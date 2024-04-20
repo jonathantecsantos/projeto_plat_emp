@@ -1,0 +1,20 @@
+CREATE TABLE grupo (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE aluno (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    grupo_id INT,
+    FOREIGN KEY (grupo_id) REFERENCES Grupo(id)
+);
+
+CREATE TABLE importacao (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome_processo VARCHAR(50) NOT NULL,
+    data_inicio DATETIME,
+    data_fim DATETIME,
+    processado TINYINT(1),
+    usuario VARCHAR(50)
+);

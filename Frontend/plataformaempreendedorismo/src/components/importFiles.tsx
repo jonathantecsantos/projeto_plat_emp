@@ -18,12 +18,12 @@ const UploadAlunos: React.FC = () => {
 
       try {
         console.log('Enviando arquivo de alunos para o backend...')
-        // const response = await fetch('/api/upload/alunos', {
-        //   method: 'POST',
-        //   body: formData
-        // })
-        // const data = await response.json()
-        // console.log(data)
+        const response = await fetch('http://localhost:8080/api/upload/arquivo', {
+          method: 'POST',
+          body: formData
+        })
+        const data = await response.json()
+        console.log(data)
         alert('Arquivo de alunos enviado com sucesso!')
       } catch (error) {
         console.error('Erro ao enviar o arquivo de alunos:', error)
@@ -61,12 +61,12 @@ const UploadGrupos: React.FC = () => {
 
       try {
         console.log('Enviando arquivo de grupos para o backend...')
-        // const response = await fetch('/api/upload/grupos', {
-        //   method: 'POST',
-        //   body: formData
-        // })
-        // const data = await response.json()
-        // console.log(data)
+        const response = await fetch('http://localhost:8080/api/upload/arquivo', {
+          method: 'POST',
+          body: formData
+        })
+        const data = await response.json()
+        console.log(data)
         alert('Arquivo de grupos enviado com sucesso!')
       } catch (error) {
         console.error('Erro ao enviar o arquivo de grupos:', error)

@@ -81,7 +81,7 @@ const App: React.FC = () => {
       <div className="container">
         <UploadAlunos />
         <UploadGrupos />
-        <AddYoutubeVideo onAdd={handleAddVideo} />
+        {/* <AddYoutubeVideo onAdd={handleAddVideo} /> */}
         <div style={{ marginTop: 30 }}>
           <button onClick={handleDisplayList}>{!showGroup ? "Exibir" : "Ocultar"} Lista de Alunos</button>
         </div>
@@ -90,11 +90,11 @@ const App: React.FC = () => {
             {displayedInfo}
           </div>
         )}
-        <div className="youtube-videos">
+        {/* <div className="youtube-videos">
           {youtubeVideos.map((url, index) => (
             <YoutubeVideo key={index} url={url} />
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 // Componente para o upload de alunos
-const UploadAlunos: React.FC = () => {
+const UploadAlunos = () => {
   const [file, setFile] = useState<File | null>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

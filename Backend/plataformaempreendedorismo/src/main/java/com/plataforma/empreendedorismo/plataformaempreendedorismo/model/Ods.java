@@ -1,26 +1,27 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-@Entity(name="grupo")
+@Entity(name="ods")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Grupo {
+public class Ods {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    private String codigo;
 
-    @OneToMany(mappedBy = "grupo")
-    private List<Aluno> alunos;
+    private String descricao;
+
 }

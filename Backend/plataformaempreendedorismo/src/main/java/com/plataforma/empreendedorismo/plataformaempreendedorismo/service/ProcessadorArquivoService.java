@@ -1,10 +1,12 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Grupo;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Importacao;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.GrupoRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,18 @@ public class ProcessadorArquivoService {
     private ImportacaoService importacaoService;
 
     @Autowired
-    private GrupoRepository grupoRepository;
+    private AlunoRepository alunoRepository;
 
     @Autowired
-    private AlunoRepository alunoRepository;
+    private OdsRepository odsRepository;
+
+    @Autowired
+    private EquipeRepository equipeRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+
     public void processarPlanilha(Workbook workbook, String tipo) throws Exception {
 
         String nomeProcesso = "";
@@ -95,7 +105,6 @@ public class ProcessadorArquivoService {
                         break;
                 }
 
-
             }
 
             LocalDateTime dataHoraFinal = LocalDateTime.now();
@@ -114,43 +123,109 @@ public class ProcessadorArquivoService {
 
         log.info("Iniciando processamento de Grupos");
 
-        Grupo grupo = new Grupo();
+        Equipe equipe = new Equipe();
 
-        String campoPlanilha = "NOME_GRUPO";
         if(row.getCell(0) != null){
-            String valueGrupo = String.valueOf(row.getCell(0));
-            grupo.setNome(valueGrupo);
-
+            String equipeEncontrada = String.valueOf(row.getCell(0));
+            equipe.setNome(equipeEncontrada);
         }
 
-        grupoRepository.save(grupo);
+        equipeRepository.save(equipe);
     }
-    private void processarAluno(Row row) throws Exception {
+
+    @Transactional
+    public void processarAluno(Row row) throws Exception {
 
         log.info("Iniciando processamento de Alunos");
 
         Aluno aluno = new Aluno();
 
-        //"NOME_ALUNO"
         if(row.getCell(0) != null){
-            String valueNome = String.valueOf(row.getCell(0));
-            aluno.setNome(valueNome);
-
+            String cpf = String.valueOf(row.getCell(0));
+            if(validarCPF(cpf)){
+                aluno.setCpf(cpf);
+            }else{
+                System.out.printf("Erro CPF");
+            }
         }
 
-        //"GRUPO"
-        if(row.getCell(0) != null){
-            String valueGrupo = String.valueOf(row.getCell(0));
+        if(row.getCell(1) != null){
+            String valueNome = String.valueOf(row.getCell(1));
+            aluno.setNome(valueNome.toUpperCase());
+        }
 
-            Grupo grupo = grupoRepository.findByNome(valueGrupo);
-            if (grupo != null){
-                aluno.setGrupo(grupo);
+        if(row.getCell(2) != null){
+            String email = String.valueOf(row.getCell(2));
+            aluno.setEmail(email);
+        }
+
+        if(row.getCell(3) != null){
+            String turma = String.valueOf(row.getCell(3));
+            aluno.setTurma(turma);
+        }
+
+        if(row.getCell(4) != null){
+            String isLider = String.valueOf(row.getCell(4));
+
+            if (isLider.equals("SIM")){
+                aluno.setIsLider(true);
+            }else{
+                aluno.setIsLider(false);
+            }
+        }
+
+        if(row.getCell(5) != null){
+            String isViceLider = String.valueOf(row.getCell(5));
+
+            if (isViceLider.equals("SIM")){
+                aluno.setIsViceLider(true);
+            }else{
+                aluno.setIsViceLider(false);
+            }
+        }
+
+        if(row.getCell(6) != null){
+            String ods = String.valueOf(row.getCell(6));
+
+            Ods odsEncontradado = odsRepository.findByCodigo(ods);
+            if (odsEncontradado != null){
+                aluno.setOds(odsEncontradado);
             }else{
                 throw new Exception("Erro");
             }
         }
 
+        Equipe equipe = new Equipe();
+
+        if(row.getCell(7) != null) {
+            String entradaEquipe = String.valueOf(row.getCell(7));
+            equipe = equipeRepository.findByNome(entradaEquipe);
+            if (equipe == null) {
+                equipe = new Equipe();
+                equipe.setNome(entradaEquipe.toUpperCase());
+                equipeRepository.saveAndFlush(equipe);
+                aluno.setEquipe(equipe);
+            }else{
+                aluno.setEquipe(equipe);
+            }
+        }
+
         alunoRepository.save(aluno);
+    }
+
+    private boolean validarCPF(String cpf) {
+
+        if(!cpf.isEmpty() || !cpf.isBlank()){
+            if(cpf.length() == 11){
+                return true;
+            }else{
+                System.out.printf("Quantidade de digitos inválida");
+                return false;
+            }
+        }else{
+            System.out.printf("Campo vazio");
+            return false;
+        }
     }
 
     private boolean validarHeader(Row headerRow, TipoImportacao tipoImportacao) {
@@ -161,17 +236,17 @@ public class ProcessadorArquivoService {
         switch (tipoImportacao){
             case GRUPO:
                 expectedHeader = new String[]{
-                        "NOME_GRUPO"
+                        "NOME_EQUIPE"
                 };
                 break;
             case ALUNO:
                 expectedHeader = new String[]{
-                        "NOME_ALUNO", "GRUPO"
+                        "CPF","NOME_ALUNO", "EMAIL", "TURMA","LIDER", "VICE-LIDER", "ODS","EQUIPE"
                 };
                 break;
             case AVALIADOR:
                 expectedHeader = new String[]{
-                        "NOME_AVALIADOR", "GRUPO"
+                        "NOME_AVALIADOR", "EQUIPE"
                 };
                 break;
         }

@@ -6,33 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="aluno")
+import java.util.List;
+
+@Entity(name="equipe")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Aluno {
+public class Equipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String cpf;
-
     private String nome;
 
-    private String email;
-
-    private String turma;
-
-    private Boolean isLider;
-
-    private Boolean isViceLider;
-
-    @OneToOne
-    private Ods ods;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "equipe_id")
-    private Equipe equipe;
+    @OneToMany(mappedBy = "equipe")
+    private List<Aluno> alunos;
 }

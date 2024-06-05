@@ -1,14 +1,13 @@
-CREATE TABLE grupo (
+-- Tabela Grupo
+DROP TABLE IF EXISTS equipe;
+
+CREATE TABLE equipe (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE aluno (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    grupo_id INT,
-    FOREIGN KEY (grupo_id) REFERENCES Grupo(id)
-);
+-- Tabela Importacao
+DROP TABLE IF EXISTS importacao;
 
 CREATE TABLE importacao (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -18,3 +17,49 @@ CREATE TABLE importacao (
     processado TINYINT(1),
     usuario VARCHAR(50)
 );
+
+-- Tabela Obs
+DROP TABLE IF EXISTS ods;
+
+CREATE TABLE ods (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR(10) NOT NULL,
+    descricao VARCHAR(250)
+);
+
+-- Tabela Aluno
+DROP TABLE IF EXISTS aluno;
+
+CREATE TABLE aluno (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    cpf VARCHAR(11) NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    turma VARCHAR(2) NOT NULL,
+    is_lider TINYINT(1) NOT NULL,
+    is_vice_lider TINYINT(1) NOT NULL,
+    equipe_id INT,
+    ods_id INT,
+    FOREIGN KEY (equipe_id) REFERENCES equipe(id),
+    FOREIGN KEY (ods_id) REFERENCES ods(id)
+);
+
+
+INSERT INTO ods (codigo, descricao) VALUES
+('ODS1', 'Erradicação da Pobreza'),
+('ODS2', 'Fome Zero e Agricultura Sustentável'),
+('ODS3', 'Saúde e Bem-Estar'),
+('ODS4', 'Educação de Qualidade'),
+('ODS5', 'Igualdade de Gênero'),
+('ODS6', 'Água Potável e Saneamento'),
+('ODS7', 'Energia Acessível e Limpa'),
+('ODS8', 'Trabalho Decente e Crescimento Econômico'),
+('ODS9', 'Indústria, Inovação e Infraestrutura'),
+('ODS10', 'Redução das Desigualdades'),
+('ODS11', 'Cidades e Comunidades Sustentáveis'),
+('ODS12', 'Consumo e Produção Responsáveis'),
+('ODS13', 'Ação Contra a Mudança Global do Clima'),
+('ODS14', 'Vida na Água'),
+('ODS15', 'Vida Terrestre'),
+('ODS16', 'Paz, Justiça e Instituições Eficazes'),
+('ODS17', 'Parcerias e Meios de Implementação');

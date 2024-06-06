@@ -1,5 +1,5 @@
 import './App.css'
-import { UploadAlunos, UploadGrupos } from './components/importFiles'
+import { UploadAlunos } from './components/importFiles'
 
 
 
@@ -12,7 +12,7 @@ const App = () => {
       </div>
       <div className="container">
         <UploadAlunos />
-        <UploadGrupos />
+        {/* <UploadGrupos /> */}
       </div>
     </div>
   )

@@ -1,8 +1,16 @@
+import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useStudentsImportMutation } from '../api/studentsImport.Slice'
+import { toggleLoading } from '../redux/reducers/loadingBar.slice'
+import { LoadingButton } from '@mui/lab';
 
-// Componente para o upload de alunos
-const UploadAlunos = () => {
+export const UploadAlunos = () => {
   const [file, setFile] = useState<File | null>(null)
+  const dispatch = useDispatch()
+  const [studentsImport, { isLoading }] = useStudentsImportMutation()
+  const { enqueueSnackbar } = useSnackbar()
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files?.[0]
@@ -13,79 +21,42 @@ const UploadAlunos = () => {
 
   const handleSubmit = async () => {
     if (file) {
+      dispatch(toggleLoading())
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('tipo', 'aluno')
+      formData.append('tipo', 'ALUNO')
 
       try {
         console.log('Enviando arquivo de alunos para o backend...')
-        const response = await fetch('http://localhost:8080/api/upload/arquivo', {
-          method: 'POST',
-          body: formData
-        })
-        const data = await response
-        console.log(data)
-        if (response.status == 200)
-          alert('Arquivo de alunos enviado com sucesso!')
+        const response = await studentsImport(formData)
+        if (!response.error)
+          enqueueSnackbar('Arquivo de alunos enviado com sucesso!', { variant: 'success' })
       } catch (error) {
         console.error('Erro ao enviar o arquivo de alunos:', error)
-        alert('Erro ao enviar o arquivo de alunos. Por favor, tente novamente.')
+        enqueueSnackbar('Erro ao enviar o arquivo de alunos. Por favor, tente novamente.', { variant: 'error' })
+      } finally {
+        dispatch(toggleLoading())
       }
     } else {
-      alert('Por favor, selecione um arquivo antes de enviar.')
+      enqueueSnackbar('Por favor, selecione um arquivo antes de enviar.', { variant: 'warning' })
     }
   }
 
   return (
     <div>
       <h2>Upload Alunos</h2>
-      <input type="file" accept=".xlsx,.xls" onChange={handleFileChange} />
-      <button onClick={handleSubmit}>Enviar</button>
+      <input
+        style={{
+          paddingInline: 20,
+        }}
+        type="file"
+        accept=".xlsx,.xls"
+        onChange={handleFileChange}
+      />
+      <LoadingButton style={{ textTransform: 'none', background: '#8668FFCC' }}
+        loading={isLoading} variant="contained" onClick={handleSubmit} disabled={isLoading}>
+        <span>Enviar</span>
+      </LoadingButton>
     </div>
   )
 }
-
-
-const UploadGrupos: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null)
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedFile = event.target.files?.[0]
-    if (uploadedFile) {
-      setFile(uploadedFile)
-    }
-  }
-
-  const handleSubmit = async () => {
-    if (file) {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      try {
-        console.log('Enviando arquivo de grupos para o backend...')
-        const response = await fetch('http://localhost:8080/api/upload/arquivo', {
-          method: 'POST',
-          body: formData,
-        })
-        const data = await response.json()
-        console.log(data)
-        alert('Arquivo de grupos enviado com sucesso!')
-      } catch (error) {
-        console.error('Erro ao enviar o arquivo de grupos:', error)
-        alert('Erro ao enviar o arquivo de grupos. Por favor, tente novamente.')
-      }
-    } else {
-      alert('Por favor, selecione um arquivo antes de enviar.')
-    }
-  }
-
-  return (
-    <div>
-      <h2>Upload Grupos</h2>
-      <input type="file" accept=".xlsx,.xls" onChange={handleFileChange} />
-      <button onClick={handleSubmit}>Enviar</button>
-    </div>
-  )
-}
-
-export { UploadAlunos, UploadGrupos }

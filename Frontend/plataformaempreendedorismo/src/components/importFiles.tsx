@@ -15,6 +15,7 @@ const UploadAlunos = () => {
     if (file) {
       const formData = new FormData()
       formData.append('file', file)
+      formData.append('tipo', 'aluno')
 
       try {
         console.log('Enviando arquivo de alunos para o backend...')
@@ -22,9 +23,10 @@ const UploadAlunos = () => {
           method: 'POST',
           body: formData
         })
-        const data = await response.json()
+        const data = await response
         console.log(data)
-        alert('Arquivo de alunos enviado com sucesso!')
+        if (response.status == 200)
+          alert('Arquivo de alunos enviado com sucesso!')
       } catch (error) {
         console.error('Erro ao enviar o arquivo de alunos:', error)
         alert('Erro ao enviar o arquivo de alunos. Por favor, tente novamente.')
@@ -63,7 +65,7 @@ const UploadGrupos: React.FC = () => {
         console.log('Enviando arquivo de grupos para o backend...')
         const response = await fetch('http://localhost:8080/api/upload/arquivo', {
           method: 'POST',
-          body: formData
+          body: formData,
         })
         const data = await response.json()
         console.log(data)

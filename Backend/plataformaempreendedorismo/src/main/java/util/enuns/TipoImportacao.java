@@ -2,5 +2,5 @@ package util.enuns;
 
 public enum TipoImportacao {
 
-    GRUPO,ALUNO,AVALIADOR
+    EQUIPE,ALUNO,AVALIADOR,PROFESSOR
 }

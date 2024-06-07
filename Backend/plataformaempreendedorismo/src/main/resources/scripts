@@ -63,3 +63,33 @@ INSERT INTO ods (codigo, descricao) VALUES
 ('ODS15', 'Vida Terrestre'),
 ('ODS16', 'Paz, Justiça e Instituições Eficazes'),
 ('ODS17', 'Parcerias e Meios de Implementação');
+
+
+CREATE TABLE formato_avaliacao (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(255)
+);
+
+insert into formato_avaliacao (descricao) values
+('DLJ'),
+('PITCH'),
+('SHARK TANK'),
+('EXPO DLEI');
+
+DROP TABLE IF EXISTS avaliador;
+
+CREATE TABLE avaliador (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255),
+    instituicao VARCHAR(255)
+);
+
+DROP TABLE IF EXISTS avaliador_formato;
+
+CREATE TABLE avaliador_formato (
+    id_avaliador INT,
+    id_formato_avaliacao INT,
+    PRIMARY KEY (id_avaliador, id_formato_avaliacao),
+    FOREIGN KEY (id_avaliador) REFERENCES avaliador(id),
+    FOREIGN KEY (id_formato_avaliacao) REFERENCES formato_avaliacao(id)
+);

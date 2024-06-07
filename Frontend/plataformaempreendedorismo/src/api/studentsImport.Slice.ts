@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const studentsImport = createApi({
   reducerPath: 'studentsImport',
   baseQuery: fetchBaseQuery(({
-    baseUrl: 'http://localhost:8080'
+    baseUrl: import.meta.env.VITE_BASE_URL
   })),
   endpoints: (build) => ({
     studentsImport: build.mutation({

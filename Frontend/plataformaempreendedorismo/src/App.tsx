@@ -1,4 +1,5 @@
 import './App.css'
+import Footer from './components/common/footer';
 import { EvaluatorsUpload } from './components/uploadFiles/evaluetors'
 import { StudentsUpload } from './components/uploadFiles/students'
 
@@ -17,6 +18,7 @@ const App = () => {
         <div className='my-8'></div>
         <EvaluatorsUpload />
       </div>
+      <Footer />
     </div>
   )
 }

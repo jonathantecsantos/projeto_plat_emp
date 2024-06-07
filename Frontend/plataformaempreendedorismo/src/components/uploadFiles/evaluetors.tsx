@@ -1,14 +1,15 @@
+import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useStudentsImportMutation } from '../api/studentsImport.Slice'
-import { toggleLoading } from '../redux/reducers/loadingBar.slice'
-import { LoadingButton } from '@mui/lab';
+import { useEvaluatorsImportMutation } from '../../api/evaluatorsImport.Slice'
+import { toggleLoading } from '../../redux/reducers/loadingBar.slice'
+import { ImportType } from '../../utils/types'
 
-export const UploadAlunos = () => {
+export const EvaluatorsUpload = () => {
   const [file, setFile] = useState<File | null>(null)
   const dispatch = useDispatch()
-  const [studentsImport, { isLoading }] = useStudentsImportMutation()
+  const [evaluatorsImport, { isLoading }] = useEvaluatorsImportMutation()
   const { enqueueSnackbar } = useSnackbar()
 
 
@@ -24,11 +25,11 @@ export const UploadAlunos = () => {
       dispatch(toggleLoading())
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('tipo', 'ALUNO')
+      formData.append('tipo', ImportType.evaluator)
 
       try {
         console.log('Enviando arquivo de alunos para o backend...')
-        const response = await studentsImport(formData)
+        const response = await evaluatorsImport(formData)
         if (!response.error)
           enqueueSnackbar('Arquivo de alunos enviado com sucesso!', { variant: 'success' })
       } catch (error) {
@@ -44,7 +45,7 @@ export const UploadAlunos = () => {
 
   return (
     <div>
-      <h2>Upload Alunos</h2>
+      <h2>Upload Avaliadores</h2>
       <input
         style={{
           paddingInline: 20,
@@ -60,3 +61,4 @@ export const UploadAlunos = () => {
     </div>
   )
 }
+

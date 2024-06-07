@@ -1,7 +1,6 @@
 import './App.css'
-import { UploadAlunos } from './components/importFiles'
-
-
+import { EvaluatorsUpload } from './components/uploadFiles/evaluetors'
+import { StudentsUpload } from './components/uploadFiles/students'
 
 const App = () => {
 
@@ -11,8 +10,9 @@ const App = () => {
         <h2>Plataforma Empreendedorismo</h2>
       </div>
       <div className="container">
-        <UploadAlunos />
-        {/* <UploadGrupos /> */}
+        <StudentsUpload />
+        <div className='my-8'></div>
+        <EvaluatorsUpload />
       </div>
     </div>
   )

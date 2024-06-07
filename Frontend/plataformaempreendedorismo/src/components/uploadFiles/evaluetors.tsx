@@ -1,3 +1,4 @@
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
@@ -11,7 +12,7 @@ export const EvaluatorsUpload = () => {
   const dispatch = useDispatch()
   const [evaluatorsImport, { isLoading }] = useEvaluatorsImportMutation()
   const { enqueueSnackbar } = useSnackbar()
-
+  const [uploaded, setUploaded] = useState(false)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files?.[0]
@@ -30,11 +31,14 @@ export const EvaluatorsUpload = () => {
       try {
         console.log('Enviando arquivo de avaliadores para o backend...')
         const response = await evaluatorsImport(formData)
-        if (!response.error)
+        if (!response.error) {
           enqueueSnackbar('Arquivo de avaliadores enviado com sucesso!', { variant: 'success' })
+          setUploaded(true)
+        }
       } catch (error) {
         console.error('Erro ao enviar o arquivo de avaliadores:', error)
         enqueueSnackbar('Erro ao enviar o arquivo de avaliadores. Por favor, tente novamente.', { variant: 'error' })
+        setUploaded(false)
       } finally {
         dispatch(toggleLoading())
       }
@@ -44,8 +48,13 @@ export const EvaluatorsUpload = () => {
   }
 
   return (
-    <div>
-      <h2>Upload Avaliadores</h2>
+    <div className='shadow-md rounded w-fit p-2 bg-[#202020]'>
+      <div className='flex justify-start space-x-1 p-4'>
+        <h2>Upload Avaliadores</h2>
+        {uploaded && <CheckCircleIcon style={{
+          color: 'green',
+        }} />}
+      </div>
       <input
         style={{
           paddingInline: 20,

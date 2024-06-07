@@ -1,11 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -13,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.enuns.TipoImportacao;
 
+import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -33,10 +32,11 @@ public class ProcessadorArquivoService {
     @Autowired
     private EquipeRepository equipeRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private FormatoAvaliacaoRepository formatoAvaliacaoRepository;
 
-
+    @Autowired
+    private AvaliadorRepository avaliadorRepository;
     public void processarPlanilha(Workbook workbook, String tipo) throws Exception {
 
         String nomeProcesso = "";
@@ -44,8 +44,8 @@ public class ProcessadorArquivoService {
         TipoImportacao tipoImportacao = TipoImportacao.valueOf(tipo);
 
         switch (tipoImportacao){
-            case GRUPO:
-                nomeProcesso = String.valueOf(TipoImportacao.GRUPO);
+            case EQUIPE:
+                nomeProcesso = String.valueOf(TipoImportacao.EQUIPE);
                 break;
             case ALUNO:
                 nomeProcesso = String.valueOf(TipoImportacao.ALUNO);
@@ -53,12 +53,15 @@ public class ProcessadorArquivoService {
             case AVALIADOR:
                 nomeProcesso = String.valueOf(TipoImportacao.AVALIADOR);
                 break;
+            case PROFESSOR:
+                nomeProcesso = String.valueOf(TipoImportacao.PROFESSOR);
+                break;
             default:
                 throw new Exception("Erro!");
         }
 
         LocalDateTime dataHoraAtual = LocalDateTime.now();
-        Date date = java.sql.Timestamp.valueOf(dataHoraAtual);
+        Date date = Timestamp.valueOf(dataHoraAtual);
         Importacao importacao = importacaoService.registrarImportacao(date,null,nomeProcesso,"Jonathan",false );
 
         try {
@@ -94,21 +97,24 @@ public class ProcessadorArquivoService {
                 }
 
                 switch (tipoImportacao){
-                    case GRUPO:
-                        processarGrupo(row);
+                    case EQUIPE:
+                        processarImportacaoEquipe(row);
                         break;
                     case ALUNO:
-                        processarAluno(row);
+                        processarImportacaoAluno(row);
                         break;
                     case AVALIADOR:
-                        System.out.println("Processar avaliador");
+                        processarImportacaoAvaliador(row);
+                        break;
+                    case PROFESSOR:
+                        processarImportacaoProfessor(row);
                         break;
                 }
 
             }
 
             LocalDateTime dataHoraFinal = LocalDateTime.now();
-            Date data = java.sql.Timestamp.valueOf(dataHoraFinal);
+            Date data = Timestamp.valueOf(dataHoraFinal);
             importacao.setDataFim(data);
             importacaoService.atualizarHoraFinalImportacao(importacao);
 
@@ -119,7 +125,42 @@ public class ProcessadorArquivoService {
 
     }
 
-    private void processarGrupo(Row row) {
+    private void processarImportacaoProfessor(Row row) {
+    }
+
+    private void processarImportacaoAvaliador(Row row) {
+        log.info("Iniciando processamento de Avaliadores");
+
+        Avaliador avaliador = new Avaliador();
+
+
+
+        if(row.getCell(0) != null){
+            String nome = String.valueOf(row.getCell(0));
+            avaliador.setNome(nome.toUpperCase());
+        }
+
+        if(row.getCell(1) != null){
+            String instituicao = String.valueOf(row.getCell(1));
+            avaliador.setInstituicao(instituicao.toUpperCase());
+        }
+
+        if(row.getCell(2) != null){
+            String formatoAvaliacao = String.valueOf(row.getCell(2));
+            FormatoAvaliacao formatoAvaliacaoEncontrado = formatoAvaliacaoRepository.findByDescricao(formatoAvaliacao);
+
+            ArrayList<FormatoAvaliacao> formatoAvaliacaos = new ArrayList<>();
+            if( formatoAvaliacaoEncontrado != null){
+                formatoAvaliacaos.add(formatoAvaliacaoEncontrado);
+                avaliador.setFormatoAvaliacoes(formatoAvaliacaos);
+            }
+        }
+
+        avaliadorRepository.save(avaliador);
+
+    }
+
+    private void processarImportacaoEquipe(Row row) {
 
         log.info("Iniciando processamento de Grupos");
 
@@ -134,7 +175,7 @@ public class ProcessadorArquivoService {
     }
 
     @Transactional
-    public void processarAluno(Row row) throws Exception {
+    public void processarImportacaoAluno(Row row) throws Exception {
 
         log.info("Iniciando processamento de Alunos");
 
@@ -234,7 +275,7 @@ public class ProcessadorArquivoService {
 
 
         switch (tipoImportacao){
-            case GRUPO:
+            case EQUIPE:
                 expectedHeader = new String[]{
                         "NOME_EQUIPE"
                 };
@@ -246,7 +287,7 @@ public class ProcessadorArquivoService {
                 break;
             case AVALIADOR:
                 expectedHeader = new String[]{
-                        "NOME_AVALIADOR", "EQUIPE"
+                        "NOME_AVALIADOR", "INSTITUICAO", "FORMATO_AVALIACAO"
                 };
                 break;
         }

@@ -1,6 +1,6 @@
 import './App.css'
 import Footer from './components/common/footer';
-import { EvaluatorsUpload } from './components/uploadFiles/evaluetors'
+import { EvaluatorsUpload } from './components/uploadFiles/evaluators'
 import { StudentsUpload } from './components/uploadFiles/students'
 
 const App = () => {

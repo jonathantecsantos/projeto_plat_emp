@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </div>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
           {/* <CssBaseline /> */}
-          {/* <Container maxWidth="xl"> */}
+          {/* <Container maxWidth="xs"> */}
           <Box sx={{ my: 0 }}>
             <RouterProvider router={router} />
             <Footer />

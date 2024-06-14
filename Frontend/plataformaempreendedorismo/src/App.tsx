@@ -1,4 +1,3 @@
-import './App.css';
 import { AppBarOptions } from './components/common/appBar';
 
 const App = () => {

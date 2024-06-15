@@ -1,10 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { authFetchBaseQuery } from '../redux/auth.middleware'
 
 export const evaluatorsImport = createApi({
   reducerPath: 'evaluatorsImport',
-  baseQuery: fetchBaseQuery(({
-    baseUrl: import.meta.env.VITE_BASE_URL
-  })),
+  baseQuery: authFetchBaseQuery(import.meta.env.VITE_BASE_URL),
   endpoints: (build) => ({
     evaluatorsImport: build.mutation({
       query: (body) => ({

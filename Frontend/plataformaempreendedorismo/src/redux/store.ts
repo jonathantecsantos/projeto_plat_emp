@@ -20,9 +20,7 @@ export const store = configureStore({
 
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
-      },
+      serializableCheck: false,
     }).concat(
       studentsImport.middleware,
       evaluatorsImport.middleware,

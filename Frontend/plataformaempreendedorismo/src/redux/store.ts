@@ -3,12 +3,14 @@ import { persistStore } from "redux-persist";
 import { evaluatorsImport } from "../api/evaluatorsImport.Slice";
 import { studentsImport } from "../api/studentsImport.Slice";
 import { userApiSlice } from "../api/userApi.slice";
+import { persistedAuthReducer } from './persistors/auth.slice';
 import { persistedUserLoginReducer } from "./persistors/userInfo.slice";
 import loadingBarReducer from './reducers/loadingBar.slice';
 
 
 export const store = configureStore({
   reducer: {
+    auth: persistedAuthReducer,
     loadingBarState: loadingBarReducer,
     userInfo: persistedUserLoginReducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,

@@ -1,13 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
-import { RoutesNames } from "./globals";
-import { BannerPreviewPage } from "./pages/bannerPreview";
-import { CompanyDetailsPage } from "./pages/companyDetails";
-import { LoginPage } from "./pages/login";
-import { RepositoryPage } from "./pages/repository";
-import { ContactPage } from "./pages/contact";
-import { UploadFilesPage } from "./pages/uploadFiles";
-
+import { createBrowserRouter } from 'react-router-dom';
+import App from './App';
+import ProtectedRoute from './components/common/protectedRoute';
+import { RoutesNames } from './globals';
+import { BannerPreviewPage } from './pages/bannerPreview';
+import { CompanyDetailsPage } from './pages/companyDetails';
+import { ContactPage } from './pages/contact';
+import { LoginPage } from './pages/login';
+import { RepositoryPage } from './pages/repository';
+import { UploadFilesPage } from './pages/uploadFiles';
 
 export const router = createBrowserRouter([
   {
@@ -16,19 +16,19 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.bannerPreview,
-    element: <BannerPreviewPage />
+    element: <ProtectedRoute children={<BannerPreviewPage />} />,
   },
   {
     path: RoutesNames.login,
-    element: <LoginPage />
+    element: <LoginPage />,
   },
   {
     path: RoutesNames.companyDetails,
-    element: <CompanyDetailsPage />
+    element: <CompanyDetailsPage />,
   },
   {
     path: RoutesNames.repository,
-    element: <RepositoryPage />,
+    element: <RepositoryPage />
   },
   {
     path: RoutesNames.contact,
@@ -36,6 +36,6 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.uploadFiles,
-    element: <UploadFilesPage />
-  }
+    element: <ProtectedRoute children={<UploadFilesPage />} />,
+  },
 ]);

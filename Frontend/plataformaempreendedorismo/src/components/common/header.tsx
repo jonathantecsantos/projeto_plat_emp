@@ -13,7 +13,7 @@ export const Header = () => {
       <div className="text-lg text-center p-2 w-fit mx-auto">
         <h2 className="cursor-pointer" onClick={() => navigate(RoutesNames.home)}>Plataforma Empreendedorismo</h2>
       </div>
-      <div className="flex gap-4 p-4 w-full items-center">
+      <div className="flex gap-4 px-2 py-4 w-full items-center">
         <span className="cursor-pointer hover:text-ring-custom" onClick={() => navigate(RoutesNames.companyDetails)}>Quem somos</span>
         <span className="cursor-pointer hover:text-ring-custom" onClick={() => navigate(RoutesNames.repository)}>Repositorio</span>
         <span className="cursor-pointer hover:text-ring-custom" onClick={() => navigate(RoutesNames.contact)}>Contato</span>

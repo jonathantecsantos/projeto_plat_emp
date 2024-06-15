@@ -10,8 +10,9 @@ import { RouterProvider } from 'react-router-dom'
 import Footer from "./components/common/footer.tsx"
 import { LoadingBarLinearComponent } from './components/common/loadingBar.tsx'
 import './index.css'
-import { store } from './redux/store.ts'
+import { persistor, store } from './redux/store.ts'
 import { router } from './routes.tsx'
+import { PersistGate } from "redux-persist/integration/react"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -21,18 +22,21 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         vertical: 'top'
       }}>
       <Provider store={store}>
-        <div className="loading-bar-container">
-          <LoadingBarLinearComponent />
-        </div>
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
-          {/* <CssBaseline /> */}
-          {/* <Container maxWidth="xs"> */}
-          <Box sx={{ my: 0 }}>
-            <RouterProvider router={router} />
-            <Footer />
-          </Box>
-          {/* </Container> */}
-        </LocalizationProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <div className="loading-bar-container">
+            <LoadingBarLinearComponent />
+          </div>
+          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
+            {/* <CssBaseline /> */}
+            {/* <Container maxWidth="xs"> */}
+            <Box sx={{ my: 0 }}>
+              <RouterProvider router={router} />
+              <Footer />
+            </Box>
+            {/* </Container> */}
+          </LocalizationProvider>
+        </PersistGate>
+
       </Provider>
     </SnackbarProvider>
   </React.StrictMode>,

@@ -1,6 +1,46 @@
 import { LoadingButton } from "@mui/lab";
+import { useSnackbar } from "notistack";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { RoutesNames } from "../../globals";
+import { UserApiService } from "../../services/login";
+import { Login } from "../../utils/types";
 
 export const LoginComponent = () => {
+  const [user, setUser] = useState<Login>()
+  const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const { login, isLoading } = UserApiService()
+
+  const handleLogin = async () => {
+    try {
+      const response = await login({
+        username: user?.username!,
+        password: user?.password!
+      })
+      if (response)
+        navigate(RoutesNames.home)
+    } catch (error) {
+      enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
+    }
+  }
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const username = e.target.value
+    setUser({
+      ...user,
+      username: username
+    } as Login)
+  }
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value
+    setUser({
+      ...user,
+      password: password
+    } as Login)
+  }
 
   return (
     <div className="flex justify-center w-full h-screen">
@@ -17,14 +57,18 @@ export const LoginComponent = () => {
           <div className="flex flex-col gap-8 text-start">
             <div className="flex flex-col text-sm text-[#888]">
               <label htmlFor="">Usuário</label>
-              <input type="text" placeholder="Seu usuário" className="rounded-md p-2 shadow-md " />
+              <input type="text" placeholder="Seu usuário" className="rounded-md p-2 shadow-md "
+                onChange={handleUsernameChange}
+              />
             </div>
             <div className="flex flex-col text-sm text-[#888]">
               <label htmlFor="">Senha</label>
-              <input type="password" placeholder="Sua senha" className="rounded-md p-2 shadow-md " />
+              <input type="password" placeholder="Sua senha" className="rounded-md p-2 shadow-md "
+                onChange={handlePasswordChange}
+              />
             </div>
-            <LoadingButton className="bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]"
-              variant="contained" onClick={() => { }} >
+            <LoadingButton loading={isLoading} disabled={isLoading} className="bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]"
+              variant="contained" onClick={handleLogin} >
               <span>Entrar</span>
             </LoadingButton>
           </div>

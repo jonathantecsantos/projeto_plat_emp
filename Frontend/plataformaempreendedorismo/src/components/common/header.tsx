@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom"
 import { RoutesNames } from "../../globals"
 import { Button } from "@mui/material"
+import { useSelector } from "react-redux"
+import { RootState } from "../../redux/store"
 
 export const Header = () => {
   const navigate = useNavigate()
+  const userGlobalState = useSelector((state: RootState) => state.userInfo.data.username)
+
   return (
     <div className="flex flex-col justify-center w-full p-2 shadow-md">
       <div className="text-lg text-center p-2 w-fit mx-auto">
@@ -13,9 +17,9 @@ export const Header = () => {
         <span className="cursor-pointer hover:text-ring-custom" onClick={() => navigate(RoutesNames.companyDetails)}>Quem somos</span>
         <span className="cursor-pointer hover:text-ring-custom" onClick={() => navigate(RoutesNames.repository)}>Repositorio</span>
         <span className="cursor-pointer hover:text-ring-custom" onClick={() => navigate(RoutesNames.contact)}>Contato</span>
-        <div className="lg:absolute lg:right-4">
-          <Button className="normal-case bg-[#8668FFCC] hover:bg-ring-custom" variant="contained" color="primary"
-            onClick={() => navigate(RoutesNames.login)}>Painel</Button>
+        <div className="sm:absolute sm:right-4">
+          <Button className="normal-case first-letter:uppercase bg-[#8668FFCC] hover:bg-ring-custom" variant="contained" color="primary"
+            onClick={() => navigate(RoutesNames.login)}>{userGlobalState ? userGlobalState : 'Painel'}</Button>
         </div>
       </div>
     </div>

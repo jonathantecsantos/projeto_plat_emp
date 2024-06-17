@@ -37,6 +37,9 @@ public class ProcessadorArquivoService {
 
     @Autowired
     private AvaliadorRepository avaliadorRepository;
+
+    @Autowired
+    private ProfessorRepository professorRepository;
     public void processarPlanilha(Workbook workbook, String tipo) throws Exception {
 
         String nomeProcesso = "";
@@ -126,14 +129,38 @@ public class ProcessadorArquivoService {
     }
 
     private void processarImportacaoProfessor(Row row) {
+        log.info("Iniciando processamento de Professores");
+
+        Professor professor = new Professor();
+
+        if(row.getCell(0) != null) {
+            String nome = String.valueOf(row.getCell(0));
+            professor.setNome(nome.toUpperCase());
+        }
+
+        if(row.getCell(1) != null) {
+            String email = String.valueOf(row.getCell(1));
+            professor.setEmail(email);
+        }
+
+        if(row.getCell(2) != null) {
+            String equipe = String.valueOf(row.getCell(2));
+
+            Equipe equipeEncontrada = equipeRepository.findByNome(equipe.toUpperCase());
+
+            if(equipeEncontrada != null){
+                professor.setEquipe(equipeEncontrada);
+            }
+        }
+
+        professorRepository.save(professor);
+
     }
 
     private void processarImportacaoAvaliador(Row row) {
         log.info("Iniciando processamento de Avaliadores");
 
         Avaliador avaliador = new Avaliador();
-
-
 
         if(row.getCell(0) != null){
             String nome = String.valueOf(row.getCell(0));
@@ -288,6 +315,11 @@ public class ProcessadorArquivoService {
             case AVALIADOR:
                 expectedHeader = new String[]{
                         "NOME_AVALIADOR", "INSTITUICAO", "FORMATO_AVALIACAO"
+                };
+                break;
+            case PROFESSOR:
+                expectedHeader = new String[]{
+                        "NOME_PROFESSOR", "EMAIL", "EQUIPE"
                 };
                 break;
         }

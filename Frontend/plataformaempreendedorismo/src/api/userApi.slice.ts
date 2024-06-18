@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Login, LoginResponse } from '../utils/types';
+import { Login, LoginResponse } from '../utils/types'
 
 
 
@@ -7,7 +7,7 @@ export const userApiSlice = createApi({
   reducerPath: 'userApi',
   tagTypes: ['UsersPost'],
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BASE_URL,
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   endpoints: (build) => ({
     userLogin: build.mutation<LoginResponse, Login>({

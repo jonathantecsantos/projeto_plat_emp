@@ -9,11 +9,12 @@ export const authFetchBaseQuery = (
     baseUrl,
     prepareHeaders: (headers) => {
       const token = store.getState().auth.token
-      console.log('AuthMiddleware')
 
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
+      if (!token) {
+        throw alert('Token de autenticação não encontrado, realize login novamente.')
       }
+
+      headers.set('Authorization', `Bearer ${token}`)
 
       if (prepareHeaders) {
         return prepareHeaders(headers)

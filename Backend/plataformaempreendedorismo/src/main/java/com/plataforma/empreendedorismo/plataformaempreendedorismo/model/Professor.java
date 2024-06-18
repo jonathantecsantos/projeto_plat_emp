@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Entity(name="equipe")
+@Entity(name="professor")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Equipe {
+public class Professor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +19,9 @@ public class Equipe {
 
     private String nome;
 
-    @OneToMany(mappedBy = "equipe")
-    private List<Aluno> alunos;
+    private String email;
+
+    @OneToOne
+    private Equipe equipe;
 
 }

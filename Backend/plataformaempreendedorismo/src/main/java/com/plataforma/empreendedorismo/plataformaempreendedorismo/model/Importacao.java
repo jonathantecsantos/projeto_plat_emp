@@ -31,4 +31,5 @@ public class Importacao {
     private Boolean processado;
 
     private String usuario;
+
 }

@@ -1,7 +1,8 @@
 
 export enum ImportType {
   student = 'ALUNO',
-  evaluator = 'AVALIADOR'
+  evaluator = 'AVALIADOR',
+  teacher = 'PROFESSOR'
 }
 
 export interface User {

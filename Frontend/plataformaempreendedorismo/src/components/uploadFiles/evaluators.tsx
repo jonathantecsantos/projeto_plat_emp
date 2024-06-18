@@ -1,11 +1,10 @@
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useEvaluatorsImportMutation } from '../../api/evaluatorsImport.Slice'
+import { useEvaluatorsImportMutation } from '../../api/evaluatorsImport.slice'
 import { toggleLoading } from '../../redux/reducers/loadingBar.slice'
 import { ImportType } from '../../utils/types'
+import { UploadComponent } from './uploadCard'
 
 export const EvaluatorsUpload = () => {
   const [file, setFile] = useState<File | null>(null)
@@ -48,26 +47,13 @@ export const EvaluatorsUpload = () => {
   }
 
   return (
-    <div className='shadow-md rounded w-fit p-2 bg-[#202020] '>
-      <div className='flex justify-start space-x-1 p-4'>
-        <h2>Upload Avaliadores</h2>
-        {uploaded && <CheckCircleIcon style={{
-          color: 'green',
-        }} />}
-      </div>
-      <input
-        style={{
-          paddingInline: 20,
-        }}
-        type="file"
-        accept=".xlsx,.xls"
-        onChange={handleFileChange}
-      />
-      <LoadingButton style={{ textTransform: 'none', background: '#8668FFCC' }}
-        loading={isLoading} variant="contained" onClick={handleSubmit} disabled={isLoading}>
-        <span>Enviar</span>
-      </LoadingButton>
-    </div>
+    <UploadComponent
+      title='Upload Avaliadores'
+      onFileChange={handleFileChange}
+      onSubmit={handleSubmit}
+      isLoading={isLoading}
+      uploaded={uploaded}
+    />
   )
 }
 

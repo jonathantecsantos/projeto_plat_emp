@@ -52,7 +52,8 @@ export const LoginComponent = () => {
       </div>
       <form action="">
         <div className="p-10 rounded-md h-fit lg:mt-40 mt-20 sm:w-96 md:shadow-xl w-full lg:m-28 lg:ml-12">
-          <h1 className="font-bold text-xl w-full mb-20">Plataforma Empreendedorismo</h1>
+          <h1 className="font-bold text-xl w-full mb-20 cursor-pointer"
+            onClick={() => navigate(RoutesNames.home)}>Plataforma Empreendedorismo</h1>
           <h2 className="font-medium mb-10 w-fit">Acesse sua conta</h2>
           <div className="flex flex-col gap-8 text-start">
             <div className="flex flex-col text-sm text-[#888]">

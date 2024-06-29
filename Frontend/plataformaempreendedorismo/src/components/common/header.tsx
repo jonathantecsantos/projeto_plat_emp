@@ -1,13 +1,14 @@
-import { useNavigate } from "react-router-dom"
-import { RoutesNames } from "../../globals"
 import { Button } from "@mui/material"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { RoutesNames } from "../../globals"
 import { RootState } from "../../redux/store"
 import { AuthMenuComponent } from "./authMenu"
 
 export const Header = () => {
   const navigate = useNavigate()
   const userGlobalState = useSelector((state: RootState) => state.userInfo.data.username)
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
 
   return (
     <div className="flex flex-col justify-center w-full p-2 shadow-md">
@@ -21,7 +22,7 @@ export const Header = () => {
           onClick={() => navigate(RoutesNames.repository)}>Repositorio</span>
         <span className="cursor-pointer hover:text-ring-custom"
           onClick={() => navigate(RoutesNames.contact)}>Contato</span>
-        {userGlobalState && (
+        {isAuthenticated && userGlobalState && (
           <div className="sm:absolute sm:right-24">
             <AuthMenuComponent />
           </div>
@@ -29,7 +30,7 @@ export const Header = () => {
 
         <div className="sm:absolute sm:right-4">
           <Button className="normal-case first-letter:uppercase bg-[#8668FFCC] hover:bg-ring-custom" variant="contained" color="primary"
-            onClick={() => navigate(RoutesNames.login)}>{userGlobalState ? userGlobalState : 'Painel'}</Button>
+            onClick={() => navigate(RoutesNames.login)}>{isAuthenticated && userGlobalState ? userGlobalState : 'Painel'}</Button>
         </div>
       </div>
     </div>

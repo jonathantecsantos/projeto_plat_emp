@@ -5,10 +5,10 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import GradeIcon from '@mui/icons-material/Grade'
 import GroupIcon from '@mui/icons-material/Group'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
+import LeaderboardIcon from '@mui/icons-material/Leaderboard'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StarIcon from '@mui/icons-material/Star'
 import RepoIcon from '@mui/icons-material/Storage'
-import LeaderboardIcon from '@mui/icons-material/Leaderboard'
 import { Collapse, IconButton, List, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 import React, { ReactNode, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -41,8 +41,12 @@ const menuItems: MenuItemProps[] = [
   {
     outsideName: 'Times',
     outsideIcon: <GroupIcon />,
-    subItens: false,
-    routeName: `${''}`,
+    subItens: true,
+    insideItems: [{
+      insideIcon: <GradeIcon />,
+      insideName: 'Banner',
+      routeName: `${RoutesNames.bannerPreview}`,
+    },],
   },
   {
     outsideName: 'Repositório',
@@ -139,7 +143,7 @@ export const AuthMenuComponent = () => {
         aria-haspopup="listbox"
         onClick={handleClick}
       >
-        <SettingsIcon style={{ color: '#cecece' }} />
+        <SettingsIcon style={{ color: '#cecece', marginInline: 20, }} />
       </IconButton>
       <Menu
         id="auth-menu"

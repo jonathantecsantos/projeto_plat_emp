@@ -3,7 +3,8 @@ import { CookieUtils } from 'essencials'
 
 interface AuthState {
   isAuthenticated: boolean
-  token: string | null // Adicionando o token ao estado
+  token: string | null //token usado no authmiddleware
+  //adicionar autorização do usuario authenticado
 }
 
 const initialState: AuthState = {

@@ -102,4 +102,4 @@ CREATE TABLE professor (
   email varchar(100) NOT NULL,
   equipe_id INT,
   FOREIGN KEY (equipe_id) REFERENCES equipe(id)
-  );
+);

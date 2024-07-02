@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,9 @@ public class Equipe {
 
     private String nome;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "equipe")
     private List<Aluno> alunos;
+
 
 }

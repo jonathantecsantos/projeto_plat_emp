@@ -15,10 +15,10 @@ const userInfoSlice = createSlice({
   name: 'userInfo',
   initialState,
   reducers: {
-    setUserInfo(state, action: PayloadAction<LoginResponse>) {
+    setUserInfo(_state, action: PayloadAction<LoginResponse>) {
       return action.payload;
     },
-    clearUserInfo(state) {
+    clearUserInfo(_state) {
       return initialState;
     },
   },

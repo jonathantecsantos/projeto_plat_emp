@@ -42,7 +42,11 @@ export const userApiSlice = createApi({
           console.error("Erro ao efetuar login:", error);
         }
       },      
-    }),
+    }), 
+    //
+    //get
+    //edit
+    //del
   }),
 })
 

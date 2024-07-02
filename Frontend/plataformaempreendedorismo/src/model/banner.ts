@@ -1,6 +1,7 @@
 import { Student } from "./student"
 
 export interface Banner {
+  svgFileName: string
   //header...
   yearTitle: string
   projectName: string

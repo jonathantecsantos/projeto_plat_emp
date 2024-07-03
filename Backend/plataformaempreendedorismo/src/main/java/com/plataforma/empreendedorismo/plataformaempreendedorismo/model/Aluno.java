@@ -1,6 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,4 +38,15 @@ public class Aluno {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "equipe_id")
     private Equipe equipe;
+
+    public Aluno(AlunoCadastroRecord alunoCadastroRecord, Ods ods, Equipe equipe) {
+        this.cpf = alunoCadastroRecord.cpf();
+        this.nome = alunoCadastroRecord.nome();
+        this.email = alunoCadastroRecord.email();
+        this.turma = alunoCadastroRecord.turma();
+        this.isLider = alunoCadastroRecord.isLider();
+        this.isViceLider = alunoCadastroRecord.isViceLider();
+        this.ods = ods;
+        this.equipe = equipe;
+    }
 }

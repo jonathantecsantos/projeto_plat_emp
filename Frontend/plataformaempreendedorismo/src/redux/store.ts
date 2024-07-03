@@ -1,14 +1,14 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { persistStore } from "redux-persist";
-import { evaluatorsImport } from "../api/evaluatorsImport.slice";
-import { studentsImport } from "../api/studentsImport.slice";
-import { teachersImport } from "../api/teachersImport.slice";
-import { userApiSlice } from "../api/userApi.slice";
-import { persistedAuthReducer } from './persistors/auth.slice';
-import { persistedUserLoginReducer } from "./persistors/userInfo.slice";
-import loadingBarReducer from './reducers/loadingBar.slice';
-import { studentsApiSlice } from "../api/studentsApi.slice";
-import { teamApiSlice } from "../api/teamApi.slice";
+import { configureStore } from "@reduxjs/toolkit"
+import { persistStore } from "redux-persist"
+import { evaluatorsImport } from "../api/evaluatorsImport.slice"
+import { studentsImport } from "../api/studentsImport.slice"
+import { teachersImport } from "../api/teachersImport.slice"
+import { userApiSlice } from "../api/userApi.slice"
+import { persistedAuthReducer } from './persistors/auth.slice'
+import { persistedUserLoginReducer } from "./persistors/userInfo.slice"
+import loadingBarReducer from './reducers/loadingBar.slice'
+import { setupListeners } from '@reduxjs/toolkit/query'
+import { teamIdApiSlice } from "../api/teamId.slice"
 
 
 export const store = configureStore({
@@ -16,8 +16,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     loadingBarState: loadingBarReducer,
     userInfo: persistedUserLoginReducer,
-    [teamApiSlice.reducerPath]: teamApiSlice.reducer,
-    [studentsApiSlice.reducerPath]: studentsApiSlice.reducer,
+    [teamIdApiSlice.reducerPath]: teamIdApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
     [teachersImport.reducerPath]: teachersImport.reducer,
     [studentsImport.reducerPath]: studentsImport.reducer,
@@ -28,8 +27,7 @@ export const store = configureStore({
     return getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
-      teamApiSlice.middleware,
-      studentsApiSlice.middleware,
+      teamIdApiSlice.middleware,
       userApiSlice.middleware,
       teachersImport.middleware,
       studentsImport.middleware,
@@ -38,6 +36,7 @@ export const store = configureStore({
   }
 })
 
+setupListeners(store.dispatch)
 export const persistor = persistStore(store)
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>

@@ -7,6 +7,8 @@ import { userApiSlice } from "../api/userApi.slice";
 import { persistedAuthReducer } from './persistors/auth.slice';
 import { persistedUserLoginReducer } from "./persistors/userInfo.slice";
 import loadingBarReducer from './reducers/loadingBar.slice';
+import { studentsApiSlice } from "../api/studentsApi.slice";
+import { teamApiSlice } from "../api/teamApi.slice";
 
 
 export const store = configureStore({
@@ -14,6 +16,8 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     loadingBarState: loadingBarReducer,
     userInfo: persistedUserLoginReducer,
+    [teamApiSlice.reducerPath]: teamApiSlice.reducer,
+    [studentsApiSlice.reducerPath]: studentsApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
     [teachersImport.reducerPath]: teachersImport.reducer,
     [studentsImport.reducerPath]: studentsImport.reducer,
@@ -24,6 +28,8 @@ export const store = configureStore({
     return getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
+      teamApiSlice.middleware,
+      studentsApiSlice.middleware,
       userApiSlice.middleware,
       teachersImport.middleware,
       studentsImport.middleware,

@@ -5,6 +5,14 @@ export const BannerPreviewComponent = ({ svgFileName }: Pick<Banner, 'svgFileNam
 
   //todo: fix impression footer banner
 
+  // -----> todo:winnicius 02 /07
+
+  // criar rotas com controle de autorização
+  // fazer o user api slice / services funcionar no endpoint user do go(exemplo, user para apagar um user, editar um user e listar todos os users)
+  // criar endpoints de manipulação dos alunos -> api go
+  // criar o api slice / services para o aluno
+
+  //   ------>
   return (
     <div
     //utils for styles texts
@@ -13,7 +21,7 @@ export const BannerPreviewComponent = ({ svgFileName }: Pick<Banner, 'svgFileNam
     >
       <img
         src={backgroundImageUrl}
-        className="w-full h-full opacity-1"
+        className="w-11/12 h-11/12 opacity-1 mx-auto"
       />
     </div>)
 }

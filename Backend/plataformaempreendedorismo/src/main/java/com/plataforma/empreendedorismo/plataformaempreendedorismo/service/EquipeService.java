@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EquipeService {
@@ -30,5 +31,22 @@ public class EquipeService {
         Professor professor = professorRepository.findByEquipeId(equipeId);
 
         return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor);
+    }
+
+    public Equipe buscarEquipePorId(Long id) throws Exception {
+
+        Equipe equipe;
+        try {
+            Optional<Equipe> optionalEquipeequipe = equipeRepository.findById(id);
+            if (optionalEquipeequipe.isPresent()) {
+                equipe = optionalEquipeequipe.get();
+
+            } else {
+                throw new Exception("ODS não encontrado com o ID: " + id);
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar ODS: " + e.getMessage(), e);
+        }
+        return equipe;
     }
 }

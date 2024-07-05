@@ -17,7 +17,7 @@ export const UserApiService = () => {
       CookieUtils.setCookie({ 'un': result.data.username }, 1)
 
       dispatch(setUserInfo(result))
-      dispatch(loginAction(result.data.token))
+      dispatch(loginAction(result))
       return result
     } catch (error) {
       console.error('UserApiService => Erro fazer login:', error)

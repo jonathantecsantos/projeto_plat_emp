@@ -1,19 +1,4 @@
-export interface ODS {
-  id: number
-  codigo: string
-  descricao: string
-}
-
-export interface Student {
-  id: number
-  cpf: string
-  nome: string
-  email: string
-  turma: string
-  isLider: boolean
-  isViceLider: boolean
-  ods: ODS
-}
+import { Student } from "./student"
 
 export interface Team {
   nomeEquipe: string

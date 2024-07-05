@@ -7,6 +7,7 @@ const initialState: LoginResponse = {
     token: '',
     userId: 0,
     username: '',
+    profile: '',
   },
   message: ""
 }

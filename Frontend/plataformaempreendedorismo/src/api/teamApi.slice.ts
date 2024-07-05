@@ -1,13 +1,12 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { Team, TeamApiResponse } from '../model/team'
+import { authFetchBaseQuery } from '../redux/auth.middleware'
 
 
-export const teamIdApiSlice = createApi({
-  reducerPath: 'teamId',
-  tagTypes: ['teamId'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
-  }),
+export const teamApiSlice = createApi({
+  reducerPath: 'teamApi',
+  tagTypes: ['teamApi'],
+  baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   endpoints: (build) => ({
     getTeamById: build.query<Team, any>({
       query: (id) => `equipes/${id}`,
@@ -20,4 +19,4 @@ export const teamIdApiSlice = createApi({
   }),
 })
 
-export const { useGetTeamByIdQuery } = teamIdApiSlice
+export const { useGetTeamByIdQuery } = teamApiSlice

@@ -1,17 +1,17 @@
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useStudentsImportMutation } from '../../api/studentsImport.slice'
 import { toggleLoading } from '../../redux/reducers/loadingBar.slice'
 import { ImportType } from '../../utils/types'
 import { UploadComponent } from './uploadCard'
+import { useUploadFileMutation } from '../../api/import.slice'
 
 
 
 export const StudentsUpload = () => {
   const [file, setFile] = useState<File | null>(null)
   const dispatch = useDispatch()
-  const [studentsImport, { isLoading }] = useStudentsImportMutation()
+  const [uploadFile, { isLoading }] = useUploadFileMutation()
   const { enqueueSnackbar } = useSnackbar()
   const [uploaded, setUploaded] = useState(false)
 
@@ -32,7 +32,7 @@ export const StudentsUpload = () => {
 
       try {
         console.log('Enviando arquivo de alunos para o backend...')
-        const response = await studentsImport(formData)
+        const response = await uploadFile(formData)
         if (!response.error) {
           enqueueSnackbar('Arquivo de alunos enviado com sucesso!', { variant: 'success' })
           setUploaded(true)

@@ -12,21 +12,22 @@ export interface User {
 
 
 export interface Login {
-  username: string,
-  password: string,
+  username: string
+  password: string
 }
 
 export interface LoginResponse {
   data: {
-    token: string;
-    userId: number;
-    username: string;
-  };
-  message: string;
+    token: string
+    userId: number
+    username: string
+    profile: string
+  }
+  message: string
 }
 
 
-export type UserId = Pick<User, 'userId'>;
+export type UserId = Pick<User, 'userId'>
 
 
 export interface Token {
@@ -40,6 +41,6 @@ export interface AuthenticatedUser extends User {
 
 
 export interface AdaptedLoginResponse {
-  payload: User;
-  token: Token;
+  payload: User
+  token: Token
 }

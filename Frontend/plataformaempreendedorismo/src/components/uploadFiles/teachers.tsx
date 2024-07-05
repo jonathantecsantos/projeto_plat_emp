@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux'
 import { toggleLoading } from '../../redux/reducers/loadingBar.slice'
 import { ImportType } from '../../utils/types'
 import { UploadComponent } from './uploadCard'
-import { useTeachersImportMutation } from '../../api/teachersImport.slice'
+import { useUploadFileMutation } from '../../api/import.slice'
 
 export const TeachersUpload = () => {
   const [file, setFile] = useState<File | null>(null)
   const dispatch = useDispatch()
-  const [teachersImport, { isLoading }] = useTeachersImportMutation()
+  const [uploadFile, { isLoading }] = useUploadFileMutation()
   const { enqueueSnackbar } = useSnackbar()
   const [uploaded, setUploaded] = useState(false)
 
@@ -30,7 +30,7 @@ export const TeachersUpload = () => {
 
       try {
         console.log('Enviando arquivo de professores para o backend...')
-        const response = await teachersImport(formData)
+        const response = await uploadFile(formData)
         if (!response.error) {
           enqueueSnackbar('Arquivo de professores enviado com sucesso!', { variant: 'success' })
           setUploaded(true)

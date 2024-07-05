@@ -7,8 +7,14 @@ import { AuthMenuComponent } from "./authMenu"
 
 export const Header = () => {
   const navigate = useNavigate()
+  // const dispatch = useDispatch()
   const userGlobalState = useSelector((state: RootState) => state.userInfo.data.username)
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
+
+  // useLayoutEffect(() => {
+  //   dispatch(checkAuth())
+  // }, [dispatch])
+
 
   return (
     <div className="flex flex-col justify-center w-full p-2 shadow-md">

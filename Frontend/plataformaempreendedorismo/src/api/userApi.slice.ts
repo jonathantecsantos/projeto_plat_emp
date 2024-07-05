@@ -5,7 +5,7 @@ import { Login, LoginResponse } from '../utils/types'
 
 export const userApiSlice = createApi({
   reducerPath: 'userApi',
-  tagTypes: ['UsersPost'],
+  tagTypes: ['Users'],
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
   }),
@@ -16,13 +16,14 @@ export const userApiSlice = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['UsersPost'],
+      invalidatesTags: ['Users'],
 
       transformResponse: (response: LoginResponse): LoginResponse => ({
         data: {
           username: response.data.username,
           token: response.data.token,
           userId: response.data.userId,
+          profile: response.data.profile,
         },
         message: response.message
       }),
@@ -41,8 +42,8 @@ export const userApiSlice = createApi({
         } catch (error) {
           console.error("Erro ao efetuar login:", error);
         }
-      },      
-    }), 
+      },
+    }),
     //
     //get
     //edit

@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.bannerPreview,
-    element: <ProtectedRoute children={<BannerPreviewPage />} />,
+    element: <ProtectedRoute children={<BannerPreviewPage />} allowedRoles={['admin', 'aluno']} />,
   },
   {
     path: RoutesNames.login,
@@ -36,6 +36,6 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.uploadFiles,
-    element: <ProtectedRoute children={<UploadFilesPage />} />,
+    element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={['admin']} />,
   },
 ]);

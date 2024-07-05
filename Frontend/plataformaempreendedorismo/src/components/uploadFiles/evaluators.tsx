@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useEvaluatorsImportMutation } from '../../api/evaluatorsImport.slice'
+import { useUploadFileMutation } from '../../api/import.slice'
 import { toggleLoading } from '../../redux/reducers/loadingBar.slice'
 import { ImportType } from '../../utils/types'
 import { UploadComponent } from './uploadCard'
@@ -9,7 +9,7 @@ import { UploadComponent } from './uploadCard'
 export const EvaluatorsUpload = () => {
   const [file, setFile] = useState<File | null>(null)
   const dispatch = useDispatch()
-  const [evaluatorsImport, { isLoading }] = useEvaluatorsImportMutation()
+  const [uploadFile, { isLoading }] = useUploadFileMutation()
   const { enqueueSnackbar } = useSnackbar()
   const [uploaded, setUploaded] = useState(false)
 
@@ -29,7 +29,7 @@ export const EvaluatorsUpload = () => {
 
       try {
         console.log('Enviando arquivo de avaliadores para o backend...')
-        const response = await evaluatorsImport(formData)
+        const response = await uploadFile(formData)
         if (!response.error) {
           enqueueSnackbar('Arquivo de avaliadores enviado com sucesso!', { variant: 'success' })
           setUploaded(true)

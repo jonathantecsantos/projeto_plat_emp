@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
+import { setupListeners } from '@reduxjs/toolkit/query'
 import { persistStore } from "redux-persist"
-import { evaluatorsImport } from "../api/evaluatorsImport.slice"
-import { studentsImport } from "../api/studentsImport.slice"
-import { teachersImport } from "../api/teachersImport.slice"
+import { importApiSlice } from "../api/import.slice"
+import { studentsApiSlice } from "../api/studentApi"
+import { teamApiSlice } from "../api/teamApi.slice"
 import { userApiSlice } from "../api/userApi.slice"
 import { persistedAuthReducer } from './persistors/auth.slice'
 import { persistedUserLoginReducer } from "./persistors/userInfo.slice"
 import loadingBarReducer from './reducers/loadingBar.slice'
-import { setupListeners } from '@reduxjs/toolkit/query'
-import { teamIdApiSlice } from "../api/teamId.slice"
+"./reducers/auth.slice"
 
 
 export const store = configureStore({
@@ -16,22 +16,20 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     loadingBarState: loadingBarReducer,
     userInfo: persistedUserLoginReducer,
-    [teamIdApiSlice.reducerPath]: teamIdApiSlice.reducer,
+    [studentsApiSlice.reducerPath]: studentsApiSlice.reducer,
+    [teamApiSlice.reducerPath]: teamApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
-    [teachersImport.reducerPath]: teachersImport.reducer,
-    [studentsImport.reducerPath]: studentsImport.reducer,
-    [evaluatorsImport.reducerPath]: evaluatorsImport.reducer,
+    [importApiSlice.reducerPath]: importApiSlice.reducer,
   },
 
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
-      teamIdApiSlice.middleware,
+      studentsApiSlice.middleware,
+      teamApiSlice.middleware,
       userApiSlice.middleware,
-      teachersImport.middleware,
-      studentsImport.middleware,
-      evaluatorsImport.middleware,
+      importApiSlice.middleware,
     )
   }
 })

@@ -1,16 +1,40 @@
 import { Ods } from "./ods"
-import { Team } from "./team"
 
 export interface Student {
+  //reponse da equipe
   id: any
   cpf: string
-  name: string
+  nome: string
   email: string
-  class: string
-  isLeader?: boolean
-  isViceLeader?: boolean
-
+  turma: string
+  isLider?: boolean
+  isViceLider?: boolean
   ods?: Ods
-  team_id?: string
-  team?: Team
+
+  // team_id?: string
+  // team?: Team
+}
+
+export interface CreateStudent {
+  nome: string
+  cpf: string
+  email: string
+  turma: string
+  isLider: boolean
+  isViceLider: boolean
+  idOds: number
+  idEquipe: number
+}
+
+export interface StudentsResponse {
+  id: number
+  cpf: string
+  nome: string
+  email: string
+  turma: string
+  isLider: boolean
+  isViceLider: boolean
+  idEquipe: number
+  nomeEquipe: string
+  idObs: number
 }

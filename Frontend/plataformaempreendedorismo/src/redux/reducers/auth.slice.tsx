@@ -1,15 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CookieUtils } from 'essencials'
+import { LoginResponse } from '../../utils/types';
+
+const deleteCookie = (name: string): void => {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+};
 
 interface AuthState {
   isAuthenticated: boolean
-  token: string | null //token usado no authmiddleware
+  token: string | null
+  profile: string | null //token usado no authmiddleware
   //adicionar autorização do usuario authenticado
 }
 
 const initialState: AuthState = {
-  isAuthenticated: false,
-  token: null,
+  isAuthenticated: !!CookieUtils.getCookie('tk'),
+  token: CookieUtils.getCookie('tk'),
+  profile: null
 }
 
 const authSlice = createSlice({
@@ -21,14 +28,15 @@ const authSlice = createSlice({
       state.isAuthenticated = !!token
       state.token = token
     },
-    login(state, action: PayloadAction<string>) {
-      const token = action.payload
-      CookieUtils.setCookie({ 'tk': token }, 1)
+    login(state, action: PayloadAction<LoginResponse>) {
+      // CookieUtils.setCookie({ 'tk': result.data.token }, 1)
+      // CookieUtils.setCookie({ 'un': result.data.username }, 1)
+      state.token = action.payload.data.token
+      state.profile = action.payload.data.profile
       state.isAuthenticated = true
-      state.token = token
     },
     logout(state) {
-      CookieUtils.deleteCookie('tk')
+      deleteCookie('tk')
       state.isAuthenticated = false
       state.token = null
     },

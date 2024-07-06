@@ -20,7 +20,7 @@ export const LoginComponent = () => {
         password: user?.password!
       })
       if (response)
-        navigate(RoutesNames.home)
+        navigate(RoutesNames.students)
     } catch (error) {
       enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
     }

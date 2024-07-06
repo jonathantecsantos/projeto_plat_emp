@@ -6,6 +6,8 @@ export const RoutesNames = {
   repository: 'repository',
   contact: 'contact',
   uploadFiles: '/upload-files',
+  students: '/students',
+  student: '/students/:id'
 }
 
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 

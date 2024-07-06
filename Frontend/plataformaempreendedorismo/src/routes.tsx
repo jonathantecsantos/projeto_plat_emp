@@ -8,6 +8,7 @@ import { ContactPage } from './pages/contact';
 import { LoginPage } from './pages/login';
 import { RepositoryPage } from './pages/repository';
 import { UploadFilesPage } from './pages/uploadFiles';
+import { StudentsDetailsPage } from './pages/studentsDetails';
 
 export const router = createBrowserRouter([
   {
@@ -37,5 +38,9 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.uploadFiles,
     element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={['admin']} />,
+  },
+  {
+    path: RoutesNames.students,
+    element: <ProtectedRoute children={<StudentsDetailsPage />} allowedRoles={['admin', 'aluno', 'professor']} />
   },
 ]);

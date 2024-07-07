@@ -8,8 +8,9 @@ interface AdminPage {
 export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
 
   const AdminAppBar = () => {
-    return <div>
-      <p>AdminAppBar</p>
+    return <div className="flex">
+      {/* <input placeholder="Pesquisar" /> */}
+      <p className="text-right w-full">Logout</p>
     </div>
   }
 
@@ -38,7 +39,7 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
 
 
   const MainContent = () => {
-    return <div className="bg-slate-400 p-4">
+    return <div className="p-4">
       <h2 className="text-bold text-xl mb-8">{title}</h2>
       {mainContent}
     </div>
@@ -46,12 +47,12 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
 
   return <div className="flex h-screen flex-col">
     <div className="overflow-hidden flex">
-      <div className="lg:block hidden w-64 h-screen shadow-lg">
+      <div className="lg:block hidden w-64 h-screen shadow-lg ">
         <LeftMenu />
       </div>
 
       <main className="overflow-x-hidden overflow-y-auto p-4 w-full">
-        <div className="p-4 shadow-md bg-blue-400 mb-4">
+        <div className="p-4 shadow-md border mb-4 rounded-3xl">
           <AdminAppBar />
         </div>
         <MainContent />

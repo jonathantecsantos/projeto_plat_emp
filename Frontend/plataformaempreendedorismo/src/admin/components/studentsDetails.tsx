@@ -10,34 +10,35 @@ export const StudentsDetails = () => {
   const { data: students, isLoading, error } = useGetAllStudentsQuery()
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { });
-  // const tableComponentSetCurrPage = tableComponentSetCurrPageRef.current
+  const tableComponentSetCurrPage = tableComponentSetCurrPageRef.current
 
   if (isLoading) return <p className="text-center">Loading...</p>
   if (error) return <p className="text-center">Error loading students.</p>
 
-  // if (tableComponentSetCurrPage)
-  //   tableComponentSetCurrPage({
-  //     page: 0
-  //   })
+  if (tableComponentSetCurrPage)
+    tableComponentSetCurrPage({
+      page: 0
+    })
 
   return (
     <div className="overflow-x-auto">
       <TableComponent
-        colums={['id', 'cpf', 'nome', 'email', 'turma', 'isLider', 'isViceLider', 'idEquipe', 'nomeEquipe', 'idObs']}
+        colums={['ID', 'CPF', 'Nome', 'Email', 'Turma', 'Líder', 'Vice Líder', 'ID Equipe',
+          'Nome Equipe', 'ID Obs']}
         wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
         setCurrPageRef={tableComponentSetCurrPageRef}
         bodyList={students!}
         bodyRowBuilder={(student: StudentsResponse) => <>
-          <td className="p-4">{student.id}</td>
-          <td className="p-4">{student.cpf}</td>
-          <td className="p-4">{student.nome}</td>
-          <td className="p-4">{student.email}</td>
-          <td className="p-4 uppercase">{student.turma}</td>
-          <td className="p-4">{student.isLider ? 'Sim' : 'Não'}</td>
-          <td className="p-4">{student.isViceLider ? 'Sim' : 'Não'}</td>
-          <td className="p-4">{student.idEquipe}</td>
-          <td className="p-4">{student.nomeEquipe}</td>
-          <td className="p-4">{student.idObs}</td>
+          <td className="px-4 py-2">{student.id}</td>
+          <td className="px-4 py-2">{student.cpf}</td>
+          <td className="px-4 py-2">{student.nome}</td>
+          <td className="px-4 py-2">{student.email}</td>
+          <td className="px-4 py-2 uppercase">{student.turma}</td>
+          <td className="px-4 py-2">{student.isLider ? 'Sim' : 'Não'}</td>
+          <td className="px-4 py-2">{student.isViceLider ? 'Sim' : 'Não'}</td>
+          <td className="px-4 py-2">{student.idEquipe}</td>
+          <td className="px-4 py-2">{student.nomeEquipe}</td>
+          <td className="px-4 py-2">{student.idObs}</td>
         </>}
         // rowStyle={{}}
         onClickRow={(student: TableComponentClickRowProps<Student>) => {

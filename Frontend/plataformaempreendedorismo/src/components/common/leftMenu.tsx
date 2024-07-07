@@ -6,38 +6,53 @@ import GradeIcon from '@mui/icons-material/Grade'
 import GroupIcon from '@mui/icons-material/Group'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import LeaderboardIcon from '@mui/icons-material/Leaderboard'
-import SettingsIcon from '@mui/icons-material/Settings'
 import StarIcon from '@mui/icons-material/Star'
 import RepoIcon from '@mui/icons-material/Storage'
-import { Collapse, IconButton, List, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
-import React, { ReactNode, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import Collapse from '@mui/material/Collapse'
+import List from '@mui/material/List'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import HomeIcon from '@mui/icons-material/Home'
+import { ReactNode, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { RoutesNames } from '../../globals'
 
 interface MenuItemProps {
-  outsideName: string,
-  outsideIcon: ReactNode,
-  routeName?: string,
-  subItens: boolean,
+  outsideName: string
+  outsideIcon: ReactNode
+  routeName?: string
+  subItens: boolean
   insideItems?: {
-    insideName: string,
-    insideIcon: ReactNode,
-    routeName: string,
-  }[],
+    insideName: string
+    insideIcon: ReactNode
+    routeName: string
+  }[]
 }
 
 interface ItemProps extends MenuItemProps {
-  onClick: (routeName: string,) => void,
+  onClick: (routeName: string) => void
 }
 
 const menuItems: MenuItemProps[] = [
+  {
+    outsideIcon: <HomeIcon />,
+    outsideName: 'Admin',
+    subItens: false,
+    routeName: `${RoutesNames.home}`
+  },
   {
     outsideName: 'Importação',
     outsideIcon: <ImportExportIcon />,
     subItens: false,
     routeName: `${RoutesNames.uploadFiles}`,
   },
+  // {
+  //   outsideName: 'Alunos',
+  //   outsideIcon: <GroupIcon />,
+  //   subItens: false,
+  //   routeName: `${RoutesNames.students}`,
+  // },
   {
     outsideName: 'Times',
     outsideIcon: <GroupIcon />,
@@ -58,7 +73,7 @@ const menuItems: MenuItemProps[] = [
     outsideName: 'Repositório',
     outsideIcon: <RepoIcon />,
     subItens: false,
-    routeName: `${RoutesNames.repository}`,
+    routeName: `/${RoutesNames.repository}`,
   },
   {
     outsideName: 'Avaliação',
@@ -85,13 +100,15 @@ const menuItems: MenuItemProps[] = [
 ]
 
 const Item = (props: ItemProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
 
   const handleClick = () => {
     if (props.routeName) {
       props.onClick(props.routeName)
     } else {
-      setIsOpen(!isOpen)
+      setOpen(!open)
     }
   }
 
@@ -99,77 +116,51 @@ const Item = (props: ItemProps) => {
     props.onClick(routeName)
   }
 
+  const isActive = props.routeName === location.pathname || props.insideItems?.some(item => item.routeName === location.pathname)
+  const isOpen = open || isActive
+
+  const listItemButtonClass = `p-4 ${isActive ? 'bg-[#EBF6FF] text-[#242424]' : 'hover:bg-[#509CDB] hover:text-white'}`;
+
   return (
     <div className=''>
-      <MenuItem onClick={handleClick}>
-        <ListItemIcon>{props.outsideIcon}</ListItemIcon>
+      <ListItemButton className={listItemButtonClass} onClick={handleClick}>
+        <ListItemIcon sx={{ color: isActive ? '' : 'inherit' }}>{props.outsideIcon}</ListItemIcon>
         <ListItemText primary={props.outsideName} />
         {props.subItens && (isOpen ? <ExpandLess /> : <ExpandMore />)}
-      </MenuItem>
-
+      </ListItemButton>
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {props.insideItems?.map((item, index) => (
-            <MenuItem sx={{ pl: 2, }} key={index} onClick={() => handleInsideItemClick(item.routeName)}>
-              <ListItemIcon>{item.insideIcon}</ListItemIcon>
-              <ListItemText primary={item.insideName} />
-            </MenuItem>
-          ))}
+          {props.insideItems?.map((item, index) => {
+            const insideItemClass = `p-2 px-6 ${location.pathname === item.routeName ? 'bg-[#509CDB] text-white' : 'hover:bg-[#509CDB] hover:text-white'}`;
+            return (
+              <ListItemButton
+                className={insideItemClass}
+                key={index}
+                onClick={() => handleInsideItemClick(item.routeName)}
+              >
+                <ListItemIcon className={location.pathname === item.routeName ? 'text-white' : 'text-inherit'}>{item.insideIcon}</ListItemIcon>
+                <ListItemText primary={item.insideName} />
+              </ListItemButton>
+            );
+          })}
         </List>
       </Collapse>
     </div>
   )
 }
 
-export const AuthMenuComponent = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+export const LeftMenuComponent = () => {
   const navigate = useNavigate()
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
 
   const handleMenuItemClick = (routeName: string) => {
     navigate(routeName)
-    handleClose()
   }
 
-  const open = Boolean(anchorEl)
-
   return (
-    <div>
-      <IconButton
-
-        aria-label="configurações"
-        aria-controls={open ? 'auth-menu' : undefined}
-        aria-haspopup="listbox"
-        onClick={handleClick}
-      >
-        <SettingsIcon style={{ color: '#cecece', marginInline: 20, }} />
-      </IconButton>
-      <Menu
-        id="auth-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        {menuItems.map((menuItem, index) => (
-          <Item
-            key={index}
-            {...menuItem}
-            onClick={handleMenuItemClick}
-          />
-        ))}
-      </Menu>
-    </div>
+    <List sx={{ width: '100%', maxWidth: 360, }} component="nav">
+      {menuItems.map((menuItem, index) => (
+        <Item key={index} {...menuItem} onClick={handleMenuItemClick} />
+      ))}
+    </List>
   )
 }
-

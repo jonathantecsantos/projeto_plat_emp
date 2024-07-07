@@ -19,11 +19,12 @@ const StyledTableTitleCell = styled(TableCell)(({ theme }) => ({
   whiteSpace: 'nowrap',
   backgroundColor: '#152259', 
   color: '#ffffff',
+  padding: 5,
 }));
 
 function renderTableHeader(columns: string[]) {
   return (
-    <TableHead className='shadow-sm'>
+    <TableHead>
       <TableRow>
         {columns.map((c, idx) => (
           <StyledTableTitleCell key={idx} align='left'>{c}</StyledTableTitleCell>

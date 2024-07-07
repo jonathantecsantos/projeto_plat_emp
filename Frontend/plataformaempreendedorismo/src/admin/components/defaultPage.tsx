@@ -1,4 +1,5 @@
 import { ReactNode } from "react"
+import { LeftMenuComponent } from "../../components/common/leftMenu"
 
 interface AdminPage {
   mainContent: ReactNode
@@ -9,7 +10,6 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
 
   const AdminAppBar = () => {
     return <div className="flex">
-      {/* <input placeholder="Pesquisar" /> */}
       <p className="text-right w-full">Logout</p>
     </div>
   }
@@ -17,7 +17,7 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
   const LeftMenu = () => {
     const backgroundImageUrl = `./src/assets/logo.png`
 
-    return <div>
+    return <div className="bg-[#152259] text-[#cecece] h-screen">
       <div className="w-full p-4 border-gray-300 border-b">
         <img
           src={backgroundImageUrl}
@@ -25,7 +25,8 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
         />
         <h2 className="text-nowrap my-4">Plataforma Empreendedorismo</h2>
       </div>
-      <ul className="">
+      <LeftMenuComponent />
+      {/* <ul className="">
         <li className="p-4 hover:bg-[#509CDB] hover:text-white">Dashboard</li>
         <li className="p-4 hover:bg-[#509CDB] hover:text-white">Teachers</li>
         <li className="p-4 hover:bg-[#509CDB] hover:text-white">Students/Classes</li>
@@ -33,7 +34,7 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
         <li className="p-4 hover:bg-[#509CDB] hover:text-white">Settings and Profile</li>
         <li className="p-4 hover:bg-[#509CDB] hover:text-white">Exams</li>
         <li className="p-4 hover:bg-[#509CDB] hover:text-white">Features</li>
-      </ul>
+      </ul> */}
     </div>
   }
 

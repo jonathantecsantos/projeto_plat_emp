@@ -15,7 +15,7 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
   }
 
   const LeftMenu = () => {
-    const backgroundImageUrl = `./src/assets/logo.png`
+    const backgroundImageUrl = `./src/assets/logo.svg`
 
     return <div className="bg-[#152259] text-[#cecece] h-screen">
       <div className="w-full p-4 border-gray-300 border-b">

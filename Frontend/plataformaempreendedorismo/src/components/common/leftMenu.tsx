@@ -67,6 +67,11 @@ const menuItems: MenuItemProps[] = [
       insideName: 'Alunos',
       routeName: `${RoutesNames.students}`,
     },
+      {
+        insideIcon: <GradeIcon />,
+        insideName: 'Add Aluno',
+        routeName: `${RoutesNames.createStudent}`,
+      },
     ],
   },
   {

@@ -9,6 +9,7 @@ import { LoginPage } from './pages/login';
 import { RepositoryPage } from './pages/repository';
 import { UploadFilesPage } from './pages/uploadFiles';
 import { StudentsDetailsPage } from './pages/studentsDetails';
+import { CreateStudentPage } from './pages/createStudent';
 
 export const router = createBrowserRouter([
   {
@@ -43,4 +44,8 @@ export const router = createBrowserRouter([
     path: RoutesNames.students,
     element: <ProtectedRoute children={<StudentsDetailsPage />} allowedRoles={['admin', 'aluno', 'professor']} />
   },
+  {
+    path: RoutesNames.createStudent,
+    element: <ProtectedRoute children={<CreateStudentPage />} allowedRoles={['admin']} />
+  }
 ]);

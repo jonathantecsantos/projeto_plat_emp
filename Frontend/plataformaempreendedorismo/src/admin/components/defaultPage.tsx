@@ -23,7 +23,7 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
           src={backgroundImageUrl}
           className="-z-10 mt-4"
         />
-        <h2 className="text-nowrap my-4">Plataforma Empreendedorismo</h2>
+        <h2 className="my-4 cursor-default font-bold text-center text-white bg-gradient-to-r from-blue-500 to-blue-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">Plataforma Empreendedorismo</h2>
       </div>
       <LeftMenuComponent />
       {/* <ul className="">
@@ -41,7 +41,7 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
 
   const MainContent = () => {
     return <div className="p-4">
-      <h2 className="text-bold text-xl mb-8">{title}</h2>
+      <h2 className="text-bold text-xl mb-8 bg-slate-50">{title}</h2>
       {mainContent}
     </div>
   }

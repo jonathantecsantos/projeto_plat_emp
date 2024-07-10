@@ -1,6 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoListaDadosRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AlunoService;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -53,6 +55,42 @@ public class AlunoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao criar aluno: " + e.getMessage());
         }
+    }
+
+    @Operation(summary = "Apagar Aluno", method = "DELETE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aluno deletado com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Aluno não encontrado")
+    })
+    @DeleteMapping("/apagar/{id}")
+    public ResponseEntity<String> apagar (@PathVariable Long id){
+        try{
+            alunoRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Aluno apagado com sucesso!");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body("Erro ao criar aluno: " + e.getMessage());
+        }
+
+    }
+
+    @Operation(summary = "Editar Aluno", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aluno editado com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao editar aluno")
+    })
+    @PutMapping("/editar")
+    public ResponseEntity<String> editar(@RequestBody @Valid AlunoEditarRecord alunoEditarRecord){
+        try {
+            alunoService.editarAluno(alunoEditarRecord);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Aluno atualizado com sucesso!");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao editar aluno: " + e.getMessage());
+        }
+
     }
 
 }

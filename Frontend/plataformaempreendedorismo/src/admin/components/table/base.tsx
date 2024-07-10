@@ -1,10 +1,10 @@
-import { LabelDisplayedRowsArgs, Table, TableBody, TablePagination } from '@mui/material'
+import { LabelDisplayedRowsArgs, TablePagination } from '@mui/material'
 import * as locales from '@mui/material/locale'
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles'
-import React, { ChangeEvent, DetailedHTMLProps, ReactNode, useEffect, useMemo, useState } from 'react'
-import { SupportedLocales, TableComponentSetCurrPageProps } from './common'
-import TablePaginationActions from './actions'
 import { CommonUtils } from 'essencials'
+import React, { ChangeEvent, DetailedHTMLProps, ReactNode, useEffect, useMemo, useState } from 'react'
+import TablePaginationActions from './actions'
+import { SupportedLocales, TableComponentSetCurrPageProps } from './common'
 
 export interface TableBaseComponentProps<T> {
   bodyList: T[],
@@ -20,11 +20,6 @@ export interface TableBaseComponentProps<T> {
   // ...EXPORTED METHOD
 }
 
-function mergeArrays<T>(...arrays: T[][]): T[] {
-  const combinedArray = arrays.reduce((acc, curr) => acc.concat(curr), [])
-  const uniqueArray = Array.from(new Set(combinedArray))
-  return uniqueArray
-}
 
 export const TableBaseComponent = <T,>(props: TableBaseComponentProps<T>) => {
   const [page, setPage] = useState(0)
@@ -53,7 +48,7 @@ export const TableBaseComponent = <T,>(props: TableBaseComponentProps<T>) => {
       props.onRowsPerPageChange(rowsPerPage)
   }, [rowsPerPage])
 
-  const handleChangePage = (event: unknown, newPage: number) => setPage(newPage)
+  const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage)
 
   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value)

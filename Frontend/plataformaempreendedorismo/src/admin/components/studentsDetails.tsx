@@ -1,3 +1,4 @@
+import { CircularProgress } from '@mui/material'
 import React, { useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useGetAllStudentsQuery } from '../../api/studentApi'
@@ -7,8 +8,9 @@ import { Student, StudentsResponse } from '../../model/student'
 import { TableComponent } from './table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from './table/common'
 
+
 export const StudentsDetails: React.FC = () => {
-  const { data: students, isLoading, error } = useGetAllStudentsQuery()
+  const { data: students, isLoading, error, refetch } = useGetAllStudentsQuery()
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
   const tableComponentSetCurrPage = tableComponentSetCurrPageRef.current
@@ -29,14 +31,14 @@ export const StudentsDetails: React.FC = () => {
   }
   console.log('STUDENTS PAGE LOG')
 
-  if (isLoading) return <p className="text-center">Loading...</p>
+  if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading students.</p>
 
   if (tableComponentSetCurrPage) tableComponentSetCurrPage({ page: 0 })
 
   return (
     <div className="overflow-x-auto">
-      <AdminHeader onSearch={handleSearch} />
+      <AdminHeader onSearch={handleSearch} onRefresh={refetch}/>
       <TableComponent
         colums={[
           'ID',

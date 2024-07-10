@@ -12,7 +12,7 @@ interface UploadComponent {
 
 export const UploadComponent = ({ title, onFileChange, onSubmit, isLoading, uploaded }: UploadComponent) => {
   return (
-    <div className='shadow-md rounded w-fit p-2 bg-[#202020] '>
+    <div className='shadow-md rounded w-fit p-2 bg-blue-300 '>
       <div className='flex justify-start space-x-1 p-4'>
         <h2>{title}</h2>
         {uploaded && <CheckCircleIcon style={{ color: 'green' }} />}

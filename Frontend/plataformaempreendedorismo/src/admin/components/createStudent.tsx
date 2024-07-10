@@ -1,13 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { z } from 'zod'
-import { useCreateStudentMutation } from '../../api/studentApi'
-import { RoutesNames } from '../../globals'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
+import { useCreateStudentMutation } from '../../api/studentApi'
 
 const createStudentSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -16,8 +15,8 @@ const createStudentSchema = z.object({
   turma: z.string().min(1, "Turma é obrigatória"),
   isLider: z.boolean(),
   isViceLider: z.boolean(),
-  idOds: z.preprocess((val) => Number(val), z.number().int()),
-  idEquipe: z.preprocess((val) => Number(val), z.number().int()),
+  idOds: z.preprocess((val) => Number(val), z.number().int().nullable()),
+  idEquipe: z.preprocess((val) => Number(val), z.number().int().nullable()),
 })
 
 type CreateStudentForm = z.infer<typeof createStudentSchema>
@@ -26,12 +25,11 @@ export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 
 export const AddStudent = () => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const [createStudent, { isLoading, isSuccess }] = useCreateStudentMutation()
   const [success, setSucess] = useState(isSuccess)
 
-  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<CreateStudentForm>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateStudentForm>({
     resolver: zodResolver(createStudentSchema),
     defaultValues: {
       nome: searchParams.get('nome') || '',
@@ -40,8 +38,8 @@ export const AddStudent = () => {
       turma: searchParams.get('turma') || '',
       isLider: searchParams.get('isLider') === 'true',
       isViceLider: searchParams.get('isViceLider') === 'true',
-      idOds: searchParams.get('idOds') ? Number(searchParams.get('idOds')) : 0,
-      idEquipe: searchParams.get('idEquipe') ? Number(searchParams.get('idEquipe')) : 0,
+      idOds: searchParams.get('idOds') ? Number(searchParams.get('idOds')) : null,
+      idEquipe: searchParams.get('idEquipe') ? Number(searchParams.get('idEquipe')) : null,
     },
   })
 

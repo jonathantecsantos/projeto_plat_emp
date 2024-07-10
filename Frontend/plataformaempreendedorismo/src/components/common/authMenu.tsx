@@ -1,11 +1,14 @@
 import AssessmentIcon from '@mui/icons-material/Assessment'
+import ClassIcon from '@mui/icons-material/Class'
 import ResultIcon from '@mui/icons-material/EmojiEvents'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import GradeIcon from '@mui/icons-material/Grade'
 import GroupIcon from '@mui/icons-material/Group'
+import GroupsIcon from '@mui/icons-material/Groups'
+import HomeIcon from '@mui/icons-material/Home'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import LeaderboardIcon from '@mui/icons-material/Leaderboard'
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StarIcon from '@mui/icons-material/Star'
 import RepoIcon from '@mui/icons-material/Storage'
@@ -33,7 +36,13 @@ interface ItemProps extends MenuItemProps {
 
 const menuItems: MenuItemProps[] = [
   {
-    outsideName: 'Importação',
+    outsideIcon: <HomeIcon />,
+    outsideName: 'Admin',
+    subItens: false,
+    routeName: `${RoutesNames.adminHome}`
+  },
+  {
+    outsideName: 'Importações',
     outsideIcon: <ImportExportIcon />,
     subItens: false,
     routeName: `${RoutesNames.uploadFiles}`,
@@ -43,14 +52,19 @@ const menuItems: MenuItemProps[] = [
     outsideIcon: <GroupIcon />,
     subItens: true,
     insideItems: [{
-      insideIcon: <GradeIcon />,
+      insideIcon: <ClassIcon />,
       insideName: 'Banner',
       routeName: `${RoutesNames.bannerPreview}`,
     },
     {
-      insideIcon: <GradeIcon />,
+      insideIcon: <GroupsIcon />,
       insideName: 'Alunos',
       routeName: `${RoutesNames.students}`,
+    },
+    {
+      insideIcon: <PersonAddAlt1Icon />,
+      insideName: 'Aluno',
+      routeName: `${RoutesNames.createStudent}`,
     },
     ],
   },
@@ -58,7 +72,7 @@ const menuItems: MenuItemProps[] = [
     outsideName: 'Repositório',
     outsideIcon: <RepoIcon />,
     subItens: false,
-    routeName: `${RoutesNames.repository}`,
+    routeName: `/${RoutesNames.repository}`,
   },
   {
     outsideName: 'Avaliação',
@@ -143,13 +157,13 @@ export const AuthMenuComponent = () => {
   return (
     <div>
       <IconButton
-
         aria-label="configurações"
         aria-controls={open ? 'auth-menu' : undefined}
         aria-haspopup="listbox"
         onClick={handleClick}
+        className='mx-4'
       >
-        <SettingsIcon style={{ color: '#cecece', marginInline: 20, }} />
+        <SettingsIcon style={{ color: '#cecece',  }} />
       </IconButton>
       <Menu
         id="auth-menu"

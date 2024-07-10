@@ -20,7 +20,7 @@ export const LoginComponent = () => {
         password: user?.password!
       })
       if (response)
-        navigate(RoutesNames.students)
+        navigate(RoutesNames.adminHome)
     } catch (error) {
       enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
     }
@@ -68,7 +68,8 @@ export const LoginComponent = () => {
                 onChange={handlePasswordChange}
               />
             </div>
-            <LoadingButton loading={isLoading} disabled={isLoading} className="bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]"
+            <LoadingButton loading={isLoading} disabled={isLoading}
+              className="bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]"
               variant="contained" onClick={handleLogin} >
               <span>Entrar</span>
             </LoadingButton>

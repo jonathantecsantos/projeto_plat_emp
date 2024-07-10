@@ -1,7 +1,6 @@
 import PercentIcon from '@mui/icons-material/Percent'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, IconButton, TextFieldProps, inputClasses } from '@mui/material'
-import * as React from 'react'
 import { ChangeEvent, MouseEventHandler, useState } from 'react'
 import { defaultMB } from '../../globals'
 

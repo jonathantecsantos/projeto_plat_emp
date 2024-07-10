@@ -1,11 +1,14 @@
 import AssessmentIcon from '@mui/icons-material/Assessment'
+import ClassIcon from '@mui/icons-material/Class'
 import ResultIcon from '@mui/icons-material/EmojiEvents'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import GradeIcon from '@mui/icons-material/Grade'
 import GroupIcon from '@mui/icons-material/Group'
+import GroupsIcon from '@mui/icons-material/Groups'
+import HomeIcon from '@mui/icons-material/Home'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import LeaderboardIcon from '@mui/icons-material/Leaderboard'
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import StarIcon from '@mui/icons-material/Star'
 import RepoIcon from '@mui/icons-material/Storage'
 import Collapse from '@mui/material/Collapse'
@@ -13,7 +16,6 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import HomeIcon from '@mui/icons-material/Home'
 import { ReactNode, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { RoutesNames } from '../../globals'
@@ -39,39 +41,33 @@ const menuItems: MenuItemProps[] = [
     outsideIcon: <HomeIcon />,
     outsideName: 'Admin',
     subItens: false,
-    routeName: `${RoutesNames.home}`
+    routeName: RoutesNames.adminHome
   },
   {
-    outsideName: 'Importação',
+    outsideName: 'Importações',
     outsideIcon: <ImportExportIcon />,
     subItens: false,
-    routeName: `${RoutesNames.uploadFiles}`,
+    routeName: RoutesNames.uploadFiles,
   },
-  // {
-  //   outsideName: 'Alunos',
-  //   outsideIcon: <GroupIcon />,
-  //   subItens: false,
-  //   routeName: `${RoutesNames.students}`,
-  // },
   {
     outsideName: 'Times',
     outsideIcon: <GroupIcon />,
     subItens: true,
     insideItems: [{
-      insideIcon: <GradeIcon />,
+      insideIcon: <ClassIcon />,
       insideName: 'Banner',
-      routeName: `${RoutesNames.bannerPreview}`,
+      routeName: RoutesNames.bannerPreview,
     },
     {
-      insideIcon: <GradeIcon />,
+      insideIcon: <GroupsIcon />,
       insideName: 'Alunos',
       routeName: `${RoutesNames.students}`,
     },
-      {
-        insideIcon: <GradeIcon />,
-        insideName: 'Add Aluno',
-        routeName: `${RoutesNames.createStudent}`,
-      },
+    {
+      insideIcon: <PersonAddAlt1Icon />,
+      insideName: 'Aluno',
+      routeName: `${RoutesNames.createStudent}`,
+    },
     ],
   },
   {
@@ -106,7 +102,6 @@ const menuItems: MenuItemProps[] = [
 
 const Item = (props: ItemProps) => {
   const location = useLocation()
-  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
 
   const handleClick = () => {

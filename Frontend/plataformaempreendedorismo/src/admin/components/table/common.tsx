@@ -7,11 +7,11 @@ import React from 'react'
 
 export type SupportedLocales = keyof typeof locales
 
-export const StyledListItemText = styled(ListItemText)(({theme}) => ({
+export const StyledListItemText = styled(ListItemText)(({ }) => ({
   margin: 0
 }))
 
-export const StyledTableCell = styled(TableCell)(({ theme }) => ({
+export const StyledTableCell = styled(TableCell)(({ }) => ({
   padding: '8px 16px',
   boxSizing: 'border-box',
 }))

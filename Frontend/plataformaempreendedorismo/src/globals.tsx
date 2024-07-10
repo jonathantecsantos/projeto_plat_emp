@@ -8,7 +8,8 @@ export const RoutesNames = {
   uploadFiles: '/upload-files',
   students: '/students',
   student: '/students/:id',
-  createStudent: '/add-student'
+  createStudent: '/add-student',
+  adminHome: '/admin-home'
 }
 
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 

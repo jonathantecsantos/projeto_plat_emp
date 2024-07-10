@@ -14,10 +14,10 @@ export interface TableComponentProps<T> extends TableBaseComponentProps<T> {
   rowStyle?: CSSProperties | undefined,
 }
 
-const StyledTableTitleCell = styled(TableCell)(({ theme }) => ({
+const StyledTableTitleCell = styled(TableCell)(({ }) => ({
   fontWeight: 'bold',
   whiteSpace: 'nowrap',
-  backgroundColor: '#152259', 
+  backgroundColor: '#152259',
   color: '#ffffff',
   padding: 5,
 }));
@@ -59,7 +59,7 @@ export const TableComponent = <T,>(props: TableComponentProps<T>) => {
       props.onRowsPerPageChange(rowsPerPage);
   }, [rowsPerPage]);
 
-  const handleChangePage = (event: unknown, newPage: number) => setPage(newPage);
+  const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
 
   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);

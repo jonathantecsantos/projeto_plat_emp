@@ -22,8 +22,8 @@ export interface CreateStudent {
   turma: string
   isLider: boolean
   isViceLider: boolean
-  idOds: number
-  idEquipe: number
+  idOds: number | null 
+  idEquipe: number | null
 }
 
 export interface StudentsResponse {

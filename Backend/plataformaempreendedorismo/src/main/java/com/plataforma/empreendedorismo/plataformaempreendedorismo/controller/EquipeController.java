@@ -1,6 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaDadosEquipeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.EquipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("equipes")
@@ -45,6 +46,17 @@ public class EquipeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
+    }
+
+    @Operation(summary = "Busca Equipes", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Equipes não encontradas"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
+    })
+    @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ListaEquipesRecord> getEquipes(){
+        return equipeService.buscarEquipes();
     }
 }
 

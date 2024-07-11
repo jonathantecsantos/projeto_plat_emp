@@ -1,5 +1,5 @@
 -- Tabela Grupo
-DROP TABLE IF EXISTS equipe;
+--DROP TABLE IF EXISTS equipe;
 
 CREATE TABLE equipe (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -7,7 +7,7 @@ CREATE TABLE equipe (
 );
 
 -- Tabela Importacao
-DROP TABLE IF EXISTS importacao;
+--DROP TABLE IF EXISTS importacao;
 
 CREATE TABLE importacao (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -19,7 +19,7 @@ CREATE TABLE importacao (
 );
 
 -- Tabela Obs
-DROP TABLE IF EXISTS ods;
+--DROP TABLE IF EXISTS ods;
 
 CREATE TABLE ods (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -28,7 +28,7 @@ CREATE TABLE ods (
 );
 
 -- Tabela Aluno
-DROP TABLE IF EXISTS aluno;
+--DROP TABLE IF EXISTS aluno;
 
 CREATE TABLE aluno (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -76,7 +76,7 @@ insert into formato_avaliacao (descricao) values
 ('SHARK TANK'),
 ('EXPO DLEI');
 
-DROP TABLE IF EXISTS avaliador;
+--DROP TABLE IF EXISTS avaliador;
 
 CREATE TABLE avaliador (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,7 +84,7 @@ CREATE TABLE avaliador (
     instituicao VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS avaliador_formato;
+--DROP TABLE IF EXISTS avaliador_formato;
 
 CREATE TABLE avaliador_formato (
     id_avaliador INT,
@@ -94,7 +94,7 @@ CREATE TABLE avaliador_formato (
     FOREIGN KEY (id_formato_avaliacao) REFERENCES formato_avaliacao(id)
 );
 
-DROP TABLE IF EXISTS professor;
+--DROP TABLE IF EXISTS professor;
 
 CREATE TABLE professor (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -102,4 +102,40 @@ CREATE TABLE professor (
   email varchar(100) NOT NULL,
   equipe_id INT,
   FOREIGN KEY (equipe_id) REFERENCES equipe(id)
+);
+
+--DROP TABLE IF EXISTS banner;
+
+ CREATE TABLE banner (
+    ID INT PRIMARY key AUTO_INCREMENT,
+    ID_EQUIPE_Q0 INT,
+    TEXTO_DESCRICAO_Q0 VARCHAR(500),
+    EQUIPE_Q1 VARCHAR(500),
+    PARCEIRO_Q1 VARCHAR(500),
+    ATIVIDADE_CHAVE_Q1 VARCHAR(500),
+    RECURSOS_Q1 VARCHAR(500),
+    CUSTOS_Q1 VARCHAR(500),
+    OPORTUNIDADE_NEG_Q2 VARCHAR(500),
+    CUSTO_Q2 VARCHAR(500),
+    PROPOSTA_VALOR_Q2 VARCHAR(500),
+    FONTE_RECEITA_Q2 VARCHAR(500),
+    RESULTADO_FINANCEIRO_Q2 VARCHAR(500),
+    CONTEXTO_PROBLEMA_Q3 VARCHAR(500),
+    PUBLICO_FOCO_IMPACTO_Q3 VARCHAR(500),
+    INTERVENCOES_Q3 VARCHAR(500),
+    SAIDAS_Q3 VARCHAR(500),
+    RESULTADOS_CURTO_PRAZO_Q3 VARCHAR(500),
+    RESULTADOS_MEDIO_PRAZO_Q3 VARCHAR(500),
+    VISAO_IMPACTO_Q3 VARCHAR(500),
+    FOREIGN KEY (ID_EQUIPE_Q0) REFERENCES equipe(ID)
+);
+
+--DROP TABLE IF EXISTS  banner;
+
+CREATE TABLE anexo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    banner_id INT,
+    nome_anexo VARCHAR(255),
+    caminho_anexo VARCHAR(500),
+    FOREIGN KEY (banner_id) REFERENCES banner (id)
 );

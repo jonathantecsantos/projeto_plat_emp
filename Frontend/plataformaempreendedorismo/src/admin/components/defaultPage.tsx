@@ -5,6 +5,7 @@ import { LeftMenuComponent } from "../../components/common/leftMenu"
 import { RoutesNames } from "../../globals"
 import { logout } from "../../redux/reducers/auth.slice"
 import LogoutIcon from '@mui/icons-material/Logout';
+import logo from '../../assets/logo.svg'; 
 
 interface AdminPage {
   mainContent: ReactNode
@@ -32,7 +33,7 @@ const AdminAppBar = () => {
 }
 
 const LeftMenu = () => {
-  const backgroundImageUrl = `./src/assets/logo.svg`
+  const backgroundImageUrl = logo
   const navigate = useNavigate()
 
   return (

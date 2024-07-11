@@ -49,4 +49,5 @@ public class Aluno {
         this.ods = ods;
         this.equipe = equipe;
     }
+
 }

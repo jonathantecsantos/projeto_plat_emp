@@ -4,6 +4,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaDadosEquipeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.ProfessorRepository;
@@ -48,5 +49,9 @@ public class EquipeService {
             throw new Exception("Erro ao buscar ODS: " + e.getMessage(), e);
         }
         return equipe;
+    }
+
+    public List<ListaEquipesRecord> buscarEquipes() {
+        return equipeRepository.findAll().stream().map(ListaEquipesRecord::new).toList();
     }
 }

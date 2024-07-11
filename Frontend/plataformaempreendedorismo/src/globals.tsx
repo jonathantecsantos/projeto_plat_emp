@@ -8,7 +8,6 @@ export const RoutesNames = {
   uploadFiles: '/upload-files',
   students: '/students',
   student: '/students/:id',
-  createStudent: '/add-student',
   adminHome: '/admin-home'
 }
 

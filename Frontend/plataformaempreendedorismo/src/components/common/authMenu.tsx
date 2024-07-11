@@ -64,7 +64,7 @@ const menuItems: MenuItemProps[] = [
     {
       insideIcon: <PersonAddAlt1Icon />,
       insideName: 'Aluno',
-      routeName: `${RoutesNames.createStudent}`,
+      routeName: `${RoutesNames.student}`,
     },
     ],
   },
@@ -163,7 +163,7 @@ export const AuthMenuComponent = () => {
         onClick={handleClick}
         className='mx-4'
       >
-        <SettingsIcon style={{ color: '#cecece',  }} />
+        <SettingsIcon style={{ color: '#cecece', }} />
       </IconButton>
       <Menu
         id="auth-menu"

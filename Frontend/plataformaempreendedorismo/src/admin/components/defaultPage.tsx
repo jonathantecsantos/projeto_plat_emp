@@ -5,7 +5,8 @@ import { LeftMenuComponent } from "../../components/common/leftMenu"
 import { RoutesNames } from "../../globals"
 import { logout } from "../../redux/reducers/auth.slice"
 import LogoutIcon from '@mui/icons-material/Logout';
-import logo from '../../assets/logo.svg'; 
+import logo from '../../assets/logo.svg';
+import { BreadcrumbComponent } from "../../components/common/breadcrumb"
 
 interface AdminPage {
   mainContent: ReactNode
@@ -66,7 +67,8 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
         </div>
         <main className="overflow-x-hidden overflow-y-auto p-4 w-full mt-14 rounded-lg">
           <div className="p-4 shadow-md border mb-4 rounded-3xl bg-white">
-            <h2 className="text-bold text-xl mb-8 bg-slate-50">{title}</h2>
+            {/* <h2 className="text-bold text-sm mb-8">{title}</h2> */}
+            <BreadcrumbComponent />
             {mainContent}
           </div>
         </main>

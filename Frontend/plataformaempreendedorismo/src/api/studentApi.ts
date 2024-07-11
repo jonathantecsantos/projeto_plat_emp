@@ -7,8 +7,8 @@ export const studentsApiSlice = createApi({
   tagTypes: ['Student'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   endpoints: (build) => ({
-    getStudent: build.query<Student, string>({
-      query: (id) => `/aluno/${id}`,
+    getStudent: build.query<Student, number>({
+      query: (id) => `/alunos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
     getAllStudents: build.query<StudentsResponse[], void>({
@@ -32,11 +32,11 @@ export const studentsApiSlice = createApi({
       }),
       invalidatesTags: [{ type: 'Student', id: 'LIST' }],
     }),
-    updateStudent: build.mutation<Student, { id: any; data: Partial<Student> }>({
+    updateStudent: build.mutation<CreateStudent, { id: any; data: Partial<CreateStudent> }>({
       query: ({ id, data }) => ({
-        url: `/aluno/${id}`,
+        url: `/alunos/editar`,
         method: 'PUT',
-        body: data,
+        body: { id, ...data },
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Student', id }],
     }),

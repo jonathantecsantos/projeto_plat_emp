@@ -6,10 +6,10 @@ import { AdminHomePage } from './pages/adminHome';
 import { BannerPreviewPage } from './pages/bannerPreview';
 import { CompanyDetailsPage } from './pages/companyDetails';
 import { ContactPage } from './pages/contact';
-import { CreateStudentPage } from './pages/createStudent';
 import { LoginPage } from './pages/login';
 import { RepositoryPage } from './pages/repository';
-import { StudentsDetailsPage } from './pages/studentsDetails';
+import { StudentPage } from './pages/student';
+import { StudentsDetailsPage } from './pages/students';
 import { UploadFilesPage } from './pages/uploadFiles';
 
 export const router = createBrowserRouter([
@@ -46,8 +46,8 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute children={<StudentsDetailsPage />} allowedRoles={['admin', 'aluno', 'professor']} />
   },
   {
-    path: RoutesNames.createStudent,
-    element: <ProtectedRoute children={<CreateStudentPage />} allowedRoles={['admin']} />
+    path: RoutesNames.student,
+    element: <ProtectedRoute children={<StudentPage />} allowedRoles={['admin']} />
   },
   {
     path: RoutesNames.adminHome,

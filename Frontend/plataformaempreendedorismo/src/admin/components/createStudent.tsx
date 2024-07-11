@@ -84,7 +84,7 @@ export const AddStudent = () => {
   const handleReset = () => {
     reset()
     setSearchParams({
-      
+
     })
     setSucess(false)
   }
@@ -186,14 +186,15 @@ export const AddStudent = () => {
             <label htmlFor="isViceLider" className="ml-2 block text-sm font-medium text-gray-700">Vice-Líder</label>
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <button
+        <div className={`flex items-center  ${success ? 'justify-between' : 'justify-end'}`}>
+          {success && <button
             type="button"
             onClick={handleReset}
             className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 mt-8"
           >
             Limpar
-          </button>
+          </button>}
+
 
           <LoadingButton
             className='bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]'

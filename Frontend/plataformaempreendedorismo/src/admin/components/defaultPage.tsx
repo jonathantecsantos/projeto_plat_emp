@@ -7,6 +7,8 @@ import { logout } from "../../redux/reducers/auth.slice"
 import LogoutIcon from '@mui/icons-material/Logout';
 import logo from '../../assets/logo.svg';
 import { BreadcrumbComponent } from "../../components/common/breadcrumb"
+import { Divider } from "@mui/material"
+import { DrawerComponent } from "../../components/common/drawer"
 
 interface AdminPage {
   mainContent: ReactNode
@@ -18,8 +20,13 @@ const AdminAppBar = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="flex  bg-[#152259]  text-white  justify-end p-4 fixed top-0 left-0 right-0 z-10">
-      <div className="flex gap-2"
+    <div className="flex bg-[#152259] text-white justify-between lg:p-4 p-1 px-4 fixed top-0 left-0 right-0 z-10">
+      {/* Botão do Drawer para dispositivos móveis */}
+      <div className="block lg:hidden">
+        <DrawerComponent />
+      </div>
+      <div className="flex-grow"></div>
+      <div className="flex gap-2 items-center"
         onClick={() => {
           dispatch(logout())
           navigate(RoutesNames.home)
@@ -39,7 +46,7 @@ const LeftMenu = () => {
 
   return (
     <div className="bg-[#152259] text-[#cecece] h-screen">
-      <div className="w-full p-4 border-gray-300 border-b">
+      <div className="w-full p-4">
         <img
           src={backgroundImageUrl}
           className="-z-10 mt-4 cursor-pointer"
@@ -52,6 +59,7 @@ const LeftMenu = () => {
           Plataforma Empreendedorismo
         </h2>
       </div>
+      <Divider variant="middle" color="white" />
       <LeftMenuComponent />
     </div>
   )

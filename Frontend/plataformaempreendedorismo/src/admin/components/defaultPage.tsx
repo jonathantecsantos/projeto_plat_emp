@@ -44,7 +44,7 @@ const LeftMenu = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="bg-[#152259] text-[#cecece] h-screen">
+    <div className="bg-[#152259] text-[#cecece] h-full">
       <div className="w-full p-4">
         <img
           src={backgroundImageUrl}
@@ -69,7 +69,7 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
     <div className="flex h-screen flex-col">
       <AdminAppBar />
       <div className="flex flex-1 overflow-hidden">
-        <div className="lg:block hidden w-64 h-full shadow-lg z-10">
+        <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto bg-[#152259]">
           <LeftMenu />
         </div>
         <main className="overflow-x-hidden overflow-y-auto p-4 w-full mt-14 rounded-lg">

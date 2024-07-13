@@ -225,14 +225,17 @@ export const LeftMenuComponent = () => {
   }
 
   return (
-    <List sx={{ width: '100%', maxWidth: 360, }} component="nav">
-      {menuItems.map((menuItem, index) => {
-        if ('divider' in menuItem && menuItem.divider) {
-          return <Divider key={index} color="white" variant='middle' />
-        }
-        const itemProps = menuItem as MenuItemProps
-        return <Item key={index} {...itemProps} onClick={handleMenuItemClick} />
-      })}
-    </List>
+    <div>
+      <List sx={{ width: '100%', maxWidth: 360, }} component="nav">
+        {menuItems.map((menuItem, index) => {
+          if ('divider' in menuItem && menuItem.divider) {
+            return <Divider key={index} color="white" variant='middle' />
+          }
+          const itemProps = menuItem as MenuItemProps
+          return <Item key={index} {...itemProps} onClick={handleMenuItemClick} />
+        })}
+      </List>
+    </div>
+
   )
 }

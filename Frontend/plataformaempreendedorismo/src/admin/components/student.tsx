@@ -61,17 +61,19 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
         })
 
       } catch (err) {
-        console.error("Failed to create student", err)
+        console.error("Failed to edit student", err)
+        enqueueSnackbar('Erro ao editar aluno', { variant: 'error' })
       }
     } else {
       try {
         await createStudent(data).then(() => {
           setSucess(true)
-          enqueueSnackbar('Aluno criado com sucesso!', { variant: 'success' })
+          enqueueSnackbar('Aluno criado com sucesso!', { variant: 'error' })
         })
 
       } catch (err) {
         console.error("Failed to create student", err)
+        enqueueSnackbar('Erro ao criar aluno', { variant: 'error' })
       }
     }
   }

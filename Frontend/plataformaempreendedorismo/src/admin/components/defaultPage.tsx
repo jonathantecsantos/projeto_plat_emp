@@ -1,14 +1,15 @@
 import LogoutIcon from '@mui/icons-material/Logout'
 import { Divider } from "@mui/material"
 import { ReactNode } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import logo from '../../assets/logo.svg'
+// import logo from '../../assets/logo.svg'
 import { BreadcrumbComponent } from "../../components/common/breadcrumb"
 import { DrawerComponent } from "../../components/common/drawer"
 import { LeftMenuComponent } from "../../components/common/leftMenu"
 import { RoutesNames } from "../../globals"
 import { logout } from "../../redux/reducers/auth.slice"
+import { RootState } from '../../redux/store'
 
 interface AdminPage {
   mainContent: ReactNode
@@ -17,13 +18,14 @@ interface AdminPage {
 const AdminAppBar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const userGlobalState = useSelector((state: RootState) => state.userInfo.data.username)
 
   return (
     <div className="flex bg-[#152259] text-white justify-between lg:p-4 p-1 px-4 fixed top-0 left-0 right-0 z-10">
-      {/* Botão do Drawer para dispositivos móveis */}
       <div className="block lg:hidden">
         <DrawerComponent />
       </div>
+      <p className='lg:block hidden first-letter:uppercase mx-56'>{userGlobalState}</p>
       <div className="flex-grow"></div>
       <div className="flex gap-2 items-center"
         onClick={() => {
@@ -40,20 +42,20 @@ const AdminAppBar = () => {
 }
 
 const LeftMenu = () => {
-  const backgroundImageUrl = logo
+  // const backgroundImageUrl = logo
   const navigate = useNavigate()
 
   return (
     <div className="bg-[#152259] text-[#cecece] h-full">
       <div className="w-full p-4">
-        <img
+        {/* <img
           src={backgroundImageUrl}
-          className="-z-10 mt-4 cursor-pointer"
+          className="-z-10 mb-4 cursor-pointer"
           onClick={() => navigate(RoutesNames.home)}
-        />
+        /> */}
         <h2
           onClick={() => navigate(RoutesNames.home)}
-          className="my-4 cursor-pointer font-bold text-center text-white bg-gradient-to-r from-blue-500 to-blue-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
+          className="cursor-pointer font-bold text-center text-white bg-gradient-to-r from-blue-500 to-blue-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
         >
           Plataforma Empreendedorismo
         </h2>

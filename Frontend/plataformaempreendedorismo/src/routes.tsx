@@ -11,6 +11,7 @@ import { RepositoryPage } from './pages/repository';
 import { StudentPage } from './pages/student';
 import { StudentsDetailsPage } from './pages/students';
 import { UploadFilesPage } from './pages/uploadFiles';
+import { TeachersPage } from './pages/teachers';
 
 export const router = createBrowserRouter([
   {
@@ -52,5 +53,9 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.adminHome,
     element: <ProtectedRoute children={<AdminHomePage />} allowedRoles={['admin']} />
+  },
+  {
+    path: RoutesNames.teachers,
+    element: <ProtectedRoute children={<TeachersPage />} allowedRoles={['admin', 'professor']} />
   }
 ]);

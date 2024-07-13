@@ -1,14 +1,17 @@
 export const RoutesNames = {
   home: '/',
-  bannerPreview: '/banner-preview',
   login: '/login',
+  bannerPreview: '/banner-preview',
   companyDetails: '/company-details',
   repository: 'repository',
   contact: 'contact',
   uploadFiles: '/upload-files',
+  adminHome: '/admin-home',
+
   students: '/students',
   student: '/students/:id',
-  adminHome: '/admin-home'
+
+  teachers: '/teachers',
 }
 
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 

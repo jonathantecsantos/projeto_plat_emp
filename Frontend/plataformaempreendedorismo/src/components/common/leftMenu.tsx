@@ -104,7 +104,7 @@ const menuItems: MenuItemType[] = [
       {
         insideName: 'Professores',
         insideIcon: <LocalLibraryIcon />,
-        routeName: '',
+        routeName: RoutesNames.teachers,
       },
       {
         insideName: 'Avaliadores',

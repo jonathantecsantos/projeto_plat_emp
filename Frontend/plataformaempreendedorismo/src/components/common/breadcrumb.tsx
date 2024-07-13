@@ -43,6 +43,10 @@ const routes = [
     path: RoutesNames.bannerPreview,
     breadcrumb: 'Banner Preview'
   },
+  {
+    path: RoutesNames.teachers,
+    breadcrumb: 'Professores'
+  },
 ]
 
 

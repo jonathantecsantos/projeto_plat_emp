@@ -1,5 +1,5 @@
 import { CircularProgress } from '@mui/material'
-import React, { useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useGetAllStudentsQuery } from '../../api/studentApi'
 import { AdminHeader } from '../../components/common/adminHeader'
@@ -9,7 +9,7 @@ import { TableComponent } from './table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from './table/common'
 
 
-export const StudentsDetails: React.FC = () => {
+export const Students = () => {
   const { data: students, isLoading, error, refetch } = useGetAllStudentsQuery()
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })

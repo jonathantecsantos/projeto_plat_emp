@@ -1,7 +1,12 @@
 import { Banner } from "../../model/banner";
+import banner from '../../assets/banner.svg';
+
 
 export const BannerPreviewComponent = ({ svgFileName }: Pick<Banner, 'svgFileName'>) => {
-  const backgroundImageUrl = `./src/assets/${svgFileName}`;
+  // const backgroundImageUrl = `./src/assets/${svgFileName}`;
+  console.log(svgFileName)
+  const backgroundImageUrl = banner;
+
 
   //todo: fix impression footer banner
 

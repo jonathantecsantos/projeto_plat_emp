@@ -1,6 +1,7 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import { Drawer, IconButton } from "@mui/material";
 import { useState } from "react";
+import { LeftMenuComponent } from './leftMenu';
 
 
 export const DrawerComponent = () => {
@@ -19,7 +20,7 @@ export const DrawerComponent = () => {
         keepMounted: true, // Better open performance on mobile.
       }}
     >
-      {/* {<LeftMenuComponent />} */}
+      {<LeftMenuComponent />}
     </Drawer>
 
     <IconButton

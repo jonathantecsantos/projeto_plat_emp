@@ -1,16 +1,24 @@
 import AssessmentIcon from '@mui/icons-material/Assessment'
-import ClassIcon from '@mui/icons-material/Class'
-import ResultIcon from '@mui/icons-material/EmojiEvents'
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import BarChartIcon from '@mui/icons-material/BarChart'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import DescriptionIcon from '@mui/icons-material/Description'
+import EventIcon from '@mui/icons-material/Event'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import GroupIcon from '@mui/icons-material/Group'
 import GroupsIcon from '@mui/icons-material/Groups'
-import HomeIcon from '@mui/icons-material/Home'
-import ImportExportIcon from '@mui/icons-material/ImportExport'
-import LeaderboardIcon from '@mui/icons-material/Leaderboard'
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
-import StarIcon from '@mui/icons-material/Star'
-import RepoIcon from '@mui/icons-material/Storage'
+import HowToRegIcon from '@mui/icons-material/HowToReg'
+import ListAltIcon from '@mui/icons-material/ListAlt'
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
+import MicIcon from '@mui/icons-material/Mic'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import SchoolIcon from '@mui/icons-material/School'
+import SettingsIcon from '@mui/icons-material/Settings'
+import StorageIcon from '@mui/icons-material/Storage'
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'
+import { Divider } from '@mui/material'
 import Collapse from '@mui/material/Collapse'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -27,79 +35,131 @@ interface MenuItemProps {
   subItens: boolean
   insideItems?: {
     insideName: string
-    insideIcon: ReactNode
+    insideIcon?: ReactNode
     routeName: string
   }[]
 }
+
+interface DividerProps {
+  divider: boolean
+}
+
+type MenuItemType = MenuItemProps | DividerProps
 
 interface ItemProps extends MenuItemProps {
   onClick: (routeName: string) => void
 }
 
-const menuItems: MenuItemProps[] = [
+const menuItems: MenuItemType[] = [
   {
-    outsideIcon: <HomeIcon />,
-    outsideName: 'Admin',
+    outsideIcon: <GroupsIcon />,
+    outsideName: 'Times',
     subItens: false,
-    routeName: RoutesNames.adminHome
+    routeName: RoutesNames.adminHome,
   },
   {
     outsideName: 'Importações',
-    outsideIcon: <ImportExportIcon />,
+    outsideIcon: <CloudUploadIcon />,
     subItens: false,
     routeName: RoutesNames.uploadFiles,
   },
+  // { divider: true },
   {
-    outsideName: 'Times',
+    outsideName: 'Avaliações',
+    outsideIcon: <AssignmentTurnedInIcon />,
+    subItens: true,
+    insideItems: [
+      {
+        insideName: 'DLJ',
+        insideIcon: <AssignmentTurnedInIcon />,
+        routeName: ''
+      },
+      {
+        insideName: 'Pitch',
+        insideIcon: <MicIcon />,
+        routeName: '',
+      },
+      {
+        insideName: 'Shark Tank',
+        insideIcon: <AttachMoneyIcon />,
+        routeName: '',
+      },
+      {
+        insideName: 'Expo Dlei',
+        insideIcon: <EventIcon />,
+        routeName: ''
+      }
+    ]
+  },
+  {
+    outsideName: 'Participantes',
     outsideIcon: <GroupIcon />,
     subItens: true,
-    insideItems: [{
-      insideIcon: <ClassIcon />,
-      insideName: 'Banner',
-      routeName: RoutesNames.bannerPreview,
-    },
-    {
-      insideIcon: <GroupsIcon />,
-      insideName: 'Alunos',
-      routeName: `${RoutesNames.students}`,
-    },
-    {
-      insideIcon: <PersonAddAlt1Icon />,
-      insideName: 'Aluno',
-      routeName: `${RoutesNames.createStudent}`,
-    },
+    insideItems: [
+      {
+        insideName: 'Alunos',
+        insideIcon: <SchoolIcon />,
+        routeName: `${RoutesNames.students}`,
+      },
+      {
+        insideName: 'Professores',
+        insideIcon: <LocalLibraryIcon />,
+        routeName: RoutesNames.teachers,
+      },
+      {
+        insideName: 'Avaliadores',
+        insideIcon: <HowToRegIcon />,
+        routeName: '',
+      },
+      {
+        insideName: 'Coordenadores',
+        insideIcon: <SupervisorAccountIcon />,
+        routeName: '',
+      },
     ],
   },
   {
     outsideName: 'Repositório',
-    outsideIcon: <RepoIcon />,
+    outsideIcon: <StorageIcon />,
     subItens: false,
     routeName: `/${RoutesNames.repository}`,
   },
   {
-    outsideName: 'Avaliação',
+    outsideName: 'Relatórios',
     outsideIcon: <AssessmentIcon />,
     subItens: true,
     insideItems: [
       {
-        insideName: 'Avaliar',
-        insideIcon: <StarIcon />,
-        routeName: `${''}`,
-      },
-      {
         insideName: 'Classificação',
-        insideIcon: <LeaderboardIcon />,
-        routeName: `${''}`,
+        insideIcon: <BarChartIcon />,
+        routeName: '',
       },
       {
-        insideName: 'Res. Final',
-        insideIcon: <ResultIcon />,
-        routeName: `${''}`,
+        insideName: 'Lista Assinatura',
+        insideIcon: <ListAltIcon />,
+        routeName: '',
+      },
+      {
+        insideName: 'Ficha de Inscrição',
+        insideIcon: <DescriptionIcon />,
+        routeName: '',
       },
     ],
   },
+  { divider: true },
+  {
+    outsideName: 'Configurações',
+    outsideIcon: <SettingsIcon />,
+    subItens: true,
+    insideItems: [
+      {
+        insideName: 'Adicionar Aluno',
+        insideIcon: <PersonAddIcon />,
+        routeName: `${RoutesNames.student}`,
+      }
+    ]
+  },
 ]
-
 const Item = (props: ItemProps) => {
   const location = useLocation()
   const [open, setOpen] = useState(false)
@@ -116,32 +176,40 @@ const Item = (props: ItemProps) => {
     props.onClick(routeName)
   }
 
-  const isActive = props.routeName === location.pathname || props.insideItems?.some(item => item.routeName === location.pathname)
-  const isOpen = open || isActive
+  const isActive = (route: string) => {
+    const regex = new RegExp(`^${route}(/\\d+)?$`)
+    return regex.test(location.pathname)
+  }
 
-  const listItemButtonClass = `p-4 ${isActive ? 'bg-[#EBF6FF] text-[#242424]' : 'hover:bg-[#509CDB] hover:text-white'}`;
+
+  const isOpen = open || isActive(props.routeName || '') || props.insideItems?.some(item => isActive(item.routeName))
+
+  const listItemButtonClass = `p-4 ${isOpen ? 'bg-[#EBF6FF] text-[#242424]' : 'hover:bg-[#509CDB] hover:text-white'}`
 
   return (
-    <div className=''>
+    <div className="">
       <ListItemButton className={listItemButtonClass} onClick={handleClick}>
-        <ListItemIcon sx={{ color: isActive ? '' : 'inherit' }}>{props.outsideIcon}</ListItemIcon>
+        <ListItemIcon sx={{ color: isOpen ? '' : 'inherit' }}>{props.outsideIcon}</ListItemIcon>
         <ListItemText primary={props.outsideName} />
         {props.subItens && (isOpen ? <ExpandLess /> : <ExpandMore />)}
       </ListItemButton>
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {props.insideItems?.map((item, index) => {
-            const insideItemClass = `p-2 px-6 ${location.pathname === item.routeName ? 'bg-[#509CDB] text-white' : 'hover:bg-[#509CDB] hover:text-white'}`;
+            const insideItemClass = `p-2 px-6 ${isActive(item.routeName) ? 'bg-[#509CDB] text-white' : 'hover:bg-[#509CDB] hover:text-white'}`
             return (
-              <ListItemButton
-                className={insideItemClass}
-                key={index}
-                onClick={() => handleInsideItemClick(item.routeName)}
-              >
-                <ListItemIcon className={location.pathname === item.routeName ? 'text-white' : 'text-inherit'}>{item.insideIcon}</ListItemIcon>
-                <ListItemText primary={item.insideName} />
-              </ListItemButton>
-            );
+              <div key={`${item.routeName}-${index}`}>
+                <ListItemButton
+                  className={insideItemClass}
+                  key={index}
+                  onClick={() => handleInsideItemClick(item.routeName)}
+                >
+                  <ListItemIcon className={isActive(item.routeName) ? 'text-white' : 'text-inherit'}>{item.insideIcon}</ListItemIcon>
+                  <ListItemText primary={item.insideName} />
+                </ListItemButton>
+                {/* {index < props.insideItems!.length - 1 && <Divider color='white' />} */}
+              </div>
+            )
           })}
         </List>
       </Collapse>
@@ -157,10 +225,17 @@ export const LeftMenuComponent = () => {
   }
 
   return (
-    <List sx={{ width: '100%', maxWidth: 360, }} component="nav">
-      {menuItems.map((menuItem, index) => (
-        <Item key={index} {...menuItem} onClick={handleMenuItemClick} />
-      ))}
-    </List>
+    <div>
+      <List sx={{ width: '100%', maxWidth: 360, }} component="nav">
+        {menuItems.map((menuItem, index) => {
+          if ('divider' in menuItem && menuItem.divider) {
+            return <Divider key={index} color="white" variant='middle' />
+          }
+          const itemProps = menuItem as MenuItemProps
+          return <Item key={index} {...itemProps} onClick={handleMenuItemClick} />
+        })}
+      </List>
+    </div>
+
   )
 }

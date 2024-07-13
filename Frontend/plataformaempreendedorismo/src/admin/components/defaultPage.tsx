@@ -1,23 +1,33 @@
+import LogoutIcon from '@mui/icons-material/Logout'
+import { Divider } from "@mui/material"
 import { ReactNode } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+// import logo from '../../assets/logo.svg'
+import { BreadcrumbComponent } from "../../components/common/breadcrumb"
+import { DrawerComponent } from "../../components/common/drawer"
 import { LeftMenuComponent } from "../../components/common/leftMenu"
 import { RoutesNames } from "../../globals"
 import { logout } from "../../redux/reducers/auth.slice"
-import LogoutIcon from '@mui/icons-material/Logout';
+import { RootState } from '../../redux/store'
 
 interface AdminPage {
   mainContent: ReactNode
-  title: string
 }
 
 const AdminAppBar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const userGlobalState = useSelector((state: RootState) => state.userInfo.data.username)
 
   return (
-    <div className="flex  bg-[#152259]  text-white  justify-end p-4 fixed top-0 left-0 right-0 z-10">
-      <div className="flex gap-2"
+    <div className="flex bg-[#152259] text-white justify-between lg:p-4 p-1 px-4 fixed top-0 left-0 right-0 z-10">
+      <div className="block lg:hidden">
+        <DrawerComponent />
+      </div>
+      <p className='lg:block hidden first-letter:uppercase mx-56'>{userGlobalState}</p>
+      <div className="flex-grow"></div>
+      <div className="flex gap-2 items-center"
         onClick={() => {
           dispatch(logout())
           navigate(RoutesNames.home)
@@ -32,40 +42,41 @@ const AdminAppBar = () => {
 }
 
 const LeftMenu = () => {
-  const backgroundImageUrl = `./src/assets/logo.svg`
+  // const backgroundImageUrl = logo
   const navigate = useNavigate()
 
   return (
-    <div className="bg-[#152259] text-[#cecece] h-screen">
-      <div className="w-full p-4 border-gray-300 border-b">
-        <img
+    <div className="bg-[#152259] text-[#cecece] h-full">
+      <div className="w-full p-4">
+        {/* <img
           src={backgroundImageUrl}
-          className="-z-10 mt-4 cursor-pointer"
+          className="-z-10 mb-4 cursor-pointer"
           onClick={() => navigate(RoutesNames.home)}
-        />
+        /> */}
         <h2
           onClick={() => navigate(RoutesNames.home)}
-          className="my-4 cursor-pointer font-bold text-center text-white bg-gradient-to-r from-blue-500 to-blue-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
+          className="cursor-pointer font-bold text-center text-white bg-gradient-to-r from-blue-500 to-blue-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
         >
           Plataforma Empreendedorismo
         </h2>
       </div>
+      <Divider variant="middle" color="white" />
       <LeftMenuComponent />
     </div>
   )
 }
 
-export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
+export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
   return (
     <div className="flex h-screen flex-col">
       <AdminAppBar />
       <div className="flex flex-1 overflow-hidden">
-        <div className="lg:block hidden w-64 h-full shadow-lg z-10">
+        <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto bg-[#152259]">
           <LeftMenu />
         </div>
         <main className="overflow-x-hidden overflow-y-auto p-4 w-full mt-14 rounded-lg">
           <div className="p-4 shadow-md border mb-4 rounded-3xl bg-white">
-            <h2 className="text-bold text-xl mb-8 bg-slate-50">{title}</h2>
+            <BreadcrumbComponent />
             {mainContent}
           </div>
         </main>

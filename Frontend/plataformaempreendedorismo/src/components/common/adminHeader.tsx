@@ -1,9 +1,9 @@
+import RefreshIcon from '@mui/icons-material/Refresh'
+import { Button, IconButton } from '@mui/material'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutesNames } from '../../globals'
 import { InputComponent } from './input'
-import { Button, IconButton } from '@mui/material'
-import RefreshIcon from '@mui/icons-material/Refresh'
 
 export interface AdminHeaderProps {
   onSearch: (query: string) => void
@@ -32,7 +32,7 @@ export const AdminHeader = ({ onSearch, onRefresh }: AdminHeaderProps) => {
 
 
   const handleAddUser = () => {
-    navigate(RoutesNames.createStudent)
+    navigate(RoutesNames.student)
   }
 
   return (

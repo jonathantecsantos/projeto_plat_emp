@@ -5,5 +5,5 @@ import { Student } from "../admin/components/student"
 
 export const StudentPage = () => {
   const { id } = useParams()
-  return <AdminDefaultPage mainContent={<Student id={Number(id)} />} title="Aluno" />
+  return <AdminDefaultPage mainContent={<Student id={Number(id)} />} />
 }

@@ -1,18 +1,17 @@
+import LogoutIcon from '@mui/icons-material/Logout'
+import { Divider } from "@mui/material"
 import { ReactNode } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import logo from '../../assets/logo.svg'
+import { BreadcrumbComponent } from "../../components/common/breadcrumb"
+import { DrawerComponent } from "../../components/common/drawer"
 import { LeftMenuComponent } from "../../components/common/leftMenu"
 import { RoutesNames } from "../../globals"
 import { logout } from "../../redux/reducers/auth.slice"
-import LogoutIcon from '@mui/icons-material/Logout';
-import logo from '../../assets/logo.svg';
-import { BreadcrumbComponent } from "../../components/common/breadcrumb"
-import { Divider } from "@mui/material"
-import { DrawerComponent } from "../../components/common/drawer"
 
 interface AdminPage {
   mainContent: ReactNode
-  title: string
 }
 
 const AdminAppBar = () => {
@@ -65,7 +64,7 @@ const LeftMenu = () => {
   )
 }
 
-export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
+export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
   return (
     <div className="flex h-screen flex-col">
       <AdminAppBar />
@@ -75,7 +74,6 @@ export const AdminDefaultPage = ({ mainContent, title }: AdminPage) => {
         </div>
         <main className="overflow-x-hidden overflow-y-auto p-4 w-full mt-14 rounded-lg">
           <div className="p-4 shadow-md border mb-4 rounded-3xl bg-white">
-            {/* <h2 className="text-bold text-sm mb-8">{title}</h2> */}
             <BreadcrumbComponent />
             {mainContent}
           </div>

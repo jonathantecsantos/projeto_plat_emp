@@ -34,6 +34,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
     skip: id ? false : true
   })
 
+  console.log(student)
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateStudentForm>({
     resolver: zodResolver(createStudentSchema),

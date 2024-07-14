@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useGetAllStudentsQuery } from '../../api/studentApi'
 import { AdminHeader } from '../../components/common/adminHeader'
 import { RoutesNames } from '../../globals'
-import { Student, StudentsResponse } from '../../model/student'
+import { StudentsResponse } from '../../model/student'
 import { TableComponent } from './table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from './table/common'
 
@@ -14,6 +14,7 @@ export const Students = () => {
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
   const tableComponentSetCurrPage = tableComponentSetCurrPageRef.current
+  if (tableComponentSetCurrPage) tableComponentSetCurrPage({ page: 0 })
 
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
@@ -29,13 +30,12 @@ export const Students = () => {
   const handleSearch = (query: string) => {
     setSearchParams({ search: query })
   }
-  console.log('STUDENTS PAGE LOG')
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading students.</p>
 
-  if (tableComponentSetCurrPage) tableComponentSetCurrPage({ page: 0 })
 
+  console.log('STUDENTS')
   return (
     <div className="flex flex-col h-full">
       <div className="sticky top-0 z-10">
@@ -73,7 +73,7 @@ export const Students = () => {
                 <td className="px-4 py-2">{student.idObs}</td>
               </>
             )}
-            onClickRow={(student: TableComponentClickRowProps<Student>) => {
+            onClickRow={(student: TableComponentClickRowProps<StudentsResponse>) => {
               navigate(RoutesNames.student.replace(':id', student.item?.id.toString()))
             }}
           />

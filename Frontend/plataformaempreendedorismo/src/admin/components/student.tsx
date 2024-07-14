@@ -25,15 +25,14 @@ type CreateStudentForm = z.infer<typeof createStudentSchema>
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 
 export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const { enqueueSnackbar } = useSnackbar()
-  const [createStudent, { isLoading, isSuccess }] = useCreateStudentMutation()
+  const { data: student } = useGetStudentQuery(id, { skip: id ? false : true })
   const [updateStudent] = useUpdateStudentMutation()
-  const [success, setSucess] = useState(isSuccess)
-  const { data: student } = useGetStudentQuery(id, {
-    skip: id ? false : true
-  })
+  const [createStudent, { isLoading, isSuccess }] = useCreateStudentMutation()
 
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const [success, setSucess] = useState(isSuccess)
+  const { enqueueSnackbar } = useSnackbar()
   console.log(student)
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateStudentForm>({
@@ -104,13 +103,12 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
 
   const handleReset = () => {
     reset()
-    setSearchParams({
-
-    })
+    setSearchParams({})
     setSucess(false)
   }
-  console.log('ALUNO PRINT')
+  //todo: implementar upload aluno por id
 
+  console.log('admin>student.tsx')
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md">
       <h2 className="text-3xl font-bold text-center mb-4">{id ? 'Editar' : 'Adicionar'} Aluno</h2>
@@ -120,6 +118,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
             <label htmlFor="nome" className="block text-sm font-medium text-gray-700">Nome</label>
             <input
               id="nome"
+              // value={student?.nome}
               type="text"
               {...register('nome')}
               onChange={(e) => handleInputChange('nome', e.target.value)}
@@ -131,6 +130,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
             <label htmlFor="cpf" className="block text-sm font-medium text-gray-700">CPF</label>
             <input
               id="cpf"
+              // value={student?.cpf}
               type="text"
               {...register('cpf')}
               onChange={(e) => handleInputChange('cpf', e.target.value)}
@@ -142,6 +142,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
               id="email"
+              // value={student?.email}
               type="email"
               {...register('email')}
               onChange={(e) => handleInputChange('email', e.target.value)}
@@ -153,6 +154,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
             <label htmlFor="turma" className="block text-sm font-medium text-gray-700">Turma</label>
             <input
               id="turma"
+              // value={student?.turma}
               type="text"
               {...register('turma')}
               onChange={(e) => handleInputChange('turma', e.target.value)}
@@ -164,6 +166,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
             <label htmlFor="idOds" className="block text-sm font-medium text-gray-700">ID ODS</label>
             <input
               id="idOds"
+              // value={student?.ods?.id}
               type="number"
               {...register('idOds')}
               onChange={(e) => handleInputChange('idOds', e.target.value)}
@@ -175,6 +178,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
             <label htmlFor="idEquipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
             <input
               id="idEquipe"
+              // value={student?.idEquipe}
               type="number"
               {...register('idEquipe')}
               onChange={(e) => handleInputChange('idEquipe', e.target.value)}
@@ -187,6 +191,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
           <div className="flex items-center">
             <input
               id="isLider"
+              // value={student?.isLider}
               type="checkbox"
               {...register('isLider')}
               onChange={(e) => handleCheckboxChange('isLider', e.target.checked)}
@@ -198,6 +203,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
           <div className="flex items-center">
             <input
               id="isViceLider"
+              // value={student?.isViceLider}
               type="checkbox"
               {...register('isViceLider')}
               onChange={(e) => handleCheckboxChange('isViceLider', e.target.checked)}

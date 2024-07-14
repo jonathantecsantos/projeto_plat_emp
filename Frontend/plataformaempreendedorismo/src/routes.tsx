@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.adminHome,
-    element: <ProtectedRoute children={<AdminHomePage />} allowedRoles={['admin']} />
+    element: <ProtectedRoute children={<AdminHomePage />} allowedRoles={['admin', 'aluno', 'professor']} />
   },
   {
     path: RoutesNames.teachers,

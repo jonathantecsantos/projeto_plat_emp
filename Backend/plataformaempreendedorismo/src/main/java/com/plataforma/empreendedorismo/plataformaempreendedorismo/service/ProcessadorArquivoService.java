@@ -46,22 +46,13 @@ public class ProcessadorArquivoService {
 
         TipoImportacao tipoImportacao = TipoImportacao.valueOf(tipo);
 
-        switch (tipoImportacao){
-            case EQUIPE:
-                nomeProcesso = String.valueOf(TipoImportacao.EQUIPE);
-                break;
-            case ALUNO:
-                nomeProcesso = String.valueOf(TipoImportacao.ALUNO);
-                break;
-            case AVALIADOR:
-                nomeProcesso = String.valueOf(TipoImportacao.AVALIADOR);
-                break;
-            case PROFESSOR:
-                nomeProcesso = String.valueOf(TipoImportacao.PROFESSOR);
-                break;
-            default:
-                throw new Exception("Erro!");
-        }
+        nomeProcesso = switch (tipoImportacao) {
+            case EQUIPE -> String.valueOf(TipoImportacao.EQUIPE);
+            case ALUNO -> String.valueOf(TipoImportacao.ALUNO);
+            case AVALIADOR -> String.valueOf(TipoImportacao.AVALIADOR);
+            case PROFESSOR -> String.valueOf(TipoImportacao.PROFESSOR);
+            default -> throw new Exception("Erro!");
+        };
 
         LocalDateTime dataHoraAtual = LocalDateTime.now();
         Date date = Timestamp.valueOf(dataHoraAtual);
@@ -99,19 +90,11 @@ public class ProcessadorArquivoService {
                     continue;
                 }
 
-                switch (tipoImportacao){
-                    case EQUIPE:
-                        processarImportacaoEquipe(row);
-                        break;
-                    case ALUNO:
-                        processarImportacaoAluno(row);
-                        break;
-                    case AVALIADOR:
-                        processarImportacaoAvaliador(row);
-                        break;
-                    case PROFESSOR:
-                        processarImportacaoProfessor(row);
-                        break;
+                switch (tipoImportacao) {
+                    case EQUIPE -> processarImportacaoEquipe(row);
+                    case ALUNO -> processarImportacaoAluno(row);
+                    case AVALIADOR -> processarImportacaoAvaliador(row);
+                    case PROFESSOR -> processarImportacaoProfessor(row);
                 }
 
             }
@@ -208,13 +191,15 @@ public class ProcessadorArquivoService {
 
         Aluno aluno = new Aluno();
 
-        if(row.getCell(0) != null){
+        if (row.getCell(0) != null) {
             String cpf = String.valueOf(row.getCell(0));
             if(validarCPF(cpf)){
                 aluno.setCpf(cpf);
             }else{
                 System.out.printf("Erro CPF");
             }
+        } else {
+            System.out.println("Cpf vazio");
         }
 
         if(row.getCell(1) != null){
@@ -287,11 +272,9 @@ public class ProcessadorArquivoService {
             if(cpf.length() == 11){
                 return true;
             }else{
-                System.out.printf("Quantidade de digitos inválida");
                 return false;
             }
         }else{
-            System.out.printf("Campo vazio");
             return false;
         }
     }

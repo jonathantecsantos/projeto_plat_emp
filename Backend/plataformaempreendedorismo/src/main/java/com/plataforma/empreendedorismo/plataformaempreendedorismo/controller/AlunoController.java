@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.AlunoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoListaDadosRecord;
@@ -37,6 +38,16 @@ public class AlunoController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AlunoListaDadosRecord> listaDadosAluno(){
         return alunoRepository.findAll().stream().map(AlunoListaDadosRecord::new).toList();
+    }
+
+    @Operation(summary = "Buscar aluno por id", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Aluno")
+    })
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public AlunoRecord buscaAlunoPorId(@PathVariable Long id){
+        return  alunoService.buscarAlunoPorId(id);
     }
 
     @Operation(summary = "Cadastra Aluno", method = "POST")

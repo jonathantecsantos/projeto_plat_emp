@@ -24,6 +24,10 @@ public class Equipe {
 
     private String linkPitch;
 
+    @OneToOne
+    @JoinColumn(name = "BANNER_ID", referencedColumnName = "id")
+    private Banner banner;
+
     @JsonIgnore
     @OneToMany(mappedBy = "equipe")
     private List<Aluno> alunos;

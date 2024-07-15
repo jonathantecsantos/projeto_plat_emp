@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class Anexo {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
+        @JsonIgnore
         @ManyToOne
         @JoinColumn(name = "banner_id")
         private Banner banner;

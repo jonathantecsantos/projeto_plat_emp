@@ -1,6 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.AlunoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoListaDadosRecord;

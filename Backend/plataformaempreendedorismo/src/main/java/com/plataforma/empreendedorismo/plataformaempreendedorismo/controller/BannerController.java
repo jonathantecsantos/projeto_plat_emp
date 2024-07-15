@@ -1,5 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.BannerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,22 +51,21 @@ public class BannerController {
         }
     }
 
+    @Operation(summary = "Buscar banner por id da Equipe", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Aluno")
+    })
+    @GetMapping(value = "/{idEquipe}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public BannerRecord buscarBannerPorIdEquipe(@PathVariable Long idEquipe){
+        return bannerService.buscarBannerPorIdEquipe(idEquipe);
+    }
+
     @ExceptionHandler(MultipartException.class)
     public ResponseEntity<String> handleMultipartException(MultipartException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Erro no upload de arquivo: " + ex.getMessage());
     }
 
-//    public ResponseEntity<String> cadastrarBanner(@RequestBody CadastroBannerRecord cadastroBannerRecord) {
-//
-//        try {
-//            bannerService.criarBanner(cadastroBannerRecord);
-//            return ResponseEntity.status(HttpStatus.CREATED)
-//                    .body("Aluno cadastrado com sucesso!");
-//        }catch (Exception e){
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("Erro ao criar aluno: " + e.getMessage());
-//        }
-//    }
 
 }

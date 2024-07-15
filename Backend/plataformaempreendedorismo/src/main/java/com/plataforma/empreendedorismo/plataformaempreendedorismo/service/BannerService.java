@@ -3,10 +3,14 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Anexo;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Banner;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AnexoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.BannerRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import jakarta.transaction.Transactional;
+import org.apache.poi.ss.formula.functions.Na;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BannerService {
@@ -29,6 +34,9 @@ public class BannerService {
 
     @Autowired
     private EquipeService equipeService;
+
+    @Autowired
+    private EquipeRepository equipeRepository;
 
     @Autowired
     private BannerRepository bannerRepository;
@@ -42,7 +50,6 @@ public class BannerService {
 
         Equipe equipe = equipeService.buscarEquipePorId(cadastroBannerRecord.idEquipeQ0());
 
-        banner.setEquipe(equipe);
         banner.setTextoDescricaoQ0(cadastroBannerRecord.textoDescricaoQ0());
         banner.setEquipeQ1(cadastroBannerRecord.equipeQ1());
         banner.setParceiroQ1(cadastroBannerRecord.idParceiroQ1());
@@ -78,6 +85,7 @@ public class BannerService {
 
         banner.setAnexos(anexos);
         bannerRepository.save(banner);
+        equipe.setBanner(banner);
     }
 
     private String saveFile(MultipartFile file) throws IOException {
@@ -97,5 +105,12 @@ public class BannerService {
         }
 
         return fileName;
+    }
+
+    public BannerRecord buscarBannerPorIdEquipe(Long idEquipe) {
+        Optional<Equipe> equipeOptional = equipeRepository.findById(idEquipe);
+
+        return equipeOptional.map(equipe -> new BannerRecord(equipe.getBanner())).orElse(null);
+
     }
 }

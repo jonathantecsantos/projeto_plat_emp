@@ -1,4 +1,4 @@
-package com.plataforma.empreendedorismo.plataformaempreendedorismo.record;
+package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;

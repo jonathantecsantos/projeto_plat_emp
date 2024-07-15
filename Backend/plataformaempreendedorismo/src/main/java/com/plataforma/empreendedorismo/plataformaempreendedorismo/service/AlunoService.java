@@ -3,8 +3,11 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Ods;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.AlunoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.Ods.OdsRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
@@ -82,5 +85,19 @@ public class AlunoService {
                 aluno.setEquipe(equipe);
             }
         }
+    }
+
+    public AlunoRecord buscarAlunoPorId(Long id) {
+
+        Optional<Aluno> alunoOptional = alunoRepository.findById(id);
+
+        if(alunoOptional.isPresent()){
+            Aluno aluno = alunoOptional.get();
+            return new AlunoRecord(aluno.getId(), aluno.getCpf(), aluno.getNome(), aluno.getEmail(), aluno.getTurma(),
+                    aluno.getIsLider(), aluno.getIsViceLider(),
+                    aluno.getOds(), aluno.getEquipe());
+        }
+
+        return null;
     }
 }

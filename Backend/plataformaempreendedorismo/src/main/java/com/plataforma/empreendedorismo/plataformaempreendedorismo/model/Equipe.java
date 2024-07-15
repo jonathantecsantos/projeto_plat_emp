@@ -22,6 +22,8 @@ public class Equipe {
 
     private String nome;
 
+    private String linkPitch;
+
     @JsonIgnore
     @OneToMany(mappedBy = "equipe")
     private List<Aluno> alunos;

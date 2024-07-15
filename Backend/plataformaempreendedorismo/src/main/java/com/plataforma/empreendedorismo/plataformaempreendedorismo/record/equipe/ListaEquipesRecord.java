@@ -4,9 +4,10 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 
 public record ListaEquipesRecord(
         Long id,
-        String nome
+        String nome,
+        String linkPitch
 ) {
     public ListaEquipesRecord(Equipe equipe){
-        this(equipe.getId(),equipe.getNome());
+        this(equipe.getId(),equipe.getNome(), equipe.getLinkPitch());
     }
 }

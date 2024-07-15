@@ -3,11 +3,13 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaDadosEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.ProfessorRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,5 +55,20 @@ public class EquipeService {
 
     public List<ListaEquipesRecord> buscarEquipes() {
         return equipeRepository.findAll().stream().map(ListaEquipesRecord::new).toList();
+    }
+
+    @Transactional
+    public void editarEquipe(EquipeRecord equipeRecord) {
+        Equipe equipe = equipeRepository.getReferenceById(equipeRecord.id());
+        atualizarEquipe(equipe, equipeRecord);
+    }
+
+    private void atualizarEquipe(Equipe equipe, EquipeRecord equipeRecord) {
+        if(equipeRecord.nome() != null){
+            equipe.setNome(equipeRecord.nome());
+        }
+        if(equipeRecord.linkPitch() != null){
+            equipe.setLinkPitch(equipeRecord.linkPitch());
+        }
     }
 }

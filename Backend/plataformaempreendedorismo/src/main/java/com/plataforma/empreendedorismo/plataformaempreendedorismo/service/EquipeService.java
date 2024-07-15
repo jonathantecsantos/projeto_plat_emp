@@ -9,6 +9,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.ProfessorRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,7 @@ public class EquipeService {
         return equipeRepository.findAll().stream().map(ListaEquipesRecord::new).toList();
     }
 
+    @Transactional
     public void editarEquipe(EquipeRecord equipeRecord) {
         Equipe equipe = equipeRepository.getReferenceById(equipeRecord.id());
         atualizarEquipe(equipe, equipeRecord);

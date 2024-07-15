@@ -59,7 +59,7 @@ public class EquipeController {
         return equipeService.buscarEquipes();
     }
 
-    @Operation(summary = "Editar Aluno", method = "PUT")
+    @Operation(summary = "Editar Equipe", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aluno editado com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao editar aluno")

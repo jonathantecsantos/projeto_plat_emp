@@ -8,7 +8,7 @@ import { CompanyDetailsPage } from './pages/companyDetails';
 import { ContactPage } from './pages/contact';
 import { LoginPage } from './pages/login';
 import { RepositoryPage } from './pages/repository';
-import { StudentPage } from './pages/student';
+import { StudentPage } from './pages/createStudent';
 import { StudentsDetailsPage } from './pages/students';
 import { UploadFilesPage } from './pages/uploadFiles';
 import { TeachersPage } from './pages/teachers';

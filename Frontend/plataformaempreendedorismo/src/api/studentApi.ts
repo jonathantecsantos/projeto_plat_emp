@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { CreateStudent, Student, StudentsResponse } from '../model/student';
+import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student';
 import { authFetchBaseQuery } from '../redux/auth.middleware';
 
 export const studentsApiSlice = createApi({
@@ -7,7 +7,7 @@ export const studentsApiSlice = createApi({
   tagTypes: ['Student'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   endpoints: (build) => ({
-    getStudent: build.query<Student, number>({
+    getStudent: build.query<StudentIdResponse, number>({
       query: (id) => `/alunos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
@@ -24,7 +24,7 @@ export const studentsApiSlice = createApi({
           ]
           : [{ type: 'Student', id: 'LIST' }],
     }),
-    createStudent: build.mutation<CreateStudent, Partial<CreateStudent>>({
+    createStudent: build.mutation<CreateOrUpdateStudent, Partial<CreateOrUpdateStudent>>({
       query: (data) => ({
         url: `/alunos/cadastrar`,
         method: 'POST',
@@ -32,7 +32,7 @@ export const studentsApiSlice = createApi({
       }),
       invalidatesTags: [{ type: 'Student', id: 'LIST' }],
     }),
-    updateStudent: build.mutation<CreateStudent, { id: any; data: Partial<CreateStudent> }>({
+    updateStudent: build.mutation<CreateOrUpdateStudent, { id: any; data: Partial<CreateOrUpdateStudent> }>({
       query: ({ id, data }) => ({
         url: `/alunos/editar`,
         method: 'PUT',

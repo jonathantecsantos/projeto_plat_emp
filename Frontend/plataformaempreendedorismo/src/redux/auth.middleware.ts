@@ -22,13 +22,13 @@ export const authFetchBaseQuery = (
 
       return headers
     },
-    // responseHandler: async (response) => {
-    //   const text = await response.text();
-    //   try {
-    //     return JSON.parse(text);
-    //   } catch {
-    //     return text;
-    //   }
-    // },
+    responseHandler: async (response) => {
+      const text = await response.text();
+      try {
+        return JSON.parse(text);
+      } catch {
+        return text;
+      }
+    },
   })
 }

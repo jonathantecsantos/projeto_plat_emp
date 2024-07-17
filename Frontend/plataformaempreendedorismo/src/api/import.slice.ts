@@ -10,7 +10,7 @@ export const importApiSlice = createApi({
         url: '/api/upload/arquivo',
         method: 'POST',
         body,
-      })
+      }),
     })
   })
 })

@@ -5,6 +5,7 @@ import { useGetStudentQuery, useUpdateStudentMutation } from "../../api/studentA
 import { CreateOrUpdateStudent, StudentIdResponse } from "../../model/student"
 import { useSnackbar } from 'notistack'
 import { formatCPF } from './createStudent'
+import { CircularProgress } from '@mui/material'
 
 
 export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
@@ -59,7 +60,8 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
     }
   }
 
-  console.log('UpdateStudent')
+  if (isLoading) return <div className='text-center'><CircularProgress /></div>
+
 
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md">

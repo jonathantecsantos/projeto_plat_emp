@@ -77,7 +77,7 @@ export const BreadcrumbComponent = (props: {
 
             {/* PATH/ROUTES NAMES */}
             {args.match.params.id == ':id' ? 'Novo' : location.pathname == args.match.pathname ?
-              <div style={colorUnlink}> {args.breadcrumb}</div> :
+              <div style={colorUnlink}> {args.breadcrumb} {args.match.params.id}</div> :
               ArrayUtils.checkEqualsFromArrays([args.match.pathname], unLink) ?
                 <div style={colorUnlink}>{args.match.route?.breadcrumb as string}</div> :
                 <Link style={breadcrumbLinkDecoration} to={args.match.pathname}>{args.breadcrumb}</Link>}

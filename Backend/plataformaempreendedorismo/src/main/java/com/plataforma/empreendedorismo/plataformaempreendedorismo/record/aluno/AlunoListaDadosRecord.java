@@ -11,12 +11,11 @@ public record AlunoListaDadosRecord(
         Boolean isLider,
         Boolean isViceLider,
         Long idEquipe,
-        String nomeEquipe,
-        Long idObs) {
+        String nomeEquipe) {
 
     public AlunoListaDadosRecord(Aluno aluno) {
         this(aluno.getId(), aluno.getCpf(), aluno.getNome(), aluno.getEmail(), aluno.getTurma(),
                 aluno.getIsLider(), aluno.getIsViceLider(), aluno.getEquipe().getId(),
-                aluno.getEquipe().getNome(), aluno.getOds().getId());
+                aluno.getEquipe().getNome());
     }
 }

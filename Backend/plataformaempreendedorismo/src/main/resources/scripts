@@ -5,8 +5,10 @@ CREATE TABLE equipe (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT null,
     banner_id INT null,
+    ods_id INT not null,
     link_pitch VARCHAR(250) null,
-    FOREIGN KEY (banner_id) REFERENCES banner(ID)
+    FOREIGN KEY (banner_id) REFERENCES banner(ID),
+    FOREIGN KEY (ods_id) REFERENCES ods(ID)
 );
 
 -- Tabela Importacao
@@ -42,11 +44,8 @@ CREATE TABLE aluno (
     is_lider TINYINT(1) NOT NULL,
     is_vice_lider TINYINT(1) NOT NULL,
     equipe_id INT,
-    ods_id INT,
-    FOREIGN KEY (equipe_id) REFERENCES equipe(id),
-    FOREIGN KEY (ods_id) REFERENCES ods(id)
+    FOREIGN KEY (equipe_id) REFERENCES equipe(id)
 );
-
 
 INSERT INTO ods (codigo, descricao) VALUES
 ('ODS1', 'Erradicação da Pobreza'),

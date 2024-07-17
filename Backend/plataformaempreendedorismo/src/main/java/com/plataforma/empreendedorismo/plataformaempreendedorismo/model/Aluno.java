@@ -31,9 +31,6 @@ public class Aluno {
 
     private Boolean isViceLider;
 
-    @OneToOne
-    private Ods ods;
-
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "equipe_id")
@@ -46,7 +43,6 @@ public class Aluno {
         this.turma = alunoCadastroRecord.turma();
         this.isLider = alunoCadastroRecord.isLider();
         this.isViceLider = alunoCadastroRecord.isViceLider();
-        this.ods = ods;
         this.equipe = equipe;
     }
 

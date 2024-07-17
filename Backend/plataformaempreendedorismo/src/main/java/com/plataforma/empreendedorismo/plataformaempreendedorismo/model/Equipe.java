@@ -28,6 +28,10 @@ public class Equipe {
     @JoinColumn(name = "BANNER_ID", referencedColumnName = "id")
     private Banner banner;
 
+    @OneToOne
+    @JoinColumn(name = "ODS_ID", referencedColumnName = "id")
+    private Ods ods;
+
     @JsonIgnore
     @OneToMany(mappedBy = "equipe")
     private List<Aluno> alunos;

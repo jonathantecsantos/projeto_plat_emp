@@ -1,6 +1,5 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -88,7 +87,7 @@ public class Banner {
         this.textoDescricaoQ0 = cadastroBannerRecord.textoDescricaoQ0();
         this.anexos = anexos;
         this.equipeQ1 = cadastroBannerRecord.equipeQ1();
-        this.parceiroQ1 = cadastroBannerRecord.idParceiroQ1();
+        this.parceiroQ1 = cadastroBannerRecord.parceiroQ1();
         this.atividadeChaveQ1 = cadastroBannerRecord.atividadeChaveQ1();
         this.recursosQ1 = cadastroBannerRecord.recursosQ1();
         this.custosQ1 = cadastroBannerRecord.custosQ1();

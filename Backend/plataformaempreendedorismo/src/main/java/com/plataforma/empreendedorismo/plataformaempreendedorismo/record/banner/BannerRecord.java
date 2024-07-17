@@ -2,7 +2,6 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Anexo;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Banner;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,7 @@ public record BannerRecord(
         Long id,
         String textoDescricaoQ0,
         String equipeQ1,
-        String idParceiroQ1,
+        String parceiroQ1,
         String atividadeChaveQ1,
         String recursosQ1,
         String custosQ1,

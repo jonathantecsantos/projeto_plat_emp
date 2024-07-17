@@ -1,6 +1,5 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.BannerService;
@@ -59,6 +58,26 @@ public class BannerController {
     @GetMapping(value = "/{idEquipe}", produces = MediaType.APPLICATION_JSON_VALUE)
     public BannerRecord buscarBannerPorIdEquipe(@PathVariable Long idEquipe){
         return bannerService.buscarBannerPorIdEquipe(idEquipe);
+    }
+
+    @Operation(summary = "Editar Banner", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aluno editado com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao editar aluno")
+    })
+    @PutMapping(value = "/editar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<String> editar(@RequestPart("files") List<MultipartFile> files,
+                                         @RequestPart("cadastroBannerRecord") CadastroBannerRecord cadastroBannerRecord){
+        try {
+            bannerService.editarBanner(files,cadastroBannerRecord);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Banner atualizada com sucesso!");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao editar Banner: " + e.getMessage());
+        }
+
     }
 
     @ExceptionHandler(MultipartException.class)

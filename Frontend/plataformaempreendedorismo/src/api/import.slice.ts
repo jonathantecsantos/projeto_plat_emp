@@ -3,7 +3,6 @@ import { authFetchBaseQuery } from '../redux/auth.middleware'
 
 export const importApiSlice = createApi({
   reducerPath: 'importApi',
-  tagTypes: ['Import', 'Student'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   endpoints: (build) => ({
     uploadFile: build.mutation({
@@ -12,7 +11,6 @@ export const importApiSlice = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{ type: 'Student', id: 'LIST' }]
     })
   })
 })

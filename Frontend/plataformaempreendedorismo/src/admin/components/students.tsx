@@ -30,15 +30,14 @@ export const Students = () => {
   if (tableComponentSetCurrPage) tableComponentSetCurrPage({ page: 0 })
   const { enqueueSnackbar } = useSnackbar()
 
-  //TESTAR INVALIDATE TAG WORKING
-  // useEffect(() => {
-  //   if (students) {
-  //     if (students?.length <= 0) {
-  //       console.log('students refetch')
-  //       refetch()
-  //     }
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (students) {
+      if (students?.length <= 0) {
+        console.log('students refetch')
+        refetch()
+      }
+    }
+  }, [])
 
 
   const filteredStudents = useMemo(() => {

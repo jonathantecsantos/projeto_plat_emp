@@ -8,10 +8,10 @@ export const teamApiSlice = createApi({
   tagTypes: ['Team'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   endpoints: (build) => ({
-    getTeamById: build.query<TeamIdResponse, number>({
-      query: (id) => `/equipes/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Team', id }],
-    }),
+    // getTeamById: build.query<TeamIdResponse, number>({
+    //   query: (id) => `/equipes/${id}`,
+    //   providesTags: (_result, _error, id) => [{ type: 'Team', id }],
+    // }),
     getAllTeams: build.query<Team[], void>({
       query: () => '/equipes/listar',
       transformResponse: (response: Team[]) => {
@@ -37,7 +37,7 @@ export const teamApiSlice = createApi({
 })
 
 export const {
-  useGetTeamByIdQuery,
+  // useGetTeamByIdQuery,
   useGetAllTeamsQuery,
   useUpdateTeamMutation
 } = teamApiSlice

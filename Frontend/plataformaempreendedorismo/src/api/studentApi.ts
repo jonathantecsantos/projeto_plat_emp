@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
+import { TeamIdResponse } from '../model/team'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
@@ -51,15 +52,26 @@ export const studentsApiSlice = createApi({
       }),
       invalidatesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
+
+    //TEAM ENDPOINTS
+    getTeamById: build.query<TeamIdResponse, number>({
+      query: (id) => `/equipes/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Team', id }],
+    }),
   }),
 })
 
 export const {
+  //Teams
+  useGetTeamByIdQuery,
+  
+  //Students
   useGetStudentQuery,
   useGetAllStudentsQuery,
   useCreateStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,
+  
 } = studentsApiSlice
 
 // As TagTypes, providesTags, e invalidatesTags são usadas em RTK Query para facilitar o gerenciamento de cache de dados e invalidar dados quando necessário.Essas tags ajudam a garantir que os dados no cache sejam atualizados corretamente quando ações como criação, atualização ou exclusão de recursos ocorrem.Vamos explorar cada um desses conceitos com mais detalhes e exemplos.

@@ -31,10 +31,15 @@ export const Students = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (students!.length <= 0) refetch()
+    if (students) {
+      if (students?.length <= 0) {
+        console.log('students refetch')
+        refetch()
+      }
+    }
   }, [])
 
-  
+
   const filteredStudents = useMemo(() => {
     if (!students) return []
     return students.filter((student) =>

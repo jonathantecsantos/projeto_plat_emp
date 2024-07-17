@@ -36,11 +36,11 @@ public class Aluno {
     @JoinColumn(name = "equipe_id")
     private Equipe equipe;
 
-    public Aluno(AlunoCadastroRecord alunoCadastroRecord, Ods ods, Equipe equipe) {
+    public Aluno(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe) {
         this.cpf = alunoCadastroRecord.cpf();
-        this.nome = alunoCadastroRecord.nome();
+        this.nome = alunoCadastroRecord.nome().toUpperCase();
         this.email = alunoCadastroRecord.email();
-        this.turma = alunoCadastroRecord.turma();
+        this.turma = alunoCadastroRecord.turma().toUpperCase();
         this.isLider = alunoCadastroRecord.isLider();
         this.isViceLider = alunoCadastroRecord.isViceLider();
         this.equipe = equipe;

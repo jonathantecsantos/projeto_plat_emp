@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("alunos")
-@Tag(name="Alunos")
+@Tag(name="Aluno")
 public class AlunoController {
 
     @Autowired
@@ -30,27 +30,27 @@ public class AlunoController {
     @Autowired
     private AlunoService alunoService;
 
-    @Operation(summary = "Lista os dados do Aluno", method = "GET")
+    @Operation(summary = "Listar todos os Alunos", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Aluno")
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<AlunoListaDadosRecord> listaDadosAluno(){
+    public List<AlunoListaDadosRecord> listaDadosAlunos(){
         return alunoRepository.findAll().stream().map(AlunoListaDadosRecord::new).toList();
     }
 
     @Operation(summary = "Buscar aluno por id", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Aluno")
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados dos Alunos")
     })
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AlunoRecord buscaAlunoPorId(@PathVariable Long id){
         return  alunoService.buscarAlunoPorId(id);
     }
 
-    @Operation(summary = "Cadastra Aluno", method = "POST")
+    @Operation(summary = "Cadastrar Aluno", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Aluno cadastrado com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao criar aluno")
@@ -81,7 +81,7 @@ public class AlunoController {
                     .body("Aluno apagado com sucesso!");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body("Erro ao criar aluno: " + e.getMessage());
+                    .body("Erro ao apagar Aluno: " + e.getMessage());
         }
 
     }

@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("equipes")
-@Tag(name="Equipes")
+@Tag(name="Equipe")
 public class EquipeController {
 
     @Autowired

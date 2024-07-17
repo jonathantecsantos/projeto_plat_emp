@@ -73,7 +73,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="nome"
               type="text"
-              value={student?.nome}
+              value={student?.nome.toLowerCase()}
               onChange={(e) => handleInputChange('nome', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />

@@ -73,7 +73,10 @@ export const Students = () => {
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading students.</p>
   if (students!.length <= 0) return <div>
-    <AdminHeader onSearch={handleSearch} onRefresh={refetch} />
+    <AdminHeader onSearch={handleSearch} onRefresh={refetch}
+      onAdd={() => { }}
+      // addButtonName='Adicionar Aluno'
+      placeholder='Pesquisar por nome ou ID' />
     <div className="my-8 flex justify-center font-semibold gap-1">
       <p>Nenhum aluno disponível, realize a</p>
       <span onClick={() => navigate(RoutesNames.uploadFiles)}
@@ -90,7 +93,10 @@ export const Students = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="sticky top-0 z-10">
-        <AdminHeader onSearch={handleSearch} onRefresh={refetch} />
+        <AdminHeader onSearch={handleSearch} onRefresh={refetch}
+          placeholder='Pesquisar por nome ou ID'
+          // addButtonName='Adicionar Aluno'
+          onAdd={() => navigate(RoutesNames.student)} />
       </div>
       <div className="flex-1 overflow-auto">
         <div className="overflow-x-auto p-4">

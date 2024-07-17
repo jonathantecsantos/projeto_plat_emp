@@ -4,7 +4,7 @@ import { authFetchBaseQuery } from '../redux/auth.middleware'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student'],
+  tagTypes: ['Student', 'Team'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   endpoints: (build) => ({
     getStudent: build.query<StudentIdResponse, number>({
@@ -30,7 +30,11 @@ export const studentsApiSlice = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: [{ type: 'Student', id: 'LIST' }],
+      // invalidatesTags: [{ type: 'Student', id: 'LIST' }],
+      invalidatesTags: (_result, _error, { teamId }: any) => [
+        { type: 'Student', id: 'LIST' },
+        { type: 'Team', id: teamId },
+      ],
     }),
     updateStudent: build.mutation<CreateOrUpdateStudent, { id: any; data: Partial<CreateOrUpdateStudent> }>({
       query: ({ id, data }) => ({

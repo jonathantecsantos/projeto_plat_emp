@@ -30,14 +30,15 @@ export const Students = () => {
   if (tableComponentSetCurrPage) tableComponentSetCurrPage({ page: 0 })
   const { enqueueSnackbar } = useSnackbar()
 
-  useEffect(() => {
-    if (students) {
-      if (students?.length <= 0) {
-        console.log('students refetch')
-        refetch()
-      }
-    }
-  }, [])
+  //TESTAR INVALIDATE TAG WORKING
+  // useEffect(() => {
+  //   if (students) {
+  //     if (students?.length <= 0) {
+  //       console.log('students refetch')
+  //       refetch()
+  //     }
+  //   }
+  // }, [])
 
 
   const filteredStudents = useMemo(() => {
@@ -121,13 +122,13 @@ export const Students = () => {
               <>
                 <td className="px-4 py-2">{student.id}</td>
                 <td className="px-4 py-2">{student.cpf}</td>
-                <td className="px-4 py-2">{student.nome}</td>
+                <td className="px-4 py-2 capitalize">{student.nome.toLowerCase()}</td>
                 <td className="px-4 py-2">{student.email}</td>
                 <td className="px-4 py-2 uppercase">{student.turma}</td>
                 <td className="px-4 py-2">{student.isLider ? 'Sim' : 'Não'}</td>
                 <td className="px-4 py-2">{student.isViceLider ? 'Sim' : 'Não'}</td>
                 <td className="px-4 py-2">{student.idEquipe}</td>
-                <td className="px-4 py-2">{student.nomeEquipe}</td>
+                <td className="px-4 py-2 capitalize">{student.nomeEquipe.toLowerCase()}</td>
                 <td className="px-4 py-2">{student.idObs}</td>
                 <td className="">
                   <IconButton

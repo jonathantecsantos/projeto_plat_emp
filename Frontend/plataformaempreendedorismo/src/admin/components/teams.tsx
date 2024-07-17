@@ -67,7 +67,7 @@ export const Teams = () => {
             bodyRowBuilder={(team: Team) => (
               <>
                 <td className="px-4 py-2">{team.id}</td>
-                <td className="px-4 py-2">{team.nome}</td>
+                <td className="px-4 py-2 capitalize">{team.nome.toLowerCase()}</td>
                 <td className="px-4 py-2">{team.linkPitch ? team.linkPitch : '--'}</td>
               </>
             )}

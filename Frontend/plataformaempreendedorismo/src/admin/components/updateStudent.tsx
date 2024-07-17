@@ -75,7 +75,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
               type="text"
               value={student?.nome.toLowerCase()}
               onChange={(e) => handleInputChange('nome', e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md capitalize"
             />
           </div>
           <div>
@@ -89,7 +89,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 lowercase">Email</label>
             <input
               id="email"
               type="email"

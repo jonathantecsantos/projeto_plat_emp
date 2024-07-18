@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorCadastroRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,4 +27,10 @@ public class Professor {
     @OneToOne
     private Equipe equipe;
 
+    public Professor(ProfessorCadastroRecord professorCadastroRecord, Equipe equipe) {
+        this.nome = professorCadastroRecord.nome().toUpperCase();
+        this.cpf = professorCadastroRecord.cpf();
+        this.email = professorCadastroRecord.email();
+        this.equipe = equipe;
+    }
 }

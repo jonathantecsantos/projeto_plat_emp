@@ -2,15 +2,11 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Ods;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.AlunoRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.Ods.OdsRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +18,6 @@ public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
-    @Autowired
-    private OdsService odsService;
-
-    @Autowired
-    private OdsRepository odsRepository;
 
     @Autowired
     private EquipeRepository equipeRepository;
@@ -37,10 +28,8 @@ public class AlunoService {
     @Transactional
     public void criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
 
-        Ods ods = odsService.buscarOdsPorId(alunoCadastroRecord.idOds());
         Equipe equipe = equipeService.buscarEquipePorId(alunoCadastroRecord.idEquipe());
-
-        alunoRepository.save(new Aluno(alunoCadastroRecord,ods,equipe));
+        alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
 
     }
 
@@ -69,14 +58,7 @@ public class AlunoService {
         if(alunoEditarRecord.isViceLider() != null){
             aluno.setIsViceLider(alunoEditarRecord.isViceLider());
         }
-        if(alunoEditarRecord.idOds() != null){
-            Ods ods;
-            Optional<Ods> odsOptional = odsRepository.findById(alunoEditarRecord.idOds());
-            if (odsOptional.isPresent()) {
-                ods = odsOptional.get();
-                aluno.setOds(ods);
-            }
-        }
+
         if(alunoEditarRecord.idEquipe() != null){
             Equipe equipe;
             Optional<Equipe> equipeOptional = equipeRepository.findById(alunoEditarRecord.idEquipe());
@@ -93,9 +75,7 @@ public class AlunoService {
 
         if(alunoOptional.isPresent()){
             Aluno aluno = alunoOptional.get();
-            return new AlunoRecord(aluno.getId(), aluno.getCpf(), aluno.getNome(), aluno.getEmail(), aluno.getTurma(),
-                    aluno.getIsLider(), aluno.getIsViceLider(),
-                    aluno.getOds(), aluno.getEquipe());
+            return new AlunoRecord(aluno);
         }
 
         return null;

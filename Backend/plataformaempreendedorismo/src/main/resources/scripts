@@ -4,7 +4,11 @@
 CREATE TABLE equipe (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT null,
-    link_pitch VARCHAR(250) null
+    banner_id INT null,
+    ods_id INT not null,
+    link_pitch VARCHAR(250) null,
+    FOREIGN KEY (banner_id) REFERENCES banner(ID),
+    FOREIGN KEY (ods_id) REFERENCES ods(ID)
 );
 
 -- Tabela Importacao
@@ -40,11 +44,8 @@ CREATE TABLE aluno (
     is_lider TINYINT(1) NOT NULL,
     is_vice_lider TINYINT(1) NOT NULL,
     equipe_id INT,
-    ods_id INT,
-    FOREIGN KEY (equipe_id) REFERENCES equipe(id),
-    FOREIGN KEY (ods_id) REFERENCES ods(id)
+    FOREIGN KEY (equipe_id) REFERENCES equipe(id)
 );
-
 
 INSERT INTO ods (codigo, descricao) VALUES
 ('ODS1', 'Erradicação da Pobreza'),
@@ -110,7 +111,6 @@ CREATE TABLE professor (
 
  CREATE TABLE banner (
     ID INT PRIMARY key AUTO_INCREMENT,
-    ID_EQUIPE_Q0 INT,
     TEXTO_DESCRICAO_Q0 VARCHAR(500),
     EQUIPE_Q1 VARCHAR(500),
     PARCEIRO_Q1 VARCHAR(500),
@@ -128,8 +128,7 @@ CREATE TABLE professor (
     SAIDAS_Q3 VARCHAR(500),
     RESULTADOS_CURTO_PRAZO_Q3 VARCHAR(500),
     RESULTADOS_MEDIO_PRAZO_Q3 VARCHAR(500),
-    VISAO_IMPACTO_Q3 VARCHAR(500),
-    FOREIGN KEY (ID_EQUIPE_Q0) REFERENCES equipe(ID)
+    VISAO_IMPACTO_Q3 VARCHAR(500)
 );
 
 --DROP TABLE IF EXISTS  banner;

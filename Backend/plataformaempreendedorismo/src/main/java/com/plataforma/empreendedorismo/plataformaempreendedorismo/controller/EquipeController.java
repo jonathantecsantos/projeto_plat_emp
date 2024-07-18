@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("equipes")
-@Tag(name="Equipes")
+@Tag(name="Equipe")
 public class EquipeController {
 
     @Autowired
@@ -54,7 +54,7 @@ public class EquipeController {
             @ApiResponse(responseCode = "404", description = "Equipes não encontradas"),
             @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
     })
-    @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ListaEquipesRecord> getEquipes(){
         return equipeService.buscarEquipes();
     }

@@ -1,13 +1,14 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { CreateStudent, Student, StudentsResponse } from '../model/student';
-import { authFetchBaseQuery } from '../redux/auth.middleware';
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
+import { TeamIdResponse } from '../model/team'
+import { authFetchBaseQuery } from '../redux/auth.middleware'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student'],
+  tagTypes: ['Student', 'Team'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   endpoints: (build) => ({
-    getStudent: build.query<Student, number>({
+    getStudent: build.query<StudentIdResponse, number>({
       query: (id) => `/alunos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
@@ -24,39 +25,56 @@ export const studentsApiSlice = createApi({
           ]
           : [{ type: 'Student', id: 'LIST' }],
     }),
-    createStudent: build.mutation<CreateStudent, Partial<CreateStudent>>({
+    createStudent: build.mutation<CreateOrUpdateStudent, Partial<CreateOrUpdateStudent>>({
       query: (data) => ({
         url: `/alunos/cadastrar`,
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: [{ type: 'Student', id: 'LIST' }],
+      invalidatesTags: (_result, _error, { id }: any) => [
+        { type: 'Student', id: 'LIST' },
+        { type: 'Team', id },
+      ],
     }),
-    updateStudent: build.mutation<CreateStudent, { id: any; data: Partial<CreateStudent> }>({
+    updateStudent: build.mutation<CreateOrUpdateStudent, { id: any; data: Partial<CreateOrUpdateStudent> }>({
       query: ({ id, data }) => ({
         url: `/alunos/editar`,
         method: 'PUT',
         body: { id, ...data },
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Student', id }],
+      invalidatesTags: (_result, _error, { id, data }: any) => [
+        { type: 'Student', id },
+        { type: 'Team', id: data.id },
+      ],
     }),
-    deleteStudent: build.mutation<void, string>({
+    deleteStudent: build.mutation<void, number>({
       query: (id) => ({
-        url: `/aluno/${id}`,
+        url: `/alunos/apagar/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
+
+    //TEAM ENDPOINTS -> Para o invalidatesTags
+    getTeamById: build.query<TeamIdResponse, number>({
+      query: (id) => `/equipes/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Team', id }],
+    }),
   }),
-});
+})
 
 export const {
+  //Teams
+  useGetTeamByIdQuery,
+
+  //Students
   useGetStudentQuery,
   useGetAllStudentsQuery,
   useCreateStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,
-} = studentsApiSlice;
+
+} = studentsApiSlice
 
 // As TagTypes, providesTags, e invalidatesTags são usadas em RTK Query para facilitar o gerenciamento de cache de dados e invalidar dados quando necessário.Essas tags ajudam a garantir que os dados no cache sejam atualizados corretamente quando ações como criação, atualização ou exclusão de recursos ocorrem.Vamos explorar cada um desses conceitos com mais detalhes e exemplos.
 

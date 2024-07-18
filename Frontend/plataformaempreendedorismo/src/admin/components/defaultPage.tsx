@@ -18,14 +18,16 @@ interface AdminPage {
 const AdminAppBar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const userGlobalState = useSelector((state: RootState) => state.userInfo.data.username)
+  const userGlobalState = useSelector((state: RootState) => state.userInfo.data)
 
   return (
     <div className="flex bg-[#152259] text-white justify-between lg:p-4 p-1 px-4 fixed top-0 left-0 right-0 z-10">
       <div className="block lg:hidden">
         <DrawerComponent />
       </div>
-      <p className='lg:block hidden first-letter:uppercase mx-56'>{userGlobalState}</p>
+      <div className='lg:block hidden first-letter:uppercase mx-56'>
+        {userGlobalState.profile}: {userGlobalState.username}
+      </div>
       <div className="flex-grow"></div>
       <div className="flex gap-2 items-center"
         onClick={() => {
@@ -46,7 +48,7 @@ const LeftMenu = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="bg-[#152259] text-[#cecece] h-full">
+    <div className=" text-[#cecece] h-full">
       <div className="w-full p-4">
         {/* <img
           src={backgroundImageUrl}

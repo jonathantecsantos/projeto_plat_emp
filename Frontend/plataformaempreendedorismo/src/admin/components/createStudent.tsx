@@ -6,8 +6,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
-import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../api/studentApi'
-import { StudentsResponse } from '../../model/student'
+import { useCreateStudentMutation } from '../../api/studentApi'
 
 const createStudentSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -24,17 +23,12 @@ type CreateStudentForm = z.infer<typeof createStudentSchema>
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 
-export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const { enqueueSnackbar } = useSnackbar()
+export const CreateStudent = () => {
   const [createStudent, { isLoading, isSuccess }] = useCreateStudentMutation()
-  const [updateStudent] = useUpdateStudentMutation()
-  const [success, setSucess] = useState(isSuccess)
-  const { data: student } = useGetStudentQuery(id, {
-    skip: id ? false : true
-  })
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  console.log(student)
+  const [success, setSucess] = useState(isSuccess)
+  const { enqueueSnackbar } = useSnackbar()
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateStudentForm>({
     resolver: zodResolver(createStudentSchema),
@@ -50,31 +44,15 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
     },
   })
 
-
   const onSubmit = async (data: CreateStudentForm) => {
     data.cpf = formatCPF(data.cpf)
-    if (id) {
-      try {
-        await updateStudent({ id, data }).then(() => {
-          setSucess(true)
-          enqueueSnackbar('Aluno Editado com sucesso!', { variant: 'success' })
-        })
-
-      } catch (err) {
-        console.error("Failed to edit student", err)
-        enqueueSnackbar('Erro ao editar aluno', { variant: 'error' })
-      }
-    } else {
-      try {
-        await createStudent(data).then(() => {
-          setSucess(true)
-          enqueueSnackbar('Aluno criado com sucesso!', { variant: 'error' })
-        })
-
-      } catch (err) {
-        console.error("Failed to create student", err)
-        enqueueSnackbar('Erro ao criar aluno', { variant: 'error' })
-      }
+    try {
+      await createStudent(data).unwrap()
+      enqueueSnackbar('Aluno criado com sucesso!', { variant: 'success' })
+      setSucess(true)
+    } catch (error: any) {
+      console.log(error)
+      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
     }
   }
 
@@ -104,16 +82,14 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
 
   const handleReset = () => {
     reset()
-    setSearchParams({
-
-    })
+    setSearchParams({})
     setSucess(false)
   }
-  console.log('ALUNO PRINT')
 
+  console.log('admin>createStudent.tsx')
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold text-center mb-4">{id ? 'Editar' : 'Adicionar'} Aluno</h2>
+      <h2 className="text-3xl font-bold text-center mb-4">Adicionar Aluno</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
@@ -225,7 +201,7 @@ export const Student = ({ id }: Pick<StudentsResponse, 'id'>) => {
             disabled={isLoading}
           >
             {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
-            <span>{id ? 'Editar' : 'Adicionar'}</span>
+            <span>Adicionar</span>
           </LoadingButton>
         </div>
       </form>

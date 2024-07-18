@@ -55,7 +55,7 @@ const menuItems: MenuItemType[] = [
     outsideIcon: <GroupsIcon />,
     outsideName: 'Times',
     subItens: false,
-    routeName: RoutesNames.adminHome,
+    routeName: RoutesNames.teams,
   },
   {
     outsideName: 'Importações',

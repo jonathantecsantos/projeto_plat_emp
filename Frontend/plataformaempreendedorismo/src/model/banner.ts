@@ -1,48 +1,28 @@
-import { Student } from "./student"
+export interface Anexo {
+  id: number
+  nomeAnexo: string
+  caminhoAnexo: string
+}
 
 export interface Banner {
-  svgFileName: string
-  //header...
-  yearTitle: string
-  projectName: string
-  students: Student[]
-  leaders: Leader[]
-  text: string
-  image: string
-  //orange...
-  organizationalCapacity: OrganizationalCapacity
-  //blue...
-  businessFlow: BusinessFlow
-  //pink...
-  changeTeory: ChangeTeory
-}
-
-export interface Leader {
-  name: string
-}
-
-export interface OrganizationalCapacity {
-  team: string
-  partners: string[]
-  keyActivity: string
-  resources: string
-  costs: string[]
-}
-
-export interface BusinessFlow{
-  marketOpportunity: string
-  costs: string[]
-  valuePropositions: string[]
-  sources: string
-  financialResult: string[]
-}
-
-export interface ChangeTeory {
-  contextAndProblem: string
-  publicImpactFocus: string
-  interventions: string[]
-  outputs: string
-  shortTermResults: string
-  mediumTermResults: string
-  impactVision: string
+  id: number
+  textoDescricaoQ0: string
+  anexos?: Anexo[]
+  equipeQ1: string
+  parceiroQ1: string
+  atividadeChaveQ1: string
+  recursosQ1: string
+  custosQ1: string
+  oportunidadeNegQ2: string
+  custoQ2: string
+  propostaValorQ2: string
+  fonteReceitaQ2: string
+  resultadoFinanceiroQ2: string
+  contextoProblemaQ3: string
+  publicoFocoImpactoQ3: string
+  intervencoesQ3: string
+  saidasQ3: string
+  resultadosCurtoPrazoQ3: string
+  resultadosMedioPrazoQ3: string
+  visaoImpactoQ3: string
 }

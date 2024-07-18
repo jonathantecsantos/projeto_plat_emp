@@ -1,32 +1,7 @@
 import { Ods } from "./ods"
+import { Team, TeamsResponse } from "./team"
 
 export interface Student {
-  //reponse da equipe
-  id: any
-  cpf: string
-  nome: string
-  email: string
-  turma: string
-  isLider?: boolean
-  isViceLider?: boolean
-  ods?: Ods
-
-  // team_id?: string
-  // team?: Team
-}
-
-export interface CreateStudent {
-  nome: string
-  cpf: string
-  email: string
-  turma: string
-  isLider: boolean
-  isViceLider: boolean
-  idOds: number | null 
-  idEquipe: number | null
-}
-
-export interface StudentsResponse {
   id: number
   cpf: string
   nome: string
@@ -34,7 +9,38 @@ export interface StudentsResponse {
   turma: string
   isLider: boolean
   isViceLider: boolean
-  idEquipe: number
-  nomeEquipe: string
-  idObs: number
 }
+
+export interface StudentIdResponse extends Student {
+  ods: Ods
+  equipe: Team
+}
+
+export interface StudentsResponse extends Student {
+  equipeRecord: TeamsResponse
+}
+
+export interface CreateOrUpdateStudent {
+  cpf: string
+  email: string
+  nome: string
+  turma: string
+  isLider: boolean
+  isViceLider: boolean
+  idOds: number | null
+  idEquipe: number | null
+}
+
+// export interface StudentsResponse {
+//   id: number
+//   cpf: string
+//   nome: string
+//   email: string
+//   turma: string
+//   isLider: boolean
+//   isViceLider: boolean
+//   idEquipe: number
+//   nomeEquipe: string
+//   idObs: number
+// }
+

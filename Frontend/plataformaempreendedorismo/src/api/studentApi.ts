@@ -31,7 +31,6 @@ export const studentsApiSlice = createApi({
         method: 'POST',
         body: data,
       }),
-      // invalidatesTags: [{ type: 'Student', id: 'LIST' }],
       invalidatesTags: (_result, _error, { teamId }: any) => [
         { type: 'Student', id: 'LIST' },
         { type: 'Team', id: teamId },
@@ -43,7 +42,9 @@ export const studentsApiSlice = createApi({
         method: 'PUT',
         body: { id, ...data },
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Student', id }],
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Student', id },
+      ],
     }),
     deleteStudent: build.mutation<void, number>({
       query: (id) => ({
@@ -53,7 +54,7 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
 
-    //TEAM ENDPOINTS
+    //TEAM ENDPOINTS -> Para o invalidatesTags
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Team', id }],
@@ -64,14 +65,14 @@ export const studentsApiSlice = createApi({
 export const {
   //Teams
   useGetTeamByIdQuery,
-  
+
   //Students
   useGetStudentQuery,
   useGetAllStudentsQuery,
   useCreateStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,
-  
+
 } = studentsApiSlice
 
 // As TagTypes, providesTags, e invalidatesTags são usadas em RTK Query para facilitar o gerenciamento de cache de dados e invalidar dados quando necessário.Essas tags ajudam a garantir que os dados no cache sejam atualizados corretamente quando ações como criação, atualização ou exclusão de recursos ocorrem.Vamos explorar cada um desses conceitos com mais detalhes e exemplos.

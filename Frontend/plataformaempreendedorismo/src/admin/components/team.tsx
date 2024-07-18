@@ -1,9 +1,14 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { IconButton } from "@mui/material"
 import { ReactNode } from "react"
+import { useGetTeamByIdQuery } from '../../api/studentApi'
 import { Student } from "../../model/student"
 import { Team } from "../../model/team"
-import { useGetTeamByIdQuery } from '../../api/studentApi'
+import ContentPasteIcon from '@mui/icons-material/ContentPaste'
+import DescriptionIcon from '@mui/icons-material/Description'
+import LinkIcon from '@mui/icons-material/Link'
+import PrintIcon from '@mui/icons-material/Print'
+import WebIcon from '@mui/icons-material/Web'
 
 
 
@@ -57,22 +62,27 @@ export const TeamComponent = ({ id }: Pick<Team, 'id'>) => {
           {team?.alunos.map((student, idx) => <TeamCardView student={student} key={idx} />)}
         </div>
       </div>
-      <div className='w-64 bg-[#fefefe] shadow-md rounded-md p-4 ml-4'>
+      <div className='w-64 bg-white shadow-md rounded-md p-4 ml-4 h-fit lg:my-auto'>
         <ul className="space-y-4">
-          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer">
-            Relatório de Inscrição
+          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
+            <ContentPasteIcon />
+            <span>Relatório de Inscrição</span>
           </li>
-          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer">
-            Prototipação
+          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
+            <DescriptionIcon />
+            <span>Prototipação</span>
           </li>
-          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer">
-            Preencher Banner
+          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
+            <WebIcon />
+            <span>Preencher Banner</span>
           </li>
-          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer">
-            Imprimir Banner
+          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
+            <PrintIcon />
+            <span>Imprimir Banner</span>
           </li>
-          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer">
-            Enviar Link do Pitch
+          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
+            <LinkIcon />
+            <span>Enviar Link do Pitch</span>
           </li>
         </ul>
       </div>

@@ -3,9 +3,11 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Anexo;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Banner;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AnexoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.BannerRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BannerService {
@@ -29,6 +33,9 @@ public class BannerService {
 
     @Autowired
     private EquipeService equipeService;
+
+    @Autowired
+    private EquipeRepository equipeRepository;
 
     @Autowired
     private BannerRepository bannerRepository;
@@ -42,10 +49,9 @@ public class BannerService {
 
         Equipe equipe = equipeService.buscarEquipePorId(cadastroBannerRecord.idEquipeQ0());
 
-        banner.setEquipe(equipe);
         banner.setTextoDescricaoQ0(cadastroBannerRecord.textoDescricaoQ0());
         banner.setEquipeQ1(cadastroBannerRecord.equipeQ1());
-        banner.setParceiroQ1(cadastroBannerRecord.idParceiroQ1());
+        banner.setParceiroQ1(cadastroBannerRecord.parceiroQ1());
         banner.setAtividadeChaveQ1(cadastroBannerRecord.atividadeChaveQ1());
         banner.setRecursosQ1(cadastroBannerRecord.recursosQ1());
         banner.setCustosQ1(cadastroBannerRecord.custosQ1());
@@ -64,20 +70,14 @@ public class BannerService {
 
         bannerRepository.save(banner);
 
-        List<Anexo> anexos = new ArrayList<>();
-        // Processar e salvar cada arquivo
-        for (MultipartFile file : files) {
-            String fileName = saveFile(file);
-            Anexo anexo = new Anexo();
-            anexo.setBanner(banner);
-            anexo.setNomeAnexo(fileName);
-            anexo.setCaminhoAnexo(caminhoBase + fileName);
-            anexos.add(anexo);
-            anexoRepository.save(anexo);
-        }
+        List<Anexo> anexos = salvarAnexos(files, banner);
 
-        banner.setAnexos(anexos);
+        banner.getAnexos().clear();
+        banner.getAnexos().addAll(anexos);
+
         bannerRepository.save(banner);
+        equipe.setBanner(banner);
+        equipeRepository.save(equipe);
     }
 
     private String saveFile(MultipartFile file) throws IOException {
@@ -97,5 +97,122 @@ public class BannerService {
         }
 
         return fileName;
+    }
+
+    public BannerRecord buscarBannerPorIdEquipe(Long idEquipe) {
+        Optional<Equipe> equipeOptional = equipeRepository.findById(idEquipe);
+
+        return equipeOptional.map(equipe -> new BannerRecord(equipe.getBanner())).orElse(null);
+
+    }
+
+    @Transactional
+    public void editarBanner(List<MultipartFile> files,CadastroBannerRecord bannerRecord) throws IOException {
+        Banner banner = bannerRepository.getReferenceById(bannerRecord.id());
+        atualizarBanner(files, banner, bannerRecord);
+
+    }
+
+    private void atualizarBanner(List<MultipartFile> files,Banner banner, CadastroBannerRecord bannerRecord) throws IOException {
+
+        tratarAndSalvarInfosBanner(banner, bannerRecord);
+
+        if (files != null && !files.isEmpty()) {
+            List<Anexo> anexosExistentes = tratarAnexos(files, banner);
+            banner.setAnexos(anexosExistentes);
+        }
+    }
+
+    private static void tratarAndSalvarInfosBanner(Banner banner, CadastroBannerRecord bannerRecord) {
+        if(bannerRecord.textoDescricaoQ0() != null){
+            banner.setTextoDescricaoQ0(bannerRecord.textoDescricaoQ0());
+        }
+        if(bannerRecord.equipeQ1() != null){
+            banner.setEquipeQ1(bannerRecord.equipeQ1());
+        }
+        if(bannerRecord.parceiroQ1() != null){
+            banner.setParceiroQ1(bannerRecord.parceiroQ1());
+        }
+        if(bannerRecord.atividadeChaveQ1() != null){
+            banner.setAtividadeChaveQ1(bannerRecord.atividadeChaveQ1());
+        }
+        if(bannerRecord.recursosQ1() != null){
+            banner.setRecursosQ1(bannerRecord.recursosQ1());
+        }
+        if(bannerRecord.custosQ1() != null){
+            banner.setCustosQ1(bannerRecord.custosQ1());
+        }
+        if(bannerRecord.oportunidadeNegQ2() != null){
+            banner.setOportunidadeNegQ2(bannerRecord.oportunidadeNegQ2());
+        }
+        if(bannerRecord.custoQ2() != null){
+            banner.setCustoQ2(bannerRecord.custoQ2());
+        }
+        if(bannerRecord.propostaValorQ2() != null){
+            banner.setPropostaValorQ2(bannerRecord.propostaValorQ2());
+        }
+        if(bannerRecord.fonteReceitaQ2() != null){
+            banner.setFonteReceitaQ2(bannerRecord.fonteReceitaQ2());
+        }
+        if(bannerRecord.resultadoFinanceiroQ2() != null){
+            banner.setResultadoFinanceiroQ2(bannerRecord.resultadoFinanceiroQ2());
+        }
+        if(bannerRecord.contextoProblemaQ3() != null){
+            banner.setContextoProblemaQ3(bannerRecord.contextoProblemaQ3());
+        }
+        if(bannerRecord.publicoFocoImpactoQ3() != null){
+            banner.setPublicoFocoImpactoQ3(bannerRecord.publicoFocoImpactoQ3());
+        }
+        if(bannerRecord.intervencoesQ3() != null){
+            banner.setIntervencoesQ3(bannerRecord.intervencoesQ3());
+        }
+        if(bannerRecord.saidasQ3() != null){
+            banner.setSaidasQ3(bannerRecord.saidasQ3());
+        }
+        if(bannerRecord.resultadosCurtoPrazoQ3() != null){
+            banner.setResultadosCurtoPrazoQ3(bannerRecord.resultadosCurtoPrazoQ3());
+        }
+        if(bannerRecord.resultadosMedioPrazoQ3() != null){
+            banner.setResultadosMedioPrazoQ3(bannerRecord.resultadosMedioPrazoQ3());
+        }
+        if(bannerRecord.visaoImpactoQ3() != null){
+            banner.setVisaoImpactoQ3(bannerRecord.visaoImpactoQ3());
+        }
+    }
+
+    private List<Anexo> tratarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
+        List<Anexo> anexosExistentes = banner.getAnexos();
+        List<String> novosNomesAnexos = files.stream()
+                .map(MultipartFile::getOriginalFilename)
+                .toList();
+
+        List<Anexo> anexosParaRemover = anexosExistentes.stream()
+                .filter(anexo -> !novosNomesAnexos.contains(anexo.getNomeAnexo()))
+                .collect(Collectors.toList());
+
+        anexosExistentes.removeAll(anexosParaRemover);
+        anexoRepository.deleteAll(anexosParaRemover);
+
+        List<Anexo> novosAnexos = salvarAnexos(files, banner);
+        anexosExistentes.addAll(novosAnexos);
+
+        return anexosExistentes;
+    }
+
+    private List<Anexo> salvarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
+        List<Anexo> anexos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String fileName = file.getOriginalFilename();
+            if (anexoRepository.findByBannerAndNomeAnexo(banner, fileName) == null) {
+                fileName = saveFile(file);
+                Anexo anexo = new Anexo();
+                anexo.setBanner(banner);
+                anexo.setNomeAnexo(fileName);
+                anexo.setCaminhoAnexo(caminhoBase + fileName);
+                anexos.add(anexo);
+            }
+        }
+        anexoRepository.saveAll(anexos);
+        return anexos;
     }
 }

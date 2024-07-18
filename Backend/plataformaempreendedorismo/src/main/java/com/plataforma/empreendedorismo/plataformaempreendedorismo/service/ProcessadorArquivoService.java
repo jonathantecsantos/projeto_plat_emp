@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import util.enuns.TipoImportacao;
 
 import java.sql.Timestamp;
-import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -122,12 +121,17 @@ public class ProcessadorArquivoService {
         }
 
         if(row.getCell(1) != null) {
-            String email = String.valueOf(row.getCell(1));
-            professor.setEmail(email);
+            String cpf = String.valueOf(row.getCell(1));
+            professor.setCpf(cpf);
         }
 
         if(row.getCell(2) != null) {
-            String equipe = String.valueOf(row.getCell(2));
+            String email = String.valueOf(row.getCell(2));
+            professor.setEmail(email);
+        }
+
+        if(row.getCell(3) != null) {
+            String equipe = String.valueOf(row.getCell(3));
 
             Equipe equipeEncontrada = equipeRepository.findByNome(equipe.toUpperCase());
 
@@ -190,6 +194,7 @@ public class ProcessadorArquivoService {
         log.info("Iniciando processamento de Alunos");
 
         Aluno aluno = new Aluno();
+        Equipe equipe = new Equipe();
 
         if (row.getCell(0) != null) {
             String cpf = String.valueOf(row.getCell(0));
@@ -237,25 +242,24 @@ public class ProcessadorArquivoService {
             }
         }
 
-        if(row.getCell(6) != null){
-            String ods = String.valueOf(row.getCell(6));
-
-            Ods odsEncontradado = odsRepository.findByCodigo(ods);
-            if (odsEncontradado != null){
-                aluno.setOds(odsEncontradado);
-            }else{
-                throw new Exception("Erro");
-            }
-        }
-
-        Equipe equipe = new Equipe();
 
         if(row.getCell(7) != null) {
             String entradaEquipe = String.valueOf(row.getCell(7));
-            equipe = equipeRepository.findByNome(entradaEquipe);
+            equipe = equipeRepository.findByNome(entradaEquipe.toUpperCase());
             if (equipe == null) {
                 equipe = new Equipe();
                 equipe.setNome(entradaEquipe.toUpperCase());
+
+                if(row.getCell(6) != null){
+                    String ods = String.valueOf(row.getCell(6));
+
+                    Ods odsEncontradado = odsRepository.findByCodigo(ods);
+                    if (odsEncontradado != null){
+                        equipe.setOds(odsEncontradado);
+                    }else{
+                        throw new Exception("Erro");
+                    }
+                }
                 equipeRepository.saveAndFlush(equipe);
                 aluno.setEquipe(equipe);
             }else{
@@ -302,7 +306,7 @@ public class ProcessadorArquivoService {
                 break;
             case PROFESSOR:
                 expectedHeader = new String[]{
-                        "NOME_PROFESSOR", "EMAIL", "EQUIPE"
+                        "NOME_PROFESSOR", "CPF","EMAIL", "EQUIPE"
                 };
                 break;
         }

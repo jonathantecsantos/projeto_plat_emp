@@ -1,10 +1,17 @@
+import { Banner } from "./banner"
+import { Ods } from "./ods"
 import { Student } from "./student"
 import { Teacher } from "./teacher"
 
-export interface Team {
+export interface TeamsResponse {
   id: number
   nome: string
   linkPitch: string
+}
+
+export interface Team extends TeamsResponse{
+  banner: Banner
+  ods: Ods
 }
 
 export interface TeamIdResponse {

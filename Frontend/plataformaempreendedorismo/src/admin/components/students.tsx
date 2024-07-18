@@ -74,7 +74,7 @@ export const Students = () => {
   if (error) return <p className="text-center">Error loading students.</p>
   if (students!.length <= 0) return <div>
     <AdminHeader onSearch={handleSearch} onRefresh={refetch}
-      onAdd={() => { }}
+      onAdd={() => navigate(RoutesNames.student)}
       // addButtonName='Adicionar Aluno'
       placeholder='Pesquisar por nome ou ID' />
     <div className="my-8 flex justify-center font-semibold gap-1">
@@ -111,7 +111,7 @@ export const Students = () => {
               'Vice Líder',
               'ID Equipe',
               'Nome Equipe',
-              'ID Obs',
+              // 'ID Obs',
               ''
             ]}
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
@@ -126,9 +126,9 @@ export const Students = () => {
                 <td className="px-4 py-2 uppercase">{student.turma}</td>
                 <td className="px-4 py-2">{student.isLider ? 'Sim' : 'Não'}</td>
                 <td className="px-4 py-2">{student.isViceLider ? 'Sim' : 'Não'}</td>
-                <td className="px-4 py-2">{student.idEquipe}</td>
-                <td className="px-4 py-2 capitalize">{student.nomeEquipe.toLowerCase()}</td>
-                <td className="px-4 py-2">{student.idObs}</td>
+                <td className="px-4 py-2">{student.equipeRecord.id}</td>
+                <td className="px-4 py-2 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
+                {/* <td className="px-4 py-2">{student}</td> */}
                 <td className="">
                   <IconButton
                     className='hover:text-white'

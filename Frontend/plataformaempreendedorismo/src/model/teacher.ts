@@ -4,6 +4,6 @@ export interface Teacher {
   id: number
   nome: string
   cpf: string
-  email:string
+  email: string
   equipe: Team
 }

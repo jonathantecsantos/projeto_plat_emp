@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { Team, TeamIdResponse } from '../model/team'
+import { TeamsResponse } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 
 
@@ -12,9 +12,9 @@ export const teamApiSlice = createApi({
     //   query: (id) => `/equipes/${id}`,
     //   providesTags: (_result, _error, id) => [{ type: 'Team', id }],
     // }),
-    getAllTeams: build.query<Team[], void>({
-      query: () => '/equipes/listar',
-      transformResponse: (response: Team[]) => {
+    getAllTeams: build.query<TeamsResponse[], void>({
+      query: () => '/equipes',
+      transformResponse: (response: TeamsResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
       },
       providesTags: (result) =>
@@ -25,7 +25,7 @@ export const teamApiSlice = createApi({
           ]
           : [{ type: 'Team', id: 'LIST' }],
     }),
-    updateTeam: build.mutation<Team, { id: any; data: Partial<Team> }>({
+    updateTeam: build.mutation<TeamsResponse, { id: any; data: Partial<TeamsResponse> }>({
       query: ({ id, data }) => ({
         url: `/equipes/editar`,
         method: 'PUT',

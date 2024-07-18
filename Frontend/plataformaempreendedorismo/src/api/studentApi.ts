@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
-import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { TeamIdResponse } from '../model/team'
+import { authFetchBaseQuery } from '../redux/auth.middleware'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
@@ -31,9 +31,9 @@ export const studentsApiSlice = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: (_result, _error, { teamId }: any) => [
+      invalidatesTags: (_result, _error, { id }: any) => [
         { type: 'Student', id: 'LIST' },
-        { type: 'Team', id: teamId },
+        { type: 'Team', id },
       ],
     }),
     updateStudent: build.mutation<CreateOrUpdateStudent, { id: any; data: Partial<CreateOrUpdateStudent> }>({
@@ -42,8 +42,9 @@ export const studentsApiSlice = createApi({
         method: 'PUT',
         body: { id, ...data },
       }),
-      invalidatesTags: (_result, _error, { id }) => [
+      invalidatesTags: (_result, _error, { id, data }: any) => [
         { type: 'Student', id },
+        { type: 'Team', id: data.id },
       ],
     }),
     deleteStudent: build.mutation<void, number>({

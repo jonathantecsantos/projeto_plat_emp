@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { useGetAllTeamsQuery } from "../../api/teamApi.slice"
 import { AdminHeader } from "../../components/common/adminHeader"
 import { RoutesNames } from '../../globals'
-import { Team } from "../../model/team"
+import { TeamsResponse } from "../../model/team"
 import { TableComponent } from "./table"
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "./table/common"
 
@@ -64,14 +64,14 @@ export const Teams = () => {
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredTeams!}
-            bodyRowBuilder={(team: Team) => (
+            bodyRowBuilder={(team: TeamsResponse) => (
               <>
                 <td className="px-4 py-2">{team.id}</td>
                 <td className="px-4 py-2 capitalize">{team.nome.toLowerCase()}</td>
                 <td className="px-4 py-2">{team.linkPitch ? team.linkPitch : '--'}</td>
               </>
             )}
-            onClickRow={(team: TableComponentClickRowProps<Team>) => {
+            onClickRow={(team: TableComponentClickRowProps<TeamsResponse>) => {
               navigate(RoutesNames.team.replace(':id', team.item?.id.toString()))
             }}
           />

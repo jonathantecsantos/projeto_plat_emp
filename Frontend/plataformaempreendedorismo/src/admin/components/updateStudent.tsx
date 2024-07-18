@@ -2,13 +2,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from "@mui/lab"
 import { FormEvent, useEffect, useState } from "react"
 import { useGetStudentQuery, useUpdateStudentMutation } from "../../api/studentApi"
-import { CreateOrUpdateStudent, StudentIdResponse } from "../../model/student"
+import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from "../../model/student"
 import { useSnackbar } from 'notistack'
 import { formatCPF } from './createStudent'
 import { CircularProgress } from '@mui/material'
 
 
-export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
+export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
   const { data, isLoading } = useGetStudentQuery(id)
   const [student, setStudent] = useState<StudentIdResponse | null>(null)
   const [updateStudent, { isSuccess }] = useUpdateStudentMutation()
@@ -45,13 +45,13 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
       email: student?.email || '',
       turma: student?.turma || '',
       idEquipe: student?.equipe.id || 0,
-      idOds: student?.ods.id || 0,
+      idOds: student?.equipe.ods.id || 0,
       isLider: student?.isLider || false,
       isViceLider: student?.isViceLider || false
     }
 
     try {
-      await updateStudent({ id, data: updatedStudent })
+      await updateStudent({ id, data: updatedStudent }).unwrap()
       enqueueSnackbar('Aluno editado com sucesso!', { variant: 'success' })
       setSucess(true)
     } catch (error: any) {
@@ -73,7 +73,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="nome"
               type="text"
-              value={student?.nome.toLowerCase()}
+              value={student?.nome?.toLowerCase() || ''}
               onChange={(e) => handleInputChange('nome', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md capitalize"
             />
@@ -83,7 +83,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="cpf"
               type="text"
-              value={student?.cpf}
+              value={student?.cpf || ''}
               onChange={(e) => handleInputChange('cpf', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -93,7 +93,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="email"
               type="email"
-              value={student?.email}
+              value={student?.email || ''}
               onChange={(e) => handleInputChange('email', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -103,7 +103,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="turma"
               type="text"
-              value={student?.turma}
+              value={student?.turma || ''}
               onChange={(e) => handleInputChange('turma', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
@@ -113,12 +113,20 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="ods"
               type="number"
-              value={student?.ods.id}
-              onChange={(e) => handleInputChange('ods', {
-                id: parseInt(e.target.value),
-                codigo: student?.ods.codigo,
-                descricao: student?.ods.descricao
-              })}
+              value={student?.equipe?.ods.id || ''}
+              onChange={(e) => {
+                const odsId = parseInt(e.target.value)
+                setStudent((prevData) => ({
+                  ...prevData!,
+                  equipe: {
+                    ...prevData!.equipe,
+                    ods: {
+                      ...prevData!.equipe.ods,
+                      id: odsId
+                    }
+                  }
+                }))
+              }}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
@@ -127,12 +135,17 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="equipe"
               type="number"
-              value={student?.equipe.id}
-              onChange={(e) => handleInputChange('equipe', {
-                id: parseInt(e.target.value),
-                nome: student?.equipe.nome,
-                linkPitch: student?.equipe.linkPitch
-              })}
+              value={student?.equipe?.id || ''}
+              onChange={(e) => {
+                const equipeId = parseInt(e.target.value)
+                setStudent((prevData) => ({
+                  ...prevData!,
+                  equipe: {
+                    ...prevData!.equipe,
+                    id: equipeId
+                  }
+                }))
+              }}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
@@ -142,7 +155,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="isLider"
               type="checkbox"
-              checked={student?.isLider}
+              checked={student?.isLider || false}
               onChange={(e) => handleCheckboxChange('isLider', e.target.checked)}
               className="h-4 w-4 text-blue-600 border-gray-300 rounded"
             />
@@ -152,7 +165,7 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
             <input
               id="isViceLider"
               type="checkbox"
-              checked={student?.isViceLider}
+              checked={student?.isViceLider || false}
               onChange={(e) => handleCheckboxChange('isViceLider', e.target.checked)}
               className="h-4 w-4 text-blue-600 border-gray-300 rounded"
             />
@@ -160,8 +173,8 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
           </div>
         </div>
         <div className='my-4 flex justify-between text-sm'>
-          <span>Equipe: {student?.equipe.nome}</span>
-          <span>{student?.ods.codigo}: {student?.ods.descricao}</span>
+          <span>Equipe: {student?.equipe?.nome}</span>
+          <span>{student?.equipe.ods?.codigo}: {student?.equipe.ods?.descricao}</span>
         </div>
 
         <div className='flex items-center justify-end'>
@@ -177,5 +190,6 @@ export const UpdateStudent = ({ id }: Pick<StudentIdResponse, 'id'>) => {
           </LoadingButton>
         </div>
       </form>
-    </div>)
+    </div>
+  )
 }

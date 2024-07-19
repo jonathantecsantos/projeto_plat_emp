@@ -47,12 +47,15 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: data.id },
       ],
     }),
-    deleteStudent: build.mutation<void, number>({
+    deleteStudent: build.mutation<void, { id: number, teamId: number }>({
       query: (id) => ({
         url: `/alunos/apagar/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (_result, _error, id) => [{ type: 'Student', id }],
+      invalidatesTags: (_result, _error, { id, teamId }) => [
+        { type: 'Student', id },
+        { type: 'Team', id: teamId }
+      ],
     }),
 
     //TEAM ENDPOINTS -> Para o invalidatesTags

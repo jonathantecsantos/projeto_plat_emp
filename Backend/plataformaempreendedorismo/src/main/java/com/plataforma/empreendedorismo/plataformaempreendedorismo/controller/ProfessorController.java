@@ -1,10 +1,9 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorEditarRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorListaRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorCadastroRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorEditarRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorListaRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.ProfessorRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;

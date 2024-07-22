@@ -166,7 +166,7 @@ public class ProcessadorArquivoService {
             ArrayList<FormatoAvaliacao> formatoAvaliacaos = new ArrayList<>();
             if( formatoAvaliacaoEncontrado != null){
                 formatoAvaliacaos.add(formatoAvaliacaoEncontrado);
-                avaliador.setFormatoAvaliacoes(formatoAvaliacaos);
+                avaliador.setFormatosAvaliacoes(formatoAvaliacaos);
             }
         }
 

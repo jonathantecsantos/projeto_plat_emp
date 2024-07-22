@@ -1,18 +1,25 @@
--- Tabela Grupo
---DROP TABLE IF EXISTS equipe;
+-- APAGAR TABELAS
 
-CREATE TABLE equipe (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT null,
-    banner_id INT null,
-    ods_id INT not null,
-    link_pitch VARCHAR(250) null,
-    FOREIGN KEY (banner_id) REFERENCES banner(ID),
-    FOREIGN KEY (ods_id) REFERENCES ods(ID)
-);
+DROP TABLE IF EXISTS aluno;
 
--- Tabela Importacao
---DROP TABLE IF EXISTS importacao;
+DROP TABLE IF EXISTS professor;
+
+DROP TABLE IF EXISTS equipe;
+
+DROP TABLE IF EXISTS ods;
+
+DROP TABLE IF EXISTS anexo;
+
+DROP TABLE IF EXISTS banner;
+
+DROP TABLE IF EXISTS importacao;
+
+DROP TABLE IF EXISTS avaliador_formato;
+
+DROP TABLE IF EXISTS formato_avaliacao;
+
+DROP TABLE IF EXISTS avaliador;
+
 
 CREATE TABLE importacao (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -23,8 +30,28 @@ CREATE TABLE importacao (
     usuario VARCHAR(50)
 );
 
--- Tabela Obs
---DROP TABLE IF EXISTS ods;
+CREATE TABLE banner (
+    ID INT PRIMARY key AUTO_INCREMENT,
+    TEXTO_DESCRICAO_Q0 VARCHAR(500),
+    EQUIPE_Q1 VARCHAR(500),
+    PARCEIRO_Q1 VARCHAR(500),
+    ATIVIDADE_CHAVE_Q1 VARCHAR(500),
+    RECURSOS_Q1 VARCHAR(500),
+    CUSTOS_Q1 VARCHAR(500),
+    OPORTUNIDADE_NEG_Q2 VARCHAR(500),
+    CUSTO_Q2 VARCHAR(500),
+    PROPOSTA_VALOR_Q2 VARCHAR(500),
+    FONTE_RECEITA_Q2 VARCHAR(500),
+    RESULTADO_FINANCEIRO_Q2 VARCHAR(500),
+    CONTEXTO_PROBLEMA_Q3 VARCHAR(500),
+    PUBLICO_FOCO_IMPACTO_Q3 VARCHAR(500),
+    INTERVENCOES_Q3 VARCHAR(500),
+    SAIDAS_Q3 VARCHAR(500),
+    RESULTADOS_CURTO_PRAZO_Q3 VARCHAR(500),
+    RESULTADOS_MEDIO_PRAZO_Q3 VARCHAR(500),
+    VISAO_IMPACTO_Q3 VARCHAR(500)
+);
+
 
 CREATE TABLE ods (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -32,8 +59,15 @@ CREATE TABLE ods (
     descricao VARCHAR(250)
 );
 
--- Tabela Aluno
---DROP TABLE IF EXISTS aluno;
+CREATE TABLE equipe (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT null,
+    banner_id INT null,
+    ods_id INT not null,
+    link_pitch VARCHAR(250) null,
+    FOREIGN KEY (banner_id) REFERENCES banner(ID),
+    FOREIGN KEY (ods_id) REFERENCES ods(ID)
+);
 
 CREATE TABLE aluno (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -66,7 +100,6 @@ INSERT INTO ods (codigo, descricao) VALUES
 ('ODS16', 'Paz, Justiça e Instituições Eficazes'),
 ('ODS17', 'Parcerias e Meios de Implementação');
 
-
 CREATE TABLE formato_avaliacao (
     id INT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(255)
@@ -78,15 +111,12 @@ insert into formato_avaliacao (descricao) values
 ('SHARK TANK'),
 ('EXPO DLEI');
 
---DROP TABLE IF EXISTS avaliador;
 
 CREATE TABLE avaliador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255),
     instituicao VARCHAR(255)
 );
-
---DROP TABLE IF EXISTS avaliador_formato;
 
 CREATE TABLE avaliador_formato (
     id_avaliador INT,
@@ -96,7 +126,6 @@ CREATE TABLE avaliador_formato (
     FOREIGN KEY (id_formato_avaliacao) REFERENCES formato_avaliacao(id)
 );
 
---DROP TABLE IF EXISTS professor;
 
 CREATE TABLE professor (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -107,31 +136,7 @@ CREATE TABLE professor (
   FOREIGN KEY (equipe_id) REFERENCES equipe(id)
 );
 
---DROP TABLE IF EXISTS banner;
 
- CREATE TABLE banner (
-    ID INT PRIMARY key AUTO_INCREMENT,
-    TEXTO_DESCRICAO_Q0 VARCHAR(500),
-    EQUIPE_Q1 VARCHAR(500),
-    PARCEIRO_Q1 VARCHAR(500),
-    ATIVIDADE_CHAVE_Q1 VARCHAR(500),
-    RECURSOS_Q1 VARCHAR(500),
-    CUSTOS_Q1 VARCHAR(500),
-    OPORTUNIDADE_NEG_Q2 VARCHAR(500),
-    CUSTO_Q2 VARCHAR(500),
-    PROPOSTA_VALOR_Q2 VARCHAR(500),
-    FONTE_RECEITA_Q2 VARCHAR(500),
-    RESULTADO_FINANCEIRO_Q2 VARCHAR(500),
-    CONTEXTO_PROBLEMA_Q3 VARCHAR(500),
-    PUBLICO_FOCO_IMPACTO_Q3 VARCHAR(500),
-    INTERVENCOES_Q3 VARCHAR(500),
-    SAIDAS_Q3 VARCHAR(500),
-    RESULTADOS_CURTO_PRAZO_Q3 VARCHAR(500),
-    RESULTADOS_MEDIO_PRAZO_Q3 VARCHAR(500),
-    VISAO_IMPACTO_Q3 VARCHAR(500)
-);
-
---DROP TABLE IF EXISTS  banner;
 
 CREATE TABLE anexo (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -140,3 +145,4 @@ CREATE TABLE anexo (
     caminho_anexo VARCHAR(500),
     FOREIGN KEY (banner_id) REFERENCES banner (id)
 );
+

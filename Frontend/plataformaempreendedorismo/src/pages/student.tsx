@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
-import { CreateStudent } from "../admin/components/createStudent"
 import { AdminDefaultPage } from "../admin/components/defaultPage"
-import { UpdateStudent } from "../admin/components/updateStudent"
+import { CreateStudent } from "../admin/components/students/createStudent"
+import { UpdateStudent } from "../admin/components/students/updateStudent"
 
 
 export const StudentPage = () => {

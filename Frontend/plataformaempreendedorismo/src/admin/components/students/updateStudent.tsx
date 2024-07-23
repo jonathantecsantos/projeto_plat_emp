@@ -1,11 +1,11 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from "@mui/lab"
-import { FormEvent, useEffect, useState } from "react"
-import { useGetStudentQuery, useUpdateStudentMutation } from "../../api/studentApi"
-import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from "../../model/student"
-import { useSnackbar } from 'notistack'
-import { formatCPF } from './createStudent'
 import { CircularProgress } from '@mui/material'
+import { useSnackbar } from 'notistack'
+import { FormEvent, useEffect, useState } from "react"
+import { useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
+import { StudentsResponse, StudentIdResponse, CreateOrUpdateStudent } from '../../../model/student'
+import { formatCPF } from './createStudent'
 
 
 export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {

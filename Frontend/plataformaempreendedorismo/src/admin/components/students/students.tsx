@@ -4,12 +4,12 @@ import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconBut
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useDeleteStudentMutation, useGetAllStudentsQuery } from '../../api/studentApi'
-import { AdminHeader } from '../../components/common/adminHeader'
-import { RoutesNames } from '../../globals'
-import { StudentsResponse } from '../../model/student'
-import { TableComponent } from './table'
-import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from './table/common'
+import { useGetAllStudentsQuery, useDeleteStudentMutation } from '../../../api/studentApi'
+import { AdminHeader } from '../../../components/common/adminHeader'
+import { RoutesNames } from '../../../globals'
+import { StudentsResponse } from '../../../model/student'
+import { TableComponent } from '../table'
+import { TableComponentSetCurrPageProps, TableComponentClickRowProps } from '../table/common'
 
 
 export const Students = () => {
@@ -60,7 +60,7 @@ export const Students = () => {
   const handleDeleteStudent = async () => {
     if (selectedStudent) {
       try {
-        await deleteStudent(selectedStudent.id).unwrap()
+        await deleteStudent(selectedStudent.id)
         enqueueSnackbar(`Aluno: ${selectedStudent.nome}, excluído com sucesso!`, { variant: 'success' })
         refetch()
         setOpen(false)

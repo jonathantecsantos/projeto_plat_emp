@@ -22,6 +22,14 @@ export const authFetchBaseQuery = (
 
       return headers
     },
+
+    // ResponseHandler utilizado para correção deste erro no front
+    // {
+    //   "status": "PARSING_ERROR",
+    //   "originalStatus": 201,
+    //   "data": "Aluno cadastrado com sucesso!",
+    //   "error": "SyntaxError: Unexpected token 'A', \"Aluno cada\"... is not valid JSON"
+    // }
     responseHandler: async (response) => {
       const text = await response.text();
       try {

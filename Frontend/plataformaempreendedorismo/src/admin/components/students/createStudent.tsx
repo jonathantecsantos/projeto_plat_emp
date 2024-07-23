@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
-import { useCreateStudentMutation } from '../../api/studentApi'
+import { useCreateStudentMutation } from '../../../api/studentApi'
 
 const createStudentSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),

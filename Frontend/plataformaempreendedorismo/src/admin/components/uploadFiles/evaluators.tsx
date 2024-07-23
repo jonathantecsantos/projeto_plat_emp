@@ -1,20 +1,17 @@
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { toggleLoading } from '../../redux/reducers/loadingBar.slice'
-import { ImportType } from '../../utils/types'
+import { useUploadFileMutation } from '../../../api/import.slice'
+import { toggleLoading } from '../../../redux/reducers/loadingBar.slice'
+import { ImportType } from '../../../utils/types'
 import { UploadComponent } from './uploadCard'
-import { useUploadFileMutation } from '../../api/import.slice'
 
-
-
-export const StudentsUpload = () => {
+export const EvaluatorsUpload = () => {
   const [file, setFile] = useState<File | null>(null)
   const dispatch = useDispatch()
   const [uploadFile, { isLoading }] = useUploadFileMutation()
   const { enqueueSnackbar } = useSnackbar()
   const [uploaded, setUploaded] = useState(false)
-
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files?.[0]
@@ -28,18 +25,18 @@ export const StudentsUpload = () => {
       dispatch(toggleLoading())
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('tipo', ImportType.student)
+      formData.append('tipo', ImportType.evaluator)
 
       try {
-        console.log('Enviando arquivo de alunos para o backend...')
+        console.log('Enviando arquivo de avaliadores para o backend...')
         const response = await uploadFile(formData)
         if (!response.error) {
-          enqueueSnackbar('Arquivo de alunos enviado com sucesso!', { variant: 'success' })
+          enqueueSnackbar('Arquivo de avaliadores enviado com sucesso!', { variant: 'success' })
           setUploaded(true)
         }
       } catch (error) {
-        console.error('Erro ao enviar o arquivo de alunos:', error)
-        enqueueSnackbar('Erro ao enviar o arquivo de alunos. Por favor, tente novamente.', { variant: 'error' })
+        console.error('Erro ao enviar o arquivo de avaliadores:', error)
+        enqueueSnackbar('Erro ao enviar o arquivo de avaliadores. Por favor, tente novamente.', { variant: 'error' })
         setUploaded(false)
       } finally {
         dispatch(toggleLoading())
@@ -51,7 +48,7 @@ export const StudentsUpload = () => {
 
   return (
     <UploadComponent
-      title='Upload Alunos'
+      title='Upload Avaliadores'
       onFileChange={handleFileChange}
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -59,3 +56,4 @@ export const StudentsUpload = () => {
     />
   )
 }
+

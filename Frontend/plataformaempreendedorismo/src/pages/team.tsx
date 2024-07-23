@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import { AdminDefaultPage } from "../admin/components/defaultPage"
-import { TeamComponent } from "../admin/components/team"
+import { TeamComponent } from "../admin/components/teams/team"
 
 
 export const TeamPage = () => {

@@ -1,5 +1,5 @@
 import { AdminDefaultPage } from "../admin/components/defaultPage"
-import { Students } from "../admin/components/students"
+import { Students } from "../admin/components/students/students"
 
 export const StudentsDetailsPage = () => {
   return <AdminDefaultPage mainContent={<Students />} />

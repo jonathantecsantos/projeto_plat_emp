@@ -7,6 +7,7 @@ export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
   tagTypes: ['Student', 'Team'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
+  // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   endpoints: (build) => ({
     getStudent: build.query<StudentIdResponse, number>({
       query: (id) => `/alunos/${id}`,
@@ -47,14 +48,14 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: data.id },
       ],
     }),
-    deleteStudent: build.mutation<void, { id: number, teamId: number }>({
+    deleteStudent: build.mutation<void, any>({
       query: (id) => ({
         url: `/alunos/apagar/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (_result, _error, { id, teamId }) => [
+      invalidatesTags: (_result, _error, { id }) => [
         { type: 'Student', id },
-        { type: 'Team', id: teamId }
+        { type: 'Team', id }
       ],
     }),
 

@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class FormatoAvaliacao {
 
     private String descricao;
 
-    @ManyToMany (mappedBy = "formatoAvaliacoes")
+    @JsonIgnore
+    @ManyToMany (mappedBy = "formatosAvaliacoes")
     private List<Avaliador> avaliadores = new ArrayList<>();
 }

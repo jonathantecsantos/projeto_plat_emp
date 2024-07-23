@@ -36,16 +36,16 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           <div className='grid xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2  gap-4'>
             {team?.alunos.map((student, idx) => <StudentCard student={student} key={idx} />)}
           </div>
-          {/* <div className='bg-gray-100 p-4 border rounded-lg shadow-md w-11/12'>
+          {team?.professor?.equipe.linkPitch && <div className='bg-gray-100 p-4 border rounded-lg shadow-md lg:w-4/5 w-full'>
             <h3 className="text-lg font-bold">Link do vídeo do Pitch:</h3>
             <a href={team?.professor?.equipe.linkPitch} target="_blank" rel="noopener noreferrer">
               {team?.professor?.equipe.linkPitch}
             </a>
-          </div> */}
+          </div>}
         </div>
       </div>
-      <div className='w-full lg:w-64 shadow-md rounded-md p-4 mb-32 
-      lg:mt-0 lg:ml-4 lg:h-fit text-nowrap'>
+      <div className={`w-full lg:w-64 shadow-md rounded-md p-4 ${!team?.professor?.equipe.linkPitch && 'mb-0'} mb-48 
+      lg:mt-0 lg:ml-4 lg:h-fit text-nowrap`}>
         <ul className="space-y-4">
           <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2 ">
             <ContentPasteIcon />
@@ -63,10 +63,10 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             <PrintIcon />
             <span>Imprimir banner</span>
           </li>
-          <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
+          {team?.professor?.equipe.linkPitch && <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
             <LinkIcon />
             <span>Enviar link do pitch</span>
-          </li>
+          </li>}
         </ul>
       </div>
       <SpeedDial

@@ -1,7 +1,6 @@
 import { ReactNode } from "react"
 import { Teacher } from "../../../model/teacher"
-import { IconButton } from "@mui/material"
-import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { ActionMenu } from "../common/actionMenuIcon"
 
 export interface TeacherCard {
   teacher?: Teacher
@@ -14,14 +13,14 @@ export const TeacherCard = ({ teacher }: TeacherCard): ReactNode => (
       <p className={`text-lg font-bold capitalize text-white mr-8`}>
         {teacher?.nome.toLowerCase()}
       </p>
-      <IconButton
-        className='hover:text-white text-[#cecece] absolute right-0 top-1 mx-1'
-        onClick={(event) => {
-          event.stopPropagation()
-          // handleClickOpen({ student })
-        }}>
-        <MoreVertIcon />
-      </IconButton>
+      <ActionMenu
+        onEdit={() => console.log('Edit teacher')}
+        onRemove={() => console.log('Remove teacher')}
+        onDetails={() => console.log('Teacher details')}
+        onPromoteLeader={() => console.log('Promote teacher to leader')}
+        onPromoteViceLeader={() => console.log('Promote teacher to vice leader')}
+        onPromoteMember={() => console.log('Promote teacher to vice leader')}
+      />
     </div>
     <p>Professor/Orientador</p>
   </div>

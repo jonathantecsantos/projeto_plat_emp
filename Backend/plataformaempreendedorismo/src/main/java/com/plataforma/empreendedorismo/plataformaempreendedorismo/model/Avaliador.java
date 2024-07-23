@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliador.AvaliadorCadastroRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,11 @@ public class Avaliador {
             joinColumns = {@JoinColumn(name = "id_avaliador", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "id_formato_avaliacao", referencedColumnName = "id")}
     )
-    private List<FormatoAvaliacao> formatoAvaliacoes = new ArrayList<>();
+    private List<FormatoAvaliacao> formatosAvaliacoes = new ArrayList<>();
 
+    public Avaliador(AvaliadorCadastroRecord avaliadorCadastroRecord) {
+        this.instituicao = avaliadorCadastroRecord.instituicao();
+        this.nome = avaliadorCadastroRecord.nome().toUpperCase();
+        this.formatosAvaliacoes = avaliadorCadastroRecord.formatoAvaliacoes();
+    }
 }

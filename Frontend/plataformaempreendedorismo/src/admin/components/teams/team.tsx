@@ -13,8 +13,8 @@ import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
 
 const actions = [
-  { icon: < SchoolIcon />, name: 'Adicionar Aluno' },
-  { icon: < LocalLibraryIcon />, name: 'Adicionar Professor', },
+  { icon: < SchoolIcon />, name: 'Adicionar Aluno', onClick: () => console.log('aluno') },
+  { icon: < LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => console.log('professor') },
 ];
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
@@ -79,6 +79,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
+            onClick={action.onClick}
           />
         ))}
       </SpeedDial>

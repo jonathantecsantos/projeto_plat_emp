@@ -5,7 +5,7 @@ import { Student } from '../../../model/student'
 import { toggleLoading } from '../../../redux/reducers/loadingBar.slice'
 import { ActionMenu } from '../common/actionMenuIcon'
 import { useState } from 'react'
-import { Dialog, DialogContent, DialogActions } from '@mui/material'
+import { Dialog, DialogContent, DialogActions, CircularProgress } from '@mui/material'
 import { Button } from 'essencials'
 import { useNavigate } from 'react-router-dom'
 import { RoutesNames } from '../../../globals'
@@ -23,7 +23,9 @@ export interface StudentCard {
 export const StudentCard = ({ student }: StudentCard) => {
   const [updateStudent] = useUpdateStudentMutation()
   const [deleteStudent] = useDeleteStudentMutation()
-  const { data: updatedStudent } = useGetStudentQuery(student.id)
+  //skip in use because stop handler update data in initiation component
+  const [skip, setSkip] = useState(true)
+  const { data: updatedStudent, isLoading } = useGetStudentQuery(student.id, { skip })
 
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
@@ -31,11 +33,11 @@ export const StudentCard = ({ student }: StudentCard) => {
   const navigate = useNavigate()
 
 
-
   const handlePromoteToLeader = async () => {
     try {
       dispatch(toggleLoading())
       await updateStudent({ id: student.id, data: { ...student, isLider: true, isViceLider: false } }).unwrap()
+      setSkip(false) // Allows fetch updated data from the API
     } catch (error) {
       console.error('Failed to promote to leader:', error)
     } finally {
@@ -47,6 +49,7 @@ export const StudentCard = ({ student }: StudentCard) => {
     try {
       dispatch(toggleLoading())
       await updateStudent({ id: student.id, data: { ...student, isLider: false, isViceLider: true } }).unwrap()
+      setSkip(false)
       enqueueSnackbar(`${student.nome}, promovido com sucesso!`, { variant: 'success' })
     } catch (error) {
       console.error('Failed to promote to vice leader:', error)
@@ -59,6 +62,7 @@ export const StudentCard = ({ student }: StudentCard) => {
     try {
       dispatch(toggleLoading())
       await updateStudent({ id: student.id, data: { ...student, isLider: false, isViceLider: false } }).unwrap()
+      setSkip(false)
       enqueueSnackbar(`${student.nome}, promovido com sucesso!`, { variant: 'success' })
     } catch (error) {
       console.error('Failed to promote to member:', error)
@@ -78,14 +82,18 @@ export const StudentCard = ({ student }: StudentCard) => {
       }
     }
   }
+
+  if (isLoading) return <div className='text-center'><CircularProgress /></div>
+  const displayStudent = updatedStudent || student;
+
   return (
     <div key={student.id} className={`p-4 border rounded-lg shadow-md max-w-80 min-h-28 relative
-  ${updatedStudent?.isLider || updatedStudent?.isViceLider ? 'bg-[#636C90] text-[#cecece]' : 'bg-gray-100'}`}>
+  ${displayStudent?.isLider || displayStudent?.isViceLider ? 'bg-[#636C90] text-[#cecece]' : 'bg-gray-100'}`}>
 
       <div className='flex justify-between'>
-        <p className={`text-lg font-bold capitalize mr-2 ${updatedStudent?.isLider || updatedStudent?.isViceLider ?
+        <p className={`text-lg font-bold capitalize mr-2 ${displayStudent?.isLider || displayStudent?.isViceLider ?
           'text-white' : 'text-slate-800'}`}>
-          {updatedStudent?.nome?.toLowerCase()}
+          {displayStudent?.nome?.toLowerCase()}
         </p>
 
         <ActionMenu
@@ -97,12 +105,12 @@ export const StudentCard = ({ student }: StudentCard) => {
         />
       </div>
 
-      <p>{getRoleLabel(updatedStudent as Student)}</p>
+      <p>{getRoleLabel(displayStudent as Student)}</p>
       {/* <p>Turma: {student.turma}</p> */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>
           <span>
-            Deseja realmente excluir o aluno: {student?.nome.toLowerCase()}?
+            Deseja realmente excluir o aluno: {displayStudent?.nome.toLowerCase()}?
           </span>
         </DialogContent>
         <DialogActions>

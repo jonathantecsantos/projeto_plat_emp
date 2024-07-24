@@ -5,13 +5,12 @@ import { MouseEvent, useState } from 'react'
 interface ActionMenuProps {
   onEdit: () => void
   onRemove: () => void
-  onDetails: () => void
   onPromoteLeader: () => void
   onPromoteViceLeader: () => void
   onPromoteMember: () => void
 }
 
-export const ActionMenu = ({ onEdit, onRemove, onDetails, onPromoteLeader,
+export const ActionMenu = ({ onEdit, onRemove, onPromoteLeader,
   onPromoteViceLeader, onPromoteMember }: ActionMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -32,7 +31,6 @@ export const ActionMenu = ({ onEdit, onRemove, onDetails, onPromoteLeader,
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={() => { handleClose(), onEdit() }}>Editar</MenuItem>
         <MenuItem onClick={() => { handleClose(), onRemove() }}>Remover</MenuItem>
-        <MenuItem onClick={() => { handleClose(), onDetails() }}>Detalhes</MenuItem>
         <MenuItem onClick={() => { handleClose(), onPromoteLeader() }}>Promover Líder</MenuItem>
         <MenuItem onClick={() => { handleClose(), onPromoteViceLeader() }}>Promover Vice Líder</MenuItem>
         <MenuItem onClick={() => { handleClose(), onPromoteMember() }}>Promover Membro</MenuItem>

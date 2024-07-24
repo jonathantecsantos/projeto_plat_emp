@@ -2,9 +2,9 @@ import { Banner } from "../../model/banner";
 import banner from '../../assets/banner.svg';
 
 
-export const BannerPreviewComponent = ({ svgFileName }: Pick<Banner, 'svgFileName'>) => {
+export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   // const backgroundImageUrl = `./src/assets/${svgFileName}`;
-  console.log(svgFileName)
+  console.log(id)
   const backgroundImageUrl = banner;
 
 

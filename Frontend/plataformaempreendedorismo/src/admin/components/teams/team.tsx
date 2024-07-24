@@ -14,7 +14,7 @@ import { TeacherCard } from './teacherCard'
 
 const actions = [
   { icon: < SchoolIcon />, name: 'Adicionar Aluno' },
-  { icon: < LocalLibraryIcon />, name: 'Adicionar Professor' },
+  { icon: < LocalLibraryIcon />, name: 'Adicionar Professor', },
 ];
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {

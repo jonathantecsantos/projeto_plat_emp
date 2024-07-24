@@ -16,7 +16,6 @@ export const TeacherCard = ({ teacher }: TeacherCard): ReactNode => (
       <ActionMenu
         onEdit={() => console.log('Edit teacher')}
         onRemove={() => console.log('Remove teacher')}
-        onDetails={() => console.log('Teacher details')}
         onPromoteLeader={() => console.log('Promote teacher to leader')}
         onPromoteViceLeader={() => console.log('Promote teacher to vice leader')}
         onPromoteMember={() => console.log('Promote teacher to vice leader')}

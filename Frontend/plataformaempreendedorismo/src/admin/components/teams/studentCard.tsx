@@ -1,8 +1,14 @@
+import { useSnackbar } from 'notistack'
 import { useDispatch } from 'react-redux'
-import { useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
+import { useDeleteStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { Student } from '../../../model/student'
-import { ActionMenu } from '../common/actionMenuIcon'
 import { toggleLoading } from '../../../redux/reducers/loadingBar.slice'
+import { ActionMenu } from '../common/actionMenuIcon'
+import { useState } from 'react'
+import { Dialog, DialogContent, DialogActions } from '@mui/material'
+import { Button } from 'essencials'
+import { useNavigate } from 'react-router-dom'
+import { RoutesNames } from '../../../globals'
 
 export const getRoleLabel = (student: Student) => {
   if (student?.isLider) return 'Líder'
@@ -16,8 +22,15 @@ export interface StudentCard {
 
 export const StudentCard = ({ student }: StudentCard) => {
   const [updateStudent] = useUpdateStudentMutation()
+  const [deleteStudent] = useDeleteStudentMutation()
   const { data: updatedStudent } = useGetStudentQuery(student.id)
+
+  const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+
+
 
   const handlePromoteToLeader = async () => {
     try {
@@ -34,6 +47,7 @@ export const StudentCard = ({ student }: StudentCard) => {
     try {
       dispatch(toggleLoading())
       await updateStudent({ id: student.id, data: { ...student, isLider: false, isViceLider: true } }).unwrap()
+      enqueueSnackbar(`${student.nome}, promovido com sucesso!`, { variant: 'success' })
     } catch (error) {
       console.error('Failed to promote to vice leader:', error)
     } finally {
@@ -45,10 +59,23 @@ export const StudentCard = ({ student }: StudentCard) => {
     try {
       dispatch(toggleLoading())
       await updateStudent({ id: student.id, data: { ...student, isLider: false, isViceLider: false } }).unwrap()
+      enqueueSnackbar(`${student.nome}, promovido com sucesso!`, { variant: 'success' })
     } catch (error) {
       console.error('Failed to promote to member:', error)
     } finally {
       dispatch(toggleLoading())
+    }
+  }
+
+  const handleDeleteStudent = async () => {
+    if (student) {
+      try {
+        await deleteStudent(student.id)
+        enqueueSnackbar(`${student.nome}, excluído com sucesso!`, { variant: 'success' })
+        setOpen(false)
+      } catch (error) {
+        enqueueSnackbar('Erro ao excluir, consulte um administrador.', { variant: 'error' })
+      }
     }
   }
   return (
@@ -58,13 +85,12 @@ export const StudentCard = ({ student }: StudentCard) => {
       <div className='flex justify-between'>
         <p className={`text-lg font-bold capitalize mr-2 ${updatedStudent?.isLider || updatedStudent?.isViceLider ?
           'text-white' : 'text-slate-800'}`}>
-          {updatedStudent?.nome.toLowerCase()}
+          {updatedStudent?.nome?.toLowerCase()}
         </p>
 
         <ActionMenu
-          onEdit={() => console.log('Edit student')}
-          onRemove={() => console.log('Remove student')}
-          onDetails={() => console.log('Student details')}
+          onEdit={() => navigate(RoutesNames.student.replace(':id', student.id.toString()))}
+          onRemove={() => setOpen(true)}
           onPromoteLeader={handlePromoteToLeader}
           onPromoteViceLeader={handlePromoteToViceLeader}
           onPromoteMember={handlePromoteToMember}
@@ -73,6 +99,21 @@ export const StudentCard = ({ student }: StudentCard) => {
 
       <p>{getRoleLabel(updatedStudent as Student)}</p>
       {/* <p>Turma: {student.turma}</p> */}
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogContent>
+          <span>
+            Deseja realmente excluir o aluno: {student?.nome.toLowerCase()}?
+          </span>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} style={{ textTransform: 'none', color: 'gray' }}>
+            Cancelar
+          </Button>
+          <Button onClick={handleDeleteStudent} style={{ textTransform: 'none', color: 'red' }}>
+            Excluir
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

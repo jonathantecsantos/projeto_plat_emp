@@ -2,10 +2,12 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
 import { TeamIdResponse } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
+import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 
+//atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team'],
+  tagTypes: ['Student', 'Team', 'Teacher'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   endpoints: (build) => ({
@@ -13,6 +15,7 @@ export const studentsApiSlice = createApi({
       query: (id) => `/alunos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
+    
     getAllStudents: build.query<StudentsResponse[], void>({
       query: () => `/alunos`,
       transformResponse: (response: StudentsResponse[]) => {
@@ -26,6 +29,7 @@ export const studentsApiSlice = createApi({
           ]
           : [{ type: 'Student', id: 'LIST' }],
     }),
+
     createStudent: build.mutation<CreateOrUpdateStudent, Partial<CreateOrUpdateStudent>>({
       query: (data) => ({
         url: `/alunos/cadastrar`,
@@ -37,6 +41,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id },
       ],
     }),
+
     updateStudent: build.mutation<CreateOrUpdateStudent, { id: any; data: Partial<CreateOrUpdateStudent> }>({
       query: ({ id, data }) => ({
         url: `/alunos/editar`,
@@ -48,6 +53,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: data.id },
       ],
     }),
+
     deleteStudent: build.mutation<void, any>({
       query: (id) => ({
         url: `/alunos/apagar/${id}`,
@@ -59,10 +65,66 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    //TEAM ENDPOINTS -> Para o invalidatesTags
+    //TEAM ENDPOINTS -> Para o invalidatesTags falta adicionar o restante
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Team', id }],
+    }),
+
+
+    //TEACHER ENDPOINTS
+    getTeacher: build.query<TeacherIdResponse, number>({
+      query: (id) => `/professores/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Teacher', id }],
+    }),
+
+    getTeachers: build.query<TeachersResponse[], void>({
+      query: () => `/professores`,
+      transformResponse: (response: TeachersResponse[]) => {
+        return response.sort((a, b) => a.nome.localeCompare(b.nome))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Teacher', id } as const)),
+            { type: 'Teacher', id: 'LIST' },
+          ]
+          : [{ type: 'Teacher', id: 'LIST' }],
+    }),
+
+    createTeacher: build.mutation<CreateOrUpdateTeacher, Partial<CreateOrUpdateTeacher>>({
+      query: (data) => ({
+        url: `/professores/cadastrar`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }: any) => [
+        { type: 'Teacher', id: 'LIST' },
+        { type: 'Team', id },
+      ],
+    }),
+
+    updateTeacher: build.mutation<CreateOrUpdateTeacher, { id: any; data: Partial<CreateOrUpdateTeacher> }>({
+      query: ({ id, data }) => ({
+        url: `/professores/editar`,
+        method: 'PUT',
+        body: { id, ...data },
+      }),
+      invalidatesTags: (_result, _error, { id, data }: any) => [
+        { type: 'Teacher', id },
+        { type: 'Team', id: data.id },
+      ],
+    }),
+
+    deleteTeacher: build.mutation<void, any>({
+      query: (id) => ({
+        url: `/professores/apagar/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Teacher', id },
+        { type: 'Team', id }
+      ],
     }),
   }),
 })
@@ -77,6 +139,13 @@ export const {
   useCreateStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,
+
+  //Teachers
+  useGetTeacherQuery,
+  useGetTeachersQuery,
+  useCreateTeacherMutation,
+  useUpdateTeacherMutation,
+  useDeleteTeacherMutation,
 
 } = studentsApiSlice
 

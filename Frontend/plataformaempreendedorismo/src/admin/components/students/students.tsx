@@ -4,12 +4,12 @@ import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconBut
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useGetAllStudentsQuery, useDeleteStudentMutation } from '../../../api/studentApi'
-import { AdminHeader } from '../../../components/common/adminHeader'
+import { useDeleteStudentMutation, useGetAllStudentsQuery } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { StudentsResponse } from '../../../model/student'
+import { AdminHeader } from '../common/adminHeader'
 import { TableComponent } from '../table'
-import { TableComponentSetCurrPageProps, TableComponentClickRowProps } from '../table/common'
+import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
 
 
 export const Students = () => {

@@ -2,5 +2,5 @@ import { BannerPreviewComponent } from "../admin/components/bannerPreview"
 
 export const BannerPreviewPage = () => {
   //provavelmente terá loading baseado no id
-  return <BannerPreviewComponent svgFileName={"banner.svg"} />
+  return <BannerPreviewComponent id={0} />
 }

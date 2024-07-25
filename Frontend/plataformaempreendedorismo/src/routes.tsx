@@ -1,6 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
 import App from './App'
-import ProtectedRoute from './components/common/protectedRoute'
 import { RoutesNames } from './globals'
 import { AdminHomePage } from './pages/adminHome'
 import { BannerPreviewPage } from './pages/bannerPreview'
@@ -14,6 +13,7 @@ import { TeachersPage } from './pages/teachers'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { TeamsPage } from './pages/teams'
 import { TeamPage } from './pages/team'
+import ProtectedRoute from './admin/components/common/protectedRoute'
 
 export const router = createBrowserRouter([
   {

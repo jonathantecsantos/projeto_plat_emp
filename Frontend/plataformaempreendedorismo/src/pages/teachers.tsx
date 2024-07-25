@@ -1,4 +1,4 @@
-import { AdminDefaultPage } from "../admin/components/defaultPage"
+import { AdminDefaultPage } from "../admin/components/common/defaultPage"
 import { TeachersComponent } from "../admin/components/teachers"
 
 export const TeachersPage = () => {

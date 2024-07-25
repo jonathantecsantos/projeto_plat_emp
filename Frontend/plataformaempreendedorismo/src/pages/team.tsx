@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { AdminDefaultPage } from "../admin/components/defaultPage"
+import { AdminDefaultPage } from "../admin/components/common/defaultPage"
 import { TeamComponent } from "../admin/components/teams/team"
 
 

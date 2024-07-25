@@ -25,7 +25,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         {
           state: {
             id: id,
-            nomeEquipe: team?.nomeEquipe.toLowerCase(),
+            nomeEquipe: team?.nomeEquipe,
           }
         })
     },

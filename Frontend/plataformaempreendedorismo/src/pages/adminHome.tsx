@@ -1,5 +1,5 @@
 import { AdminHomeComponent } from "../admin/components/adminHome"
-import { AdminDefaultPage } from "../admin/components/defaultPage"
+import { AdminDefaultPage } from "../admin/components/common/defaultPage"
 
 export const AdminHomePage = () => {
 

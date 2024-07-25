@@ -1,9 +1,9 @@
 import { Button } from "@mui/material"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { AuthMenuComponent } from "../../admin/components/common/authMenu"
 import { RoutesNames } from "../../globals"
 import { RootState } from "../../redux/store"
-import { AuthMenuComponent } from "./authMenu"
 
 export const Header = () => {
   const navigate = useNavigate()

@@ -16,7 +16,7 @@ import { Collapse, IconButton, List, ListItemIcon, ListItemText, Menu, MenuItem 
 import React, { ReactNode, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { RoutesNames } from '../../globals'
+import { RoutesNames } from '../../../globals'
 
 interface MenuItemProps {
   outsideName: string,

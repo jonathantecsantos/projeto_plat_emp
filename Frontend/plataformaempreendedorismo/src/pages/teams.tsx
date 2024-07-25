@@ -1,4 +1,4 @@
-import { AdminDefaultPage } from "../admin/components/defaultPage"
+import { AdminDefaultPage } from "../admin/components/common/defaultPage"
 import { Teams } from "../admin/components/teams/teams"
 
 export const TeamsPage = () => {

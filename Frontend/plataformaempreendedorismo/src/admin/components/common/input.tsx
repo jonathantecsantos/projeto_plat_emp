@@ -2,7 +2,7 @@ import PercentIcon from '@mui/icons-material/Percent'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, IconButton, TextFieldProps, inputClasses } from '@mui/material'
 import { ChangeEvent, MouseEventHandler, useState } from 'react'
-import { defaultMB } from '../../globals'
+import { defaultMB } from '../../../globals'
 
 type SearchInputPropsBase = {
   onIconClick?: MouseEventHandler<HTMLButtonElement> | undefined,

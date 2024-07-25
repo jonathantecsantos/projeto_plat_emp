@@ -1,5 +1,5 @@
 import { useLocation, useParams } from "react-router-dom"
-import { AdminDefaultPage } from "../admin/components/defaultPage"
+import { AdminDefaultPage } from "../admin/components/common/defaultPage"
 import { CreateStudent } from "../admin/components/students/createStudent"
 import { UpdateStudent } from "../admin/components/students/updateStudent"
 

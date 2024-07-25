@@ -1,12 +1,12 @@
 // BreadcrumbComponent.tsx
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
 import { styled } from '@mui/material'
+import { ArrayUtils } from 'essencials'
+import React from 'react'
 import { IoMdHome as HomeIcon } from 'react-icons/io'
 import { MdOutlineArrowForwardIos as DividerIcon } from 'react-icons/md'
-import { RoutesNames } from '../../globals'
+import { Link, useLocation } from 'react-router-dom'
 import useReactRouterBreadcrumbs from 'use-react-router-breadcrumbs'
-import { ArrayUtils } from 'essencials'
+import { RoutesNames } from '../../../globals'
 
 // STYLE
 const breadcrumbAlignItem: React.CSSProperties = { display: 'flex', alignSelf: 'center' }

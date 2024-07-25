@@ -1,4 +1,4 @@
-import { AdminDefaultPage } from "../admin/components/defaultPage"
+import { AdminDefaultPage } from "../admin/components/common/defaultPage"
 import { UploadFilesComponent } from "../admin/components/uploadFiles/uploadFiles"
 
 export const UploadFilesPage = () => {

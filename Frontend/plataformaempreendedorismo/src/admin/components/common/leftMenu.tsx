@@ -26,7 +26,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { ReactNode, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { RoutesNames } from '../../globals'
+import { RoutesNames } from '../../../globals'
 
 interface MenuItemProps {
   outsideName: string

@@ -1,8 +1,9 @@
 import { ReactNode, useLayoutEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { checkAuth } from '../../redux/reducers/auth.slice'
-import { RootState } from '../../redux/store'
+import { RootState } from '../../../redux/store'
+import { checkAuth } from '../../../redux/reducers/auth.slice'
+
 
 interface ProtectedRouteProps {
   children: ReactNode

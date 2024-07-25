@@ -4,12 +4,12 @@ import { ReactNode } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 // import logo from '../../assets/logo.svg'
-import { BreadcrumbComponent } from "../../components/common/breadcrumb"
-import { DrawerComponent } from "../../components/common/drawer"
-import { LeftMenuComponent } from "../../components/common/leftMenu"
-import { RoutesNames } from "../../globals"
-import { logout } from "../../redux/reducers/auth.slice"
-import { RootState } from '../../redux/store'
+import { RoutesNames } from "../../../globals"
+import { logout } from "../../../redux/reducers/auth.slice"
+import { RootState } from '../../../redux/store'
+import { BreadcrumbComponent } from "./breadcrumb"
+import { DrawerComponent } from "./drawer"
+import { LeftMenuComponent } from "./leftMenu"
 
 interface AdminPage {
   mainContent: ReactNode

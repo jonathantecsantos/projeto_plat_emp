@@ -65,6 +65,7 @@ export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
           { variant: 'success' })
         setSucess(true)
         if (teamData) {
+          //substituir essa lógica para botões clicaveis após o success, limpar ou voltar.
           history.back()
         }
       } catch (error: any) {

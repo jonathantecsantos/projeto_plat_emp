@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
-import { Teacher } from "../../../model/teacher"
 import { ActionMenu } from "../common/actionMenuIcon"
+import { Teacher } from "../../../model/teacher"
 
 export interface TeacherCard {
   teacher?: Teacher

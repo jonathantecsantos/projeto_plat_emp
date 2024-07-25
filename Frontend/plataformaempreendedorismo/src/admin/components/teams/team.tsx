@@ -56,8 +56,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </div>}
         </div>
       </div>
-      <div className={`w-full lg:w-64 shadow-md rounded-md p-4 ${!team?.professor?.equipe.linkPitch && 'mb-0'} mb-48 
-      lg:mt-0 lg:ml-4 lg:h-fit text-nowrap`}>
+      <div className={`w-full lg:w-64 shadow-md rounded-md p-4 ${!team?.professor?.equipe.linkPitch && 'mb-0'} ${team?.professor && `lg:mb-96`} mb-40 lg:mt-0 lg:ml-4 lg:h-fit text-nowrap`}>
         <ul className="space-y-4">
           <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2 ">
             <ContentPasteIcon />

@@ -7,18 +7,30 @@ import LinkIcon from '@mui/icons-material/Link'
 import PrintIcon from '@mui/icons-material/Print'
 import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
+import { useNavigate } from 'react-router-dom'
 import { useGetTeamByIdQuery } from '../../../api/studentApi'
+import { RoutesNames } from '../../../globals'
 import { TeamsResponse } from "../../../model/team"
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
 
-const actions = [
-  { icon: < SchoolIcon />, name: 'Adicionar Aluno', onClick: () => console.log('aluno') },
-  { icon: < LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => console.log('professor') },
-];
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
+  const navigate = useNavigate()
+
+  const actions = [
+    {
+      icon: < SchoolIcon />, name: 'Adicionar Aluno', onClick: () => navigate(RoutesNames.student,
+        {
+          state: {
+            id: id,
+            nomeEquipe: team?.nomeEquipe.toLowerCase(),
+          }
+        })
+    },
+    { icon: < LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => console.log('professor') },
+  ]
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p>Error loading team</p>

@@ -3,18 +3,26 @@ import { LoadingButton } from "@mui/lab"
 import { CircularProgress } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { FormEvent, useEffect, useState } from "react"
-import { useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
-import { StudentsResponse, StudentIdResponse, CreateOrUpdateStudent } from '../../../model/student'
+import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
+import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
 import { formatCPF } from './createStudent'
 
 
-export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
-  const { data, isLoading } = useGetStudentQuery(id)
+interface UpdateStudentProps {
+  id: number;
+  teamData?: { id: number; nomeEquipe: string };
+}
+
+
+export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
+  const { data, isLoading } = useGetStudentQuery(id, { skip: !!teamData?.id })
   const [student, setStudent] = useState<StudentIdResponse | null>(null)
   const [updateStudent, { isSuccess }] = useUpdateStudentMutation()
+  const [createStudent] = useCreateStudentMutation()
   const [success, setSucess] = useState(isSuccess)
   const { enqueueSnackbar } = useSnackbar()
 
+  console.table(student)
   useEffect(() => {
     if (data) {
       setStudent(data)
@@ -44,20 +52,36 @@ export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
       cpf: formatCPF(student!.cpf) || '',
       email: student?.email || '',
       turma: student?.turma || '',
-      idEquipe: student?.equipe.id || 0,
-      idOds: student?.equipe.ods.id || 0,
+      idEquipe: student?.equipe?.id || teamData?.id || 0,
+      idOds: student?.equipe?.ods?.id || 0,
       isLider: student?.isLider || false,
       isViceLider: student?.isViceLider || false
     }
 
-    try {
-      await updateStudent({ id, data: updatedStudent }).unwrap()
-      enqueueSnackbar('Aluno editado com sucesso!', { variant: 'success' })
-      setSucess(true)
-    } catch (error: any) {
-      console.log(error)
-      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+    if (teamData?.id) {
+      try {
+        await createStudent(updatedStudent).unwrap()
+        enqueueSnackbar(`Membro ${student?.nome} adicionado no time ${teamData?.nomeEquipe} com sucesso!`,
+          { variant: 'success' })
+        setSucess(true)
+        if (teamData) {
+          history.back()
+        }
+      } catch (error: any) {
+        console.log(error)
+        enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+      }
+    } else {
+      try {
+        await updateStudent({ id, data: updatedStudent }).unwrap()
+        enqueueSnackbar('Aluno editado com sucesso!', { variant: 'success' })
+        setSucess(true)
+      } catch (error: any) {
+        console.log(error)
+        enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+      }
     }
+
   }
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
@@ -65,7 +89,7 @@ export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
 
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold text-center mb-4">Editar Aluno</h2>
+      <h2 className="text-3xl font-bold text-center mb-4">{`${teamData ? 'Adicionar' : 'Editar'} Aluno`}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
@@ -114,6 +138,7 @@ export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
               id="ods"
               type="number"
               value={student?.equipe?.ods.id || ''}
+              disabled={!!teamData?.id}
               onChange={(e) => {
                 const odsId = parseInt(e.target.value)
                 setStudent((prevData) => ({
@@ -135,7 +160,8 @@ export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
             <input
               id="equipe"
               type="number"
-              value={student?.equipe?.id || ''}
+              value={student?.equipe?.id || teamData?.id}
+              disabled={!!teamData?.id}
               onChange={(e) => {
                 const equipeId = parseInt(e.target.value)
                 setStudent((prevData) => ({
@@ -173,8 +199,8 @@ export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
           </div>
         </div>
         <div className='my-4 flex justify-between text-sm'>
-          <span>Equipe: {student?.equipe?.nome}</span>
-          <span>{student?.equipe.ods?.codigo}: {student?.equipe.ods?.descricao}</span>
+          <span>Equipe: {student?.equipe?.nome || teamData?.nomeEquipe}</span>
+          {student?.equipe?.ods && <span>{student?.equipe.ods?.codigo}: {student?.equipe.ods?.descricao}</span>}
         </div>
 
         <div className='flex items-center justify-end'>
@@ -186,7 +212,7 @@ export const UpdateStudent = ({ id }: Pick<StudentsResponse, 'id'>) => {
             disabled={isLoading}
           >
             {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className='mr-1' />}
-            <span>Atualizar</span>
+            {teamData?.nomeEquipe ? <span>Adicionar</span> : <span>Editar</span>}
           </LoadingButton>
         </div>
       </form>

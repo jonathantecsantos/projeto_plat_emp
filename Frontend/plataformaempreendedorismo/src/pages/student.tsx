@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import { AdminDefaultPage } from "../admin/components/defaultPage"
 import { CreateStudent } from "../admin/components/students/createStudent"
 import { UpdateStudent } from "../admin/components/students/updateStudent"
@@ -6,5 +6,8 @@ import { UpdateStudent } from "../admin/components/students/updateStudent"
 
 export const StudentPage = () => {
   const { id } = useParams()
-  return <AdminDefaultPage mainContent={id !== ':id' ? <UpdateStudent id={Number(id)} /> : <CreateStudent />} />
+  const location = useLocation()
+  const { state } = location
+  return <AdminDefaultPage mainContent={id !== ':id' || state ? <UpdateStudent id={Number(id)} teamData={state} /> :
+    <CreateStudent />} />
 }

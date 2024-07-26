@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useState } from "react"
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
 import { formatCPF } from './createStudent'
+import { useNavigate } from 'react-router-dom'
 
 
 interface UpdateStudentProps {
@@ -21,6 +22,7 @@ export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
   const [createStudent] = useCreateStudentMutation()
   const [success, setSucess] = useState(isSuccess)
   const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
 
   console.table(student)
   useEffect(() => {
@@ -64,10 +66,6 @@ export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
         enqueueSnackbar(`Membro ${student?.nome} adicionado no time ${teamData?.nomeEquipe} com sucesso!`,
           { variant: 'success' })
         setSucess(true)
-        if (teamData) {
-          //substituir essa lógica para botões clicaveis após o success, limpar ou voltar.
-          history.back()
-        }
       } catch (error: any) {
         console.log(error)
         enqueueSnackbar(`${error?.data}`, { variant: 'error' })
@@ -98,9 +96,9 @@ export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
             <input
               id="nome"
               type="text"
-              value={student?.nome?.toLowerCase() || ''}
+              value={student?.nome || ''}
               onChange={(e) => handleInputChange('nome', e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md capitalize"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
           <div>
@@ -204,7 +202,23 @@ export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
           {student?.equipe?.ods && <span>{student?.equipe.ods?.codigo}: {student?.equipe.ods?.descricao}</span>}
         </div>
 
-        <div className='flex items-center justify-end'>
+        <div className={`flex items-center ${success ? 'justify-between' : 'justify-end'}`}>
+          <div className='flex gap-4'>
+            {success && <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 mt-8">
+              Voltar
+            </button>}
+            {success && teamData && <button
+              type="button"
+              onClick={() => {
+                setStudent(null), setSucess(false)
+              }}
+              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 mt-8">
+              Novo
+            </button>}
+          </div>
           <LoadingButton
             className='bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]'
             variant='contained'

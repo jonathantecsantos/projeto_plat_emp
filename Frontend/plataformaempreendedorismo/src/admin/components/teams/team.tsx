@@ -29,7 +29,15 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           }
         })
     },
-    { icon: < LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => console.log('professor') },
+    {
+      icon: < LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => navigate(RoutesNames.teacher,
+        {
+          state: {
+            id: id,
+            nomeEquipe: team?.nomeEquipe,
+          }
+        })
+    },
   ]
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>

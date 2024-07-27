@@ -1,5 +1,5 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
+import ClearIcon from '@mui/icons-material/Clear'
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -131,16 +131,18 @@ export const Students = () => {
                 {/* <td className="px-4 py-2">{student}</td> */}
                 <td className="">
                   <IconButton
-                    className='hover:text-white'
-                    aria-label="more"
                     aria-controls="long-menu"
                     aria-haspopup="true"
                     onClick={(event) => {
                       event.stopPropagation()
                       handleClickOpen({ student })
+
                     }}
                   >
-                    <MoreVertIcon />
+                    <ClearIcon style={{
+                      width: 15,
+                      height: 15,
+                    }} className='hover:text-red-500' />
                   </IconButton>
                 </td>
               </>

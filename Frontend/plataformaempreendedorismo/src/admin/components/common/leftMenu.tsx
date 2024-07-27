@@ -189,19 +189,19 @@ const Item = (props: ItemProps) => {
 
   const isOpen = open || isActive(props.routeName || '') || props.insideItems?.some(item => isActive(item.routeName))
 
-  const listItemButtonClass = `p-3 ${isOpen ? 'bg-[#EBF6FF] text-[#242424]' : 'hover:bg-[#509CDB] hover:text-white'}`
+  const listItemButtonClass = `p-4 ${isOpen ? 'bg-[#EBF6FF] text-[#242424]' : 'hover:bg-[#509CDB] hover:text-white'}`
 
   return (
     <div className="">
       <ListItemButton className={listItemButtonClass} onClick={handleClick}>
-        <ListItemIcon sx={{ color: isOpen ? '' : 'inherit', }}>{props.outsideIcon}</ListItemIcon>
+        <ListItemIcon sx={{ color: isOpen ? '' : 'inherit' }}>{props.outsideIcon}</ListItemIcon>
         <ListItemText primary={props.outsideName} />
         {props.subItens && (isOpen ? <ExpandLess /> : <ExpandMore />)}
       </ListItemButton>
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {props.insideItems?.map((item, index) => {
-            const insideItemClass = `px-5 ${isActive(item.routeName) ? 'bg-[#509CDB] text-white' : 'hover:bg-[#509CDB] hover:text-white'}`
+            const insideItemClass = `p-2 px-6 ${isActive(item.routeName) ? 'bg-[#509CDB] text-white' : 'hover:bg-[#509CDB] hover:text-white'}`
             return (
               <div key={`${item.routeName}-${index}`}>
                 <ListItemButton
@@ -210,7 +210,7 @@ const Item = (props: ItemProps) => {
                   onClick={() => handleInsideItemClick(item.routeName)}
                 >
                   <ListItemIcon className={isActive(item.routeName) ? 'text-white' : 'text-inherit'}>{item.insideIcon}</ListItemIcon>
-                  <ListItemText primary={item.insideName} className='text-nowrap' />
+                  <ListItemText primary={item.insideName} className='' />
                 </ListItemButton>
                 {/* {index < props.insideItems!.length - 1 && <Divider color='white' />} */}
               </div>

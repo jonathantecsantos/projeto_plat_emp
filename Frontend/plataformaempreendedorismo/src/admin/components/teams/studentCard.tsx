@@ -38,6 +38,7 @@ export const StudentCard = ({ student }: StudentCard) => {
       dispatch(toggleLoading())
       await updateStudent({ id: student.id, data: { ...student, isLider: true, isViceLider: false } }).unwrap()
       setSkip(false) // Allows fetch updated data from the API
+      enqueueSnackbar(`${student.nome}, promovido com sucesso!`, { variant: 'success' })
     } catch (error) {
       console.error('Failed to promote to leader:', error)
     } finally {

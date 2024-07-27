@@ -21,7 +21,7 @@ export interface TeachersResponse extends Teacher {
 }
 
 export interface CreateOrUpdateTeacher {
-  id: number
+  // id: number
   nome: string
   cpf: string
   email: string

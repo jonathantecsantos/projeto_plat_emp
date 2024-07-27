@@ -8,7 +8,7 @@ export const StudentPage = () => {
   const { id } = useParams()
   const location = useLocation()
   const { state } = location
-  return <AdminDefaultPage mainContent={id !== ':id' || state ? <UpdateOrCreateStudentByTeam id={Number(id)}
-    teamData={state} /> :
+  return <AdminDefaultPage mainContent={id !== ':id' || state ?
+    <UpdateOrCreateStudentByTeam id={Number(id)} teamData={state} /> :
     <CreateStudent />} />
 }

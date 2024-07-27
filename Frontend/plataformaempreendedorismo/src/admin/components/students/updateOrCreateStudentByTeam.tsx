@@ -8,15 +8,15 @@ import { FormEvent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
-import { formatCPF } from './createStudent'
+import { formatCPF } from '../../../utils/types'
 
-interface UpdateStudentProps {
+interface UpdateOrCreateStudentProps {
   id: number;
   teamData?: { id: number; nomeEquipe: string };
 }
 
 
-export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateStudentProps) => {
+export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStudentProps) => {
   const { data, isLoading } = useGetStudentQuery(id, { skip: !!teamData?.id })
   const [student, setStudent] = useState<StudentIdResponse | null>(null)
   const [updateStudent, { isSuccess }] = useUpdateStudentMutation()
@@ -25,7 +25,6 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateStudentProps
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
-  console.table(student)
   useEffect(() => {
     if (data) {
       setStudent(data)

@@ -1,8 +1,8 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 // import MoreVertIcon from '@mui/icons-material/MoreVert'
-import RemoveIcon from '@mui/icons-material/Remove';
+// import RemoveIcon from '@mui/icons-material/Remove';
 // import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-// import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from '@mui/icons-material/Clear';
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton } from '@mui/material'
 import { useSnackbar } from "notistack"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -121,8 +121,6 @@ export const TeachersComponent = () => {
                 <td className="px-4 py-2 capitalize">{teacher.equipeRecord.nome.toLowerCase()}</td>
                 <td className="">
                   <IconButton
-                    className='hover:text-white'
-                    aria-label="more"
                     aria-controls="long-menu"
                     aria-haspopup="true"
                     onClick={(event) => {
@@ -130,7 +128,10 @@ export const TeachersComponent = () => {
                       handleClickOpen({ teacher: teacher })
                     }}
                   >
-                    <RemoveIcon />  
+                    <ClearIcon style={{
+                      width: 15,
+                      height: 15,
+                    }} className='hover:text-red-500' />
                   </IconButton>
                 </td>
               </>

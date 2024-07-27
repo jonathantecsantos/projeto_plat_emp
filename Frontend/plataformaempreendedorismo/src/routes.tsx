@@ -14,6 +14,7 @@ import { UploadFilesPage } from './pages/uploadFiles'
 import { TeamsPage } from './pages/teams'
 import { TeamPage } from './pages/team'
 import ProtectedRoute from './admin/components/common/protectedRoute'
+import { TeacherPage } from './pages/teacher'
 
 export const router = createBrowserRouter([
   {
@@ -38,11 +39,11 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.bannerPreview,
-    element: <ProtectedRoute children={<BannerPreviewPage />} allowedRoles={['admin', 'aluno']} />,
+    element: <ProtectedRoute children={<BannerPreviewPage />} allowedRoles={['admin', 'aluno', 'professor']} />,
   },
   {
     path: RoutesNames.uploadFiles,
-    element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={['admin']} />,
+    element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={['admin','professor']} />,
   },
   {
     path: RoutesNames.students,
@@ -50,7 +51,7 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.student,
-    element: <ProtectedRoute children={<StudentPage />} allowedRoles={['admin']} />
+    element: <ProtectedRoute children={<StudentPage />} allowedRoles={['admin', 'aluno', 'professor']} />
   },
   {
     path: RoutesNames.adminHome,
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.teachers,
     element: <ProtectedRoute children={<TeachersPage />} allowedRoles={['admin', 'professor']} />
+  },
+  {
+    path: RoutesNames.teacher,
+    element: <ProtectedRoute children={<TeacherPage />} allowedRoles={['admin', 'aluno', 'professor']} />
   },
   {
     path: RoutesNames.teams,

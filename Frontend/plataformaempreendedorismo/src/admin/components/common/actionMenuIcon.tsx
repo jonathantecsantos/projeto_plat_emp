@@ -29,7 +29,7 @@ export const ActionMenu = ({ onEdit, onRemove, onPromoteLeader,
         <MoreVertIcon />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={() => { handleClose(), onEdit() }}>Editar</MenuItem>
+        <MenuItem onClick={() => { handleClose(), onEdit() }}>Editar/Visualizar</MenuItem>
         <MenuItem onClick={() => { handleClose(), onRemove() }}>Remover</MenuItem>
         <MenuItem onClick={() => { handleClose(), onPromoteLeader() }}>Promover Líder</MenuItem>
         <MenuItem onClick={() => { handleClose(), onPromoteViceLeader() }}>Promover Vice Líder</MenuItem>

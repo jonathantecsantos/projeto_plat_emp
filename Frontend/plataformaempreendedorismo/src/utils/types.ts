@@ -44,3 +44,5 @@ export interface AdaptedLoginResponse {
   payload: User
   token: Token
 }
+
+export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')

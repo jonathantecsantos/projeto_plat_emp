@@ -25,5 +25,5 @@ export interface CreateOrUpdateTeacher {
   nome: string
   cpf: string
   email: string
-  idEquipe: number
+  idEquipe: number | null
 }

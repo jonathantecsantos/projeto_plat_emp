@@ -1,13 +1,14 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import { LoadingButton } from "@mui/lab"
 import { CircularProgress } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { FormEvent, useEffect, useState } from "react"
+import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
 import { formatCPF } from './createStudent'
-import { useNavigate } from 'react-router-dom'
-
 
 interface UpdateStudentProps {
   id: number;
@@ -15,7 +16,7 @@ interface UpdateStudentProps {
 }
 
 
-export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
+export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateStudentProps) => {
   const { data, isLoading } = useGetStudentQuery(id, { skip: !!teamData?.id })
   const [student, setStudent] = useState<StudentIdResponse | null>(null)
   const [updateStudent, { isSuccess }] = useUpdateStudentMutation()
@@ -202,21 +203,21 @@ export const UpdateStudent = ({ id, teamData }: UpdateStudentProps) => {
           {student?.equipe?.ods && <span>{student?.equipe.ods?.codigo}: {student?.equipe.ods?.descricao}</span>}
         </div>
 
-        <div className={`flex items-center ${success ? 'justify-between' : 'justify-end'}`}>
+        <div className={`flex items-center justify-between`}>
           <div className='flex gap-4'>
-            {success && <button
+            {<button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 mt-8">
-              Voltar
+              className="px-2 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-600 mt-8 text-sm">
+              <ArrowBackIcon />
             </button>}
             {success && teamData && <button
               type="button"
               onClick={() => {
                 setStudent(null), setSucess(false)
               }}
-              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 mt-8">
-              Novo
+              className="px-4 py-1 bg-gray-400 text-white rounded-md hover:bg-gray-600 mt-8">
+              <PersonAddAlt1Icon /> Novo
             </button>}
           </div>
           <LoadingButton

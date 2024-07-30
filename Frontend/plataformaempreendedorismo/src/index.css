@@ -64,3 +64,15 @@ div.overflow-x-auto::-webkit-scrollbar {
 div.overflow-x-auto::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2); /* Cor da alça da barra de rolagem */
 }
+
+#testepseudo::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #FF771B;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+  
+}

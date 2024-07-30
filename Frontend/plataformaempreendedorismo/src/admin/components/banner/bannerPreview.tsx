@@ -48,24 +48,183 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
         </div>
       </div>
       {/* ----> Primeiro componente inicial parte azul */}
+      <div className="flex">
+        <div className="CAPACIDADE ORGANIZACIONAL">
+          <div className="relative ml-16 mt-16">
+            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px]  pl-2 py-1 rounded-md border-4 border-orange-500">
+              Equipe
+            </div>
+            <div id="testepseudo" className=" border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-52 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
 
-      <div className="relative mx-16 mt-16">
-        <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-20 pl-2 py-1 rounded-md border-4 border-orange-500">
-          Equipe
+          <div className="flex">
+            <div className="relative ml-16 mt-4">
+              <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[72px] pl-2 py-1 rounded-md border-4 border-orange-500">
+                Parceiros
+              </div>
+              <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[130px] h-52 bg-white">
+                <p className="py-2">teste</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <div className="relative mx-6 mt-4">
+                <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-10 pl-2 py-1 rounded-md border-4 border-orange-500 text-nowrap">
+                  Atividade Chave
+                </div>
+                <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[150px] h-24 bg-white">
+                  <p className="py-2">teste</p>
+                </div>
+              </div>
+
+              <div className="relative mx-6 mt-3">
+                <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[92px] pl-2 py-1 rounded-md border-4 border-orange-500">
+                  Recursos
+                </div>
+                <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[150px] h-24 bg-white">
+                  <p className="py-2">teste</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="relative ml-16 mt-4">
+            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-md border-4 border-orange-500">
+              Custos
+            </div>
+            <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+          {/* Adicionando o novo componente "Resultado Financeiro" */}
+          <div className="w-fullmt-8">
+            <div className="relative ml-16 mt-8 w-full">
+              <div className="absolute z-10 -top-2 -left-4 bg-pink-500 text-white w-full pl-2 py-1 rounded-md border-4 border-pink-500 uppercase font-semibold text-nowrap text-center">
+                Resultado Financeiro
+              </div>
+              <div className="absolute border-4 border-l-8 border-pink-500 rounded-md p-6 h-52 bg-white w-[840px]">
+                <p className="py-2">teste</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-72 h-56 bg-white">
-          <p className="py-2">teste</p>
+
+        <div className="w-1/3">
+          <div className="relative ml-1 mt-16 w-full">
+            <div className="absolute -top-2 -left-4 bg-pink-500 text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500 uppercase font-semibold text-nowrap">
+              Oportunidade de mercado
+            </div>
+            <div className="border-y-4 border-l-8 border-pink-500 rounded-md p-6  h-26 bg-white" >
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-4  w-full">
+            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500">
+              Custos
+            </div>
+            <div className="border-y-4 border-l-8 border-pink-500 rounded-md p-6  h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-4  w-full">
+            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500">
+              Proposta de valor
+            </div>
+            <div className="border-4 border-l-8 border-pink-500 rounded-md p-6  h-52 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-4">
+            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px] pl-2 py-1 rounded-md border-4 border-pink-500">
+              Custos
+            </div>
+            <div className="border-4 border-l-8 border-pink-500 rounded-md p-6 w-[505px] h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
         </div>
+
+        <div className="w-2/5">
+          <div className="relative ml-1 mt-16  w-full">
+            <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap">
+              Contexto e problema
+            </div>
+            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-4  w-full">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+              Público / Foco do Impacto
+            </div>
+            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-4  w-full">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+              Intervenções (estratégias)
+            </div>
+            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-52 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-4">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+              Saídas / Outputs
+            </div>
+            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6 w-[700px] h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-8">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+              Resultados Curto Prazo
+            </div>
+            <div className="border-x-4 border-t-4 border-l-8 border-[#6C4796] rounded-t-md p-6 w-[700px] h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+          
+          <div className="relative ml-1 mt-0">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+              Resultados Curto Prazo
+            </div>
+            <div className="border-x-4 border-b-4 border-l-8 border-[#6C4796] rounded-b-md p-6 w-[700px] h-26 bg-white"
+              style={{
+                borderTop: 'dashed',
+                borderColor: "#6C4796",
+                borderTopWidth: 2,
+              }}>
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+          <div className="relative ml-1 mt-8  w-full">
+            <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap text-center">
+              Visão de impacto
+            </div>
+            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+              <p className="py-2">teste</p>
+            </div>
+          </div>
+
+        </div>
+
+
       </div>
 
-      <div className="relative mx-16 mt-4">
-        <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-14 pl-2 py-1 rounded-md border-4 border-orange-500">
-          Parceiros
-        </div>
-        <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-28 h-48 bg-white">
-          <p className="py-2">teste</p>
-        </div>
-      </div>
 
-    </div>)
+
+    </div>
+  )
 }

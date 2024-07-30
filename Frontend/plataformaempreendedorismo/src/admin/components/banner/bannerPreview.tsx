@@ -54,7 +54,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px]  pl-2 py-1 rounded-md border-4 border-orange-500">
               Equipe
             </div>
-            <div id="testepseudo" className=" border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-52 bg-white">
+            <div id="equipeq1" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-52 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -64,7 +64,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[72px] pl-2 py-1 rounded-md border-4 border-orange-500">
                 Parceiros
               </div>
-              <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[130px] h-52 bg-white">
+              <div id="parceiros" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[130px] h-52 bg-white">
                 <p className="py-2">teste</p>
               </div>
             </div>
@@ -74,7 +74,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-10 pl-2 py-1 rounded-md border-4 border-orange-500 text-nowrap">
                   Atividade Chave
                 </div>
-                <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[150px] h-24 bg-white">
+                <div id="atividadeChave" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[150px] h-24 bg-white">
                   <p className="py-2">teste</p>
                 </div>
               </div>
@@ -97,25 +97,25 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               <p className="py-2">teste</p>
             </div>
           </div>
-          {/* Adicionando o novo componente "Resultado Financeiro" */}
+
           <div className="w-fullmt-8">
             <div className="relative ml-16 mt-8 w-full">
               <div className="absolute z-10 -top-2 -left-4 bg-pink-500 text-white w-full pl-2 py-1 rounded-md border-4 border-pink-500 uppercase font-semibold text-nowrap text-center">
                 Resultado Financeiro
               </div>
-              <div className="absolute border-4 border-l-8 border-pink-500 rounded-md p-6 h-52 bg-white w-[840px]">
+              <div className="absolute border-4  border-pink-500 rounded-md p-6 h-[330px] bg-white w-[880px]">
                 <p className="py-2">teste</p>
-              </div>
+              </div> 
             </div>
           </div>
         </div>
 
-        <div className="w-1/3">
+        <div className="FLUXO DE NEGOCIO w-1/3">
           <div className="relative ml-1 mt-16 w-full">
             <div className="absolute -top-2 -left-4 bg-pink-500 text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500 uppercase font-semibold text-nowrap">
               Oportunidade de mercado
             </div>
-            <div className="border-y-4 border-l-8 border-pink-500 rounded-md p-6  h-26 bg-white" >
+            <div id="oportunidadeMercado" className="oportunidadeMercadoDot border-y-4 border-l-8 border-pink-500 p-6  h-26 bg-white" >
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -124,7 +124,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500">
               Custos
             </div>
-            <div className="border-y-4 border-l-8 border-pink-500 rounded-md p-6  h-26 bg-white">
+            <div id="custosq2" className="custosq2Dot border-y-4 border-l-8 border-pink-500  p-6  h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -133,7 +133,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500">
               Proposta de valor
             </div>
-            <div className="border-4 border-l-8 border-pink-500 rounded-md p-6  h-52 bg-white">
+            <div id="propostaValor" className="propostaValorDot border-y-4 border-l-8 border-pink-500  p-6  h-52 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -142,19 +142,19 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px] pl-2 py-1 rounded-md border-4 border-pink-500">
               Custos
             </div>
-            <div className="border-4 border-l-8 border-pink-500 rounded-md p-6 w-[505px] h-26 bg-white">
+            <div className="border-4 border-l-8 border-pink-500 rounded-md p-6 w-[550px] h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
 
         </div>
 
-        <div className="w-2/5">
+        <div className="CONTEXTO E PROBLEMA w-2/5">
           <div className="relative ml-1 mt-16  w-full">
             <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap">
               Contexto e problema
             </div>
-            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+            <div id="contextoProblema" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -163,7 +163,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796]">
               Público / Foco do Impacto
             </div>
-            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+            <div id="publicoFoco" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -172,7 +172,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796]">
               Intervenções (estratégias)
             </div>
-            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-52 bg-white">
+            <div id="intervencoesEstrategias" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-52 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -181,7 +181,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
               Saídas / Outputs
             </div>
-            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6 w-[700px] h-26 bg-white">
+            <div id="saidasOutputs" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6 w-[700px] h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -194,7 +194,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               <p className="py-2">teste</p>
             </div>
           </div>
-          
+
           <div className="relative ml-1 mt-0">
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
               Resultados Curto Prazo
@@ -209,11 +209,11 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
           </div>
 
-          <div className="relative ml-1 mt-8  w-full">
+          <div className="relative ml-1 mt-8 mb-80 w-full">
             <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap text-center">
               Visão de impacto
             </div>
-            <div className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+            <div className="border-4  border-[#6C4796] rounded-md p-6  h-28 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>

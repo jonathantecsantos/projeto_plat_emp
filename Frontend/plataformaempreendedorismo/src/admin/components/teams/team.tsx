@@ -80,7 +80,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </li>
           <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
             <PrintIcon />
-            <span>Imprimir banner</span>
+            <span onClick={() => navigate(RoutesNames.bannerPreview)}>Imprimir banner</span>
           </li>
           {team?.professor?.equipe.linkPitch && <li className="bg-blue-800 text-white py-2 px-4 rounded-md text-center cursor-pointer flex items-center justify-start space-x-2">
             <LinkIcon />

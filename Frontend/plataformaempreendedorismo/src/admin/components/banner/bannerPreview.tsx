@@ -199,7 +199,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
               Resultados Curto Prazo
             </div>
-            <div className="border-x-4 border-b-4 border-l-8 border-[#6C4796] rounded-b-md p-6 w-[700px] h-26 bg-white"
+            <div id="resultadosCurtoPrazo" className="border-x-4 border-b-4 border-l-8 border-[#6C4796] rounded-b-md p-6 w-[700px] h-26 bg-white"
               style={{
                 borderTop: 'dashed',
                 borderColor: "#6C4796",
@@ -213,7 +213,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap text-center">
               Visão de impacto
             </div>
-            <div className="border-4  border-[#6C4796] rounded-md p-6  h-28 bg-white">
+            <div  className="border-4  border-[#6C4796] rounded-md p-6  h-28 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>

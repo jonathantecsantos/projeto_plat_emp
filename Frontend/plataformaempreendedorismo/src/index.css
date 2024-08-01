@@ -34,6 +34,31 @@
   }
 }
 
+
+ /* @layer components {
+  @media print {
+    .print-container {
+      @apply w-full h-full;
+      transform-origin: top left;
+      page-break-inside: avoid;
+    }
+
+    .print-hidden {
+      @apply hidden;
+    }
+
+    body {
+      -webkit-print-color-adjust: exact; 
+    }
+
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+  }
+ }  */
+
+
 ::-webkit-scrollbar {
   width: 8px;
 }

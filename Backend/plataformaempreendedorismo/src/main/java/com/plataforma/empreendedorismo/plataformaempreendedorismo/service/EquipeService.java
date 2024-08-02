@@ -12,6 +12,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.Pro
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import util.exceptions.ValidaAlunoException;
 
 import java.util.List;
 import java.util.Optional;

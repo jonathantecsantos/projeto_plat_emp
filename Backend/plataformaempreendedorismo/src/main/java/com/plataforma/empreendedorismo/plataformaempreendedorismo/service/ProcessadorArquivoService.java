@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.enuns.TipoImportacao;
+import util.enuns.TipoImportacaoEnum;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -43,13 +43,13 @@ public class ProcessadorArquivoService {
 
         String nomeProcesso = "";
 
-        TipoImportacao tipoImportacao = TipoImportacao.valueOf(tipo);
+        TipoImportacaoEnum tipoImportacaoEnum = TipoImportacaoEnum.valueOf(tipo);
 
-        nomeProcesso = switch (tipoImportacao) {
-            case EQUIPE -> String.valueOf(TipoImportacao.EQUIPE);
-            case ALUNO -> String.valueOf(TipoImportacao.ALUNO);
-            case AVALIADOR -> String.valueOf(TipoImportacao.AVALIADOR);
-            case PROFESSOR -> String.valueOf(TipoImportacao.PROFESSOR);
+        nomeProcesso = switch (tipoImportacaoEnum) {
+            case EQUIPE -> String.valueOf(TipoImportacaoEnum.EQUIPE);
+            case ALUNO -> String.valueOf(TipoImportacaoEnum.ALUNO);
+            case AVALIADOR -> String.valueOf(TipoImportacaoEnum.AVALIADOR);
+            case PROFESSOR -> String.valueOf(TipoImportacaoEnum.PROFESSOR);
             default -> throw new Exception("Erro!");
         };
 
@@ -62,7 +62,7 @@ public class ProcessadorArquivoService {
 
             Row headerRow = sheet.getRow(0);
 
-            if(!validarHeader(headerRow, tipoImportacao)){
+            if(!validarHeader(headerRow, tipoImportacaoEnum)){
                 throw new Exception("O cabeçalho está com problema");
             }
 
@@ -89,7 +89,7 @@ public class ProcessadorArquivoService {
                     continue;
                 }
 
-                switch (tipoImportacao) {
+                switch (tipoImportacaoEnum) {
                     case EQUIPE -> processarImportacaoEquipe(row);
                     case ALUNO -> processarImportacaoAluno(row);
                     case AVALIADOR -> processarImportacaoAvaliador(row);
@@ -283,12 +283,12 @@ public class ProcessadorArquivoService {
         }
     }
 
-    private boolean validarHeader(Row headerRow, TipoImportacao tipoImportacao) {
+    private boolean validarHeader(Row headerRow, TipoImportacaoEnum tipoImportacaoEnum) {
 
         String [] expectedHeader = {};
 
 
-        switch (tipoImportacao){
+        switch (tipoImportacaoEnum){
             case EQUIPE:
                 expectedHeader = new String[]{
                         "NOME_EQUIPE"

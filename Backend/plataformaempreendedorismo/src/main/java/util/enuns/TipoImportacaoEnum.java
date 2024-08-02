@@ -1,6 +1,5 @@
 package util.enuns;
 
-public enum TipoImportacao {
-
+public enum TipoImportacaoEnum {
     EQUIPE,ALUNO,AVALIADOR,PROFESSOR
 }

@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.enuns.TipoValidacaoLiderAndViceLiderEnum;
+import util.enuns.TipoOperacaoEnum;
 import util.exceptions.ValidaAlunoException;
 
 import java.util.Optional;
@@ -32,7 +32,7 @@ public class AlunoService {
     public void criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
         Equipe equipe = equipeService.buscarEquipePorId(alunoCadastroRecord.idEquipe());
 
-        validaLiderAndViceLider(TipoValidacaoLiderAndViceLiderEnum.CADASTRAR ,null , alunoCadastroRecord, null,equipe);
+        validaLiderAndViceLider(TipoOperacaoEnum.CADASTRAR ,null , alunoCadastroRecord, null,equipe);
         alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
     }
 
@@ -41,17 +41,17 @@ public class AlunoService {
         Aluno aluno = alunoRepository.getReferenceById(alunoEditarRecord.id());
         Equipe equipe = equipeRepository.getReferenceById(alunoEditarRecord.idEquipe());
 
-        validaLiderAndViceLider(TipoValidacaoLiderAndViceLiderEnum.EDITAR ,aluno , null, alunoEditarRecord,equipe);
+        validaLiderAndViceLider(TipoOperacaoEnum.EDITAR ,aluno , null, alunoEditarRecord,equipe);
         atualizarAluno(aluno, alunoEditarRecord);
 
     }
 
-    private void validaLiderAndViceLider(TipoValidacaoLiderAndViceLiderEnum tipo,
-                                            Aluno aluno,
-                                            AlunoCadastroRecord alunoCadastroRecord,
-                                            AlunoEditarRecord alunoEditarRecord,
-                                            Equipe equipe) throws ValidaAlunoException {
-        if (tipo.equals(TipoValidacaoLiderAndViceLiderEnum.CADASTRAR)){
+    private void validaLiderAndViceLider(TipoOperacaoEnum tipo,
+                                         Aluno aluno,
+                                         AlunoCadastroRecord alunoCadastroRecord,
+                                         AlunoEditarRecord alunoEditarRecord,
+                                         Equipe equipe) throws ValidaAlunoException {
+        if (tipo.equals(TipoOperacaoEnum.CADASTRAR)){
             validarLiderAndViceLiderCadastro(equipe, alunoCadastroRecord);
         } else{
             validaLiderAndViceLiderEdicao(aluno, alunoEditarRecord, equipe);

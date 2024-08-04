@@ -39,7 +39,7 @@ public class ProfessorController {
     public ResponseEntity<String> cadastrarProfessor(@RequestBody ProfessorCadastroRecord professorCadastroRecord) throws Exception {
 
         try {
-            professorService.criarProfessor(professorCadastroRecord);
+            professorService.criaProfessor(professorCadastroRecord);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body("Professor cadastrado com sucesso!");
         }catch (Exception e){
@@ -65,7 +65,7 @@ public class ProfessorController {
     })
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProfessorRecord buscaProfessorPorId(@PathVariable Long id){
-        return  professorService.buscarProfessorPorId(id);
+        return  professorService.buscaProfessorPorId(id);
     }
 
     @Operation(summary = "Apagar Professor", method = "DELETE")
@@ -93,7 +93,7 @@ public class ProfessorController {
     @PutMapping("/editar")
     public ResponseEntity<String> editar(@RequestBody @Valid ProfessorEditarRecord professorEditarRecord){
         try {
-            professorService.editarProfessor(professorEditarRecord);
+            professorService.editaProfessor(professorEditarRecord);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Professor atualizado com sucesso!");
         }catch (Exception e){

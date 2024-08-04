@@ -88,12 +88,11 @@ export const StudentCard = ({ student }: StudentCard) => {
   const displayStudent = updatedStudent || student;
 
   return (
-    <div key={student.id} className={`p-4 border rounded-lg shadow-md max-w-80 min-h-28 relative
-  ${displayStudent?.isLider || displayStudent?.isViceLider ? 'bg-[#636C90] text-[#cecece]' : 'bg-gray-100'}`}>
+    <div key={student.id} className={`p-4 border rounded-lg shadow-md max-w-80 min-h-20 relative
+  ${displayStudent?.isLider || displayStudent?.isViceLider ? 'bg-[#9F8FD9] text-[#210077]' : 'bg-gray-100'}`}>
 
       <div className='flex justify-between'>
-        <p className={`text-lg font-bold capitalize mr-2 ${displayStudent?.isLider || displayStudent?.isViceLider ?
-          'text-white' : 'text-slate-800'}`}>
+        <p className={`text-lg font-bold capitalize mr-2 text-[#210077] `}>
           {displayStudent?.nome?.toLowerCase()}
         </p>
 
@@ -106,7 +105,7 @@ export const StudentCard = ({ student }: StudentCard) => {
         />
       </div>
 
-      <p>{getRoleLabel(displayStudent as Student)}</p>
+      <p className='text-[#210077]'>{getRoleLabel(displayStudent as Student)}</p>
       {/* <p>Turma: {student.turma}</p> */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>

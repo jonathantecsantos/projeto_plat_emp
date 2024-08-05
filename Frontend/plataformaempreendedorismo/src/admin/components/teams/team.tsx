@@ -65,7 +65,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         <div className='flex flex-col gap-4 w-full'>
           {team?.professor && <TeacherCard teacher={team?.professor} />}
           {/* <Divider /> */}
-          <div className='mt-4 w-full relative'>
+          <div className='w-full relative'>
             <div className='grid md:grid-cols-2 gap-4 mb-14'>
               {sortedStudents.map((student, idx) => <StudentCard student={student} key={idx} />)}
             </div>

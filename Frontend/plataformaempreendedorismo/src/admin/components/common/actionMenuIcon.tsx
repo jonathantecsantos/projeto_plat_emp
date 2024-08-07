@@ -1,17 +1,23 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import LeaderIcon from '@mui/icons-material/Person'
+import ViceLeaderIcon from '@mui/icons-material/PersonOutline'
+import MemberIcon from '@mui/icons-material/Group'
+import ViewIcon from '@mui/icons-material/Visibility'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 import { MouseEvent, useState } from 'react'
 
 interface ActionMenuProps {
-  onEdit: () => void
-  onRemove: () => void
-  onPromoteLeader: () => void
-  onPromoteViceLeader: () => void
-  onPromoteMember: () => void
+  onEdit?: () => void
+  onRemove?: () => void
+  onPromoteLeader?: () => void
+  onPromoteViceLeader?: () => void
+  onPromoteMember?: () => void
+  onView?: () => void
 }
 
-export const ActionMenu = ({ onEdit, onRemove, onPromoteLeader,
-  onPromoteViceLeader, onPromoteMember }: ActionMenuProps) => {
+export const ActionMenu = ({ onEdit, onRemove, onPromoteLeader, onPromoteViceLeader, onPromoteMember, onView }: ActionMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -29,11 +35,42 @@ export const ActionMenu = ({ onEdit, onRemove, onPromoteLeader,
         <MoreVertIcon />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={() => { handleClose(), onEdit() }}>Editar/Visualizar</MenuItem>
-        <MenuItem onClick={() => { handleClose(), onRemove() }}>Remover</MenuItem>
-        <MenuItem onClick={() => { handleClose(), onPromoteLeader() }}>Promover Líder</MenuItem>
-        <MenuItem onClick={() => { handleClose(), onPromoteViceLeader() }}>Promover Vice Líder</MenuItem>
-        <MenuItem onClick={() => { handleClose(), onPromoteMember() }}>Promover Membro</MenuItem>
+        {onView && (
+          <MenuItem onClick={() => { handleClose(); onView(); }}>
+            <ViewIcon fontSize="small" />
+            <span style={{ marginLeft: 8 }}>Visualizar</span>
+          </MenuItem>
+        )}
+        {onEdit && (
+          <MenuItem onClick={() => { handleClose(); onEdit(); }}>
+            <EditIcon fontSize="small" />
+            <span style={{ marginLeft: 8 }}>Editar</span>
+          </MenuItem>
+        )}
+        {onRemove && (
+          <MenuItem onClick={() => { handleClose(); onRemove(); }}>
+            <DeleteIcon fontSize="small" />
+            <span style={{ marginLeft: 8 }}>Remover</span>
+          </MenuItem>
+        )}
+        {onPromoteLeader && (
+          <MenuItem onClick={() => { handleClose(); onPromoteLeader(); }}>
+            <LeaderIcon fontSize="small" />
+            <span style={{ marginLeft: 8 }}>Promover Líder</span>
+          </MenuItem>
+        )}
+        {onPromoteViceLeader && (
+          <MenuItem onClick={() => { handleClose(); onPromoteViceLeader(); }}>
+            <ViceLeaderIcon fontSize="small" />
+            <span style={{ marginLeft: 8 }}>Promover Vice Líder</span>
+          </MenuItem>
+        )}
+        {onPromoteMember && (
+          <MenuItem onClick={() => { handleClose(); onPromoteMember(); }}>
+            <MemberIcon fontSize="small" />
+            <span style={{ marginLeft: 8 }}>Promover Membro</span>
+          </MenuItem>
+        )}
       </Menu>
     </>
   )

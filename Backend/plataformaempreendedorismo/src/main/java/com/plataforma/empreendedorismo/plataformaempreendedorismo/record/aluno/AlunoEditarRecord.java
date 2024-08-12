@@ -11,7 +11,6 @@ public record AlunoEditarRecord(
         String turma,
         Boolean isLider,
         Boolean isViceLider,
-        Long idOds,
         Long idEquipe
 ) {
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name="equipe")
@@ -28,9 +29,13 @@ public class Equipe {
     @JoinColumn(name = "BANNER_ID", referencedColumnName = "id")
     private Banner banner;
 
-    @OneToOne
-    @JoinColumn(name = "ODS_ID", referencedColumnName = "id")
-    private Ods ods;
+    @ManyToMany
+    @JoinTable(
+            name = "equipe_ods",
+            joinColumns = {@JoinColumn(name = "id_equipe", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "id_ods", referencedColumnName = "id")}
+    )
+    private List<Ods> odsList = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "equipe")

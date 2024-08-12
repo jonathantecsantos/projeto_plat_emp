@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -243,31 +244,62 @@ public class ProcessadorArquivoService {
         }
 
 
-        if(row.getCell(7) != null) {
-            String entradaEquipe = String.valueOf(row.getCell(7));
+        if(row.getCell(9) != null) {
+            String entradaEquipe = String.valueOf(row.getCell(9));
+            List<Ods> odsList = new ArrayList<>();
+
             equipe = equipeRepository.findByNome(entradaEquipe.toUpperCase());
             if (equipe == null) {
                 equipe = new Equipe();
                 equipe.setNome(entradaEquipe.toUpperCase());
 
-                if(row.getCell(6) != null){
-                    String ods = String.valueOf(row.getCell(6));
+                processarOds(row, odsList);
 
-                    Ods odsEncontradado = odsRepository.findByCodigo(ods);
-                    if (odsEncontradado != null){
-                        equipe.setOds(odsEncontradado);
-                    }else{
-                        throw new Exception("Erro");
-                    }
-                }
+                equipe.setOdsList(odsList);
                 equipeRepository.saveAndFlush(equipe);
                 aluno.setEquipe(equipe);
             }else{
+                processarOds(row, odsList);
+                equipe.setOdsList(odsList);
+                equipeRepository.saveAndFlush(equipe);
                 aluno.setEquipe(equipe);
             }
         }
 
         alunoRepository.save(aluno);
+    }
+
+    private void processarOds(Row row, List<Ods> odsList) throws Exception {
+        if(row.getCell(6) != null){
+            String ods = String.valueOf(row.getCell(6));
+
+            Ods odsEncontradado = odsRepository.findByCodigo(ods);
+            if (odsEncontradado != null){
+                odsList.add(odsEncontradado);
+            }else{
+                throw new Exception("Erro");
+            }
+        }
+        if(row.getCell(7) != null){
+            String ods = String.valueOf(row.getCell(7));
+
+            Ods odsEncontradado = odsRepository.findByCodigo(ods);
+            if (odsEncontradado != null){
+                odsList.add(odsEncontradado);
+            }else{
+                throw new Exception("Erro");
+            }
+        }
+        if(row.getCell(8) != null){
+            String ods = String.valueOf(row.getCell(8));
+
+            Ods odsEncontradado = odsRepository.findByCodigo(ods);
+            if (odsEncontradado != null){
+                odsList.add(odsEncontradado);
+            }else{
+                throw new Exception("Erro");
+            }
+        }
     }
 
     private boolean validarCPF(String cpf) {
@@ -296,7 +328,7 @@ public class ProcessadorArquivoService {
                 break;
             case ALUNO:
                 expectedHeader = new String[]{
-                        "CPF","NOME_ALUNO", "EMAIL", "TURMA","LIDER", "VICE-LIDER", "ODS","EQUIPE"
+                        "CPF","NOME_ALUNO", "EMAIL", "TURMA","LIDER", "VICE-LIDER", "ODS_1","ODS_2","ODS_3","EQUIPE"
                 };
                 break;
             case AVALIADOR:

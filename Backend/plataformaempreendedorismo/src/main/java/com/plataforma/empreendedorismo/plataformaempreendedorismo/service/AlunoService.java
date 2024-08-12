@@ -31,7 +31,6 @@ public class AlunoService {
     @Transactional
     public void criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
         Equipe equipe = equipeService.buscarEquipePorId(alunoCadastroRecord.idEquipe());
-
         validaLiderAndViceLider(TipoOperacaoEnum.CADASTRAR ,null , alunoCadastroRecord, null,equipe);
         alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
     }

@@ -4,9 +4,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Importac
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.ImportacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.enuns.TipoImportacao;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service

@@ -7,13 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.enuns.TipoImportacao;
+import util.enuns.TipoImportacaoEnum;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -43,13 +44,13 @@ public class ProcessadorArquivoService {
 
         String nomeProcesso = "";
 
-        TipoImportacao tipoImportacao = TipoImportacao.valueOf(tipo);
+        TipoImportacaoEnum tipoImportacaoEnum = TipoImportacaoEnum.valueOf(tipo);
 
-        nomeProcesso = switch (tipoImportacao) {
-            case EQUIPE -> String.valueOf(TipoImportacao.EQUIPE);
-            case ALUNO -> String.valueOf(TipoImportacao.ALUNO);
-            case AVALIADOR -> String.valueOf(TipoImportacao.AVALIADOR);
-            case PROFESSOR -> String.valueOf(TipoImportacao.PROFESSOR);
+        nomeProcesso = switch (tipoImportacaoEnum) {
+            case EQUIPE -> String.valueOf(TipoImportacaoEnum.EQUIPE);
+            case ALUNO -> String.valueOf(TipoImportacaoEnum.ALUNO);
+            case AVALIADOR -> String.valueOf(TipoImportacaoEnum.AVALIADOR);
+            case PROFESSOR -> String.valueOf(TipoImportacaoEnum.PROFESSOR);
             default -> throw new Exception("Erro!");
         };
 
@@ -62,7 +63,7 @@ public class ProcessadorArquivoService {
 
             Row headerRow = sheet.getRow(0);
 
-            if(!validarHeader(headerRow, tipoImportacao)){
+            if(!validarHeader(headerRow, tipoImportacaoEnum)){
                 throw new Exception("O cabeçalho está com problema");
             }
 
@@ -89,7 +90,7 @@ public class ProcessadorArquivoService {
                     continue;
                 }
 
-                switch (tipoImportacao) {
+                switch (tipoImportacaoEnum) {
                     case EQUIPE -> processarImportacaoEquipe(row);
                     case ALUNO -> processarImportacaoAluno(row);
                     case AVALIADOR -> processarImportacaoAvaliador(row);
@@ -243,31 +244,62 @@ public class ProcessadorArquivoService {
         }
 
 
-        if(row.getCell(7) != null) {
-            String entradaEquipe = String.valueOf(row.getCell(7));
+        if(row.getCell(9) != null) {
+            String entradaEquipe = String.valueOf(row.getCell(9));
+            List<Ods> odsList = new ArrayList<>();
+
             equipe = equipeRepository.findByNome(entradaEquipe.toUpperCase());
             if (equipe == null) {
                 equipe = new Equipe();
                 equipe.setNome(entradaEquipe.toUpperCase());
 
-                if(row.getCell(6) != null){
-                    String ods = String.valueOf(row.getCell(6));
+                processarOds(row, odsList);
 
-                    Ods odsEncontradado = odsRepository.findByCodigo(ods);
-                    if (odsEncontradado != null){
-                        equipe.setOds(odsEncontradado);
-                    }else{
-                        throw new Exception("Erro");
-                    }
-                }
+                equipe.setOdsList(odsList);
                 equipeRepository.saveAndFlush(equipe);
                 aluno.setEquipe(equipe);
             }else{
+                processarOds(row, odsList);
+                equipe.setOdsList(odsList);
+                equipeRepository.saveAndFlush(equipe);
                 aluno.setEquipe(equipe);
             }
         }
 
         alunoRepository.save(aluno);
+    }
+
+    private void processarOds(Row row, List<Ods> odsList) throws Exception {
+        if(row.getCell(6) != null){
+            String ods = String.valueOf(row.getCell(6));
+
+            Ods odsEncontradado = odsRepository.findByCodigo(ods);
+            if (odsEncontradado != null){
+                odsList.add(odsEncontradado);
+            }else{
+                throw new Exception("Erro");
+            }
+        }
+        if(row.getCell(7) != null){
+            String ods = String.valueOf(row.getCell(7));
+
+            Ods odsEncontradado = odsRepository.findByCodigo(ods);
+            if (odsEncontradado != null){
+                odsList.add(odsEncontradado);
+            }else{
+                throw new Exception("Erro");
+            }
+        }
+        if(row.getCell(8) != null){
+            String ods = String.valueOf(row.getCell(8));
+
+            Ods odsEncontradado = odsRepository.findByCodigo(ods);
+            if (odsEncontradado != null){
+                odsList.add(odsEncontradado);
+            }else{
+                throw new Exception("Erro");
+            }
+        }
     }
 
     private boolean validarCPF(String cpf) {
@@ -283,12 +315,12 @@ public class ProcessadorArquivoService {
         }
     }
 
-    private boolean validarHeader(Row headerRow, TipoImportacao tipoImportacao) {
+    private boolean validarHeader(Row headerRow, TipoImportacaoEnum tipoImportacaoEnum) {
 
         String [] expectedHeader = {};
 
 
-        switch (tipoImportacao){
+        switch (tipoImportacaoEnum){
             case EQUIPE:
                 expectedHeader = new String[]{
                         "NOME_EQUIPE"
@@ -296,7 +328,7 @@ public class ProcessadorArquivoService {
                 break;
             case ALUNO:
                 expectedHeader = new String[]{
-                        "CPF","NOME_ALUNO", "EMAIL", "TURMA","LIDER", "VICE-LIDER", "ODS","EQUIPE"
+                        "CPF","NOME_ALUNO", "EMAIL", "TURMA","LIDER", "VICE-LIDER", "ODS_1","ODS_2","ODS_3","EQUIPE"
                 };
                 break;
             case AVALIADOR:

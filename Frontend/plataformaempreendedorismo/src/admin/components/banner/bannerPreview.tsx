@@ -85,10 +85,10 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
           </div>
           <div className="relative ml-16 mt-4">
-            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-md border-4 border-orange-500">
+            <div  className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-md border-4 border-orange-500">
               Custos
             </div>
-            <div className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-26 bg-white">
+            <div id="custosq2Arrow" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -137,7 +137,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px] pl-2 py-1 rounded-md border-4 border-pink-500">
               Custos
             </div>
-            <div className="border-4 border-l-8 border-pink-500 rounded-md p-6 w-11/12 h-26 bg-white">
+            <div id="custosq3Arrow" className="border-4 border-l-8 border-pink-500 rounded-md p-6 w-11/12 h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
@@ -192,7 +192,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
           <div className="relative ml-1 mt-0">
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
-              Resultados Curto Prazo
+              Resultados Médio Prazo
             </div>
             <div id="resultadosCurtoPrazo" className="border-x-4 border-b-4 border-l-8 border-[#6C4796] rounded-b-md p-6 w-full h-26 bg-white"
               style={{

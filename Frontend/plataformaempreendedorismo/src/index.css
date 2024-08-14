@@ -272,3 +272,50 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
     z-index: 51;
 }
+
+#custosq2Arrow::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #f97316;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+} 
+
+#custosq2Arrow::before {
+    content: '';
+    width: 40px;
+    height: 20px; /* Ajuste conforme necessário */
+    background: #f97316;
+    position: absolute;
+    bottom: -25px;
+    left: -15px;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 51;
+}
+
+#custosq3Arrow::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #ec4899;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+} 
+
+#custosq3Arrow::before {
+    content: '';
+    width: 40px;
+    height: 20px; /* Ajuste conforme necessário */
+    background: #ec4899;
+    position: absolute;
+    bottom: -25px;
+    left: -15px;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 51;
+}
+

@@ -14,6 +14,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
         <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute" />
       </div>
 
+
       {/* ----> Primeiro componente inicial parte azul */}
       <div className="px-8 relative">
         <div className="border-[20px] border-[#10BBEF]">
@@ -45,7 +46,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
           </div>
         </div>
       </div>
-      {/* ----> Primeiro componente inicial parte azul */}
+      
       <div className="flex">
         <div className="CAPACIDADE ORGANIZACIONAL">
           <div className="relative ml-16 mt-16">

@@ -46,6 +46,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
       <div className="flex">
         <div className="CAPACIDADE ORGANIZACIONAL">
           <div className="relative ml-16 mt-16">
+            <p className="font-bold text-orange-500 absolute -top-8 left-6 transform transform-x-1/2">CAPACIDADE ORGANIZACIONAL</p>
             <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px]  pl-2 py-1 rounded-md border-4 border-orange-500">
               Equipe
             </div>
@@ -85,7 +86,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
           </div>
           <div className="relative ml-16 mt-4">
-            <div  className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-md border-4 border-orange-500">
+            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-md border-4 border-orange-500">
               Custos
             </div>
             <div id="custosq2Arrow" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-26 bg-white">
@@ -107,6 +108,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
         <div className="FLUXO DE NEGOCIO w-2/3">
           <div className="relative ml-1 mt-16 w-full">
+            <p className="font-bold text-pink-500 absolute -top-8 left-1/3 transform transform-x-1/2">FLUXO DE NEGOCIO</p>
             <div className="absolute -top-2 -left-4 bg-pink-500 text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500 uppercase font-semibold text-nowrap">
               Oportunidade de mercado
             </div>
@@ -145,7 +147,8 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
         </div>
 
         <div className="CONTEXTO E PROBLEMA w-full pr-14">
-          <div className="relative ml-1 mt-16  w-full">
+          <div className="relative ml-1 mt-16 w-full">
+            <p className="font-bold text-[#6C4796] absolute -top-8 left-1/3 transform transform-x-1/2">TEORIA DE MUDANÇA</p>
             <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap">
               Contexto e problema
             </div>
@@ -212,7 +215,6 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               <p className="py-2">teste</p>
             </div>
           </div>
-
         </div>
       </div>
     </div>

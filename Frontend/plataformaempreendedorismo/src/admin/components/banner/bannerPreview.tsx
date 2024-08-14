@@ -9,10 +9,13 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   return (
 
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative" ref={bannerRef}>
-      <div className="h-[340px] border"><p>Header</p></div>
+      {/* <div className="h-[340px] border bg-[url('/src/assets/header.svg')] bg-cover bg-center"></div> */}
+      <div className="relative h-[340px] border">
+        <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute" />
+      </div>
 
       {/* ----> Primeiro componente inicial parte azul */}
-      <div className="px-8">
+      <div className="px-8 relative">
         <div className="border-[20px] border-[#10BBEF]">
           <div className="p-4 border-b-4 border-[#10BBEF]  bg-white flex h-20">
             <p className="text-[#10BBEF]">Projeto:</p>

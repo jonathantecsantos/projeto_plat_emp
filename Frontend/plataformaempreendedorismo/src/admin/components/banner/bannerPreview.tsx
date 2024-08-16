@@ -10,7 +10,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative" ref={bannerRef}>
       {/* <div className="h-[340px] border bg-[url('/src/assets/header.svg')] bg-cover bg-center"></div> */}
-      <div className="relative h-[340px] border">
+      <div className="relative h-[340px]">
         <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute" />
       </div>
 
@@ -46,7 +46,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
           </div>
         </div>
       </div>
-      
+
       <div className="flex">
         <div className="CAPACIDADE ORGANIZACIONAL">
           <div className="relative ml-16 mt-16">
@@ -55,7 +55,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Equipe
             </div>
             <div id="equipeq1" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-52 bg-white">
-              <p className="py-2">teste</p>
+              <p className="py-2" style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>teste</p>
             </div>
           </div>
 
@@ -211,7 +211,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
           </div>
 
-          <div className="relative ml-1 mt-8 mb-80 w-full">
+          <div className="relative ml-1 mt-8 mb-4 w-full">
             <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap text-center">
               Visão de impacto
             </div>
@@ -220,6 +220,9 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="relativ h-40">
+        <img src="/src/assets/footer.svg" alt="Header" className="object-cover absolute" />
       </div>
     </div>
   )

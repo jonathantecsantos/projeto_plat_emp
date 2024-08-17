@@ -319,3 +319,17 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     z-index: 51;
 }
 
+
+#recursosArrow::before {
+    content: '';
+    width: 40px;
+    height: 20px; /* Ajuste conforme necessário */
+    background: #f97316;
+    position: absolute;
+    bottom: -8px;
+    left: -15px;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 51;
+}
+
+

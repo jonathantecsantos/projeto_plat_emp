@@ -10,22 +10,20 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative 
     print:w-[950px] print:text-sm" ref={bannerRef}>
-      {/* <div className="h-[340px] border bg-[url('/src/assets/header.svg')] bg-cover bg-center"></div> */}
-      <div className="relative h-[340px] print:h-[170px]">
+
+      <div className="relative h-[340px] print:h-[160px]">
         <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute
-        print:h-[196px]" />
+        print:h-[186px]" />
       </div>
-
-
       {/* ----> Primeiro componente inicial parte azul */}
       <div className="relative px-8 print:px-4">
         <div className="border-[20px] print:border-[10px] border-[#10BBEF]">
-          <div className="p-4 border-b-4 border-[#10BBEF]  bg-white flex h-20 print:p-4 print:h-14">
+          <div className="p-4 border-b-4 print:border-b-2 border-[#10BBEF]  bg-white flex h-20 print:p-4 print:h-11">
             <p className="text-[#10BBEF]">Projeto:</p>
             <p className="px-2 print:px-1">teste</p>
           </div>
-          <div className="flex text-start h-36 print:h-24 bg-white">
-            <div className="w-full px-4 py-2 border-r-2 border-[#10BBEF] flex">
+          <div className="flex text-start h-36 print:h-[70px] bg-white">
+            <div className="w-full px-4 py-2 border-r-2 print:border-r-0 border-[#10BBEF] flex">
               <p className="text-[#10BBEF]">Alunos:</p>
               <p className="px-2 print:px-1">teste</p>
             </div>
@@ -35,9 +33,9 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
           </div>
         </div>
-        <div className="border-[20px] print:border-[10px] border-[#10BBEF] w-full mt-6 h-96 print:h-60 print:mt-3 bg-white">
+        <div className="border-[20px] print:border-[10px] border-[#10BBEF] w-full mt-6 h-96 print:h-56 print:mt-3 bg-white">
           <div className="flex text-start h-full">
-            <div className="w-full p-4 border-r-2 border-[#10BBEF] flex">
+            <div className="w-full p-4 border-r-2 print:border-r-0 border-[#10BBEF] flex">
               <p className="text-[#10BBEF]">Texto</p>
               <p className="px-2 print:px-1">teste</p>
             </div>
@@ -51,66 +49,68 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
       <div className="flex">
         <div className="CAPACIDADE ORGANIZACIONAL">
-          <div className="relative ml-16 print:ml-10 mt-16 print:mt-10 ">
-            <p className="font-bold text-orange-500 absolute -top-8 left-6 transform transform-x-1/2">CAPACIDADE ORGANIZACIONAL</p>
-            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] print:w-[155px] pl-2 py-1 rounded-md 
+          <div className="relative ml-16 print:ml-10 mt-16 print:mt-9">
+            <p className="font-bold text-orange-500 absolute -top-7 left-6 transform transform-x-1/2">CAPACIDADE ORGANIZACIONAL</p>
+            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] print:w-[135px] pl-2 py-1 rounded-lg 
             border-4 border-orange-500">
               Equipe
             </div>
-            <div id="equipeq1" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px] h-52 print:w-[250px] print:h-40 bg-white">
+            <div id="equipeq1" className="border-4 border-l-8 border-orange-500 rounded-lg p-6 w-[305px] h-52 
+            print:w-[240px] print:h-[150px] bg-white">
               <p className="py-2" style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>teste</p>
             </div>
           </div>
 
           <div className="flex">
-            <div className="relative ml-16 print:ml-10 mt-4 ">
-              <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[72px] print:pr-[30px] pl-2 py-1 rounded-md border-4 border-orange-500">
+            <div className="relative ml-16 print:ml-10 mt-4 print:mt-3 ">
+              <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[72px] print:pr-[35px] pl-2 py-1 rounded-lg border-4 border-orange-500">
                 Parceiros
               </div>
-              <div id="parceiros" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[132px] print:w-[80px] print:h-40 h-52 bg-white">
+              <div id="parceiros" className="border-4 border-l-8 border-orange-500 rounded-lg p-6 w-[132px] 
+              print:w-[90px] print:h-[150px] h-52 bg-white">
                 <p className="py-2">teste</p>
               </div>
             </div>
 
             <div className="flex flex-col">
-              <div className="relative mx-5 mt-4">
-                <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-10 pl-2 py-1 rounded-md border-4 border-orange-500 text-nowrap">
+              <div className="relative mx-5 mt-4 print:mt-3">
+                <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-10 pl-2 py-1 rounded-lg border-4 border-orange-500 text-nowrap print:pr-8">
                   Atividade Chave
                 </div>
-                <div id="atividadeChave" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[150px]
-                 print:w-[135px] h-24 print:h-20 bg-white">
+                <div id="atividadeChave" className="border-4 border-l-8 border-orange-500 rounded-lg p-6 w-[150px]
+                 print:w-[128px] h-24 print:h-[70px] bg-white">
                   <p className="py-2">teste</p>
                 </div>
               </div>
 
               <div className="relative mx-6 mt-3 print:mt-[10px]">
-                <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[92px] pl-2 py-1 rounded-md border-4 border-orange-500 print:pr-[80px]">
+                <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[88px] pl-2 py-1 rounded-lg border-4 border-orange-500 print:pr-[75px]">
                   Recursos
                 </div>
-                <div id="recursosArrow" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[150px] h-24 
-                print:h-[70px] print:w-[130px] bg-white">
+                <div id="recursosArrow" className="border-4 border-l-8 border-orange-500 rounded-lg p-6 w-[145px] h-24 
+                print:h-[70px] print:w-[125px] bg-white">
                   <p className="py-2">teste</p>
                 </div>
               </div>
             </div>
           </div>
           <div className="relative ml-16 print:ml-10 mt-4">
-            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-md border-4 border-orange-500 print:w-[170px]">
+            <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-lg border-4 border-orange-500 print:w-[150px]">
               Custos
             </div>
-            <div id="custosq2Arrow" className="border-4 border-l-8 border-orange-500 rounded-md p-6 w-[305px]
-            h-26 bg-white print:w-[235px]">
-              <p className="py-2">teste</p>
+            <div id="custosq2Arrow" className="border-4 border-l-8 border-orange-500 rounded-lg p-6 w-[304px]
+            h-26 bg-white print:w-[240px]">
+              <p className="py-2">testeaaa</p>
             </div>
           </div>
 
-          <div className="w-full mt-8">
-            <div className="relative ml-16 print:ml-10 mt-8 w-full">
-              <div className="absolute z-10 -top-2 -left-4 bg-pink-500 text-white w-full pl-2 py-1 rounded-md border-4 border-pink-500 uppercase font-semibold text-nowrap text-center">
+          <div className="w-full mt-8 print:mt-4">
+            <div className="relative ml-16 print:ml-10  w-full">
+              <div className="absolute z-10 -top-2 -left-4 bg-pink-500 text-white w-full pl-2 py-1 rounded-lg border-4 border-pink-500 uppercase font-semibold text-nowrap text-center print:w-[350px]">
                 Resultado Financeiro
               </div>
-              <div className="absolute border-4  border-pink-500 rounded-md p-6  bg-white w-[875px] h-[330px]
-              print:w-[425px] print:h-[115px] print:p-3">
+              <div className="absolute border-4  border-pink-500 rounded-lg p-6  bg-white w-[875px] h-[330px]
+              print:w-[492px] print:h-[200px] print:p-3">
                 <p className="py-2">teste</p>
               </div>
             </div>
@@ -118,85 +118,91 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
         </div>
 
         <div className="FLUXO DE NEGOCIO w-2/3 ">
-          <div className="relative ml-1 mt-16 print:mt-12 w-full">
-            <p className="font-bold text-pink-500 absolute -top-8 left-1/3 transform transform-x-1/2">FLUXO DE NEGOCIO</p>
-            <div className="absolute -top-2 -left-4 bg-pink-500 text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500 uppercase font-semibold text-nowrap">
+          <div className="relative ml-1 mt-16 print:mt-9 w-full">
+            <p className="font-bold text-pink-500 absolute -top-7 left-1/3 transform transform-x-1/2">FLUXO DE NEGÓCIO</p>
+            <div className="absolute -top-2 -left-4 bg-pink-500 text-white w-[290px]  pl-2 py-1 rounded-lg border-4 border-pink-500 uppercase font-semibold text-nowrap print:w-[220px]">
               Oportunidade de mercado
             </div>
-            <div id="oportunidadeMercado" className="oportunidadeMercadoDot border-y-4 border-l-8 border-pink-500 p-6  h-26 bg-white" >
+            <div id="oportunidadeMercado" className="oportunidadeMercadoDot border-y-4 border-l-8 border-pink-500 
+            p-6 print:p-4 h-26 print:h-16 bg-white" >
               <p className="py-2">teste</p>
             </div>
           </div>
 
-          <div className="relative ml-1 mt-4  w-full">
-            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500">
+          <div className="relative ml-1 mt-4 print:mt-3 w-full">
+            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-lg border-4 border-pink-500 print:w-[220px]">
               Custos
             </div>
-            <div id="custosq2" className="custosq2Dot border-y-4 border-l-8 border-pink-500  p-6  h-26 bg-white">
+            <div id="custosq2" className="custosq2Dot border-y-4 border-l-8 border-pink-500  p-6 print:p-4 h-24' 
+            bg-white print:h-[80px]">
               <p className="py-2">teste</p>
             </div>
           </div>
 
           <div className="relative ml-1 mt-4  w-full">
-            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-md border-4 border-pink-500">
+            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-lg border-4 border-pink-500 print:w-[220px]">
               Proposta de valor
             </div>
-            <div id="propostaValor" className="propostaValorDot border-y-4 border-l-8 border-pink-500  p-6  h-52 bg-white">
+            <div id="propostaValor" className="propostaValorDot border-y-4 border-l-8 border-pink-500  p-6 print:p-4 
+            h-52 print:h-[165px] bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
 
           <div className="relative ml-1 mt-4">
-            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px] pl-2 py-1 rounded-md border-4 border-pink-500">
+            <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px] pl-2 py-1 rounded-lg border-4 border-pink-500 print:w-[220px]">
               Custos
             </div>
-            <div id="custosq3Arrow" className="border-4 border-l-8 border-pink-500 rounded-md p-6 w-11/12 h-26 bg-white">
+            <div id="custosq3Arrow" className="border-4 border-l-8 border-pink-500 rounded-lg p-6 print:p-4 w-11/12 
+            h-26 bg-white print:h-[90px]">
               <p className="py-2">teste</p>
             </div>
           </div>
 
         </div>
 
-        <div className="CONTEXTO E PROBLEMA w-full pr-14">
-          <div className="relative ml-1 mt-16 print:mt-12 w-full">
-            <p className="font-bold text-[#6C4796] absolute -top-8 left-1/3 transform transform-x-1/2">TEORIA DE MUDANÇA</p>
-            <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap">
+        <div className="CONTEXTO E PROBLEMA w-full pr-14 print:pr-8">
+          <div className="relative ml-1 mt-16 print:mt-9 w-full">
+            <p className="font-bold text-[#6C4796] absolute -top-7 left-1/3 transform transform-x-1/2">TEORIA DE MUDANÇA</p>
+            <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-lg border-4 border-[#6C4796] uppercase font-semibold text-nowrap print:w-[220px]">
               Contexto e problema
             </div>
-            <div id="contextoProblema" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+            <div id="contextoProblema" className="border-4 border-l-8 border-[#6C4796] rounded-lg p-6 h-26 bg-white 
+            print:h-16">
               <p className="py-2">teste</p>
             </div>
           </div>
 
-          <div className="relative ml-1 mt-4  w-full">
-            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+          <div className="relative ml-1 mt-4 print:mt-3  w-full">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-lg border-4 border-[#6C4796] print:w-[220px]">
               Público / Foco do Impacto
             </div>
-            <div id="publicoFoco" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-26 bg-white">
+            <div id="publicoFoco" className="border-4 border-l-8 border-[#6C4796] rounded-lg p-6  h-26 bg-white 
+            print:h-[80px]">
               <p className="py-2">teste</p>
             </div>
           </div>
 
           <div className="relative ml-1 mt-4  w-full">
-            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px]  pl-2 py-1 rounded-lg border-4 border-[#6C4796] print:w-[220px]">
               Intervenções (estratégias)
             </div>
-            <div id="intervencoesEstrategias" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6  h-52 bg-white">
+            <div id="intervencoesEstrategias" className="border-4 border-l-8 border-[#6C4796] rounded-lg p-6  h-52 bg-white print:h-[165px]">
               <p className="py-2">teste</p>
             </div>
           </div>
 
           <div className="relative ml-1 mt-4">
-            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-lg border-4 border-[#6C4796] print:w-[220px]">
               Saídas / Outputs
             </div>
-            <div id="saidasOutputs" className="border-4 border-l-8 border-[#6C4796] rounded-md p-6 w-full h-26 bg-white">
+            <div id="saidasOutputs" className="border-4 border-l-8 border-[#6C4796] rounded-lg p-6 w-full h-26 bg-white">
               <p className="py-2">teste</p>
             </div>
           </div>
 
           <div className="relative ml-1 mt-8">
-            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-lg border-4 border-[#6C4796] print:w-[220px]">
               Resultados Curto Prazo
             </div>
             <div className="border-x-4 border-t-4 border-l-8 border-[#6C4796] rounded-t-md p-6 w-full h-26 bg-white">
@@ -205,7 +211,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
           </div>
 
           <div className="relative ml-1 mt-0">
-            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-md border-4 border-[#6C4796]">
+            <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-lg border-4 border-[#6C4796] print:w-[220px]">
               Resultados Médio Prazo
             </div>
             <div id="resultadosCurtoPrazo" className="border-x-4 border-b-4 border-l-8 border-[#6C4796] rounded-b-md p-6 w-full h-26 bg-white"
@@ -219,16 +225,16 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
           </div>
 
           <div className="relative ml-1 mt-8 mb-4 w-full">
-            <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-md border-4 border-[#6C4796] uppercase font-semibold text-nowrap text-center">
+            <div className="absolute -top-2 -left-4 bg-[#6C4796] text-white w-[290px]  pl-2 py-1 rounded-lg border-4 border-[#6C4796] uppercase font-semibold text-nowrap text-center print:w-[220px]">
               Visão de impacto
             </div>
-            <div className="border-4  border-[#6C4796] rounded-md p-6  h-28 bg-white max-w-full">
+            <div className="border-4  border-[#6C4796] rounded-lg p-6  h-28 bg-white max-w-full">
               <p className="py-2">teste</p>
             </div>
           </div>
         </div>
       </div>
-      <div className="relativ h-40">
+      <div className="relative h-28">
         <img src="/src/assets/footer.svg" alt="Header" className="object-cover absolute" />
       </div>
     </div>

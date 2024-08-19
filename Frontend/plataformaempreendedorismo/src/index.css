@@ -102,6 +102,13 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   z-index: 50;
 }
 
+@media print {
+  #equipeq1::after {
+    height: 15px;
+    bottom: -8px;
+  }
+}
+
 
 #parceiros::after {
   content: '';
@@ -123,6 +130,13 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   bottom: -8px;
   left: 0;
   z-index: 50;
+}
+
+@media print {
+  #atividadeChave::after {
+    height: 15px;
+    bottom: -3px;
+  }
 }
 
 #oportunidadeMercado::after {
@@ -239,7 +253,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 #saidasOutputs::after {
   content: '';
   width: 8px;
-  height: 30px;
+  height: 35px;
   background: #6C4796;
   position: absolute;
   bottom: -26px;
@@ -333,3 +347,25 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 }
 
 
+
+/* @media print {
+  #equipeq1::after,
+  #parceiros::after,
+  #atividadeChave::after,
+  #oportunidadeMercado::after,
+  #equipeq1::after,
+  #parceiros::after,
+  #atividadeChave::after,
+  #oportunidadeMercado::after,
+  #propostaValor::after,
+  #contextoProblema::after,
+  #publicoFoco::after,
+  #intervencoesEstrategias::after,
+  #saidasOutputs::after,
+  #resultadosCurtoPrazo::after,
+  #custosq2Arrow::after,
+  #custosq3Arrow::after,
+  #custosq2::after {
+    width: 3px;
+  }
+} */

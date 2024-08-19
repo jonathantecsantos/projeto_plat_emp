@@ -104,8 +104,9 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 
 @media print {
   #equipeq1::after {
-    height: 15px;
+    height: 125px;
     bottom: -8px;
+    border-radius: 1px;
   }
 }
 
@@ -121,6 +122,14 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   z-index: 50;
 }
 
+@media print {
+  #parceiros::after{
+    height: 15px;
+    bottom: -8px;
+    border-radius: 1px;
+  }
+}
+
 #atividadeChave::after {
   content: '';
   width: 8px;
@@ -134,8 +143,9 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 
 @media print {
   #atividadeChave::after {
-    height: 15px;
+    height: 12px;
     bottom: -3px;
+    border-radius: 1px;
   }
 }
 
@@ -228,6 +238,14 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   z-index: 50;
 }
 
+@media print {
+  #contextoProblema::after{
+    height: 55px;
+    bottom: -8px;
+    border-radius: 1px;
+  }
+}
+
 #publicoFoco::after {
   content: '';
   width: 8px;
@@ -238,6 +256,15 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   left: 0;
   z-index: 50;
 }
+
+@media print {
+  #publicoFoco::after{
+    height: 55px;
+    bottom: -8px;
+    border-radius: 1px;
+  }
+}
+
 
 #intervencoesEstrategias::after {
   content: '';
@@ -250,6 +277,16 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   z-index: 50;
 }
 
+@media print {
+  #intervencoesEstrategias::after{
+    height: 126px;
+    bottom: -8px;
+    /* border-radius: 1px; */
+  }
+}
+
+
+
 #saidasOutputs::after {
   content: '';
   width: 8px;
@@ -261,9 +298,16 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   z-index: 50;
 }
 
+@media print {
+  #saidasOutputs::after {
+    height: 70px;
+    bottom: -10px;
+    border-radius: 1px;
+  }
+}
+
 
 /* Arrow Styles */
-
 #resultadosCurtoPrazo::after {
   content: '';
   width: 8px;
@@ -274,6 +318,12 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   left: 0;
   z-index: 50;
 } 
+
+@media print {
+  #resultadosCurtoPrazo::after{
+  height: 50px;
+  }
+}
 
 #resultadosCurtoPrazo::before {
     content: '';
@@ -321,6 +371,13 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   z-index: 50;
 } 
 
+@media print {
+  #custosq2Arrow::after,
+  #custosq3Arrow::after{
+    height: 0px;
+  }
+}
+
 #custosq3Arrow::before {
     content: '';
     width: 40px;
@@ -333,6 +390,15 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     z-index: 51;
 }
 
+@media print {
+  #custosq2Arrow::before,
+  #custosq3Arrow::before{
+    content: '';
+    width:40px;
+    height: 20px;
+    bottom: -8px;
+  }
+}
 
 #recursosArrow::before {
     content: '';
@@ -345,6 +411,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
     z-index: 51;
 }
+
 
 
 

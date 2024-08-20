@@ -8,9 +8,9 @@ export interface TeacherCard {
 
 export const TeacherCard = ({ teacher }: TeacherCard): ReactNode => (
 
-  <div key={teacher?.id} className={`p-4 border rounded-lg shadow-md w-fit min-h-28 relative bg-[#3C4775] text-[#cecece]`}>
-    <div className='w-fit'>
-      <p className={`text-lg font-bold capitalize text-white mr-8`}>
+  <div key={teacher?.id} className={`p-4 border rounded-lg shadow-md w-fit min-h-20 relative bg-[#5741A6] text-[#cecece]`}>
+    <div className='min-w-56 w-fit'>
+      <p className={`text-lg font-bold capitalize text-white mr-2`}>
         {teacher?.nome.toLowerCase()}
       </p>
       <ActionMenu

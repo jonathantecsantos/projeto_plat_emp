@@ -34,6 +34,31 @@
   }
 }
 
+
+ /* @layer components {
+  @media print {
+    .print-container {
+      @apply w-full h-full;
+      transform-origin: top left;
+      page-break-inside: avoid;
+    }
+
+    .print-hidden {
+      @apply hidden;
+    }
+
+    body {
+      -webkit-print-color-adjust: exact; 
+    }
+
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+  }
+ }  */
+
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -64,3 +89,426 @@ div.overflow-x-auto::-webkit-scrollbar {
 div.overflow-x-auto::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2); /* Cor da alça da barra de rolagem */
 }
+
+/* BANNER STYLES */
+#equipeq1::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #FF771B;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #equipeq1::after {
+    height: 125px;
+    bottom: -6px;
+    width: 6px;
+    border-radius: 1px;
+  }
+}
+
+
+#parceiros::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #FF771B;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #parceiros::after{
+    height: 135px;
+    bottom: -6px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+#atividadeChave::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #FF771B;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #atividadeChave::after {
+    height: 12px;
+    bottom: -3px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+#oportunidadeMercado::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #ec4899;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #oportunidadeMercado::after {
+    height: 12px;
+    bottom: -5px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+
+.oportunidadeMercadoDot::before {
+  content: '';
+  width: 2px;
+  /* marginLeft: 250px; */
+  height: calc(100% - 20px); /* Adjust height to leave space at top and bottom */
+  background: linear-gradient(to bottom, 
+              #ec4899 50%, 
+              rgba(0,0,0,0) 0%) repeat-y;
+  background-size: 100% 10px;
+  position: absolute;
+  top: 10px; /* Adjust according to your requirement */
+  right: 8px;
+}
+
+#custosq2::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #ec4899;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #custosq2::after {
+    height: 12px;
+    bottom: -5px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+
+.custosq2Dot::before {
+  content: '';
+  width: 2px;
+  /* marginLeft: 250px; */
+  height: calc(100% - 20px); /* Adjust height to leave space at top and bottom */
+  background: linear-gradient(to bottom, 
+              #ec4899 50%, 
+              rgba(0,0,0,0) 0%) repeat-y;
+  background-size: 100% 10px;
+  position: absolute;
+  top: 10px; /* Adjust according to your requirement */
+  /* left: 0; */
+  right: 8px;
+}
+
+#propostaValor::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #ec4899;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #propostaValor::after {
+    height: 12px;
+    bottom: -10px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+.propostaValorDot::before {
+  content: '';
+  width: 2px;
+  /* marginLeft: 250px; */
+  height: calc(100% - 20px); /* Adjust height to leave space at top and bottom */
+  background: linear-gradient(to bottom, 
+              #ec4899 50%, 
+              rgba(0,0,0,0) 0%) repeat-y;
+  background-size: 100% 10px;
+  position: absolute;
+  top: 10px; /* Adjust according to your requirement */
+  /* left: 0; */
+  right: 8px;
+}
+
+
+#contextoProblema::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #6C4796;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #contextoProblema::after{
+    height: 55px;
+    bottom: -6px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+#publicoFoco::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #6C4796;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #publicoFoco::after{
+    height: 55px;
+    bottom: -6px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+
+#intervencoesEstrategias::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #6C4796;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #intervencoesEstrategias::after{
+    height: 126px;
+    bottom: -8px;
+    width: 6px;
+    /* border-radius: 1px; */
+  }
+}
+
+
+
+#saidasOutputs::after {
+  content: '';
+  width: 8px;
+  height: 35px;
+  background: #6C4796;
+  position: absolute;
+  bottom: -26px;
+  left: 0;
+  z-index: 50;
+}
+
+@media print {
+  #saidasOutputs::after {
+    height: 70px;
+    bottom: -10px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+
+/* Arrow Styles */
+#resultadosCurtoPrazo::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #6C4796;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+} 
+
+@media print {
+  #resultadosCurtoPrazo::after{
+    height: 0px;
+  }
+}
+
+#resultadosCurtoPrazo::before {
+    content: '';
+    width: 40px;
+    height: 20px; /* Ajuste conforme necessário */
+    background: #6C4796;
+    position: absolute;
+    bottom: -25px;
+    left: -15px;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 51;
+}
+
+@media print {
+  /* #recursosArrow::before,
+  #custosq2Arrow::before, */
+  #resultadosCurtoPrazo::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -18px;
+    left: -12px;
+    /* width: 6px; */
+  }
+}
+
+@media print {
+  #resultadosCurtoPrazo::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -5px;
+    left: -12px;
+    /* width: 6px; */
+  }
+}
+
+#custosq2Arrow::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #f97316;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+} 
+
+#custosq2Arrow::before {
+    content: '';
+    width: 40px;
+    height: 20px; /* Ajuste conforme necessário */
+    background: #f97316;
+    position: absolute;
+    bottom: -25px;
+    left: -15px;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 51;
+}
+
+#custosq3Arrow::after {
+  content: '';
+  width: 8px;
+  height: 30px;
+  background: #ec4899;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  z-index: 50;
+} 
+
+@media print {
+  #custosq2Arrow::after,
+  #custosq3Arrow::after{
+    height: 72px;
+    width: 6px;
+  }
+}
+
+#custosq3Arrow::before {
+    content: '';
+    width: 40px;
+    height: 20px; /* Ajuste conforme necessário */
+    background: #ec4899;
+    position: absolute;
+    bottom: -25px;
+    left: -15px;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 51;
+}
+
+
+#recursosArrow::before {
+    content: '';
+    width: 40px;
+    height: 20px; /* Ajuste conforme necessário */
+    background: #f97316;
+    position: absolute;
+    bottom: -8px;
+    left: -15px;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 51;
+}
+
+@media print {
+  #recursosArrow::before,
+  #custosq2Arrow::before,
+  #custosq3Arrow::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -18px;
+    left: -12px;
+    /* width: 6px; */
+  }
+}
+
+@media print {
+  #recursosArrow::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -5px;
+    left: -12px;
+    /* width: 6px; */
+  }
+}
+
+
+
+
+/* @media print {
+  #equipeq1::after,
+  #parceiros::after,
+  #atividadeChave::after,
+  #oportunidadeMercado::after,
+  #equipeq1::after,
+  #parceiros::after,
+  #atividadeChave::after,
+  #oportunidadeMercado::after,
+  #propostaValor::after,
+  #contextoProblema::after,
+  #publicoFoco::after,
+  #intervencoesEstrategias::after,
+  #saidasOutputs::after,
+  #resultadosCurtoPrazo::after,
+  #custosq2Arrow::after,
+  #custosq3Arrow::after,
+  #custosq2::after {
+    width: 3px;
+  }
+} */

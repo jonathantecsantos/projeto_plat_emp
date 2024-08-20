@@ -17,7 +17,7 @@ export interface TableComponentProps<T> extends TableBaseComponentProps<T> {
 const StyledTableTitleCell = styled(TableCell)(({ }) => ({
   fontWeight: 'bold',
   whiteSpace: 'nowrap',
-  backgroundColor: '#152259',
+  backgroundColor: '#3B1E86',
   color: '#ffffff',
   padding: 5,
 }));
@@ -92,8 +92,8 @@ export const TableComponent = <T,>(props: TableComponentProps<T>) => {
             {items.map((item: T, idx: number) => {
               return (
                 <StyledTableRow hover key={idx}
-                  className='hover:bg-[#509CDB] hover:text-white hover:from-neutral-900 
-                  even:bg-[#EBF6FF] 	lowercase'
+                  className='hover:bg-[hsl(253,44%,45%)] hover:text-white hover:from-neutral-900 
+                  even:bg-[hsl(253,44%,95%)] 	lowercase'
                   style={{
                     width: '100%',
                     cursor: props.onClickRow ? 'pointer' : 'default',

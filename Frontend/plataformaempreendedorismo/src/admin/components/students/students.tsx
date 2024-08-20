@@ -10,6 +10,7 @@ import { StudentsResponse } from '../../../model/student'
 import { AdminHeader } from '../common/adminHeader'
 import { TableComponent } from '../table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
+import CheckIcon from '@mui/icons-material/Check'
 
 
 export const Students = () => {
@@ -102,15 +103,15 @@ export const Students = () => {
         <div className="overflow-x-auto p-4">
           <TableComponent
             colums={[
-              'ID',
+              // 'ID',
               'CPF',
               'Nome',
               'Email',
               'Turma',
               'Líder',
               'Vice Líder',
-              'ID Equipe',
-              'Nome Equipe',
+              // 'ID Equipe',
+              'Equipe',
               // 'ID Obs',
               ''
             ]}
@@ -119,16 +120,14 @@ export const Students = () => {
             bodyList={filteredStudents!}
             bodyRowBuilder={(student: StudentsResponse) => (
               <>
-                <td className="px-4 py-2">{student.id}</td>
+                {/* <td className="px-4 py-2">{student.id}</td> */}
                 <td className="px-4 py-2">{student.cpf}</td>
                 <td className="px-4 py-2 capitalize">{student.nome.toLowerCase()}</td>
                 <td className="px-4 py-2">{student.email}</td>
                 <td className="px-4 py-2 uppercase">{student.turma}</td>
-                <td className="px-4 py-2">{student.isLider ? 'Sim' : 'Não'}</td>
-                <td className="px-4 py-2">{student.isViceLider ? 'Sim' : 'Não'}</td>
-                <td className="px-4 py-2">{student.equipeRecord.id}</td>
+                <td className="px-4 py-2">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
+                <td className="px-4 py-2">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
                 <td className="px-4 py-2 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
-                {/* <td className="px-4 py-2">{student}</td> */}
                 <td className="">
                   <IconButton
                     aria-controls="long-menu"

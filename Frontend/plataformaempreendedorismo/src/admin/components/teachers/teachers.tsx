@@ -100,12 +100,10 @@ export const TeachersComponent = () => {
         <div className="overflow-x-auto p-4">
           <TableComponent
             colums={[
-              'ID',
               'CPF',
               'Nome',
               'Email',
-              'Equipe ID',
-              'Equipe Nome',
+              'Equipe',
               ''
             ]}
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
@@ -113,11 +111,9 @@ export const TeachersComponent = () => {
             bodyList={filteredStudents!}
             bodyRowBuilder={(teacher: TeachersResponse) => (
               <>
-                <td className="px-4 py-2">{teacher.id}</td>
                 <td className="px-4 py-2">{teacher.cpf}</td>
                 <td className="px-4 py-2 capitalize">{teacher.nome.toLowerCase()}</td>
                 <td className="px-4 py-2">{teacher.email}</td>
-                <td className="px-4 py-2">{teacher.equipeRecord.id}</td>
                 <td className="px-4 py-2 capitalize">{teacher.equipeRecord.nome.toLowerCase()}</td>
                 <td className="">
                   <IconButton

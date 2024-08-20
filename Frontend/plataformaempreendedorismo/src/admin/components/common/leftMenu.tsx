@@ -13,7 +13,6 @@ import HowToRegIcon from '@mui/icons-material/HowToReg'
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 import MicIcon from '@mui/icons-material/Mic'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import SchoolIcon from '@mui/icons-material/School'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
@@ -150,19 +149,19 @@ const menuItems: MenuItemType[] = [
   {
     outsideName: 'Configurações',
     outsideIcon: <SettingsIcon />,
-    subItens: true,
-    insideItems: [
-      {
-        insideName: 'Adicionar Aluno',
-        insideIcon: <PersonAddIcon />,
-        routeName: `${RoutesNames.student}`,
-      },
-      {
-        insideName: 'Adicionar Professor',
-        insideIcon: <PersonAddIcon />,
-        routeName: `${RoutesNames.teacher}`,
-      }
-    ]
+    subItens: false,
+    // insideItems: [
+    //   {
+    //     insideName: 'Adicionar Aluno',
+    //     insideIcon: <PersonAddIcon />,
+    //     routeName: `${RoutesNames.student}`,
+    //   },
+    //   {
+    //     insideName: 'Adicionar Professor',
+    //     insideIcon: <PersonAddIcon />,
+    //     routeName: `${RoutesNames.teacher}`,
+    //   }
+    // ]
   },
 ]
 const Item = (props: ItemProps) => {
@@ -182,26 +181,29 @@ const Item = (props: ItemProps) => {
   }
 
   const isActive = (route: string) => {
-    const regex = new RegExp(`^${route}(/\\d+)?$`)
+    //controle de rotas nao configuradas
+    if(!route) return
+    // const regex = new RegExp(`^${route}(/\\d+)?$`) serve para considerar /:id 
+    const regex = new RegExp(`^${route}(/.*)?$`)
     return regex.test(location.pathname)
   }
 
 
   const isOpen = open || isActive(props.routeName || '') || props.insideItems?.some(item => isActive(item.routeName))
 
-  const listItemButtonClass = `p-4 ${isOpen ? 'bg-[#EBF6FF] text-[#242424]' : 'hover:bg-[#509CDB] hover:text-white'}`
+  const listItemButtonClass = `p-4 ${isOpen ? 'bg-[#3C14A4] text-[#fefefe]' : 'hover:bg-[#9F8FD9] hover:text-white'}`
 
   return (
     <div className="">
       <ListItemButton className={listItemButtonClass} onClick={handleClick}>
-        <ListItemIcon sx={{ color: isOpen ? '' : 'inherit' }}>{props.outsideIcon}</ListItemIcon>
+        <ListItemIcon className={`${isOpen ? 'text-white' : 'text-inherit'}`}>{props.outsideIcon}</ListItemIcon>
         <ListItemText primary={props.outsideName} />
         {props.subItens && (isOpen ? <ExpandLess /> : <ExpandMore />)}
       </ListItemButton>
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {props.insideItems?.map((item, index) => {
-            const insideItemClass = `p-2 px-6 ${isActive(item.routeName) ? 'bg-[#509CDB] text-white' : 'hover:bg-[#509CDB] hover:text-white'}`
+            const insideItemClass = `p-2 px-6 ${isActive(item.routeName) ? 'bg-[#9F8FD9] text-white' : 'hover:bg-[#9F8FD9] hover:text-white'}`
             return (
               <div key={`${item.routeName}-${index}`}>
                 <ListItemButton

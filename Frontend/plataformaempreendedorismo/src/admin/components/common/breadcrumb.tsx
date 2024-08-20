@@ -1,7 +1,7 @@
 // BreadcrumbComponent.tsx
 import { styled } from '@mui/material'
 import { ArrayUtils } from 'essencials'
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import { IoMdHome as HomeIcon } from 'react-icons/io'
 import { MdOutlineArrowForwardIos as DividerIcon } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'
@@ -9,9 +9,9 @@ import useReactRouterBreadcrumbs from 'use-react-router-breadcrumbs'
 import { RoutesNames } from '../../../globals'
 
 // STYLE
-const breadcrumbAlignItem: React.CSSProperties = { display: 'flex', alignSelf: 'center' }
-const breadcrumbLinkDecoration: React.CSSProperties = { textDecoration: 'none', color: '#166CC8' }
-const colorUnlink: React.CSSProperties = { color: '#606060' }
+const breadcrumbAlignItem: CSSProperties = { display: 'flex', alignSelf: 'center' }
+const breadcrumbLinkDecoration: CSSProperties = { textDecoration: 'none', color: '#3C14A4' }
+const colorUnlink: CSSProperties = { color: '#606060' }
 
 const BreadcrumbWrapperStyled = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -77,7 +77,7 @@ export const BreadcrumbComponent = (props: {
           {/* HOME */}
           {args.match.pathname == RoutesNames.home ?
             <Link style={breadcrumbAlignItem} to={args.match.pathname}>
-              <HomeIcon style={{ ...breadcrumbAlignItem, color: '#166CC8', marginRight: 5 }} />
+              <HomeIcon style={{ ...breadcrumbAlignItem, color: '#3C14A4', marginRight: 5 }} />
             </Link> : null}
 
           <span style={{ ...breadcrumbAlignItem }}>

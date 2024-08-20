@@ -105,7 +105,8 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 @media print {
   #equipeq1::after {
     height: 125px;
-    bottom: -8px;
+    bottom: -6px;
+    width: 6px;
     border-radius: 1px;
   }
 }
@@ -124,9 +125,10 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 
 @media print {
   #parceiros::after{
-    height: 15px;
-    bottom: -8px;
+    height: 135px;
+    bottom: -6px;
     border-radius: 1px;
+    width: 6px;
   }
 }
 
@@ -146,6 +148,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     height: 12px;
     bottom: -3px;
     border-radius: 1px;
+    width: 6px;
   }
 }
 
@@ -159,6 +162,16 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   left: 0;
   z-index: 50;
 }
+
+@media print {
+  #oportunidadeMercado::after {
+    height: 12px;
+    bottom: -5px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
 
 .oportunidadeMercadoDot::before {
   content: '';
@@ -185,6 +198,16 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   z-index: 50;
 }
 
+@media print {
+  #custosq2::after {
+    height: 12px;
+    bottom: -5px;
+    border-radius: 1px;
+    width: 6px;
+  }
+}
+
+
 .custosq2Dot::before {
   content: '';
   width: 2px;
@@ -209,6 +232,15 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   bottom: -8px;
   left: 0;
   z-index: 50;
+}
+
+@media print {
+  #propostaValor::after {
+    height: 12px;
+    bottom: -10px;
+    border-radius: 1px;
+    width: 6px;
+  }
 }
 
 .propostaValorDot::before {
@@ -241,8 +273,9 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 @media print {
   #contextoProblema::after{
     height: 55px;
-    bottom: -8px;
+    bottom: -6px;
     border-radius: 1px;
+    width: 6px;
   }
 }
 
@@ -260,8 +293,9 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 @media print {
   #publicoFoco::after{
     height: 55px;
-    bottom: -8px;
+    bottom: -6px;
     border-radius: 1px;
+    width: 6px;
   }
 }
 
@@ -281,6 +315,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   #intervencoesEstrategias::after{
     height: 126px;
     bottom: -8px;
+    width: 6px;
     /* border-radius: 1px; */
   }
 }
@@ -303,6 +338,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     height: 70px;
     bottom: -10px;
     border-radius: 1px;
+    width: 6px;
   }
 }
 
@@ -321,7 +357,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 
 @media print {
   #resultadosCurtoPrazo::after{
-  height: 50px;
+    height: 0px;
   }
 }
 
@@ -335,6 +371,30 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     left: -15px;
     clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
     z-index: 51;
+}
+
+@media print {
+  /* #recursosArrow::before,
+  #custosq2Arrow::before, */
+  #resultadosCurtoPrazo::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -18px;
+    left: -12px;
+    /* width: 6px; */
+  }
+}
+
+@media print {
+  #resultadosCurtoPrazo::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -5px;
+    left: -12px;
+    /* width: 6px; */
+  }
 }
 
 #custosq2Arrow::after {
@@ -374,7 +434,8 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
 @media print {
   #custosq2Arrow::after,
   #custosq3Arrow::after{
-    height: 0px;
+    height: 72px;
+    width: 6px;
   }
 }
 
@@ -390,15 +451,6 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     z-index: 51;
 }
 
-@media print {
-  #custosq2Arrow::before,
-  #custosq3Arrow::before{
-    content: '';
-    width:40px;
-    height: 20px;
-    bottom: -8px;
-  }
-}
 
 #recursosArrow::before {
     content: '';
@@ -410,6 +462,30 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     left: -15px;
     clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
     z-index: 51;
+}
+
+@media print {
+  #recursosArrow::before,
+  #custosq2Arrow::before,
+  #custosq3Arrow::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -18px;
+    left: -12px;
+    /* width: 6px; */
+  }
+}
+
+@media print {
+  #recursosArrow::before{
+    content: '';
+    width:30px;
+    height: 15px;
+    bottom: -5px;
+    left: -12px;
+    /* width: 6px; */
+  }
 }
 
 

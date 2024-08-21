@@ -1,6 +1,8 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.CriterioAvaliacao;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.FormatoAvaliacao;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,10 +28,20 @@ public class AvaliacaoController {
     @Operation(summary = "Buscar Avaliações por Formato de Avaliação (DLJ, PITCH, SHARK_TANK, EXPO_DLEI", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Avaliador")
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados da Avaliação")
     })
     @GetMapping(value = "/{idFormato}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CriterioAvaliacao> buscaAvaliacaoPorFormato(@PathVariable Long idFormato){
         return avaliacaoService.buscarAvaliacao(idFormato);
+    }
+
+    @Operation(summary = "Busca Formatos de Avaliação (DLJ, PITCH, SHARK_TANK, EXPO_DLEI", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados da Avaliação")
+    })
+    @GetMapping(value = "/formatos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<FormatoAvaliacaoRecord> buscaFormatos(){
+        return avaliacaoService.buscarFormatosAvaliacao();
     }
 }

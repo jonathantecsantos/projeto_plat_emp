@@ -175,46 +175,70 @@ CREATE TABLE criterio_avaliacao (
   PRIMARY KEY (id)
 );
 
-INSERT INTO db_empreendedorismo.criterio_avaliacao (descricao,nota_maxima_criterio) VALUES
-	 ('DLJ',100.0),
-	 ('Criatividade',50.0),
-	 ('Comunicação',50.0),
-	 ('Modelo de Negócio no Pitch',100.0),
-	 ('Problema/Inovação',100.0),
-	 ('Mercado',100.0),
-	 ('Impacto Social e Ambiental',200.0),
-	 ('Modelo de negócio',100.0),
-	 ('Estágio atual da Solução/Protótipo',200.0),
-	 ('Validação',100.0);
+CREATE TABLE subcriterio_avaliacao (
+  id int NOT NULL AUTO_INCREMENT,
+  descricao varchar(500) NOT NULL,
+  nota_maxima double DEFAULT NULL,
+  id_criterio_avaliacao int DEFAULT NULL,
+  valor_padrao tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY criterio_fk1 (id_criterio_avaliacao),
+  CONSTRAINT criterio_fk2 FOREIGN KEY (id_criterio_avaliacao) REFERENCES criterio_avaliacao (id)
+);
 
-INSERT INTO db_empreendedorismo.subcriterio_avaliacao (descricao,nota_maxima,id_formato_avaliacao,id_criterio_avaliacao,valor_padrao) VALUES
-	 ('O time fez inscrição no DLJ SEBRAE 2024 com a ideia / proposta do DLEI 2024, sendo Líder + 04 Integrantes?',25.0,1,1,1),
-	 ('O time fez inscrição no DLJ SEBRAE 2023 com a ideia / proposta do DLEI 2024, sendo Líder + 04 Integrantes?',25.0,1,1,0),
-	 ('A classificação do Time do DLEI 2024 está entre os 24 melhores Times do Estado da Paraíba no DLJ SEBRAE 2024?',25.0,1,1,0),
-	 ('O Time do DLEI 2024 foi classificado da Etapa Estadual para a Regional do DLJ SEBRAE 2024?',50.0,1,1,0),
-	 ('O pitch de vídeo apresenta com clareza o problema/solução/protótipo de forma criativa?',50.0,2,2,NULL),
-	 ('A comunicação do negócio no pitch de vídeo foi clara e assertiva?',50.0,2,3,NULL),
-	 ('O problema identificado foi relevante e está bem definido no pitch de vídeo?',20.0,2,4,NULL),
-	 ('A solução encontrada para atacar ou resolver o problema está bem posta no pitch de vídeo?',20.0,2,4,NULL),
-	 ('Os clientes da solução estão bem identificados e foram exemplificados no pitch de vídeo?',20.0,2,4,NULL),
-	 ('As fontes de receita levantadas estão bem demostradas no pitch de vídeo?',20.0,2,4,NULL);
-INSERT INTO db_empreendedorismo.subcriterio_avaliacao (descricao,nota_maxima,id_formato_avaliacao,id_criterio_avaliacao,valor_padrao) VALUES
-	 ('Os impactos socioambientais positivos estão bem explicitados no pitch de vídeo?',20.0,2,4,NULL),
-	 ('O produto/serviço do negócio ataca um problema relevante?',50.0,3,5,NULL),
-	 ('Representa uma inovação promissora em relação aos concorrentes?',50.0,3,5,NULL),
-	 ('O segmento de mercado e a clientela alvo estão bem definidos?',30.0,3,6,NULL),
-	 ('O produto/serviço do negócio é promissor para esse mercado?',30.0,3,6,NULL),
-	 ('O produto/serviço do negócio já está gerando receitas com vendas?',40.0,3,6,NULL),
-	 ('O negócio causa impactos sociais positivos com vistas às desigualdades sociais?',100.0,3,7,NULL),
-	 ('O negócio traz impactos positivos e benéficios para o meio ambiente e os ecossistemas?',100.0,3,7,NULL),
-	 ('O modelo de negócio é viável?',25.0,4,8,NULL),
-	 ('O modelo de negócio é inovador?',25.0,4,8,NULL);
-INSERT INTO db_empreendedorismo.subcriterio_avaliacao (descricao,nota_maxima,id_formato_avaliacao,id_criterio_avaliacao,valor_padrao) VALUES
-	 ('O modelo de negócio é escalável?',25.0,4,8,NULL),
-	 ('As estruturas de custos e de receitas estão bem definidas no modelo de negócio?',25.0,4,8,NULL),
-	 ('O produto/serviço tem viabilidade técnica e econômica? É exequível?',50.0,4,9,NULL),
-	 ('A versão atual do protótipo desenvolvido já está próxima de um produto/serviço vendável?',50.0,4,9,NULL),
-	 ('A versão atual já consegue demonstrar o potencial do negócio?',50.0,4,9,NULL),
-	 ('A qualidade do protótipo consegue mostrar as funcionalidades reais do produto/serviço?',50.0,4,9,NULL),
-	 ('Os indícios de validação que foram apresentados demonstram que o produto/serviço é promissor?',50.0,4,10,NULL),
-	 ('O número de pessoas que já validou a versão atual do produto foi suficiente?',50.0,4,10,NULL);
+CREATE TABLE criterio_avaliacao (
+  id int NOT NULL AUTO_INCREMENT,
+  descricao varchar(255) DEFAULT NULL,
+  id_formato_avaliacao int DEFAULT NULL,
+  nota_maxima_criterio double DEFAULT NULL,
+  KEY tipo_avaliacao_fk1 (id_formato_avaliacao),
+  PRIMARY KEY (id),
+  CONSTRAINT tipo_avaliacao_fk1 FOREIGN KEY (id_formato_avaliacao) REFERENCES formato_avaliacao (id)
+);
+
+INSERT INTO db_empreendedorismo.criterio_avaliacao (descricao,id_formato_avaliacao,nota_maxima_criterio) VALUES
+	 ('DLJ',1,100.0),
+	 ('Criatividade',2,50.0),
+	 ('Comunicação',2,50.0),
+	 ('Modelo de Negócio no Pitch',2,100.0),
+	 ('Problema/Inovação',3,100.0),
+	 ('Mercado',3,100.0),
+	 ('Impacto Social e Ambiental',3,200.0),
+	 ('Modelo de negócio',4,100.0),
+	 ('Estágio atual da Solução/Protótipo',4,200.0),
+	 ('Validação',4,100.0);
+
+INSERT INTO db_empreendedorismo.subcriterio_avaliacao (descricao,nota_maxima,id_criterio_avaliacao,valor_padrao) VALUES
+	 ('O time fez inscrição no DLJ SEBRAE 2024 com a ideia / proposta do DLEI 2024, sendo Líder + 04 Integrantes?',25.0,1,1),
+	 ('O time fez inscrição no DLJ SEBRAE 2023 com a ideia / proposta do DLEI 2024, sendo Líder + 04 Integrantes?',25.0,1,0),
+	 ('A classificação do Time do DLEI 2024 está entre os 24 melhores Times do Estado da Paraíba no DLJ SEBRAE 2024?',25.0,1,0),
+	 ('O Time do DLEI 2024 foi classificado da Etapa Estadual para a Regional do DLJ SEBRAE 2024?',50.0,1,0),
+	 ('O pitch de vídeo apresenta com clareza o problema/solução/protótipo de forma criativa?',50.0,2,NULL),
+	 ('A comunicação do negócio no pitch de vídeo foi clara e assertiva?',50.0,3,NULL),
+	 ('O problema identificado foi relevante e está bem definido no pitch de vídeo?',20.0,4,NULL),
+	 ('A solução encontrada para atacar ou resolver o problema está bem posta no pitch de vídeo?',20.0,4,NULL),
+	 ('Os clientes da solução estão bem identificados e foram exemplificados no pitch de vídeo?',20.0,4,NULL),
+	 ('As fontes de receita levantadas estão bem demostradas no pitch de vídeo?',20.0,4,NULL);
+
+INSERT INTO db_empreendedorismo.subcriterio_avaliacao (descricao,nota_maxima,id_criterio_avaliacao,valor_padrao) VALUES
+	 ('Os impactos socioambientais positivos estão bem explicitados no pitch de vídeo?',20.0,4,NULL),
+	 ('O produto/serviço do negócio ataca um problema relevante?',50.0,5,NULL),
+	 ('Representa uma inovação promissora em relação aos concorrentes?',50.0,5,NULL),
+	 ('O segmento de mercado e a clientela alvo estão bem definidos?',30.0,6,NULL),
+	 ('O produto/serviço do negócio é promissor para esse mercado?',30.0,6,NULL),
+	 ('O produto/serviço do negócio já está gerando receitas com vendas?',40.0,6,NULL),
+	 ('O negócio causa impactos sociais positivos com vistas às desigualdades sociais?',100.0,7,NULL),
+	 ('O negócio traz impactos positivos e benéficios para o meio ambiente e os ecossistemas?',100.0,7,NULL),
+	 ('O modelo de negócio é viável?',25.0,8,NULL),
+	 ('O modelo de negócio é inovador?',25.0,8,NULL);
+
+INSERT INTO db_empreendedorismo.subcriterio_avaliacao (descricao,nota_maxima,id_criterio_avaliacao,valor_padrao) VALUES
+	 ('O modelo de negócio é escalável?',25.0,8,NULL),
+	 ('As estruturas de custos e de receitas estão bem definidas no modelo de negócio?',25.0,8,NULL),
+	 ('O produto/serviço tem viabilidade técnica e econômica? É exequível?',50.0,9,NULL),
+	 ('A versão atual do protótipo desenvolvido já está próxima de um produto/serviço vendável?',50.0,9,NULL),
+	 ('A versão atual já consegue demonstrar o potencial do negócio?',50.0,9,NULL),
+	 ('A qualidade do protótipo consegue mostrar as funcionalidades reais do produto/serviço?',50.0,9,NULL),
+	 ('Os indícios de validação que foram apresentados demonstram que o produto/serviço é promissor?',50.0,10,NULL),
+	 ('O número de pessoas que já validou a versão atual do produto foi suficiente?',50.0,10,NULL);
+

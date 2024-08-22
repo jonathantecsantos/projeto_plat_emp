@@ -7,26 +7,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity(name="formato_avaliacao")
+@Entity(name="subcriterio_avaliacao")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormatoAvaliacao {
-
+public class Subcriterio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String descricao;
 
-    @OneToMany(mappedBy = "formatoAvaliacao", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<CriterioAvaliacao> criterios = new ArrayList<>();
+    private Double notaMaxima;
 
     @JsonIgnore
-    @ManyToMany (mappedBy = "formatosAvaliacoes")
-    private List<Avaliador> avaliadores = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "id_criterio_avaliacao", referencedColumnName = "id")
+    private CriterioAvaliacao criterioAvaliacao;
+
+    private Boolean valorPadrao;
+
 }

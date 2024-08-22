@@ -11,7 +11,7 @@ export interface TeamsResponse {
 
 export interface Team extends TeamsResponse {
   banner: Banner
-  ods: Ods
+  odsList: Ods[]
 }
 
 export interface TeamIdResponse {

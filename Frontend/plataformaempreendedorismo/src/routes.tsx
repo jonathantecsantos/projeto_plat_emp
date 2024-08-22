@@ -15,6 +15,7 @@ import { TeamsPage } from './pages/teams'
 import { TeamPage } from './pages/team'
 import ProtectedRoute from './admin/components/common/protectedRoute'
 import { TeacherPage } from './pages/teacher'
+import { BannerPage } from './pages/banner'
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.uploadFiles,
-    element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={['admin','professor']} />,
+    element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={['admin', 'professor']} />,
   },
   {
     path: RoutesNames.students,
@@ -73,4 +74,8 @@ export const router = createBrowserRouter([
     path: RoutesNames.team,
     element: <ProtectedRoute children={<TeamPage />} allowedRoles={['admin', 'professor', 'aluno']} />
   },
+  {
+    path: RoutesNames.banner,
+    element: <ProtectedRoute children={<BannerPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  }
 ])

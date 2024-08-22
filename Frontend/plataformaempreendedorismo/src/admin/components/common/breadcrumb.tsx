@@ -1,7 +1,7 @@
 // BreadcrumbComponent.tsx
 import { styled } from '@mui/material'
 import { ArrayUtils } from 'essencials'
-import React, { CSSProperties } from 'react'
+import React, { Children, CSSProperties } from 'react'
 import { IoMdHome as HomeIcon } from 'react-icons/io'
 import { MdOutlineArrowForwardIos as DividerIcon } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'
@@ -44,6 +44,10 @@ const routes = [
     breadcrumb: 'Banner Preview'
   },
   {
+    path: RoutesNames.banner,
+    breadcrumb: 'Banner Time'
+  },
+  {
     path: RoutesNames.teachers,
     breadcrumb: 'Professores'
   },
@@ -53,8 +57,8 @@ const routes = [
     children: [
       {
         path: RoutesNames.team,
-        breadcrumb: 'Time'
-      }
+        breadcrumb: 'Time',
+      },
     ]
   }
 ]
@@ -73,6 +77,9 @@ export const BreadcrumbComponent = (props: {
   return (
     <BreadcrumbWrapperStyled {...props.props}>
       {breadcrumbs.map((args, index) => {
+        const isBannerRoute = location.pathname.includes(RoutesNames.banner.replace(':id', ''));
+        const teamRoute = RoutesNames.team.replace(':id', location.pathname.split('/').pop() || '');
+
         return <React.Fragment key={index}>
           {/* HOME */}
           {args.match.pathname == RoutesNames.home ?
@@ -90,7 +97,7 @@ export const BreadcrumbComponent = (props: {
               <div style={colorUnlink}> {args.breadcrumb} {args.match.params.id}</div> :
               ArrayUtils.checkEqualsFromArrays([args.match.pathname], unLink) ?
                 <div style={colorUnlink}>{args.match.route?.breadcrumb as string}</div> :
-                <Link style={breadcrumbLinkDecoration} to={args.match.pathname}>{args.breadcrumb}</Link>}
+                <Link style={breadcrumbLinkDecoration} to={isBannerRoute ? teamRoute : args.match.pathname}>{args.breadcrumb}</Link>}
           </span>
         </React.Fragment>
       })}

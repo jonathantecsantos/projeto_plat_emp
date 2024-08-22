@@ -1,9 +1,9 @@
 import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import DescriptionIcon from '@mui/icons-material/Description'
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
-import SchoolIcon from '@mui/icons-material/School'
 import LinkIcon from '@mui/icons-material/Link'
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 import PrintIcon from '@mui/icons-material/Print'
+import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
 import { useNavigate } from 'react-router-dom'
@@ -56,7 +56,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         <h2 className="text-2xl font-bold mb-0 capitalize">{team?.nomeEquipe.toLowerCase()}</h2>
         <h3>TIME</h3>
         <div className="mt-4 mb-6 capitalize">
-          <p className='font-semibold'>{team?.professor && `${team?.professor?.equipe?.ods?.descricao}`}</p>
+          <p className='font-semibold'>{team?.professor && `${team?.professor?.equipe?.odsList[0]?.descricao}`}</p>
           <p>ODS</p>
         </div>
         <div className='flex flex-col gap-4 w-full'>
@@ -113,13 +113,13 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
             <WebIcon fontSize='large' />
             <div className="flex-1 flex justify-center">
-              <span>Preencher banner</span>
+              <span onClick={() => navigate(RoutesNames.banner.replace(':id', id.toString()))}>Preencher banner</span>
             </div>
           </li>
           <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
             <PrintIcon fontSize='large' />
             <div className="flex-1 flex justify-center">
-              <span onClick={() => navigate(RoutesNames.bannerPreview)}>Imprimir banner</span>
+              <span onClick={() => navigate(RoutesNames.bannerPreview.replace(':id', id.toString()))}>Imprimir banner</span>
             </div>
           </li>
           {!team?.professor?.equipe.linkPitch && (

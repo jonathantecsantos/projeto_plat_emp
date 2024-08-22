@@ -3,11 +3,12 @@ import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../m
 import { TeamIdResponse } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
+import { Banner } from '../model/banner'
 
 //atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   endpoints: (build) => ({
@@ -126,6 +127,29 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id }
       ],
     }),
+
+    getBannerById: build.query<Banner, number>({
+      query: (id) => `/banner/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Banner', id }],
+    }),
+
+    createBanner: build.mutation<void, FormData>({
+      query: (data) => ({
+        url: `/banner/cadastrar`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: [{ type: 'Banner', id: 'LIST' }],
+    }),
+
+    updateBanner: build.mutation<FormData, { id: number; data: FormData }>({
+      query: ({ data }) => ({
+        url: `/banner/editar`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Banner', id }],
+    }),
   }),
 })
 
@@ -146,6 +170,11 @@ export const {
   useCreateTeacherMutation,
   useUpdateTeacherMutation,
   useDeleteTeacherMutation,
+
+  //Banner
+  useGetBannerByIdQuery,
+  useCreateBannerMutation,
+  useUpdateBannerMutation,
 
 } = studentsApiSlice
 

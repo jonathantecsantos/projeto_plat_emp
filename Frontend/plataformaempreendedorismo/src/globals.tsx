@@ -1,7 +1,8 @@
 export const RoutesNames = {
   home: '/',
   login: '/login',
-  bannerPreview: '/banner-preview',
+  banner: '/banner/:id',
+  bannerPreview: '/banner-preview/:id',
   companyDetails: '/company-details',
   repository: 'repository',
   contact: 'contact',

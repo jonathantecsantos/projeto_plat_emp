@@ -56,7 +56,9 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         <h2 className="text-2xl font-bold mb-0 capitalize">{team?.nomeEquipe.toLowerCase()}</h2>
         <h3>TIME</h3>
         <div className="mt-4 mb-6 capitalize">
-          <p className='font-semibold'>{team?.professor && `${team?.professor?.equipe?.odsList[0]?.descricao}`}</p>
+          <p className='font-semibold'>
+            {team?.professor && `${team?.professor?.equipe?.odsList.map((ods) => ods.descricao)}`}
+          </p>
           <p>ODS</p>
         </div>
         <div className='flex flex-col gap-4 w-full'>

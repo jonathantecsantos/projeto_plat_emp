@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react"
-import { Banner } from "../../../model/banner"
+import { useRef } from "react"
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi"
+import { Banner } from "../../../model/banner"
 
 
 export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
+  //passar como props vindo da tela de team
   console.log(id)
   const bannerRef = useRef<HTMLDivElement>(null)
   const { data: banner } = useGetBannerByIdQuery(id)

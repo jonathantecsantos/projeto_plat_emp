@@ -168,13 +168,6 @@ CREATE TABLE subcriterio_avaliacao (
   CONSTRAINT tipo_avaliacao_fk1 FOREIGN KEY (id_formato_avaliacao) REFERENCES formato_avaliacao (id)
 );
 
-CREATE TABLE criterio_avaliacao (
-  id int NOT NULL AUTO_INCREMENT,
-  descricao varchar(255) DEFAULT NULL,
-  nota_maxima_criterio double DEFAULT NULL,
-  PRIMARY KEY (id)
-);
-
 CREATE TABLE subcriterio_avaliacao (
   id int NOT NULL AUTO_INCREMENT,
   descricao varchar(500) NOT NULL,

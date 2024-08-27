@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorCadastroRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class Professor {
 
     private String email;
 
+    @JsonIgnore
     @OneToOne
     private Equipe equipe;
 

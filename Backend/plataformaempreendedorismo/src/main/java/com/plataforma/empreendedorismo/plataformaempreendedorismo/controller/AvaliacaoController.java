@@ -1,7 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.CriterioAvaliacao;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.FormatoAvaliacao;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;

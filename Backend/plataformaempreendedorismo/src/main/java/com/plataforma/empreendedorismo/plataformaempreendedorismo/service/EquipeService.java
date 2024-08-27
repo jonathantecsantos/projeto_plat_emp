@@ -34,7 +34,7 @@ public class EquipeService {
         List<Aluno> alunos = alunoRepository.findByEquipeId(equipeId);
         Professor professor = professorRepository.findByEquipeId(equipeId);
 
-        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor);
+        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor, equipe.getOdsList());
     }
 
     public Equipe buscarEquipePorId(Long id) throws Exception {

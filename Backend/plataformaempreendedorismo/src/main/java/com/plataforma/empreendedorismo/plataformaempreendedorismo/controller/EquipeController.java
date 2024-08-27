@@ -26,7 +26,7 @@ public class EquipeController {
     @Autowired
     private EquipeService equipeService;
 
-    @Operation(summary = "Busca dados da Equipe", method = "GET")
+    @Operation(summary = "Busca dados da Equipe por ID", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Equipe não encontrada"),

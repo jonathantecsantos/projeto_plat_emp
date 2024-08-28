@@ -30,7 +30,7 @@ public class CriterioAvaliacao {
     private FormatoAvaliacao formatoAvaliacao;
 
     @OneToMany(mappedBy = "criterioAvaliacao", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Subcriterio> subcriterios = new ArrayList<>();
+    private List<SubcriterioAvaliacao> subcriterioAvaliacaos = new ArrayList<>();
 
 
 }

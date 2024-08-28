@@ -71,7 +71,7 @@ const menuItems: MenuItemType[] = [
       {
         insideName: 'DLJ',
         insideIcon: <AssignmentTurnedInIcon />,
-        routeName: ''
+        routeName: RoutesNames.dlj
       },
       {
         insideName: 'Pitch',

@@ -16,6 +16,7 @@ import { TeamPage } from './pages/team'
 import ProtectedRoute from './admin/components/common/protectedRoute'
 import { TeacherPage } from './pages/teacher'
 import { BannerPage } from './pages/banner'
+import { DLJPage } from './pages/dlj'
 
 export const router = createBrowserRouter([
   {
@@ -77,5 +78,9 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.banner,
     element: <ProtectedRoute children={<BannerPage />} allowedRoles={['admin', 'professor', 'aluno']} />
-  }
+  },
+  {
+    path: RoutesNames.dlj,
+    element: <ProtectedRoute children={<DLJPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
 ])

@@ -4,13 +4,16 @@ import { TeamIdResponse } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 import { Banner } from '../model/banner'
+import { EvaluationById } from '../model/evaluationFormat'
 
 //atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
+  
+  //STUDENT
   endpoints: (build) => ({
     getStudent: build.query<StudentIdResponse, number>({
       query: (id) => `/alunos/${id}`,
@@ -66,14 +69,14 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    //TEAM ENDPOINTS -> Para o invalidatesTags falta adicionar o restante
+    //TEAM -> Para o invalidatesTags falta adicionar o restante
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Team', id }],
     }),
 
 
-    //TEACHER ENDPOINTS
+    //TEACHER 
     getTeacher: build.query<TeacherIdResponse, number>({
       query: (id) => `/professores/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Teacher', id }],
@@ -128,6 +131,7 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
+    //BANNER
     getBannerById: build.query<Banner, number>({
       query: (id) => `/banner/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Banner', id }],
@@ -150,6 +154,14 @@ export const studentsApiSlice = createApi({
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Banner', id }],
     }),
+
+    //EVALUATION
+    getEvaluationById: build.query<EvaluationById, number>({
+      query: (id) => `/avaliacoes/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
+    }),
+
+    
   }),
 })
 
@@ -175,6 +187,9 @@ export const {
   useGetBannerByIdQuery,
   useCreateBannerMutation,
   useUpdateBannerMutation,
+
+  //Evaluations
+  useGetEvaluationByIdQuery,
 
 } = studentsApiSlice
 

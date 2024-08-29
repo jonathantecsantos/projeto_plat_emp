@@ -74,7 +74,12 @@ export const DLJTeams = () => {
             </>
           )}
           onClickRow={(team: TableComponentClickRowProps<TeamsResponse>) => {
-            navigate(RoutesNames.dljTeam.replace(':id', team.item?.id.toString()))
+            navigate(RoutesNames.dljTeam.replace(':id', team.item?.id.toString()), {
+              state: {
+                id: team.item.id,
+                nomeEquipe: team.item.nome
+              }
+            })
           }}
         />
       </div>

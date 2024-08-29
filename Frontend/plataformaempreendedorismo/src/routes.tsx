@@ -1,22 +1,23 @@
 import { createBrowserRouter } from 'react-router-dom'
+import ProtectedRoute from './admin/components/common/protectedRoute'
 import App from './App'
 import { RoutesNames } from './globals'
 import { AdminHomePage } from './pages/adminHome'
+import { BannerPage } from './pages/banner'
 import { BannerPreviewPage } from './pages/bannerPreview'
 import { CompanyDetailsPage } from './pages/companyDetails'
 import { ContactPage } from './pages/contact'
+import { DLJPage } from './pages/dljTeams'
 import { LoginPage } from './pages/login'
 import { RepositoryPage } from './pages/repository'
 import { StudentPage } from './pages/student'
 import { StudentsDetailsPage } from './pages/students'
-import { TeachersPage } from './pages/teachers'
-import { UploadFilesPage } from './pages/uploadFiles'
-import { TeamsPage } from './pages/teams'
-import { TeamPage } from './pages/team'
-import ProtectedRoute from './admin/components/common/protectedRoute'
 import { TeacherPage } from './pages/teacher'
-import { BannerPage } from './pages/banner'
-import { DLJPage } from './pages/dlj'
+import { TeachersPage } from './pages/teachers'
+import { TeamPage } from './pages/team'
+import { TeamsPage } from './pages/teams'
+import { UploadFilesPage } from './pages/uploadFiles'
+import { DLJEvaluationPage } from './pages/dljTeamEvaluation'
 
 export const router = createBrowserRouter([
   {
@@ -80,7 +81,11 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute children={<BannerPage />} allowedRoles={['admin', 'professor', 'aluno']} />
   },
   {
-    path: RoutesNames.dlj,
+    path: RoutesNames.dljTeams,
     element: <ProtectedRoute children={<DLJPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
+  {
+    path: RoutesNames.dljTeam,
+    element: <ProtectedRoute children={<DLJEvaluationPage />} allowedRoles={['admin', 'professor', 'aluno']} />
   },
 ])

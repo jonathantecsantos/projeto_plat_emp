@@ -18,7 +18,8 @@ export const RoutesNames = {
   teams: '/teams',
   team: '/teams/:id',
 
-  dlj: '/dlj/:id',
+  dljTeams: '/dlj',
+  dljTeam: '/dlj/:id'
 }
 
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 

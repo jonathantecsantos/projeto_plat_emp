@@ -57,7 +57,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         <h3>TIME</h3>
         <div className="mt-4 mb-6 capitalize">
           <p className='font-semibold'>
-            {team?.professor && `${team?.professor?.equipe?.odsList.map((ods) => ods.descricao)}`}
+            {/* {team?.professor && `${team?.professor?.equipe?.odsList.map((ods) => ods.descricao)}`} */}
           </p>
           <p>ODS</p>
         </div>
@@ -90,12 +90,12 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             </SpeedDial>
           </div>
 
-          {team?.professor?.equipe.linkPitch && <div className='bg-gray-100 p-4 border rounded-lg shadow-md lg:w-4/5 w-full'>
+          {/* {team?.professor?.equipe.linkPitch && <div className='bg-gray-100 p-4 border rounded-lg shadow-md lg:w-4/5 w-full'>
             <h3 className="text-lg font-bold">Pitch:</h3>
             <a href={team?.professor?.equipe.linkPitch} target="_blank" rel="noopener noreferrer">
               {team?.professor?.equipe.linkPitch}
             </a>
-          </div>}
+          </div>} */}
         </div>
       </div>
       <div className={`w-full lg:w-72 rounded-md p-4  lg:h-fit text-nowrap`}>

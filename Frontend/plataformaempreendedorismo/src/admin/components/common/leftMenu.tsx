@@ -71,7 +71,7 @@ const menuItems: MenuItemType[] = [
       {
         insideName: 'DLJ',
         insideIcon: <AssignmentTurnedInIcon />,
-        routeName: RoutesNames.dlj
+        routeName: RoutesNames.dljTeams
       },
       {
         insideName: 'Pitch',
@@ -182,7 +182,7 @@ const Item = (props: ItemProps) => {
 
   const isActive = (route: string) => {
     //controle de rotas nao configuradas
-    if(!route) return
+    if (!route) return
     // const regex = new RegExp(`^${route}(/\\d+)?$`) serve para considerar /:id 
     const regex = new RegExp(`^${route}(/.*)?$`)
     return regex.test(location.pathname)

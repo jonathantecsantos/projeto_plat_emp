@@ -235,3 +235,14 @@ INSERT INTO db_empreendedorismo.subcriterio_avaliacao (descricao,nota_maxima,id_
 	 ('Os indícios de validação que foram apresentados demonstram que o produto/serviço é promissor?',50.0,10,NULL),
 	 ('O número de pessoas que já validou a versão atual do produto foi suficiente?',50.0,10,NULL);
 
+CREATE TABLE avaliacao (
+  id int NOT NULL AUTO_INCREMENT,
+  id_equipe int NOT NULL,
+  id_criterio_avaliacao int NOT NULL,
+  id_subcriterio_avaliacao int NOT NULL,
+  nota double DEFAULT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT equipe_fk0 FOREIGN KEY (id_equipe) REFERENCES equipe (id),
+  CONSTRAINT criterio_avaliacao_fk1 FOREIGN KEY (id_criterio_avaliacao) REFERENCES criterio_avaliacao (id),
+  CONSTRAINT subcriterio_avaliacao_fk2 FOREIGN KEY (id_subcriterio_avaliacao) REFERENCES subcriterio_avaliacao (id)
+);

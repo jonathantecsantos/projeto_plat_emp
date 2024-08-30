@@ -7,6 +7,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliac
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AvaliacaoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.CriterioAvaliacaoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.FormatoAvaliacaoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,12 @@ public class AvaliacaoService {
                 .collect(Collectors.toList());
     }
 
-    public void avaliarEquipe(AvaliacaoEquipeRecord avaliacaoEquipeRecord) {
-        avaliacaoRepository.save(new Avaliacao(avaliacaoEquipeRecord));
+    @Transactional
+    public void avaliarEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) {
+
+        List<Avaliacao> avaliacaos = avaliacaoEquipeRecord.stream()
+                        .map(Avaliacao::new)
+                                .collect(Collectors.toList());
+        avaliacaoRepository.saveAll(avaliacaos);
     }
 }

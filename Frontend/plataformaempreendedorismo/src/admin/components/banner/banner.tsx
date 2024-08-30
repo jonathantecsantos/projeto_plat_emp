@@ -1,6 +1,30 @@
-import { useState } from "react";
-import { Banner } from "../../../model/banner"
+import React, { useState } from "react";
+import { Banner } from "../../../model/banner";
 import { useCreateBannerMutation } from "../../../api/studentApi";
+import { z } from "zod";
+
+const bannerSchema = z.object({
+  atividadeChaveQ1: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  contextoProblemaQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  textoDescricaoQ0: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  resultadosMedioPrazoQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  recursosQ1: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  fonteReceitaQ2: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  idEquipeQ0: z.number(),
+  publicoFocoImpactoQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  propostaValorQ2: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  oportunidadeNegQ2: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  equipeQ1: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  custosQ1: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  resultadoFinanceiroQ2: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  saidasQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  visaoImpactoQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  custoQ2: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  parceiroQ1: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  intervencoesQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  resultadosCurtoPrazoQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  file: z.instanceof(File).nullable(),
+});
 
 export interface BannerFormData {
   atividadeChaveQ1: string;
@@ -25,9 +49,8 @@ export interface BannerFormData {
   file: File | null;
 }
 
-
 export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
-  const [createBanner, { isLoading}] = useCreateBannerMutation()
+  const [createBanner, { isLoading }] = useCreateBannerMutation();
   const [formData, setFormData] = useState<BannerFormData>({
     atividadeChaveQ1: '',
     contextoProblemaQ3: '',
@@ -51,11 +74,25 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
     file: null,
   });
 
+  const [errors, setErrors] = useState<Partial<Record<keyof BannerFormData, string>>>({});
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    try {
+      bannerSchema.parse({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setErrors((prev) => ({ ...prev, [e.target.name]: error.errors[0].message }));
+      }
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,41 +104,51 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
-    formDataToSend.append('files', formData.file as File);
-
-    const jsonBlob = new Blob(
-      [JSON.stringify({
-        atividadeChaveQ1: formData.atividadeChaveQ1,
-        contextoProblemaQ3: formData.contextoProblemaQ3,
-        textoDescricaoQ0: formData.textoDescricaoQ0,
-        resultadosMedioPrazoQ3: formData.resultadosMedioPrazoQ3,
-        recursosQ1: formData.recursosQ1,
-        fonteReceitaQ2: formData.fonteReceitaQ2,
-        idEquipeQ0: formData.idEquipeQ0,
-        publicoFocoImpactoQ3: formData.publicoFocoImpactoQ3,
-        propostaValorQ2: formData.propostaValorQ2,
-        oportunidadeNegQ2: formData.oportunidadeNegQ2,
-        equipeQ1: formData.equipeQ1,
-        custosQ1: formData.custosQ1,
-        resultadoFinanceiroQ2: formData.resultadoFinanceiroQ2,
-        saidasQ3: formData.saidasQ3,
-        visaoImpactoQ3: formData.visaoImpactoQ3,
-        custoQ2: formData.custoQ2,
-        parceiroQ1: formData.parceiroQ1,
-        intervencoesQ3: formData.intervencoesQ3,
-        resultadosCurtoPrazoQ3: formData.resultadosCurtoPrazoQ3,
-      })],
-      { type: 'application/json' }
-    );
-    
-    formDataToSend.append('cadastroBannerRecord', jsonBlob);
-
     try {
+      bannerSchema.parse(formData);
+      setErrors({});
+      const formDataToSend = new FormData();
+      formDataToSend.append('files', formData.file as File);
+
+      const jsonBlob = new Blob(
+        [JSON.stringify({
+          atividadeChaveQ1: formData.atividadeChaveQ1,
+          contextoProblemaQ3: formData.contextoProblemaQ3,
+          textoDescricaoQ0: formData.textoDescricaoQ0,
+          resultadosMedioPrazoQ3: formData.resultadosMedioPrazoQ3,
+          recursosQ1: formData.recursosQ1,
+          fonteReceitaQ2: formData.fonteReceitaQ2,
+          idEquipeQ0: formData.idEquipeQ0,
+          publicoFocoImpactoQ3: formData.publicoFocoImpactoQ3,
+          propostaValorQ2: formData.propostaValorQ2,
+          oportunidadeNegQ2: formData.oportunidadeNegQ2,
+          equipeQ1: formData.equipeQ1,
+          custosQ1: formData.custosQ1,
+          resultadoFinanceiroQ2: formData.resultadoFinanceiroQ2,
+          saidasQ3: formData.saidasQ3,
+          visaoImpactoQ3: formData.visaoImpactoQ3,
+          custoQ2: formData.custoQ2,
+          parceiroQ1: formData.parceiroQ1,
+          intervencoesQ3: formData.intervencoesQ3,
+          resultadosCurtoPrazoQ3: formData.resultadosCurtoPrazoQ3,
+        })],
+        { type: 'application/json' }
+      );
+
+      formDataToSend.append('cadastroBannerRecord', jsonBlob);
+
       await createBanner(formDataToSend).unwrap();
       alert('Banner cadastrado com sucesso!');
     } catch (error) {
-      console.error('Erro ao cadastrar o banner:', error);
+      if (error instanceof z.ZodError) {
+        const newErrors: Partial<Record<keyof BannerFormData, string>> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0] in formData) {
+            newErrors[err.path[0] as keyof BannerFormData] = err.message;
+          }
+        });
+        setErrors(newErrors);
+      }
     }
   };
 
@@ -118,6 +165,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.atividadeChaveQ1 && (
+          <p className="text-red-500 text-sm">{errors.atividadeChaveQ1}</p>
+        )}
 
         <input
           type="text"
@@ -127,6 +177,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.contextoProblemaQ3 && (
+          <p className="text-red-500 text-sm">{errors.contextoProblemaQ3}</p>
+        )}
 
         <textarea
           name="textoDescricaoQ0"
@@ -135,6 +188,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.textoDescricaoQ0 && (
+          <p className="text-red-500 text-sm">{errors.textoDescricaoQ0}</p>
+        )}
 
         <input
           type="text"
@@ -144,6 +200,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.resultadosMedioPrazoQ3 && (
+          <p className="text-red-500 text-sm">{errors.resultadosMedioPrazoQ3}</p>
+        )}
 
         <input
           type="text"
@@ -153,6 +212,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.recursosQ1 && (
+          <p className="text-red-500 text-sm">{errors.recursosQ1}</p>
+        )}
 
         <input
           type="text"
@@ -162,15 +224,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
-
-        {/* <input
-          type="number"
-          name="idEquipeQ0"
-          placeholder="ID da Equipe"
-          value={formData.idEquipeQ0}
-          onChange={handleChange}
-          className="border border-primary p-2 rounded-md"
-        /> */}
+        {errors.fonteReceitaQ2 && (
+          <p className="text-red-500 text-sm">{errors.fonteReceitaQ2}</p>
+        )}
 
         <input
           type="text"
@@ -180,6 +236,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.publicoFocoImpactoQ3 && (
+          <p className="text-red-500 text-sm">{errors.publicoFocoImpactoQ3}</p>
+        )}
 
         <input
           type="text"
@@ -189,6 +248,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.propostaValorQ2 && (
+          <p className="text-red-500 text-sm">{errors.propostaValorQ2}</p>
+        )}
 
         <input
           type="text"
@@ -198,6 +260,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.oportunidadeNegQ2 && (
+          <p className="text-red-500 text-sm">{errors.oportunidadeNegQ2}</p>
+        )}
 
         <input
           type="text"
@@ -207,6 +272,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.equipeQ1 && (
+          <p className="text-red-500 text-sm">{errors.equipeQ1}</p>
+        )}
 
         <input
           type="text"
@@ -216,6 +284,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.custosQ1 && (
+          <p className="text-red-500 text-sm">{errors.custosQ1}</p>
+        )}
 
         <input
           type="text"
@@ -225,6 +296,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.resultadoFinanceiroQ2 && (
+          <p className="text-red-500 text-sm">{errors.resultadoFinanceiroQ2}</p>
+        )}
 
         <input
           type="text"
@@ -234,6 +308,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.saidasQ3 && (
+          <p className="text-red-500 text-sm">{errors.saidasQ3}</p>
+        )}
 
         <input
           type="text"
@@ -243,6 +320,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.visaoImpactoQ3 && (
+          <p className="text-red-500 text-sm">{errors.visaoImpactoQ3}</p>
+        )}
 
         <input
           type="text"
@@ -252,6 +332,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.custoQ2 && (
+          <p className="text-red-500 text-sm">{errors.custoQ2}</p>
+        )}
 
         <input
           type="text"
@@ -261,6 +344,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.parceiroQ1 && (
+          <p className="text-red-500 text-sm">{errors.parceiroQ1}</p>
+        )}
 
         <input
           type="text"
@@ -270,6 +356,9 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.intervencoesQ3 && (
+          <p className="text-red-500 text-sm">{errors.intervencoesQ3}</p>
+        )}
 
         <input
           type="text"
@@ -279,22 +368,25 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
           onChange={handleChange}
           className="border border-primary p-2 rounded-md"
         />
+        {errors.resultadosCurtoPrazoQ3 && (
+          <p className="text-red-500 text-sm">{errors.resultadosCurtoPrazoQ3}</p>
+        )}
 
         <input
           type="file"
           name="file"
+          multiple
           onChange={handleFileChange}
           className="border border-primary p-2 rounded-md"
         />
       </div>
       <button
         type="submit"
-        className="mt-4 w-full  bg-black text-white p-2 rounded-md"
+        className="mt-4 w-full bg-black text-white p-2 rounded-md"
         disabled={isLoading}
       >
         {isLoading ? 'Enviando...' : 'Cadastrar Banner'}
       </button>
     </form>
   );
-
-}
+};

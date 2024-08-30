@@ -4,7 +4,7 @@ import { TeamIdResponse } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 import { Banner } from '../model/banner'
-import { EvaluationById } from '../model/evaluationFormat'
+import { Evaluation, EvaluationById } from '../model/evaluationFormat'
 
 //atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
 export const studentsApiSlice = createApi({
@@ -161,6 +161,16 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
     }),
 
+    postEvaluation: build.mutation<void, Evaluation>({
+      query: (data) => ({
+        url: `/avaliacoes`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: [{ type: 'Evaluation', id: 'LIST' }],
+      //possivelmente invalidar a tag dos times para atualizar equipe que ja foi avaliada
+    }),
+
     
   }),
 })
@@ -190,6 +200,7 @@ export const {
 
   //Evaluations
   useGetEvaluationByIdQuery,
+  usePostEvaluationMutation,
 
 } = studentsApiSlice
 

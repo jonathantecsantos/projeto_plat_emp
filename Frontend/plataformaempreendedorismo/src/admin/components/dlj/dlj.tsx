@@ -9,8 +9,6 @@ import { TableComponent } from "../table"
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
 
 export const DLJTeams = () => {
-  //carregar times e depois no clique do bottao chamar o componente de avaliacao do dlj passando os valores do componente pai DLJ component com os dados do time para o avaliacao do dlj
-
   const { data: teams, refetch, isLoading, error } = useGetAllTeamsQuery()
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''

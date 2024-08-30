@@ -4,25 +4,6 @@ export interface EvaluationFormat {
   description: string
 }
 
-// export interface SubCriterio {
-//   id: number
-//   descricao: string
-//   notaMaxima: number
-//   valorPadrao: boolean
-// }
-
-// export interface Criterio {
-//   id: number
-//   descricao: string
-//   notaMaximaCriterio: number
-//   subcriterios: SubCriterio[]
-// }
-
-// export interface EvaluationById extends EvaluationFormat {
-//   criterios: Criterio[]
-// }
-
-
 export interface SubcriterioAvaliacao {
   id: number
   descricao: string
@@ -36,13 +17,6 @@ export interface CriterioAvaliacao {
   notaMaximaCriterio: number
   subcriterioAvaliacaos: SubcriterioAvaliacao[]
 }
-
-// export interface EvaluationById {
-//   id: number
-//   descricao: string
-//   notaMaximaCriterio: number
-//   subcriterioAvaliacaos: CriterioAvaliacao[]
-// }
 
 export interface SubcriterioAvaliacao {
   id: number;
@@ -58,5 +32,11 @@ export interface CriterioAvaliacao {
   subcriterioAvaliacaos: SubcriterioAvaliacao[];
 }
 
-// A resposta do endpoint é um array de CriterioAvaliacao
-export type EvaluationById = CriterioAvaliacao[];
+export type EvaluationById = CriterioAvaliacao[]
+
+export interface Evaluation {
+  idEquipe: number
+  idCriterioAvaliacao: number
+  idSubcriterioAvaliacao: number
+  nota: number
+}

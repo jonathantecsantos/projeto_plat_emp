@@ -50,7 +50,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "500", description = "Erro ao Avaliar Equipe")
     })
     @PostMapping
-    public ResponseEntity<String> avaliarEquipe(@RequestBody AvaliacaoEquipeRecord avaliacaoEquipeRecord){
+    public ResponseEntity<String> avaliarEquipe(@RequestBody List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord){
 
         try {
             avaliacaoService.avaliarEquipe(avaliacaoEquipeRecord);

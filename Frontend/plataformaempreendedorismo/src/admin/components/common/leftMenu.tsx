@@ -81,12 +81,12 @@ const menuItems: MenuItemType[] = [
       {
         insideName: 'Shark Tank',
         insideIcon: <AttachMoneyIcon />,
-        routeName: '',
+        routeName: RoutesNames.sharkTankTeams,
       },
       {
         insideName: 'Expo Dlei',
         insideIcon: <EventIcon />,
-        routeName: ''
+        routeName: RoutesNames.expoDleiTeams
       }
     ]
   },

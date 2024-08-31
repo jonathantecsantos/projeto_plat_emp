@@ -7,9 +7,16 @@ import { BannerPage } from './pages/banner'
 import { BannerPreviewPage } from './pages/bannerPreview'
 import { CompanyDetailsPage } from './pages/companyDetails'
 import { ContactPage } from './pages/contact'
+import { DLJEvaluationPage } from './pages/dljTeamEvaluation'
 import { DLJPage } from './pages/dljTeams'
+import { ExpoDleiEvaluationPage } from './pages/expoDleiTeamEvaluation'
+import { ExpoDleiPage } from './pages/expoDleiTeams'
 import { LoginPage } from './pages/login'
+import { PitchEvaluationPage } from './pages/pitchTeamEvaluation'
+import { PitchPage } from './pages/pitchTeams'
 import { RepositoryPage } from './pages/repository'
+import { SharkTankEvaluationPage } from './pages/sharkTankTeamEvaluation'
+import { SharkTankPage } from './pages/sharkTankTeams'
 import { StudentPage } from './pages/student'
 import { StudentsDetailsPage } from './pages/students'
 import { TeacherPage } from './pages/teacher'
@@ -17,9 +24,6 @@ import { TeachersPage } from './pages/teachers'
 import { TeamPage } from './pages/team'
 import { TeamsPage } from './pages/teams'
 import { UploadFilesPage } from './pages/uploadFiles'
-import { DLJEvaluationPage } from './pages/dljTeamEvaluation'
-import { PitchPage } from './pages/pitchTeams'
-import { PitchEvaluationPage } from './pages/pitchTeamEvaluation'
 
 export const router = createBrowserRouter([
   {
@@ -90,7 +94,6 @@ export const router = createBrowserRouter([
     path: RoutesNames.dljTeam,
     element: <ProtectedRoute children={<DLJEvaluationPage />} allowedRoles={['admin', 'professor', 'aluno']} />
   },
-
   {
     path: RoutesNames.pitchTeams,
     element: <ProtectedRoute children={<PitchPage />} allowedRoles={['admin', 'professor', 'aluno']} />
@@ -98,5 +101,21 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.pitchTeam,
     element: <ProtectedRoute children={<PitchEvaluationPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
+  {
+    path: RoutesNames.sharkTankTeams,
+    element: <ProtectedRoute children={<SharkTankPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
+  {
+    path: RoutesNames.sharkTankTeam,
+    element: <ProtectedRoute children={<SharkTankEvaluationPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
+  {
+    path: RoutesNames.expoDleiTeams,
+    element: <ProtectedRoute children={<ExpoDleiPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
+  {
+    path: RoutesNames.expoDleiTeam,
+    element: <ProtectedRoute children={<ExpoDleiEvaluationPage />} allowedRoles={['admin', 'professor', 'aluno']} />
   },
 ])

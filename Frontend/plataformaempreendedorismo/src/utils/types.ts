@@ -45,4 +45,8 @@ export interface AdaptedLoginResponse {
   token: Token
 }
 
+export interface EvaluationProps {
+  teamData: { id: number, nomeEquipe: string }
+}
+
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')

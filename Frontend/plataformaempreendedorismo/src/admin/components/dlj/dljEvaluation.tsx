@@ -2,16 +2,13 @@ import { Button, Dialog, DialogActions, DialogContent } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
+import { EvaluationProps } from "../../../utils/types"
 
 
 interface QuestionItemProps {
   subcriterio: SubcriterioAvaliacao
   isDisabled: boolean
   onSelectionChange: (id: number, isSelected: boolean, points: number) => void
-}
-
-interface DljTeamEvaluationProps {
-  teamData: { id: number, nomeEquipe: string }
 }
 
 
@@ -58,7 +55,7 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
   )
 }
 
-export const DljTeamEvaluation = ({ teamData }: DljTeamEvaluationProps) => {
+export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const { data: dljQuestions } = useGetEvaluationByIdQuery(1)
   const [postEvaluation] = usePostEvaluationMutation()
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])

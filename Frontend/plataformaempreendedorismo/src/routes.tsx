@@ -18,6 +18,8 @@ import { TeamPage } from './pages/team'
 import { TeamsPage } from './pages/teams'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { DLJEvaluationPage } from './pages/dljTeamEvaluation'
+import { PitchPage } from './pages/pitchTeams'
+import { PitchEvaluationPage } from './pages/pitchTeamEvaluation'
 
 export const router = createBrowserRouter([
   {
@@ -87,5 +89,14 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.dljTeam,
     element: <ProtectedRoute children={<DLJEvaluationPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
+
+  {
+    path: RoutesNames.pitchTeams,
+    element: <ProtectedRoute children={<PitchPage />} allowedRoles={['admin', 'professor', 'aluno']} />
+  },
+  {
+    path: RoutesNames.pitchTeam,
+    element: <ProtectedRoute children={<PitchEvaluationPage />} allowedRoles={['admin', 'professor', 'aluno']} />
   },
 ])

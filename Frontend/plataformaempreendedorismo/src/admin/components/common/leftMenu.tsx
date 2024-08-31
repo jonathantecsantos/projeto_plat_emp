@@ -76,7 +76,7 @@ const menuItems: MenuItemType[] = [
       {
         insideName: 'Pitch',
         insideIcon: <MicIcon />,
-        routeName: '',
+        routeName: RoutesNames.pitchTeams,
       },
       {
         insideName: 'Shark Tank',

@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
-import { EvaluationProps } from "../../../utils/types"
+import { capitalizeTeamName, EvaluationProps } from "../../../utils/types"
 
 
 interface QuestionItemProps {
@@ -29,6 +29,7 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
         <div className="flex mt-2">
           <label className="mr-4">
             <input
+              className="mr-1"
               type="radio"
               name={`option-${subcriterio.id}`}
               checked={isSelected}
@@ -39,6 +40,7 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
           </label>
           <label>
             <input
+              className="mr-1"
               type="radio"
               name={`option-${subcriterio.id}`}
               checked={!isSelected}
@@ -121,7 +123,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   }
 
   return (
-    <div className="w-full mx-auto p-4">
+    <div className="w-full mx-auto p-4 text-[#30168C]">
       {/* <h2 className="p-2">Avaliação DLJ time: {teamData?.nomeEquipe}</h2> */}
       {dljQuestions?.map((criterio: CriterioAvaliacao) => (
         <div key={criterio.id} className="mb-6">
@@ -142,14 +144,14 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
         <p className="text-lg font-bold text-primary">
           Total de pontos somados: {totalPoints} pontos
         </p>
-        <Button variant="contained" color="primary" disabled={totalPoints > 100} onClick={() => setOpen(true)}>
+        <Button variant="contained" className="bg-[#5741A6] normal-case first-letter:capitalize" disabled={totalPoints > 100} onClick={() => setOpen(true)}>
           Finalizar
         </Button>
       </div>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>
           <span>
-            Deseja finalizar a avaliação DLJ do Time: {teamData?.nomeEquipe.toLowerCase()}?
+            Deseja finalizar a avaliação DLJ do time {capitalizeTeamName(teamData?.nomeEquipe)}?
           </span>
         </DialogContent>
         <DialogActions>

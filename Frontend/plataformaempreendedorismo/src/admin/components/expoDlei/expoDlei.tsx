@@ -1,3 +1,6 @@
+import { RoutesNames } from "../../../globals";
+import { TeamsTable } from "../common/teamsTableEvaluations";
+
 export const ExpoDleiTeams = () => {
-  return <p>ExpoDleiTeams</p>
-}
+  return <TeamsTable routeName={RoutesNames.expoDleiTeam} />;
+};

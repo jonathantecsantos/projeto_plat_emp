@@ -50,3 +50,7 @@ export interface EvaluationProps {
 }
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
+
+export const capitalizeTeamName = (name: string) => {
+  return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : '';
+};

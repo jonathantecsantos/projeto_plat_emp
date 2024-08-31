@@ -1,4 +1,6 @@
+import { RoutesNames } from "../../../globals"
+import { TeamsTable } from "../common/teamsTableEvaluations"
+
 export const PitchTeams = () => {
-  //carregar lista de times e passar o id e nome do time
-  return <p>PitchComponent</p>
+  return <TeamsTable routeName={RoutesNames.pitchTeam} />
 }

@@ -11,8 +11,7 @@ interface QuestionItemProps {
 }
 
 interface DljTeamEvaluationProps {
-  id: number;
-  teamData?: { id: number; nomeEquipe: string };
+  teamData: { id: number, nomeEquipe: string }
 }
 
 
@@ -59,8 +58,8 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
   )
 }
 
-export const DljTeamEvaluation = ({ id, teamData }: DljTeamEvaluationProps) => {
-  const { data: dljQuestions } = useGetEvaluationByIdQuery(id)
+export const DljTeamEvaluation = ({ teamData }: DljTeamEvaluationProps) => {
+  const { data: dljQuestions } = useGetEvaluationByIdQuery(1)
   const [postEvaluation] = usePostEvaluationMutation()
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
@@ -104,24 +103,25 @@ export const DljTeamEvaluation = ({ id, teamData }: DljTeamEvaluationProps) => {
 
 
   const handlePostEvaluation = async () => {
-    if (!teamData || !dljQuestions || dljQuestions.length === 0) return;
+    if (!teamData || !dljQuestions || dljQuestions.length === 0) return
 
     const evaluations: Evaluation[] = dljQuestions[0].subcriterioAvaliacaos.map(subcriterio => ({
       idEquipe: teamData.id,
       idCriterioAvaliacao: dljQuestions[0].id,
       idSubcriterioAvaliacao: subcriterio.id,
       nota: selectedOptions.includes(subcriterio.id) ? subcriterio.notaMaxima : 0,
-    }));
+    }))
 
     try {
-      await Promise.all(evaluations.map(evaluation => postEvaluation(evaluation).unwrap()));
-      setOpen(false);
-      alert('Avaliação enviada com sucesso!');
+      await postEvaluation(evaluations).unwrap()
+      setOpen(false)
+      //Adicionar lógica para perguntar se o usuário deseja avaliar o proximo time ou voltar a lista de times
+      alert('Avaliação enviada com sucesso!')
     } catch (error) {
-      console.error("Failed to submit evaluation", error);
-      alert('Falha ao enviar avaliação!');
+      console.error("Failed to submit evaluation", error)
+      alert('Falha ao enviar avaliação!')
     }
-  };
+  }
 
   return (
     <div className="w-full mx-auto p-4">
@@ -159,7 +159,7 @@ export const DljTeamEvaluation = ({ id, teamData }: DljTeamEvaluationProps) => {
           <Button onClick={() => setOpen(false)} style={{ textTransform: 'none', color: 'gray' }}>
             Cancelar
           </Button>
-          <Button onClick={handlePostEvaluation} style={{ textTransform: 'none', color: 'red' }}>
+          <Button onClick={handlePostEvaluation} style={{ textTransform: 'none', color: 'green' }}>
             Finalizar
           </Button>
         </DialogActions>

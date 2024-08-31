@@ -161,7 +161,7 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
     }),
 
-    postEvaluation: build.mutation<void, Evaluation>({
+    postEvaluation: build.mutation<void, Evaluation[]>({
       query: (data) => ({
         url: `/avaliacoes`,
         method: 'POST',

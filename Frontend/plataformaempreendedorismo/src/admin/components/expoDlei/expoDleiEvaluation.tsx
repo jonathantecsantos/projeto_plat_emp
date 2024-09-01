@@ -73,7 +73,7 @@ export const ExpoDleiTeamEvaluation = ({ teamData }: EvaluationProps) => {
     <div className="max-w-4xl mx-auto p-4">
       {expoDleiQuestions?.map((criterio: CriterioAvaliacao) => (
         <div key={criterio.id} className="mb-6 border rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold text-primary bg-[#5741A6] p-2 rounded-t-lg text-white">Critério: {criterio.descricao}</h3>
+          <h3 className="text-xl font-semibold bg-[#5741A6] p-2 rounded-t-lg text-white">Critério: {criterio.descricao}</h3>
           {criterio.subcriterioAvaliacaos.map((subcriterio) => (
             <SubcriterionSlider
               key={subcriterio.id}
@@ -84,9 +84,9 @@ export const ExpoDleiTeamEvaluation = ({ teamData }: EvaluationProps) => {
           ))}
         </div>
       ))}
-      <div className="flex justify-between items-center mt-6">
-        <p className="text-lg font-bold text-primary">Total de pontos somados:  {totalPoints.toFixed(1)} pontos</p>
-        <Button variant="contained" color="primary" onClick={handlePostEvaluation} disabled={totalPoints > 400}>
+      <div className="flex flex-col justify-end gap-4 items-end mt-6">
+        <p className="text-lg font-bold text-[#30168C]">Total de pontos somados:  {totalPoints.toFixed(1)} pontos</p>
+        <Button variant="contained" className="bg-[#5741A6] normal-case first-letter:capitalize" onClick={handlePostEvaluation} disabled={totalPoints > 400}>
           Finalizar
         </Button>
       </div>

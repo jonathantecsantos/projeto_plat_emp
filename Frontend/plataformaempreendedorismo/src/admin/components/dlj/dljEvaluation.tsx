@@ -140,8 +140,8 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
           ))}
         </div>
       ))}
-      <div className="flex justify-between items-center mt-6">
-        <p className="text-lg font-bold text-primary">
+      <div className="flex flex-col justify-end gap-4 items-end mt-6">
+        <p className="text-lg font-bold">
           Total de pontos somados: {totalPoints} pontos
         </p>
         <Button variant="contained" className="bg-[#5741A6] normal-case first-letter:capitalize" disabled={totalPoints > 100} onClick={() => setOpen(true)}>

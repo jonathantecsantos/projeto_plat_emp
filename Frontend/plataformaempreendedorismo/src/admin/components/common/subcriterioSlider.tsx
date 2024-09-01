@@ -15,8 +15,8 @@ export const SubcriterionSlider = ({ subcriterio, value, onChange }: Subcriterio
   };
 
   return (
-    <div className="mb-4">
-      <Typography gutterBottom className="text-primary p-4">
+    <div className="">
+      <Typography gutterBottom className="p-4 text-[#30168C]">
         {subcriterio.descricao}
       </Typography>
       <div className="p-4 md:w-1/2 flex-col justify-center mx-auto ">

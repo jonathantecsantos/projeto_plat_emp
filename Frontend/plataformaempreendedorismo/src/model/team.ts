@@ -1,7 +1,7 @@
 import { Banner } from "./banner"
 import { Ods } from "./ods"
 import { Student } from "./student"
-import { TeacherIdResponse } from "./teacher"
+import { Teacher } from "./teacher"
 
 export interface TeamsResponse {
   id: number
@@ -17,5 +17,6 @@ export interface Team extends TeamsResponse {
 export interface TeamIdResponse {
   nomeEquipe: string
   alunos: Student[]
-  professor: TeacherIdResponse
+  professor: Teacher
+  odsList: Ods[]
 }

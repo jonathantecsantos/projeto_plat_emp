@@ -57,7 +57,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         <h3>TIME</h3>
         <div className="mt-4 mb-6 capitalize">
           <p className='font-semibold'>
-            {/* {team?.professor && `${team?.professor?.equipe?.odsList.map((ods) => ods.descricao)}`} */}
+            {team?.odsList.map(ods => ods.descricao).join(', ')}
           </p>
           <p>ODS</p>
         </div>
@@ -69,7 +69,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             </div>
             <SpeedDial
               ariaLabel="SpeedDial"
-              className="absolute right-4 -bottom-4"
+              className={`absolute right-4 -bottom-4 ${!sortedStudents.length ? 'left-96' : ''}`}
               sx={{
                 '& .MuiFab-primary': {
                   backgroundColor: '#5741A6',
@@ -98,7 +98,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </div>} */}
         </div>
       </div>
-      <div className={`w-full lg:w-72 rounded-md p-4  lg:h-fit text-nowrap`}>
+      <div className={`w-full lg:w-72 rounded-md p-4  lg:h-fit text-nowrap ${!sortedStudents.length ? 'hidden' : ''}`}>
         <ul className="space-y-4 mt-36">
           <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
             <ContentPasteIcon fontSize='large' />
@@ -124,14 +124,14 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               <span onClick={() => navigate(RoutesNames.bannerPreview.replace(':id', id.toString()))}>Imprimir banner</span>
             </div>
           </li>
-          {!team?.professor?.equipe.linkPitch && (
+          {/* {!team?.professor?.equipe.linkPitch && (
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
               <LinkIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
                 <span>Enviar link do pitch</span>
               </div>
             </li>
-          )}
+          )} */}
         </ul>
       </div>
     </div>

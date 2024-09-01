@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
-import { capitalizeTeamName, EvaluationProps } from "../../../utils/types"
+import { EvaluationProps } from "../../../utils/types"
 
 
 interface QuestionItemProps {
@@ -63,6 +63,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)
+  //todo: winnicius => adicionar loading para os dados e loading para o button finalizar em todos componentes de avaliação
 
   useEffect(() => {
     if (dljQuestions) {
@@ -115,6 +116,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       await postEvaluation(evaluations).unwrap()
       setOpen(false)
       //Adicionar lógica para perguntar se o usuário deseja avaliar o proximo time ou voltar a lista de times
+      //anotações de como pode ser essa lógica, primeiro contorlar a exibição por enum? segundo tela com o nome do time que foi avaliado e sua nota total e perguntar se o usuario deseja proceguir pro proximo time e o nome do time, componente que carregue a lista de times e verifique se o time fornecido já foi avaliado e em seguida perguntar e chamar a tela passando o id do time restante até não sobrar mais nenhum time e retornar a mensagem que não há mais nenhum time para ser avaliado.
       alert('Avaliação enviada com sucesso!')
     } catch (error) {
       console.error("Failed to submit evaluation", error)
@@ -142,7 +144,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       ))}
       <div className="flex flex-col justify-end gap-4 items-end mt-6">
         <p className="text-lg font-bold">
-          Total de pontos somados: {totalPoints} pontos
+          Total do time {teamData.nomeEquipe}: {totalPoints} pontos
         </p>
         <Button variant="contained" className="bg-[#5741A6] normal-case first-letter:capitalize" disabled={totalPoints > 100} onClick={() => setOpen(true)}>
           Finalizar
@@ -151,7 +153,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>
           <span>
-            Deseja finalizar a avaliação DLJ do time {capitalizeTeamName(teamData?.nomeEquipe)}?
+            Deseja finalizar a avaliação DLJ do time {teamData?.nomeEquipe}?
           </span>
         </DialogContent>
         <DialogActions>

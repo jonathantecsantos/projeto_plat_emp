@@ -1,8 +1,8 @@
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent } from "@mui/material"
+import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation } from "react-router-dom"
-import { useSnackbar } from "notistack"
 import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao } from "../../../model/evaluationFormat"
@@ -111,7 +111,11 @@ export const ExpoDleiTeamEvaluation = ({ teamData }: EvaluationProps) => {
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-7xl mx-auto p-4 text-[#3C14A4]">
+      {!showSuccess ? <div className="flex gap-1 py-1">
+        <p className="font-semibold">Time:</p>
+        <p className="font-medium">{teamData?.nomeEquipe}</p>
+      </div> : null}
       {showSuccess ? (
         <HandleNextTeamComponent
           currentTeamId={teamData.id}
@@ -141,7 +145,7 @@ export const ExpoDleiTeamEvaluation = ({ teamData }: EvaluationProps) => {
             </div>
           ))}
           <div className="flex flex-col justify-end gap-4 items-end mt-6">
-            <p className="text-lg font-bold text-[#30168C]">Total de pontos somados:  {totalPoints.toFixed(1)} pontos</p>
+            <p className="text-lg font-bold text-[#30168C]">Pontuação total:  {totalPoints.toFixed(1)} pontos</p>
             {alreadyEvaluated && <p className="text-red-400">Este time já foi avaliado.</p>}
             <Button
               variant="contained"

@@ -156,7 +156,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
 
       dispatch(addEvaluation({
         teamId: teamData.id,
-        evaluationType: RoutesNames.dljTeam, 
+        evaluationType: RoutesNames.dljTeam,
       }));
 
       setShowSuccess(true)
@@ -171,9 +171,13 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
 
   return (
-    <div className="w-full mx-auto p-4 text-[#30168C]">
+    <div className="max-w-7xl mx-auto p-4 text-[#30168C]">
       {/* <div className="bg-red-200">teamId atual {JSON.stringify(teamData.id)}</div> */}
       {/* <div className="bg-blue-300">Times avaliados{JSON.stringify(evaluatedTeams)}</div> */}
+      {!showSuccess ? <div className="flex gap-1 py-1">
+        <p className="font-semibold">Time:</p>
+        <p className="font-medium">{teamData?.nomeEquipe}</p>
+      </div> : null}
       {showSuccess ? (
         <HandleNextTeamComponent
           currentTeamId={teamData.id}
@@ -190,6 +194,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       ) : (
         <>
           {dljQuestions?.map((criterio: CriterioAvaliacao) => (
+
             <div key={criterio.id} className="mb-6">
               {criterio.subcriterioAvaliacaos.map((subcriterio: SubcriterioAvaliacao) => (
                 <QuestionItem
@@ -206,7 +211,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
           ))}
           <div className="flex flex-col justify-end gap-4 items-end mt-6">
             <p className="text-lg font-bold">
-              Total do time {teamData?.nomeEquipe}: {totalPoints} pontos
+              Pontuação total: {totalPoints} pontos
             </p>
             {alreadyEvaluated && <p className="text-red-400">Este time já foi avaliado.</p>}
             <Button variant="contained" className="bg-[#5741A6] normal-case"

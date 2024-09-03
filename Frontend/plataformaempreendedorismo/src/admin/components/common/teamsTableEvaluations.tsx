@@ -20,7 +20,7 @@ export const TeamsTable = ({ routeName }: TeamsTableProps) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
   const evaluatedTeams = useSelector(selectEvaluatedTeams)
-  
+
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
   const tableComponentSetCurrPage = tableComponentSetCurrPageRef.current
@@ -38,8 +38,8 @@ export const TeamsTable = ({ routeName }: TeamsTableProps) => {
   const filteredTeams = useMemo(() => {
     if (!teams) return []
     return teams.filter((team) =>
-      team.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      team.id.toString().includes(searchTerm)
+      team.nome.toLowerCase().includes(searchTerm.toLowerCase())
+      // || team.id.toString().includes(searchTerm)
     )
   }, [teams, searchTerm])
 
@@ -53,15 +53,16 @@ export const TeamsTable = ({ routeName }: TeamsTableProps) => {
   return (
     <div className="flex flex-col h-full">
       <div className="sticky top-0 z-10">
-        <AdminHeader onSearch={handleSearch} onRefresh={refetch} placeholder='Pesquisar por nome ou ID' />
+        <AdminHeader onSearch={handleSearch} onRefresh={refetch} placeholder='Pesquisar por nome' />
       </div>
       <div className="flex-1 overflow-auto">
         <div className="overflow-x-auto p-4">
           <TableComponent
-            colums={['Nome', '', '','', 'Ação']}
+            colums={['Nome', '', 'Ação']}
             wrapperProps={{
               style: {
-                maxWidth: 'calc(100% - 10px)',
+                // maxWidth: 'calc(100% - 10px)',
+                width: '100%'
               }
             }}
             setCurrPageRef={tableComponentSetCurrPageRef}
@@ -73,15 +74,19 @@ export const TeamsTable = ({ routeName }: TeamsTableProps) => {
 
               return (
                 <>
-                  <td className="px-4 py-2 capitalize">{team.nome.toLowerCase()}</td>
-                  <td className="xl:pr-96 pr-0"></td>
-                  <td className="sm:pr-96"></td>
-                  <td className="">{alreadyEvaluated && <CheckIcon className='text-green-500 hover:text-white' />}</td>
-                  <td className="py-2 underline capitalize">Avaliar</td>
+                  <td className="px-4 py-2 capitalize whitespace-nowrap w-full">
+                    {team.nome.toLowerCase()}
+                  </td>
+                  <td className="text-center">
+                    {alreadyEvaluated && <CheckIcon className='text-green-500 hover:text-white' />}
+                  </td>
+                  <td className="py-2 px-2 underline capitalize text-left whitespace-nowrap">
+                    {alreadyEvaluated ? 'Av. concluída' : 'Avaliar'}
+                  </td>
                 </>
               );
             }}
-            
+
             onClickRow={(team: TableComponentClickRowProps<TeamsResponse>) => {
               navigate(routeName.replace(':id', team.item?.id.toString()), {
                 state: {

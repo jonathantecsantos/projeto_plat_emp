@@ -1,8 +1,13 @@
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material"
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
+import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
+import { addEvaluation, selectEvaluatedTeams } from "../../../redux/reducers/evaluations.slice"
 import { EvaluationProps } from "../../../utils/types"
+import { HandleNextTeamComponent } from "../common/handleNextTeam"
 
 
 interface QuestionItemProps {
@@ -63,7 +68,13 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)
+  const dispatch = useDispatch()
+  const [showSuccess, setShowSuccess] = useState(false)
+  const evaluatedTeams = useSelector(selectEvaluatedTeams)
+  const location = useLocation();
   //todo: winnicius => adicionar loading para os dados e loading para o button finalizar em todos componentes de avaliação
+  // console.table(teams)
+  const currentTeamData = location.state?.teamData || teamData;
 
   useEffect(() => {
     if (dljQuestions) {
@@ -82,7 +93,12 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       setSelectedOptions(initialSelectedOptions)
       setTotalPoints(initialTotalPoints)
     }
-  }, [dljQuestions])
+
+    return () => {
+      setSelectedOptions([]);
+      setTotalPoints(0);
+    };
+  }, [dljQuestions, currentTeamData])
 
   const handleSelectionChange = (id: number, isSelected: boolean, points: number) => {
     let updatedSelectedOptions = [...selectedOptions]
@@ -115,9 +131,14 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
     try {
       await postEvaluation(evaluations).unwrap()
       setOpen(false)
-      //Adicionar lógica para perguntar se o usuário deseja avaliar o proximo time ou voltar a lista de times
-      //anotações de como pode ser essa lógica, primeiro contorlar a exibição por enum? segundo tela com o nome do time que foi avaliado e sua nota total e perguntar se o usuario deseja proceguir pro proximo time e o nome do time, componente que carregue a lista de times e verifique se o time fornecido já foi avaliado e em seguida perguntar e chamar a tela passando o id do time restante até não sobrar mais nenhum time e retornar a mensagem que não há mais nenhum time para ser avaliado.
-      alert('Avaliação enviada com sucesso!')
+
+      dispatch(addEvaluation({
+        teamId: teamData.id,
+        evaluationType: RoutesNames.dljTeam, // Substitua conforme necessário
+      }));
+
+      setShowSuccess(true)
+      // alert('Avaliação enviada com sucesso!')
     } catch (error) {
       console.error("Failed to submit evaluation", error)
       alert('Falha ao enviar avaliação!')
@@ -125,46 +146,64 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   }
 
   return (
-    <div className="w-full mx-auto p-4 text-[#30168C]">
-      {/* <h2 className="p-2">Avaliação DLJ time: {teamData?.nomeEquipe}</h2> */}
-      {dljQuestions?.map((criterio: CriterioAvaliacao) => (
-        <div key={criterio.id} className="mb-6">
-          {criterio.subcriterioAvaliacaos.map((subcriterio: SubcriterioAvaliacao) => (
-            <QuestionItem
-              key={subcriterio.id}
-              subcriterio={subcriterio}
-              isDisabled={
-                (subcriterio.id === 2 && selectedOptions.includes(1)) ||
-                (subcriterio.id === 1 && selectedOptions.includes(2))
-              }
-              onSelectionChange={handleSelectionChange}
-            />
+    <div className="w-full mx-auto p-4 text-[#30168C]">   
+      {/* <div className="bg-red-200">teamId atual {JSON.stringify(teamData.id)}</div>
+      <div className="bg-blue-300">Times avaliados{JSON.stringify(evaluatedTeams)}</div> */}
+      {showSuccess ? (
+        <HandleNextTeamComponent
+          currentTeamId={teamData.id}
+          state={{
+            teamData: {
+              id: teamData.id,
+              nomeEquipe: teamData?.nomeEquipe,
+              teams: teamData.teams,
+            }
+          }}
+          evaluationType={RoutesNames.dljTeam}
+          onComplete={() => setShowSuccess(false)}
+        />
+      ) : (
+        <>
+          {dljQuestions?.map((criterio: CriterioAvaliacao) => (
+            <div key={criterio.id} className="mb-6">
+              {criterio.subcriterioAvaliacaos.map((subcriterio: SubcriterioAvaliacao) => (
+                <QuestionItem
+                  key={subcriterio.id}
+                  subcriterio={subcriterio}
+                  isDisabled={
+                    (subcriterio.id === 2 && selectedOptions.includes(1)) ||
+                    (subcriterio.id === 1 && selectedOptions.includes(2))
+                  }
+                  onSelectionChange={handleSelectionChange}
+                />
+              ))}
+            </div>
           ))}
-        </div>
-      ))}
-      <div className="flex flex-col justify-end gap-4 items-end mt-6">
-        <p className="text-lg font-bold">
-          Total do time {teamData.nomeEquipe}: {totalPoints} pontos
-        </p>
-        <Button variant="contained" className="bg-[#5741A6] normal-case first-letter:capitalize" disabled={totalPoints > 100} onClick={() => setOpen(true)}>
-          Finalizar
-        </Button>
-      </div>
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogContent>
-          <span>
-            Deseja finalizar a avaliação DLJ do time {teamData?.nomeEquipe}?
-          </span>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} style={{ textTransform: 'none', color: 'gray' }}>
-            Cancelar
-          </Button>
-          <Button onClick={handlePostEvaluation} style={{ textTransform: 'none', color: 'green' }}>
-            Finalizar
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <div className="flex flex-col justify-end gap-4 items-end mt-6">
+            <p className="text-lg font-bold">
+              Total do time {teamData?.nomeEquipe}: {totalPoints} pontos
+            </p>
+            <Button variant="contained" className="bg-[#5741A6] normal-case" disabled={totalPoints > 100} onClick={() => setOpen(true)}>
+              Finalizar
+            </Button>
+          </div>
+          <Dialog open={open} onClose={() => setOpen(false)}>
+            <DialogContent>
+              <span>
+                Deseja finalizar a avaliação DLJ do time {teamData?.nomeEquipe}?
+              </span>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpen(false)} style={{ textTransform: 'none', color: 'gray' }}>
+                Cancelar
+              </Button>
+              <Button onClick={handlePostEvaluation} style={{ textTransform: 'none', color: 'green' }}>
+                Finalizar
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
+      )}
     </div>
   )
 }

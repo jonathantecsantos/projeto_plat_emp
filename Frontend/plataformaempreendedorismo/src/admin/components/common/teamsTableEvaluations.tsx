@@ -73,8 +73,9 @@ export const TeamsTable = ({ routeName }: TeamsTableProps) => {
               navigate(routeName.replace(':id', team.item?.id.toString()), {
                 state: {
                   id: team.item.id,
-                  nomeEquipe: team.item.nome
-                }
+                  nomeEquipe: team.item.nome,
+                  teams: teams
+                },
               })
             }}
           />

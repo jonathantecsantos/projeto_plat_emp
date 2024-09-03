@@ -1,3 +1,4 @@
+import { TeamsResponse } from "../model/team"
 
 export enum ImportType {
   student = 'ALUNO',
@@ -46,7 +47,7 @@ export interface AdaptedLoginResponse {
 }
 
 export interface EvaluationProps {
-  teamData: { id: number, nomeEquipe: string }
+  teamData: { id: number, nomeEquipe?: string, teams: TeamsResponse[] }
 }
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')

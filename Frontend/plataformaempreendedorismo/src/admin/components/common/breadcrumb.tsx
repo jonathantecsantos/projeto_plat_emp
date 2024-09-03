@@ -1,7 +1,7 @@
 // BreadcrumbComponent.tsx
 import { styled } from '@mui/material'
 import { ArrayUtils } from 'essencials'
-import React, { Children, CSSProperties } from 'react'
+import React, { CSSProperties } from 'react'
 import { IoMdHome as HomeIcon } from 'react-icons/io'
 import { MdOutlineArrowForwardIos as DividerIcon } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'

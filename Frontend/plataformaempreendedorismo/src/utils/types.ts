@@ -1,5 +1,4 @@
 import { TeamsResponse } from "../model/team"
-import { EvaluationState } from "../redux/reducers/evaluations.slice"
 
 export enum ImportType {
   student = 'ALUNO',

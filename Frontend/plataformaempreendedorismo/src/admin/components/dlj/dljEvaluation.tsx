@@ -68,7 +68,7 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
 export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const { data: dljQuestions, isLoading } = useGetEvaluationByIdQuery(1) //id dlj = 1
   const [postEvaluation] = usePostEvaluationMutation()
-  const evaluatedTeams = useSelector(selectEvaluatedTeams)
+  // const evaluatedTeams = useSelector(selectEvaluatedTeams)
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)

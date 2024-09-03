@@ -22,7 +22,7 @@ export const SubcriterionSlider = ({ subcriterio, value, onChange }: Subcriterio
       <div className="p-4 md:w-1/2 flex-col justify-center mx-auto ">
           <Slider
             size="medium"
-            value={value}
+            value={value || 0}
             max={subcriterio.notaMaxima}
             min={0.0}
             step={0.1}

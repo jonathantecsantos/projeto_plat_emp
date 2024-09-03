@@ -9,17 +9,31 @@ import { Evaluation, EvaluationById } from '../model/evaluationFormat'
 //atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
-  
-  //STUDENT
+
   endpoints: (build) => ({
+
+    //IMPORTS
+    uploadFile: build.mutation({
+      query: (body) => ({
+        url: '/api/upload/arquivo',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: (_result, _error) => [
+        { type: 'Student', id: 'LIST' },
+        { type: 'Teacher', id: 'LIST' },
+      ],
+    }),
+
+    //STUDENT
     getStudent: build.query<StudentIdResponse, number>({
       query: (id) => `/alunos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
-    
+
     getAllStudents: build.query<StudentsResponse[], void>({
       query: () => `/alunos`,
       transformResponse: (response: StudentsResponse[]) => {
@@ -171,13 +185,13 @@ export const studentsApiSlice = createApi({
       //possivelmente invalidar a tag dos times para atualizar equipe que ja foi avaliada
     }),
 
-    
+
   }),
 })
 
 export const {
-  //Teams
-  useGetTeamByIdQuery,
+  //Imports
+  useUploadFileMutation,
 
   //Students
   useGetStudentQuery,
@@ -185,6 +199,9 @@ export const {
   useCreateStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,
+
+  //Teams
+  useGetTeamByIdQuery,
 
   //Teachers
   useGetTeacherQuery,

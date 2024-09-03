@@ -57,7 +57,7 @@ export const Teams = () => {
         <div className="overflow-x-auto p-4">
           <TableComponent
             colums={[
-              'ID',
+              // 'ID',
               'Nome',
               'Link Pitch'
             ]}
@@ -66,7 +66,7 @@ export const Teams = () => {
             bodyList={filteredTeams!}
             bodyRowBuilder={(team: TeamsResponse) => (
               <>
-                <td className="px-4 py-2">{team.id}</td>
+                {/* <td className="px-4 py-2">{team.id}</td> */}
                 <td className="px-4 py-2 capitalize">{team.nome.toLowerCase()}</td>
                 <td className="px-4 py-2">{team.linkPitch ? team.linkPitch : '--'}</td>
               </>

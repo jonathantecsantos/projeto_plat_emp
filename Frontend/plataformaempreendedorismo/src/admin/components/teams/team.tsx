@@ -1,6 +1,5 @@
 import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import DescriptionIcon from '@mui/icons-material/Description'
-import LinkIcon from '@mui/icons-material/Link'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 import PrintIcon from '@mui/icons-material/Print'
 import SchoolIcon from '@mui/icons-material/School'

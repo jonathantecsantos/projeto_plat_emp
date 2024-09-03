@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { persistStore } from "redux-persist"
-import { importApiSlice } from "../api/import.slice"
 import { studentsApiSlice } from "../api/studentApi"
 import { teamApiSlice } from "../api/teamApi.slice"
 import { userApiSlice } from "../api/userApi.slice"
@@ -9,7 +8,6 @@ import { persistedAuthReducer } from './persistors/auth.slice'
 import { persistedUserLoginReducer } from "./persistors/userInfo.slice"
 import { persistedEvaluationReducer } from './persistors/evaluations.slice'
 import loadingBarReducer from './reducers/loadingBar.slice'
-
 
 
 export const store = configureStore({
@@ -21,7 +19,6 @@ export const store = configureStore({
     [studentsApiSlice.reducerPath]: studentsApiSlice.reducer,
     [teamApiSlice.reducerPath]: teamApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
-    [importApiSlice.reducerPath]: importApiSlice.reducer,
   },
 
   middleware: (getDefaultMiddleware) => {
@@ -31,7 +28,6 @@ export const store = configureStore({
       studentsApiSlice.middleware,
       teamApiSlice.middleware,
       userApiSlice.middleware,
-      importApiSlice.middleware,
     )
   }
 })

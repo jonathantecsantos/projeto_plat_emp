@@ -113,7 +113,7 @@ export const Students = () => {
               // 'ID Equipe',
               'Equipe',
               // 'ID Obs',
-              ''
+              'Ação'
             ]}
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
             setCurrPageRef={tableComponentSetCurrPageRef}

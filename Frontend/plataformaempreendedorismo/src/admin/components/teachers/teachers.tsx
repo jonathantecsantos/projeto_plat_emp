@@ -104,7 +104,7 @@ export const TeachersComponent = () => {
               'Nome',
               'Email',
               'Equipe',
-              ''
+              'Ação'
             ]}
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
             setCurrPageRef={tableComponentSetCurrPageRef}

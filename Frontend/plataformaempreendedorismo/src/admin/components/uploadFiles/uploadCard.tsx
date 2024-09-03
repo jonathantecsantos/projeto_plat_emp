@@ -12,13 +12,13 @@ interface UploadComponent {
 
 export const UploadComponent = ({ title, onFileChange, onSubmit, isLoading, uploaded }: UploadComponent) => {
   return (
-    <div className='shadow-md rounded w-fit p-2 bg-blue-300 '>
-      <div className='flex justify-start space-x-1 p-4'>
-        <h2>{title}</h2>
-        {uploaded && <CheckCircleIcon style={{ color: 'green' }} />}
+    <div className='rounded w-fit p-4  text-[#cecece] bg-gradient-to-r from-indigo-500 to-indigo-900  shadow-lg transform hover:scale-105 transition-transform duration-300'>
+      <div className='flex justify-start space-x-1 items-center'>
+        <h2 className='text-white  p-2'>{title}</h2>
+        {uploaded && <CheckCircleIcon className='rounded-full  text-green-300'/>}
       </div>
       <input
-        style={{ paddingInline: 20 }}
+        className='p-2'
         type="file"
         accept=".xlsx,.xls"
         onChange={onFileChange}

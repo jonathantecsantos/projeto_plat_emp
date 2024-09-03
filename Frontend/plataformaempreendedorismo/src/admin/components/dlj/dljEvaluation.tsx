@@ -1,11 +1,14 @@
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material"
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent } from "@mui/material"
+import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
-import { addEvaluation, selectEvaluatedTeams } from "../../../redux/reducers/evaluations.slice"
+import { addEvaluation, checkIfTeamEvaluated, selectEvaluatedTeams } from "../../../redux/reducers/evaluations.slice"
+import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
+import { RootState } from "../../../redux/store"
 import { EvaluationProps } from "../../../utils/types"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
 
@@ -63,18 +66,28 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
 }
 
 export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
-  const { data: dljQuestions } = useGetEvaluationByIdQuery(1) //id dlj = 1
+  const { data: dljQuestions, isLoading } = useGetEvaluationByIdQuery(1) //id dlj = 1
   const [postEvaluation] = usePostEvaluationMutation()
+  const evaluatedTeams = useSelector(selectEvaluatedTeams)
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
   const [showSuccess, setShowSuccess] = useState(false)
-  const evaluatedTeams = useSelector(selectEvaluatedTeams)
-  const location = useLocation();
-  //todo: winnicius => adicionar loading para os dados e loading para o button finalizar em todos componentes de avaliação
-  // console.table(teams)
+  const location = useLocation()
+  const { enqueueSnackbar } = useSnackbar()
   const currentTeamData = location.state?.teamData || teamData;
+
+
+  const alreadyEvaluated = useSelector((state: RootState) => {
+    const evaluatedTeams = selectEvaluatedTeams(state);
+    return checkIfTeamEvaluated({
+      evaluatedTeams,
+      teamId: teamData.id,
+      evaluationType: RoutesNames.dljTeam,
+    });
+  });
+
 
   useEffect(() => {
     if (dljQuestions) {
@@ -119,7 +132,15 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
 
 
   const handlePostEvaluation = async () => {
-    if (!teamData || !dljQuestions || dljQuestions.length === 0) return
+    if (!teamData || !dljQuestions || dljQuestions.length === 0) {
+      enqueueSnackbar('Nenhuma alternativa disponível, consulte um admin.', { variant: 'info' })
+      return
+    }
+
+    if (alreadyEvaluated) {
+      enqueueSnackbar('Este time já foi avaliado', { variant: 'error' })
+      return
+    }
 
     const evaluations: Evaluation[] = dljQuestions[0].subcriterioAvaliacaos.map(subcriterio => ({
       idEquipe: teamData.id,
@@ -129,26 +150,30 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
     }))
 
     try {
+      dispatch(toggleLoading())
       await postEvaluation(evaluations).unwrap()
       setOpen(false)
 
       dispatch(addEvaluation({
         teamId: teamData.id,
-        evaluationType: RoutesNames.dljTeam, // Substitua conforme necessário
+        evaluationType: RoutesNames.dljTeam, 
       }));
 
       setShowSuccess(true)
-      // alert('Avaliação enviada com sucesso!')
     } catch (error) {
       console.error("Failed to submit evaluation", error)
-      alert('Falha ao enviar avaliação!')
+      enqueueSnackbar('Falha ao enviar avaliação, consulte um admin.', { variant: 'error' })
+    } finally {
+      dispatch(toggleLoading())
     }
   }
 
+  if (isLoading) return <div className='text-center'><CircularProgress /></div>
+
   return (
-    <div className="w-full mx-auto p-4 text-[#30168C]">   
-      {/* <div className="bg-red-200">teamId atual {JSON.stringify(teamData.id)}</div>
-      <div className="bg-blue-300">Times avaliados{JSON.stringify(evaluatedTeams)}</div> */}
+    <div className="w-full mx-auto p-4 text-[#30168C]">
+      {/* <div className="bg-red-200">teamId atual {JSON.stringify(teamData.id)}</div> */}
+      {/* <div className="bg-blue-300">Times avaliados{JSON.stringify(evaluatedTeams)}</div> */}
       {showSuccess ? (
         <HandleNextTeamComponent
           currentTeamId={teamData.id}
@@ -183,7 +208,9 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
             <p className="text-lg font-bold">
               Total do time {teamData?.nomeEquipe}: {totalPoints} pontos
             </p>
-            <Button variant="contained" className="bg-[#5741A6] normal-case" disabled={totalPoints > 100} onClick={() => setOpen(true)}>
+            {alreadyEvaluated && <p className="text-red-400">Este time já foi avaliado.</p>}
+            <Button variant="contained" className="bg-[#5741A6] normal-case"
+              disabled={totalPoints > 100 || alreadyEvaluated || isLoading} onClick={() => setOpen(true)}>
               Finalizar
             </Button>
           </div>
@@ -197,7 +224,8 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
               <Button onClick={() => setOpen(false)} style={{ textTransform: 'none', color: 'gray' }}>
                 Cancelar
               </Button>
-              <Button onClick={handlePostEvaluation} style={{ textTransform: 'none', color: 'green' }}>
+              <Button onClick={handlePostEvaluation}
+                style={{ textTransform: 'none', color: 'white', backgroundColor: '#5741A6' }}>
                 Finalizar
               </Button>
             </DialogActions>

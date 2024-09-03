@@ -9,6 +9,7 @@ import { logout } from "../../../redux/reducers/auth.slice"
 import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
+import { clearEvaluations } from '../../../redux/reducers/evaluations.slice'
 
 interface AdminPage {
   mainContent: ReactNode
@@ -31,6 +32,7 @@ const AdminAppBar = () => {
       <div className="flex gap-2 items-center"
         onClick={() => {
           dispatch(logout())
+          dispatch(clearEvaluations())
           navigate(RoutesNames.home)
         }} >
         <LogoutIcon className="text-right cursor-pointer" />

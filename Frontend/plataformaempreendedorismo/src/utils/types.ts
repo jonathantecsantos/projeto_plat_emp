@@ -1,4 +1,5 @@
 import { TeamsResponse } from "../model/team"
+import { EvaluationState } from "../redux/reducers/evaluations.slice"
 
 export enum ImportType {
   student = 'ALUNO',
@@ -55,3 +56,22 @@ export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 export const capitalizeTeamName = (name: string) => {
   return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : '';
 };
+
+
+// interface CheckIfTeamEvaluatedProps {
+//   evaluatedTeams: EvaluationState['evaluatedTeams'];
+//   teamId: number;
+//   evaluationType: string;
+// }
+
+// export const checkIfTeamEvaluated = ({
+//   evaluatedTeams,
+//   teamId,
+//   evaluationType
+// }: CheckIfTeamEvaluatedProps): boolean => {
+//   return evaluatedTeams.some(
+//     (evaluation) =>
+//       evaluation.teamId === teamId &&
+//       evaluation.evaluationType === evaluationType
+//   );
+// };

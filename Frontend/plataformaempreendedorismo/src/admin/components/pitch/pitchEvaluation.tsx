@@ -12,6 +12,7 @@ import { RootState } from "../../../redux/store"
 import { EvaluationProps } from "../../../utils/types"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
 import { SubcriterionSlider } from "../common/subcriterioSlider"
+import { EvaluationHeader } from "../common/evaluationHeader"
 
 export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const { data: pitchQuestions, isLoading } = useGetEvaluationByIdQuery(2) // id pitch = 2
@@ -111,10 +112,8 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 text-[#3C14A4]">
-      {!showSuccess ? <div className="flex gap-1 py-1">
-        <p className="font-semibold">Time:</p>
-        <p className="font-medium">{teamData?.nomeEquipe}</p>
-      </div> : null}
+
+      {!showSuccess ? <EvaluationHeader teamName={teamData?.nomeEquipe || ''} /> : null}
       {showSuccess ? (
         <HandleNextTeamComponent
           currentTeamId={teamData.id}

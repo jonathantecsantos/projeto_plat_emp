@@ -3,13 +3,12 @@ import { Divider } from "@mui/material"
 import { ReactNode } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-// import logo from '../../assets/logo.svg'
 import { RoutesNames } from "../../../globals"
 import { logout } from "../../../redux/reducers/auth.slice"
+import { clearEvaluations } from '../../../redux/reducers/evaluations.slice'
 import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
-import { clearEvaluations } from '../../../redux/reducers/evaluations.slice'
 
 interface AdminPage {
   mainContent: ReactNode
@@ -45,17 +44,10 @@ const AdminAppBar = () => {
 }
 
 const LeftMenu = () => {
-  // const backgroundImageUrl = logo
   const navigate = useNavigate()
-
   return (
-    <div className=" text-[#3C14A4] h-full">
+    <div className=" text-[#3C14A4] h-full z-30">
       <div className="w-full p-4">
-        {/* <img
-          src={backgroundImageUrl}
-          className="-z-10 mb-4 cursor-pointer"
-          onClick={() => navigate(RoutesNames.home)}
-        /> */}
         <h2
           onClick={() => navigate(RoutesNames.home)}
           className="cursor-pointer font-bold text-center text-white bg-gradient-to-r from-indigo-500 to-indigo-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"

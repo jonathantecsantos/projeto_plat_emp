@@ -11,6 +11,7 @@ import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
 import { RootState } from "../../../redux/store"
 import { EvaluationProps } from "../../../utils/types"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
+import { EvaluationHeader } from "../common/evaluationHeader"
 
 
 interface QuestionItemProps {
@@ -172,12 +173,8 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 text-[#30168C]">
-      {/* <div className="bg-red-200">teamId atual {JSON.stringify(teamData.id)}</div> */}
-      {/* <div className="bg-blue-300">Times avaliados{JSON.stringify(evaluatedTeams)}</div> */}
-      {!showSuccess ? <div className="flex gap-1 py-1">
-        <p className="font-semibold">Time:</p>
-        <p className="font-medium">{teamData?.nomeEquipe}</p>
-      </div> : null}
+      {!showSuccess ? <EvaluationHeader teamName={teamData?.nomeEquipe || ''} /> : null}
+
       {showSuccess ? (
         <HandleNextTeamComponent
           currentTeamId={teamData.id}

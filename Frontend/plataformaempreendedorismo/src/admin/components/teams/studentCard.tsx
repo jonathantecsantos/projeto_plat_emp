@@ -3,7 +3,7 @@ import { Button } from 'essencials'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDeleteStudentMutation, useGetStudentQuery } from '../../../api/studentApi'
+import { useDeleteStudentMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { Student } from '../../../model/student'
 import { ActionMenu } from '../common/actionMenuIcon'
@@ -21,10 +21,9 @@ export interface StudentCard {
 export const StudentCard = ({ student }: StudentCard) => {
   // const [updateStudent] = useUpdateStudentMutation()
   const [deleteStudent] = useDeleteStudentMutation()
-  //skip in use because stop handler update data in initiation component
+  // skip in use because stop handler update data in initiation component
   // const [skip, setSkip] = useState(true)
   // const { data: updatedStudent, isLoading } = useGetStudentQuery(student.id, { skip })
-  const { data: updatedStudent, isLoading } = useGetStudentQuery(student.id)
 
 
   const [open, setOpen] = useState(false)
@@ -84,16 +83,16 @@ export const StudentCard = ({ student }: StudentCard) => {
     }
   }
 
-  if (isLoading) return <div className='text-center'><CircularProgress /></div>
-  const displayStudent = updatedStudent || student;
+  // if (isLoading) return <div className='text-center'><CircularProgress /></div>
+  // const displayStudent = updatedStudent || student;
 
   return (
     <div key={student.id} className={`p-4 border rounded-lg shadow-md max-w-80 min-h-20 relative
-  ${displayStudent?.isLider || displayStudent?.isViceLider ? 'bg-[#9F8FD9] text-[#210077]' : 'bg-gray-100'}`}>
+  ${student?.isLider || student?.isViceLider ? 'bg-[#9F8FD9] text-[#210077]' : 'bg-gray-100'}`}>
 
       <div className='flex justify-between'>
         <p className={`text-lg font-bold capitalize mr-2 text-[#210077] `}>
-          {displayStudent?.nome?.toLowerCase()}
+          {student?.nome?.toLowerCase()}
         </p>
 
         <ActionMenu
@@ -105,12 +104,12 @@ export const StudentCard = ({ student }: StudentCard) => {
         />
       </div>
 
-      <p className='text-[#210077]'>{getRoleLabel(displayStudent as Student)}</p>
+      <p className='text-[#210077]'>{getRoleLabel(student as Student)}</p>
       {/* <p>Turma: {student.turma}</p> */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>
           <span>
-            Deseja realmente excluir o aluno: {displayStudent?.nome.toLowerCase()}?
+            Deseja realmente excluir o aluno: {student?.nome.toLowerCase()}?
           </span>
         </DialogContent>
         <DialogActions>

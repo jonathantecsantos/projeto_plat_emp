@@ -3,7 +3,7 @@ import { SubcriterioAvaliacao } from "../../../model/evaluationFormat";
 
 interface SubcriterionSliderProps {
   subcriterio: SubcriterioAvaliacao;
-  value: number; // Recebe o valor diretamente do componente pai
+  value: number; 
   onChange: (id: number, value: number) => void;
 }
 
@@ -29,11 +29,11 @@ export const SubcriterionSlider = ({ subcriterio, value, onChange }: Subcriterio
           step={0.1}
           aria-label="medium"
           onChange={handleSliderChange}
-          valueLabelDisplay="auto"
+          valueLabelDisplay="on"
         />
         <div className="flex justify-between text-sm text-gray-500">
           <span>0</span>
-          <span>{subcriterio.notaMaxima}</span>
+          <span>{subcriterio.notaMaxima.toFixed(1)}</span>
         </div>
       </div>
     </div>

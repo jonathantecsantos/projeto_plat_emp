@@ -3,6 +3,8 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.CriterioAvaliacao;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -60,5 +62,16 @@ public class AvaliacaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao Avaliar Equipe: " + e.getMessage());
         }
+    }
+
+    @Operation(summary = "Busca Equipes validando Avaliacao", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Equipes não encontradas"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
+    })
+    @GetMapping(value = "/equipes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ListaEquipesAvaliadasRecord>> getEquipes(@RequestParam Long idTipoAvaliacao, @RequestParam Long idAvaliador){
+        return ResponseEntity.ok(avaliacaoService.buscarEquipes(idTipoAvaliacao, idAvaliador));
     }
 }

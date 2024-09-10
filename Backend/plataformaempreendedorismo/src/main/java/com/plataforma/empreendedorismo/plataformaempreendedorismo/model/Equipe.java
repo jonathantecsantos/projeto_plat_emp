@@ -41,4 +41,7 @@ public class Equipe {
     @OneToMany(mappedBy = "equipe")
     private List<Aluno> alunos;
 
+    @Transient
+    private Boolean equipeAvaliada;
+
 }

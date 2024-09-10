@@ -1,17 +1,19 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Avaliacao;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.CriterioAvaliacao;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AvaliacaoRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.CriterioAvaliacaoRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.FormatoAvaliacaoRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +28,15 @@ public class AvaliacaoService {
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
 
+    @Autowired
+    private AvaliadorRepository avaliadorRepository;
+
+    @Autowired
+    private RegistroAvaliacaoRepository registroAvaliacaoRepository;
+
+    @Autowired
+    private EquipeService equipeService;
+
     public List<CriterioAvaliacao> buscarAvaliacao(Long idFormato) {
         return criterioAvaliacaoRepository.findByFormatoAvaliacaoId(idFormato);
     }
@@ -38,11 +49,62 @@ public class AvaliacaoService {
     }
 
     @Transactional
-    public void avaliarEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) {
+    public void avaliarEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) throws Exception {
 
         List<Avaliacao> avaliacaos = avaliacaoEquipeRecord.stream()
                         .map(Avaliacao::new)
                                 .collect(Collectors.toList());
         avaliacaoRepository.saveAll(avaliacaos);
+        persistirRegistroAvaliacao(avaliacaoEquipeRecord);
+    }
+
+    private void persistirRegistroAvaliacao(List<AvaliacaoEquipeRecord> listAvaliacao) throws Exception {
+        Long idAvaliador = listAvaliacao.get(0).idAvaliador();
+        Avaliador avaliador = avaliadorRepository.findById(idAvaliador)
+                .orElseThrow(() -> new EntityNotFoundException("Avaliador não encontrado com o ID: " + idAvaliador));
+
+        Long idTipoAvaliacao = listAvaliacao.get(0).idTipoAvaliacao();
+        FormatoAvaliacao formatoAvaliacao = getFormatoAvaliacao(idTipoAvaliacao);
+
+        Long idEquipe = listAvaliacao.get(0).idEquipe();
+        Equipe equipe = equipeService.buscarEquipePorId(idEquipe);
+
+        if(avaliador != null){
+            RegistroAvaliacao registroAvaliacao = new RegistroAvaliacao();
+            registroAvaliacao.setAvaliador(avaliador);
+            registroAvaliacao.setFormatoAvaliacao(formatoAvaliacao);
+
+            LocalDateTime dataHoraAtual = LocalDateTime.now();
+            Date date = Timestamp.valueOf(dataHoraAtual);
+            registroAvaliacao.setDataAvaliacao(date);
+            registroAvaliacao.setEquipe(equipe);
+
+            registroAvaliacaoRepository.save(registroAvaliacao);
+        }
+    }
+
+    private FormatoAvaliacao getFormatoAvaliacao(Long idTipoAvaliacao) {
+        return formatoAvaliacaoRepository.findById(idTipoAvaliacao)
+                .orElseThrow(() -> new EntityNotFoundException("Formato Avaliador não encontrado " + idTipoAvaliacao));
+    }
+
+    public List<ListaEquipesAvaliadasRecord> buscarEquipes(Long idTipoAvaliacao, Long idAvaliador) {
+
+        List<ListaEquipesAvaliadasRecord> listEquipesBanco = equipeService.buscarEquipesTipoAvaliacao();
+
+        List<RegistroAvaliacao> registroAvaliacaoList = registroAvaliacaoRepository
+                .findByFormatoAvaliacaoIdAndAvaliadorId(idTipoAvaliacao, idAvaliador);
+
+        Set<Long> equipesAvaliadasIds = registroAvaliacaoList.stream()
+                .map(registro -> registro.getEquipe().getId())
+                .collect(Collectors.toSet());
+
+        return listEquipesBanco.stream()
+                .map(equipe -> new ListaEquipesAvaliadasRecord(
+                        equipe.id(),
+                        equipe.nome(),
+                        equipesAvaliadasIds.contains(equipe.id())
+                ))
+                .collect(Collectors.toList());
     }
 }

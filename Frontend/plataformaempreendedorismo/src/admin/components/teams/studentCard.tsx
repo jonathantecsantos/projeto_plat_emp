@@ -1,4 +1,4 @@
-import { CircularProgress, Dialog, DialogActions, DialogContent } from '@mui/material'
+import { Dialog, DialogActions, DialogContent } from '@mui/material'
 import { Button } from 'essencials'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'

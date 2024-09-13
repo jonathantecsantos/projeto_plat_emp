@@ -52,12 +52,12 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="p-4 border-l-2 border-[#10BBEF] flex w-full">
               <p className="text-[#10BBEF]">Imagem</p>
               {/* <p className="break-words break-all  px-2 print:px-1">teste</p> */}
-              <img
+              {banner?.anexos![0].nomeAnexo && <img
                 src={imageURL}
-                alt="Imagem"
+                alt="Imagem do banner"
                 // className="break-words break-all px-2 print:px-1"
                 style={{ maxWidth: '100%', height: 'auto' }}
-              />
+              />}
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               <div className="absolute z-10 -top-2 -left-4 bg-pink-500 text-white w-full pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-pink-500 uppercase font-semibold text-nowrap text-center print:w-[350px]">
                 Resultado Financeiro
               </div>
-              <div className="absolute border-4 print:border-[2px]   border-pink-500 rounded-lg p-6  bg-white w-[875px] h-[330px] print:w-[490px] print:h-[212px] print:p-3">
+              <div className="absolute border-4 print:border-[2px]   border-pink-500 rounded-lg p-6  bg-white w-[875px] h-[334px] print:w-[490px] print:h-[212px] print:p-3">
                 <p className="break-words break-all  py-2">{banner?.resultadoFinanceiroQ2}</p>
               </div>
             </div>
@@ -216,7 +216,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-[#6C4796] print:w-[220px]">
               Resultados Curto Prazo
             </div>
-            <div className="border-x-4 print:border-x-[2px] border-t-4 print:border-t-[2px] border-l-8 print:border-l-[6px] border-[#6C4796] rounded-t-md print:rounded-t-lg p-6 print:px-1 print:pt-3 w-full  bg-white print:h-[65px]">
+            <div className="border-x-4 print:border-x-[2px] border-t-4 print:border-t-[2px] border-l-8 print:border-l-[6px] border-[#6C4796] rounded-t-md print:rounded-t-lg p-6 print:px-1 print:pt-3 w-full  bg-white print:h-[65px] h-24"> 
               <p className="break-words break-all  py-2">{banner?.resultadosCurtoPrazoQ3}</p>
             </div>
           </div>
@@ -225,7 +225,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-[#6C4796] print:w-[220px]">
               Resultados Médio Prazo
             </div>
-            <div id="resultadosCurtoPrazo" className="border-x-4 print:border-x-[2px] border-b-4 print:border-b-[2px] border-l-8 print:border-l-[6px] border-[#6C4796] rounded-b-md print:rounded-b-lg p-6 print:px-1 print:pt-3 w-full  print:h-[65px] bg-white"
+            <div id="resultadosCurtoPrazo" className="border-x-4 print:border-x-[2px] border-b-4 print:border-b-[2px] border-l-8 print:border-l-[6px] border-[#6C4796] rounded-b-md print:rounded-b-lg p-6 print:px-1 print:pt-3 w-full  print:h-[65px] bg-white h-24"
               style={{
                 borderTop: 'dashed',
                 borderColor: "#6C4796",

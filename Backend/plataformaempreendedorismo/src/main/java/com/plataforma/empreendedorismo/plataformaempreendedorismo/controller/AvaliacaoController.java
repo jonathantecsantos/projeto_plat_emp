@@ -64,6 +64,24 @@ public class AvaliacaoController {
         }
     }
 
+    @Operation(summary = "Editar Avaliação", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Avaliação Editada com sucesso!"),
+            @ApiResponse(responseCode = "500", description = "Erro ao Editar Avaliação")
+    })
+    @PutMapping("/editar")
+    public ResponseEntity<String> editarAvaliacaoEquipe(@RequestBody List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord){
+
+        try {
+            avaliacaoService.editarAvaliacaoEquipe(avaliacaoEquipeRecord);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Avaliação editada com sucesso!");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao editar Avaliação da Equipe: " + e.getMessage());
+        }
+    }
+
     @Operation(summary = "Busca Equipes validando Avaliacao", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),

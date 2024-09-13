@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RegistroAvaliacaoRepository extends JpaRepository<RegistroAvaliacao, Long> {
-    List<RegistroAvaliacao> findByFormatoAvaliacaoIdAndAvaliadorId(Long idTipoAvaliacao, Long idAvaliador);
+    List<RegistroAvaliacao> findByFormatoAvaliacaoIdAndAvaliadorId(Long idCriterioAvaliacao, Long idSubcriterioAvaliacao);
 }

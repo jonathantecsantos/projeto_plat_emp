@@ -51,11 +51,35 @@ public class AvaliacaoService {
     @Transactional
     public void avaliarEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) throws Exception {
 
+        for (AvaliacaoEquipeRecord record : avaliacaoEquipeRecord) {
+            Avaliacao avaliacaoExistente = getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(record);
+
+            if (avaliacaoExistente != null) {
+                throw new Exception("Avaliação já realizada para o time " + record.idEquipe()
+                        + " com o critério " + record.idCriterioAvaliacao()
+                        + " e subcritério " + record.idSubcriterioAvaliacao());
+            }
+        }
+
         List<Avaliacao> avaliacaos = avaliacaoEquipeRecord.stream()
-                        .map(Avaliacao::new)
-                                .collect(Collectors.toList());
+                .map(Avaliacao::new)
+                .collect(Collectors.toList());
         avaliacaoRepository.saveAll(avaliacaos);
         persistirRegistroAvaliacao(avaliacaoEquipeRecord);
+    }
+
+    @Transactional
+    public void editarAvaliacaoEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) throws Exception {
+        for(AvaliacaoEquipeRecord avaliacaoRecord : avaliacaoEquipeRecord){
+            Avaliacao avaliacao = getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(avaliacaoRecord);
+            avaliacao.setNota(avaliacaoRecord.nota());
+        }
+        persistirRegistroAvaliacao(avaliacaoEquipeRecord);
+    }
+
+    private Avaliacao getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(AvaliacaoEquipeRecord avaliacaoRecord) {
+        return avaliacaoRepository.findByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(avaliacaoRecord.idEquipe(),
+                avaliacaoRecord.idCriterioAvaliacao(), avaliacaoRecord.idSubcriterioAvaliacao());
     }
 
     private void persistirRegistroAvaliacao(List<AvaliacaoEquipeRecord> listAvaliacao) throws Exception {
@@ -107,4 +131,5 @@ public class AvaliacaoService {
                 ))
                 .collect(Collectors.toList());
     }
+
 }

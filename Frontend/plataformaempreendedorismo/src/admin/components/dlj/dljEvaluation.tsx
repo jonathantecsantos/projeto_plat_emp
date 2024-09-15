@@ -3,7 +3,7 @@ import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useLocation } from "react-router-dom"
-import { useGetEvaluationByIdQuery, useGetTeamEvaluationsQuery, usePostEvaluationMutation } from "../../../api/studentApi"
+import { useGetEvaluationByIdQuery, useGetTeamsEvaluationsQuery, usePostEvaluationMutation, usePutEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
@@ -66,13 +66,14 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
 
 export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const { data: dljQuestions, isLoading } = useGetEvaluationByIdQuery(1) //id dlj = 1
-  const { data: teams, } = useGetTeamEvaluationsQuery(
+  const { data: teams, } = useGetTeamsEvaluationsQuery(
     {
       evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
       evaluatorId: teamData.teamEvaluation.evaluatorId
     })
 
   const [postEvaluation] = usePostEvaluationMutation()
+  const [putEvaluation] = usePutEvaluationMutation()
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)
@@ -134,12 +135,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       return
     }
 
-    if (alreadyEvaluated) {
-      enqueueSnackbar('Este time já foi avaliado', { variant: 'error' })
-      return
-    }
-
-    const evaluations: Evaluation[] = dljQuestions[0].subcriterioAvaliacaos.map(subcriterio => ({
+    const payload: Evaluation[] = dljQuestions[0].subcriterioAvaliacaos.map(subcriterio => ({
       idEquipe: teamData.id,
       idCriterioAvaliacao: dljQuestions[0].id,
       idSubcriterioAvaliacao: subcriterio.id,
@@ -150,9 +146,10 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
 
     try {
       dispatch(toggleLoading())
-      await postEvaluation({ evaluations, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap()
-      setOpen(false)
 
+      alreadyEvaluated ? await putEvaluation({ data: payload, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap() : await postEvaluation({ data: payload, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap()
+
+      setOpen(false)
       setShowSuccess(true)
     } catch (error) {
       console.error("Failed to submit evaluation", error)
@@ -209,14 +206,14 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
             </p>
             {alreadyEvaluated && <p className="text-red-400">Este time já foi avaliado.</p>}
             <Button variant="contained" className="bg-[#5741A6] normal-case"
-              disabled={totalPoints > 100 || alreadyEvaluated || isLoading} onClick={() => setOpen(true)}>
-              Finalizar
+              disabled={totalPoints > 100 || isLoading} onClick={() => setOpen(true)}>
+              {alreadyEvaluated ? 'Editar' : 'Finalizar'}
             </Button>
           </div>
           <Dialog open={open} onClose={() => setOpen(false)}>
             <DialogContent>
               <span>
-                Deseja finalizar a avaliação DLJ do time {teamData?.nomeEquipe}?
+                Deseja {alreadyEvaluated ? 'editar' : 'finalizar'} a avaliação DLJ do time {teamData?.nomeEquipe}?
               </span>
             </DialogContent>
             <DialogActions>
@@ -225,7 +222,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
               </Button>
               <Button onClick={handlePostEvaluation}
                 style={{ textTransform: 'none', color: 'white', backgroundColor: '#5741A6' }}>
-                Finalizar
+                {alreadyEvaluated ? 'Editar' : 'Finalizar'}
               </Button>
             </DialogActions>
           </Dialog>

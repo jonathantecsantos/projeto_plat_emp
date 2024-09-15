@@ -175,18 +175,29 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
     }),
 
-    postEvaluation: build.mutation<void, { evaluations: Evaluation[], evaluationTypeId: any }>({
-      query: ({ evaluations }) => ({
+    postEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+      query: ({ data }) => ({
         url: `/avaliacoes`,
         method: 'POST',
-        body: evaluations,
+        body: data,
       }),
       invalidatesTags: (_result, _error, { evaluationTypeId }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
       ],
     }),
 
-    getTeamEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation>({
+    putEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+      query: ({ data }) => ({
+        url: `/avaliacoes/editar`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+        { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+      ],
+    }),
+
+    getTeamsEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation>({
       query: ({ evaluationTypeId, evaluatorId }) => `/avaliacoes/equipes?idTipoAvaliacao=${evaluationTypeId}&idAvaliador=${evaluatorId}`,
       transformResponse: (response: TeamEvaluationResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
@@ -232,8 +243,9 @@ export const {
 
   //Evaluations
   useGetEvaluationByIdQuery,
+  useGetTeamsEvaluationsQuery,
   usePostEvaluationMutation,
-  useGetTeamEvaluationsQuery
+  usePutEvaluationMutation,
 
 } = studentsApiSlice
 

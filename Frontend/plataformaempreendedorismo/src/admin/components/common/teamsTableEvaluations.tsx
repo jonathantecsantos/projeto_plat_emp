@@ -2,7 +2,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import { CircularProgress } from '@mui/material'
 import { useEffect, useMemo, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useGetTeamEvaluationsQuery } from '../../../api/studentApi'
+import { useGetTeamsEvaluationsQuery } from '../../../api/studentApi'
 import { TeamEvaluation, TeamEvaluationResponse } from '../../../model/evaluationFormat'
 import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from "../table"
@@ -15,7 +15,7 @@ interface TeamsTableProps {
 }
 
 export const TeamsTable = ({ routeName, teamEvaluation }: TeamsTableProps) => {
-  const { data: teams, refetch, isLoading, error } = useGetTeamEvaluationsQuery(
+  const { data: teams, refetch, isLoading, error } = useGetTeamsEvaluationsQuery(
     {
       evaluationTypeId: teamEvaluation.evaluationTypeId,
       evaluatorId: teamEvaluation.evaluatorId
@@ -91,7 +91,7 @@ export const TeamsTable = ({ routeName, teamEvaluation }: TeamsTableProps) => {
                   id: team.item.id,
                   nomeEquipe: team.item.nome,
                   teams: teams,
-                  teamEvaluation: teamEvaluation 
+                  teamEvaluation: teamEvaluation
                 },
               })
             }}

@@ -1,22 +1,12 @@
 import AssessmentIcon from '@mui/icons-material/Assessment'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import BarChartIcon from '@mui/icons-material/BarChart'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import DescriptionIcon from '@mui/icons-material/Description'
-import EventIcon from '@mui/icons-material/Event'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import GroupIcon from '@mui/icons-material/Group'
 import GroupsIcon from '@mui/icons-material/Groups'
-import HowToRegIcon from '@mui/icons-material/HowToReg'
-import ListAltIcon from '@mui/icons-material/ListAlt'
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
-import MicIcon from '@mui/icons-material/Mic'
-import SchoolIcon from '@mui/icons-material/School'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'
 import { Divider } from '@mui/material'
 import Collapse from '@mui/material/Collapse'
 import List from '@mui/material/List'
@@ -70,22 +60,18 @@ const menuItems: MenuItemType[] = [
     insideItems: [
       {
         insideName: 'DLJ',
-        insideIcon: <AssignmentTurnedInIcon />,
         routeName: RoutesNames.dljTeams
       },
       {
         insideName: 'Pitch',
-        insideIcon: <MicIcon />,
         routeName: RoutesNames.pitchTeams,
       },
       {
         insideName: 'Shark Tank',
-        insideIcon: <AttachMoneyIcon />,
         routeName: RoutesNames.sharkTankTeams,
       },
       {
         insideName: 'Expo Dlei',
-        insideIcon: <EventIcon />,
         routeName: RoutesNames.expoDleiTeams
       }
     ]
@@ -97,22 +83,18 @@ const menuItems: MenuItemType[] = [
     insideItems: [
       {
         insideName: 'Alunos',
-        insideIcon: <SchoolIcon />,
         routeName: `${RoutesNames.students}`,
       },
       {
         insideName: 'Professores',
-        insideIcon: <LocalLibraryIcon />,
         routeName: RoutesNames.teachers,
       },
       {
         insideName: 'Avaliadores',
-        insideIcon: <HowToRegIcon />,
         routeName: '',
       },
       {
         insideName: 'Coordenadores',
-        insideIcon: <SupervisorAccountIcon />,
         routeName: '',
       },
     ],
@@ -130,17 +112,14 @@ const menuItems: MenuItemType[] = [
     insideItems: [
       {
         insideName: 'Classificação',
-        insideIcon: <BarChartIcon />,
         routeName: '',
       },
       {
         insideName: 'Lista Assinatura',
-        insideIcon: <ListAltIcon />,
         routeName: '',
       },
       {
         insideName: 'Ficha de Inscrição',
-        insideIcon: <DescriptionIcon />,
         routeName: '',
       },
     ],
@@ -153,12 +132,10 @@ const menuItems: MenuItemType[] = [
     // insideItems: [
     //   {
     //     insideName: 'Adicionar Aluno',
-    //     insideIcon: <PersonAddIcon />,
     //     routeName: `${RoutesNames.student}`,
     //   },
     //   {
     //     insideName: 'Adicionar Professor',
-    //     insideIcon: <PersonAddIcon />,
     //     routeName: `${RoutesNames.teacher}`,
     //   }
     // ]

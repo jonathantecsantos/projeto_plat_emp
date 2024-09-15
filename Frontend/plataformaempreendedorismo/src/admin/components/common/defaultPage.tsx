@@ -69,11 +69,13 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
         <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto">
           <LeftMenu />
         </div>
-        <main className="overflow-x-hidden overflow-y-auto w-full mt-8">
-          <div className="p-4">
+        <main className="overflow-x-hidden overflow-y-auto w-full">
+          {/* <BannerImage /> */}
+          <div className="p-4 h-[calc(100%-9rem)]">
             <BreadcrumbComponent />
             {mainContent}
           </div>
+          {/* <FooterImage /> */}
         </main>
       </div>
     </div>

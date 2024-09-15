@@ -38,4 +38,5 @@ public class Avaliador {
         this.nome = avaliadorCadastroRecord.nome().toUpperCase();
         this.formatosAvaliacoes = avaliadorCadastroRecord.formatoAvaliacoes();
     }
+
 }

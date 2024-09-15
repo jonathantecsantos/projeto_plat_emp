@@ -4,6 +4,8 @@ public record AvaliacaoEquipeRecord(
         Long idEquipe,
         Long idCriterioAvaliacao,
         Long idSubcriterioAvaliacao,
-        Double nota
+        Double nota,
+        Long idAvaliador,
+        Long idTipoAvaliacao
 ) {
 }

@@ -8,7 +8,6 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.A
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import jakarta.transaction.Transactional;
-import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.enuns.TipoOperacaoEnum;
@@ -71,14 +70,33 @@ public class AlunoService {
     }
 
     private void validaLiderAndViceLiderEdicao(Aluno aluno, AlunoEditarRecord alunoEditarRecord, Equipe equipe) throws ValidaAlunoException {
-        if(!Objects.equals(aluno.getIsLider(), alunoEditarRecord.isLider())
-                || !Objects.equals(aluno.getIsViceLider(), alunoEditarRecord.isViceLider())){
-                    for(Aluno alunoList : equipe.getAlunos()){
-                        if(aluno != alunoList && ((Objects.equals(alunoList.getIsLider(), alunoEditarRecord.isLider())) || (Objects.equals(alunoList.getIsViceLider(), alunoEditarRecord.isViceLider())))){
-                            throw new ValidaAlunoException("Já existe um Líder/Vice-líder no time!");
-                        }
-                    }
+        validarLiderancaDupla(alunoEditarRecord);
+        validarSeExisteLider(aluno, equipe);
+        validarSeExisteViceLider(aluno, equipe);
+
+    }
+
+    private void validarLiderancaDupla(AlunoEditarRecord alunoEditarRecord) throws ValidaAlunoException {
+        if(alunoEditarRecord.isLider() && alunoEditarRecord.isViceLider()){
+            throw new ValidaAlunoException("O aluno não pode ser Lider e Vice-lider");
         }
+    }
+
+    private void validarSeExisteViceLider(Aluno aluno, Equipe equipe) throws ValidaAlunoException {
+        for(Aluno alunoList : equipe.getAlunos()) {
+            if(alunoList.getIsViceLider() && alunoList != aluno){
+                throw new ValidaAlunoException("Já existe um Vice-Líder no time!");
+            }
+        }
+    }
+
+    private void validarSeExisteLider(Aluno aluno, Equipe equipe) throws ValidaAlunoException {
+        for(Aluno alunoList : equipe.getAlunos()) {
+            if(alunoList.getIsLider() && alunoList != aluno){
+                throw new ValidaAlunoException("Já existe um Líder no time!");
+            }
+        }
+
     }
 
     public void atualizarAluno(Aluno aluno, AlunoEditarRecord alunoEditarRecord) {

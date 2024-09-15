@@ -21,11 +21,6 @@ public class Banner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @JsonIgnore
-//    @OneToOne
-//    @JoinColumn(name = "ID_EQUIPE_Q0", referencedColumnName = "id")
-//    private Equipe equipe;
-
     @Column(name = "TEXTO_DESCRICAO_Q0")
     private String textoDescricaoQ0;
 

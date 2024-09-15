@@ -5,6 +5,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaDadosEquipeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
@@ -46,10 +47,10 @@ public class EquipeService {
                 equipe = optionalEquipeequipe.get();
 
             } else {
-                throw new Exception("ODS não encontrado com o ID: " + id);
+                throw new Exception("Equipe não encontrada com o ID: " + id);
             }
         } catch (Exception e) {
-            throw new Exception("Erro ao buscar ODS: " + e.getMessage(), e);
+            throw new Exception("Erro ao buscar Equipe: " + e.getMessage(), e);
         }
         return equipe;
     }
@@ -71,5 +72,10 @@ public class EquipeService {
         if(equipeRecord.linkPitch() != null){
             equipe.setLinkPitch(equipeRecord.linkPitch());
         }
+    }
+
+    public List<ListaEquipesAvaliadasRecord> buscarEquipesTipoAvaliacao() {
+
+        return equipeRepository.findAll().stream().map(ListaEquipesAvaliadasRecord::new).toList();
     }
 }

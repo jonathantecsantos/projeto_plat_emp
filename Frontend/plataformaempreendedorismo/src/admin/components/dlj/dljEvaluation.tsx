@@ -1,17 +1,15 @@
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { useLocation } from "react-router-dom"
-import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
+import { useGetEvaluationByIdQuery, useGetTeamEvaluationsQuery, usePostEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
-import { addEvaluation, checkIfTeamEvaluated, selectEvaluatedTeams } from "../../../redux/reducers/evaluations.slice"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { RootState } from "../../../redux/store"
 import { EvaluationProps } from "../../../utils/types"
-import { HandleNextTeamComponent } from "../common/handleNextTeam"
 import { EvaluationHeader } from "../common/evaluationHeader"
+import { HandleNextTeamComponent } from "../common/handleNextTeam"
 
 
 interface QuestionItemProps {
@@ -68,8 +66,13 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
 
 export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const { data: dljQuestions, isLoading } = useGetEvaluationByIdQuery(1) //id dlj = 1
+  const { data: teams, } = useGetTeamEvaluationsQuery(
+    {
+      evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
+      evaluatorId: teamData.teamEvaluation.evaluatorId
+    })
+
   const [postEvaluation] = usePostEvaluationMutation()
-  // const evaluatedTeams = useSelector(selectEvaluatedTeams)
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)
@@ -80,14 +83,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const currentTeamData = location.state?.teamData || teamData;
 
 
-  const alreadyEvaluated = useSelector((state: RootState) => {
-    const evaluatedTeams = selectEvaluatedTeams(state);
-    return checkIfTeamEvaluated({
-      evaluatedTeams,
-      teamId: teamData.id,
-      evaluationType: RoutesNames.dljTeam,
-    });
-  });
+  const alreadyEvaluated = teams?.some(team => team.id === teamData.id && team.equipeAvaliada === true)
 
 
   useEffect(() => {
@@ -148,23 +144,21 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       idCriterioAvaliacao: dljQuestions[0].id,
       idSubcriterioAvaliacao: subcriterio.id,
       nota: selectedOptions.includes(subcriterio.id) ? subcriterio.notaMaxima : 0,
+      idAvaliador: teamData.teamEvaluation.evaluatorId,
+      idTipoAvaliacao: teamData.teamEvaluation.evaluationTypeId
     }))
 
     try {
       dispatch(toggleLoading())
-      await postEvaluation(evaluations).unwrap()
+      await postEvaluation({ evaluations, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap()
       setOpen(false)
-
-      dispatch(addEvaluation({
-        teamId: teamData.id,
-        evaluationType: RoutesNames.dljTeam,
-      }));
 
       setShowSuccess(true)
     } catch (error) {
       console.error("Failed to submit evaluation", error)
       enqueueSnackbar('Falha ao enviar avaliação, consulte um admin.', { variant: 'error' })
     } finally {
+      setOpen(false)
       dispatch(toggleLoading())
     }
   }
@@ -173,6 +167,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 text-[#30168C]">
+
       {!showSuccess ? <EvaluationHeader teamName={teamData?.nomeEquipe || ''} /> : null}
 
       {showSuccess ? (
@@ -182,7 +177,8 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
             teamData: {
               id: teamData.id,
               nomeEquipe: teamData?.nomeEquipe,
-              teams: teamData.teams,
+              teams: teams || [],
+              teamEvaluation: teamData.teamEvaluation
             }
           }}
           evaluationType={RoutesNames.dljTeam}
@@ -207,6 +203,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
             </div>
           ))}
           <div className="flex flex-col justify-end gap-4 items-end mt-6">
+            {JSON.stringify(teamData.teamEvaluation, null, 2)}
             <p className="text-lg font-bold">
               Pontuação total: {totalPoints} pontos
             </p>

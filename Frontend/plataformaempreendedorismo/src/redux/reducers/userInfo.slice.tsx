@@ -5,7 +5,7 @@ import { LoginResponse } from '../../utils/types';
 const initialState: LoginResponse = {
   data: {
     token: '',
-    userId: 0,
+    id: 0,
     username: '',
     profile: '',
   },

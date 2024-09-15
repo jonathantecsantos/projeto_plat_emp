@@ -1,25 +1,28 @@
+import CheckIcon from '@mui/icons-material/Check'
 import { CircularProgress } from '@mui/material'
 import { useEffect, useMemo, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useGetAllTeamsQuery } from "../../../api/teamApi.slice"
-import { TeamsResponse } from "../../../model/team"
+import { useGetTeamEvaluationsQuery } from '../../../api/studentApi'
+import { TeamEvaluation, TeamEvaluationResponse } from '../../../model/evaluationFormat'
 import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from "../table"
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
-import CheckIcon from '@mui/icons-material/Check'
-import { checkIfTeamEvaluated, selectEvaluatedTeams } from '../../../redux/reducers/evaluations.slice'
-import { useSelector } from 'react-redux'
 
 
 interface TeamsTableProps {
   routeName: string
+  teamEvaluation: TeamEvaluation
 }
 
-export const TeamsTable = ({ routeName }: TeamsTableProps) => {
-  const { data: teams, refetch, isLoading, error } = useGetAllTeamsQuery()
+export const TeamsTable = ({ routeName, teamEvaluation }: TeamsTableProps) => {
+  const { data: teams, refetch, isLoading, error } = useGetTeamEvaluationsQuery(
+    {
+      evaluationTypeId: teamEvaluation.evaluationTypeId,
+      evaluatorId: teamEvaluation.evaluatorId
+    })
+
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
-  const evaluatedTeams = useSelector(selectEvaluatedTeams)
 
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
@@ -61,38 +64,34 @@ export const TeamsTable = ({ routeName }: TeamsTableProps) => {
             colums={['Nome', '', 'Ação']}
             wrapperProps={{
               style: {
-                // maxWidth: 'calc(100% - 10px)',
                 width: '100%'
               }
             }}
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredTeams!}
-            bodyRowBuilder={(team: TeamsResponse) => {
-              const alreadyEvaluated = routeName
-                ? checkIfTeamEvaluated({ evaluatedTeams, teamId: team.id, evaluationType: routeName })
-                : false;
-
+            bodyRowBuilder={(team: TeamEvaluationResponse) => {
               return (
                 <>
                   <td className="px-4 py-2 capitalize whitespace-nowrap w-full">
                     {team.nome.toLowerCase()}
                   </td>
                   <td className="text-center">
-                    {alreadyEvaluated && <CheckIcon className='text-green-500 hover:text-white' />}
+                    {team.equipeAvaliada && <CheckIcon className='text-green-500 hover:text-white' />}
                   </td>
                   <td className="py-2 px-2 underline capitalize text-left whitespace-nowrap">
-                    {alreadyEvaluated ? 'Av. concluída' : 'Avaliar'}
+                    {team.equipeAvaliada ? 'Av. concluída' : 'Avaliar'}
                   </td>
                 </>
               );
             }}
 
-            onClickRow={(team: TableComponentClickRowProps<TeamsResponse>) => {
+            onClickRow={(team: TableComponentClickRowProps<TeamEvaluationResponse>) => {
               navigate(routeName.replace(':id', team.item?.id.toString()), {
                 state: {
                   id: team.item.id,
                   nomeEquipe: team.item.nome,
-                  teams: teams
+                  teams: teams,
+                  teamEvaluation: teamEvaluation 
                 },
               })
             }}

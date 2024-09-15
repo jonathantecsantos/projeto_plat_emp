@@ -1,10 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
+import { Banner } from '../model/banner'
+import { Evaluation, EvaluationById, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
+import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 import { TeamIdResponse } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
-import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
-import { Banner } from '../model/banner'
-import { Evaluation, EvaluationById } from '../model/evaluationFormat'
 
 //atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
 export const studentsApiSlice = createApi({
@@ -175,14 +175,29 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
     }),
 
-    postEvaluation: build.mutation<void, Evaluation[]>({
-      query: (data) => ({
+    postEvaluation: build.mutation<void, { evaluations: Evaluation[], evaluationTypeId: any }>({
+      query: ({ evaluations }) => ({
         url: `/avaliacoes`,
         method: 'POST',
-        body: data,
+        body: evaluations,
       }),
-      invalidatesTags: [{ type: 'Evaluation', id: 'LIST' }],
-      //possivelmente invalidar a tag dos times para atualizar equipe que ja foi avaliada
+      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+        { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+      ],
+    }),
+
+    getTeamEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation>({
+      query: ({ evaluationTypeId, evaluatorId }) => `/avaliacoes/equipes?idTipoAvaliacao=${evaluationTypeId}&idAvaliador=${evaluatorId}`,
+      transformResponse: (response: TeamEvaluationResponse[]) => {
+        return response.sort((a, b) => a.nome.localeCompare(b.nome))
+      },
+      providesTags: (result, _error, { evaluationTypeId }) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: 'Evaluation', id } as const)),
+            { type: 'Evaluation', id: `LIST_${evaluationTypeId}` },
+          ]
+          : [{ type: 'Evaluation', id: `LIST_${evaluationTypeId}` }],
     }),
 
 
@@ -218,6 +233,7 @@ export const {
   //Evaluations
   useGetEvaluationByIdQuery,
   usePostEvaluationMutation,
+  useGetTeamEvaluationsQuery
 
 } = studentsApiSlice
 

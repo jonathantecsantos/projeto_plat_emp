@@ -1,9 +1,16 @@
-import { TeamsResponse } from "../model/team"
+import { TeamEvaluation, TeamEvaluationResponse } from "../model/evaluationFormat"
 
 export enum ImportType {
   student = 'ALUNO',
   evaluator = 'AVALIADOR',
   teacher = 'PROFESSOR'
+}
+
+export enum EvalutionType {
+  DLJ = 1,
+  PITCH = 2,
+  SHARKTANK = 3,
+  EXPODLEI = 4,
 }
 
 export interface User {
@@ -20,7 +27,7 @@ export interface Login {
 export interface LoginResponse {
   data: {
     token: string
-    userId: number
+    id: number
     username: string
     profile: string
   }
@@ -47,7 +54,7 @@ export interface AdaptedLoginResponse {
 }
 
 export interface EvaluationProps {
-  teamData: { id: number, nomeEquipe?: string, teams: TeamsResponse[] }
+  teamData: { id: number, nomeEquipe?: string, teams: TeamEvaluationResponse[], teamEvaluation: TeamEvaluation }
 }
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')

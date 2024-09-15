@@ -3,9 +3,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CheckIcon from '@mui/icons-material/Check'
 import { Typography } from "@mui/material"
 import { useState } from "react"
-import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { selectEvaluatedTeams } from "../../../redux/reducers/evaluations.slice"
 import { EvaluationProps } from "../../../utils/types"
 
 
@@ -24,7 +22,6 @@ export const HandleNextTeamComponent = ({
   onComplete,
 }: HandleNextTeamComponentProps) => {
   const navigate = useNavigate()
-  const evaluatedTeams = useSelector(selectEvaluatedTeams)
   const [teamAvailable, setTeamAvailable] = useState(!false)
 
   const teamsEvaluationsList = [...state.teamData.teams]
@@ -32,20 +29,15 @@ export const HandleNextTeamComponent = ({
   const handleNextTeam = () => {
     const currentTeamIndex = teamsEvaluationsList.findIndex(
       (team) => team.id === currentTeamId
-    )
+    );
 
     if (currentTeamIndex === -1) {
-      console.error("Current team not found in teams array")
-      return <p>Current team not found</p>
+      console.error("Current team not found in teams array");
+      return;
     }
 
     const nextAvailableTeam = teamsEvaluationsList.find(
-      (team) =>
-        !evaluatedTeams.some(
-          (evaluation) =>
-            evaluation.teamId === team.id &&
-            evaluation.evaluationType === evaluationType
-        )
+      (team) => !team.equipeAvaliada
     );
 
     if (nextAvailableTeam) {
@@ -54,11 +46,12 @@ export const HandleNextTeamComponent = ({
           id: nextAvailableTeam.id,
           nomeEquipe: nextAvailableTeam.nome,
           teams: teamsEvaluationsList,
+          teamEvaluation: state.teamData.teamEvaluation
         },
-      })
-      onComplete()
+      });
+      onComplete();
     } else {
-      setTeamAvailable(!true)
+      setTeamAvailable(false);
     }
   }
 
@@ -70,6 +63,11 @@ export const HandleNextTeamComponent = ({
 
   return (
     <div className="text-center p-4 mt-16">
+      <div className='bg-red-200'>
+        {JSON.stringify(teamsEvaluationsList, null, 2)}
+      </div>
+      {JSON.stringify(state.teamData.teamEvaluation, null, 2)}
+
       <Typography variant="h5" color="green">
         <CheckIcon />  Avaliação do time {state.teamData?.nomeEquipe} realizada com sucesso!
       </Typography>

@@ -1,21 +1,24 @@
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { useLocation } from "react-router-dom"
-import { useGetEvaluationByIdQuery, usePostEvaluationMutation } from "../../../api/studentApi"
+import { useGetEvaluationByIdQuery, useGetTeamEvaluationsQuery, usePostEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao } from "../../../model/evaluationFormat"
-import { addEvaluation, checkIfTeamEvaluated, selectEvaluatedTeams } from "../../../redux/reducers/evaluations.slice"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { RootState } from "../../../redux/store"
 import { EvaluationProps } from "../../../utils/types"
+import { EvaluationHeader } from "../common/evaluationHeader"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
 import { SubcriterionSlider } from "../common/subcriterioSlider"
-import { EvaluationHeader } from "../common/evaluationHeader"
 
 export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const { data: pitchQuestions, isLoading } = useGetEvaluationByIdQuery(2) // id pitch = 2
+  const { data: teams, } = useGetTeamEvaluationsQuery(
+    {
+      evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
+      evaluatorId: teamData.teamEvaluation.evaluatorId
+    })
   const [postEvaluation] = usePostEvaluationMutation()
   const [values, setValues] = useState<{ [key: number]: number }>({})
   const [totalPoints, setTotalPoints] = useState(0)
@@ -26,14 +29,7 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const location = useLocation()
   const currentTeamData = location.state?.teamData || teamData
 
-  const alreadyEvaluated = useSelector((state: RootState) => {
-    const evaluatedTeams = selectEvaluatedTeams(state)
-    return checkIfTeamEvaluated({
-      evaluatedTeams,
-      teamId: teamData.id,
-      evaluationType: RoutesNames.pitchTeam,
-    })
-  })
+  const alreadyEvaluated = teams?.some(team => team.id === teamData.id && team.equipeAvaliada === true)
 
   useEffect(() => {
     if (pitchQuestions) {
@@ -75,7 +71,7 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
       return
     }
 
-    const payload = Object.keys(values).map((idSubcriterio) => {
+    const evaluations = Object.keys(values).map((idSubcriterio) => {
       const subcriterioId = parseInt(idSubcriterio, 10)
       const criterio = pitchQuestions?.find((criterio) =>
         criterio.subcriterioAvaliacaos.some((sub) => sub.id === subcriterioId)
@@ -86,24 +82,22 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
         idCriterioAvaliacao: criterio?.id || 0,
         idSubcriterioAvaliacao: subcriterioId,
         nota: parseFloat(values[subcriterioId].toFixed(1)),
+        idAvaliador: teamData.teamEvaluation.evaluatorId,
+        idTipoAvaliacao: teamData.teamEvaluation.evaluationTypeId
       }
     })
 
     try {
       dispatch(toggleLoading())
-      await postEvaluation(payload).unwrap()
+      await postEvaluation({ evaluations, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap()
       setOpen(false)
-
-      dispatch(addEvaluation({
-        teamId: teamData.id,
-        evaluationType: RoutesNames.pitchTeam,
-      }))
 
       setShowSuccess(true)
     } catch (error) {
       console.error("Failed to submit evaluation", error)
       enqueueSnackbar('Falha ao enviar avaliação, consulte um admin.', { variant: 'error' })
     } finally {
+      setOpen(false)
       dispatch(toggleLoading())
     }
   }
@@ -121,7 +115,8 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
             teamData: {
               id: teamData.id,
               nomeEquipe: teamData?.nomeEquipe,
-              teams: teamData.teams,
+              teams: teams || [],
+              teamEvaluation: teamData.teamEvaluation
             }
           }}
           evaluationType={RoutesNames.pitchTeam}
@@ -143,7 +138,7 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
             </div>
           ))}
           <div className="flex flex-col justify-end gap-4 items-end mt-6">
-            <p className="text-lg font-bold text-[#30168C]">Pontuação total:  {totalPoints.toFixed(1)} pontos</p>
+            <p className="text-lg font-bold text-[#30168C]">Pontuação total:  {totalPoints} pontos</p>
             {alreadyEvaluated && <p className="text-red-400">Este time já foi avaliado.</p>}
             <Button
               variant="contained"

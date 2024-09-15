@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { RoutesNames } from "../../../globals"
 import { logout } from "../../../redux/reducers/auth.slice"
-import { clearEvaluations } from '../../../redux/reducers/evaluations.slice'
 import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
@@ -28,10 +27,10 @@ const AdminAppBar = () => {
         {userGlobalState.profile}: {userGlobalState.username}
       </div> */}
       <div className="flex-grow"></div>
-      <div className="flex gap-2 items-center"
+      <div className="flex gap-2 items-center bg-white p-2 rounded-lg"
         onClick={() => {
           dispatch(logout())
-          dispatch(clearEvaluations())
+          // dispatch(clearEvaluations())
           navigate(RoutesNames.home)
         }} >
         <LogoutIcon className="text-right cursor-pointer" />
@@ -71,7 +70,7 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
         </div>
         <main className="overflow-x-hidden overflow-y-auto w-full">
           {/* <BannerImage /> */}
-          <div className="p-4 h-[calc(100%-9rem)]">
+          <div className="p-4 h-[calc(100%-9rem)] mt-20">
             <BreadcrumbComponent />
             {mainContent}
           </div>

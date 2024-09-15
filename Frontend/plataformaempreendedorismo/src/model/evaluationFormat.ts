@@ -39,4 +39,17 @@ export interface Evaluation {
   idCriterioAvaliacao: number
   idSubcriterioAvaliacao: number
   nota: number
+  idAvaliador:number
+  idTipoAvaliacao: number
+}
+
+export interface TeamEvaluation {
+  evaluationTypeId: number
+  evaluatorId: number
+}
+
+export interface TeamEvaluationResponse {
+  id: number
+  nome: string
+  equipeAvaliada: boolean
 }

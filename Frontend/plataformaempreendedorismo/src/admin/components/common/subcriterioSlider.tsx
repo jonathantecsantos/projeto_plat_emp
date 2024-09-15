@@ -25,15 +25,15 @@ export const SubcriterionSlider = ({ subcriterio, value, onChange }: Subcriterio
           size="medium"
           value={value || 0}
           max={subcriterio.notaMaxima}
-          min={0.0}
-          step={0.1}
+          min={0}
+          step={1}
           aria-label="medium"
           onChange={handleSliderChange}
           valueLabelDisplay="on"
         />
         <div className="flex justify-between text-sm text-gray-500">
           <span>0</span>
-          <span>{subcriterio.notaMaxima.toFixed(1)}</span>
+          <span>{subcriterio.notaMaxima}</span>
         </div>
       </div>
     </div>

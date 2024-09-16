@@ -24,12 +24,15 @@ public class Avaliacao {
 
     private Long idSubcriterioAvaliacao;
 
+    private Long idAvaliador;
+
     private Double nota;
 
     public Avaliacao(AvaliacaoEquipeRecord avaliacaoEquipeRecord){
         this.idEquipe = avaliacaoEquipeRecord.idEquipe();
         this.idCriterioAvaliacao = avaliacaoEquipeRecord.idCriterioAvaliacao();
         this.idSubcriterioAvaliacao = avaliacaoEquipeRecord.idSubcriterioAvaliacao();
+        this.idAvaliador = avaliacaoEquipeRecord.idAvaliador();
         this.nota = avaliacaoEquipeRecord.nota();
     }
 }

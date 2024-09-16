@@ -2,19 +2,23 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Ods;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.Ods.OdsRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaDadosEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.ProfessorRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.exceptions.ValidaAlunoException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +33,9 @@ public class EquipeService {
 
     @Autowired
     private ProfessorRepository professorRepository;
+
+    @Autowired
+    private OdsRepository odsRepository;
 
     public ListaDadosEquipeRecord getEquipeDTO(Long equipeId) {
         Equipe equipe = equipeRepository.findById(equipeId).orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
@@ -71,6 +78,31 @@ public class EquipeService {
         }
         if(equipeRecord.linkPitch() != null){
             equipe.setLinkPitch(equipeRecord.linkPitch());
+        }
+
+        if(!equipeRecord.listIdOds().isEmpty()){
+
+            Equipe equipeTemp = null;
+            Ods odstemp = null;
+            List<Ods> odsList = new ArrayList<>();
+            Optional<Equipe> equipeOptional = equipeRepository.findById(equipeRecord.id());
+
+            if(equipeOptional.isPresent()) {
+                equipeTemp = equipeOptional.get();
+
+                for (OdsRecord ods : equipeRecord.listIdOds()) {
+
+                    Optional<Ods> odsOptional = odsRepository.findById(ods.id());
+                    if (odsOptional.isPresent()) {
+                        odstemp = odsOptional.get();
+                        odsList.add(odstemp);
+                    }
+                }
+            }
+
+            equipeTemp.setOdsList(odsList);
+
+            equipeRepository.save(equipeTemp);
         }
     }
 

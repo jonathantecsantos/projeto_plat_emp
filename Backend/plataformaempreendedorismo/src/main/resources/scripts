@@ -240,11 +240,13 @@ CREATE TABLE avaliacao (
   id_equipe int NOT NULL,
   id_criterio_avaliacao int NOT NULL,
   id_subcriterio_avaliacao int NOT NULL,
+  id_avaliador int not null,
   nota double DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT equipe_fk0 FOREIGN KEY (id_equipe) REFERENCES equipe (id),
   CONSTRAINT criterio_avaliacao_fk1 FOREIGN KEY (id_criterio_avaliacao) REFERENCES criterio_avaliacao (id),
-  CONSTRAINT subcriterio_avaliacao_fk2 FOREIGN KEY (id_subcriterio_avaliacao) REFERENCES subcriterio_avaliacao (id)
+  CONSTRAINT subcriterio_avaliacao_fk2 FOREIGN KEY (id_subcriterio_avaliacao) REFERENCES subcriterio_avaliacao (id),
+  CONSTRAINT avaliador_fk3 FOREIGN KEY (id_avaliador) REFERENCES avaliador (id)
 );
 
 CREATE TABLE registro_avaliacao (

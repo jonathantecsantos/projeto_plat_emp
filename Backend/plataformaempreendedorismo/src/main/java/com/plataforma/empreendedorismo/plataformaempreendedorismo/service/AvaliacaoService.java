@@ -4,7 +4,6 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -13,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,15 +52,15 @@ public class AvaliacaoService {
     @Transactional
     public void avaliarEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) throws Exception {
 
-        for (AvaliacaoEquipeRecord record : avaliacaoEquipeRecord) {
-            Avaliacao avaliacaoExistente = getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(record);
-
-            if (avaliacaoExistente != null) {
-                throw new Exception("Avaliação já realizada para o time " + record.idEquipe()
-                        + " com o critério " + record.idCriterioAvaliacao()
-                        + " e subcritério " + record.idSubcriterioAvaliacao());
-            }
-        }
+//        for (AvaliacaoEquipeRecord record : avaliacaoEquipeRecord) {
+//            Avaliacao avaliacaoExistente = getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(record);
+//
+//            if (avaliacaoExistente != null) {
+//                throw new Exception("Avaliação já realizada para o time " + record.idEquipe()
+//                        + " com o critério " + record.idCriterioAvaliacao()
+//                        + " e subcritério " + record.idSubcriterioAvaliacao());
+//            }
+//        }
 
         List<Avaliacao> avaliacaos = avaliacaoEquipeRecord.stream()
                 .map(Avaliacao::new)
@@ -72,14 +73,20 @@ public class AvaliacaoService {
     public void editarAvaliacaoEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) throws Exception {
         for(AvaliacaoEquipeRecord avaliacaoRecord : avaliacaoEquipeRecord){
             Avaliacao avaliacao = getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(avaliacaoRecord);
-            avaliacao.setNota(avaliacaoRecord.nota());
+            if (avaliacao != null) {
+                avaliacao.setNota(avaliacaoRecord.nota());
+                avaliacaoRepository.save(avaliacao);
+            }else {
+                throw new Exception("Avaliação não encontrada para os parâmetros fornecidos.");
+            }
+
         }
         persistirRegistroAvaliacao(avaliacaoEquipeRecord);
     }
 
     private Avaliacao getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(AvaliacaoEquipeRecord avaliacaoRecord) {
-        return avaliacaoRepository.findByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(avaliacaoRecord.idEquipe(),
-                avaliacaoRecord.idCriterioAvaliacao(), avaliacaoRecord.idSubcriterioAvaliacao());
+        return avaliacaoRepository.findByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacaoAndIdAvaliador(avaliacaoRecord.idEquipe(),
+                avaliacaoRecord.idCriterioAvaliacao(), avaliacaoRecord.idSubcriterioAvaliacao(), avaliacaoRecord.idAvaliador());
     }
 
     private void persistirRegistroAvaliacao(List<AvaliacaoEquipeRecord> listAvaliacao) throws Exception {

@@ -4,5 +4,5 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Avaliaca
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
-    Avaliacao findByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(Long idEquipe, Long criterioAvaliacaoId, Long subCriterioAvaliacaoId);
+    Avaliacao findByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacaoAndIdAvaliador(Long idEquipe, Long criterioAvaliacaoId, Long subCriterioAvaliacaoId, Long avaliadorId);
 }

@@ -1,20 +1,57 @@
 import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import DescriptionIcon from '@mui/icons-material/Description'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
+import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import PrintIcon from '@mui/icons-material/Print'
 import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetTeamByIdQuery } from '../../../api/studentApi'
+import { useGetTeamByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
-import { TeamsResponse } from "../../../model/team"
+import { Ods } from '../../../model/ods'
+import { TeamsResponse, UpdateTeam } from "../../../model/team"
+import { EditOds } from './editOds'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
+import { useSnackbar } from 'notistack'
+
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
+  const [updateTeam, status] = useUpdateTeamMutation()
   const navigate = useNavigate()
+  const [editOdsOpen, setEditOdsOpen] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+
+  const handleEditOdsOpen = (state: boolean) => {
+    setEditOdsOpen(!state)
+  }
+
+  const handleEditOdsSave = async (selectedOds: Ods[]) => {
+    const payload: UpdateTeam = {
+      nome: team?.nomeEquipe || '',
+      listIdOds: selectedOds?.map((ods) => ({
+        id: ods.id
+      }))
+    }
+
+    try {
+      await updateTeam({ id, data: payload }).unwrap()
+      enqueueSnackbar('ODS Editada com sucesso!', { variant: 'success' })
+    } catch (error: any) {
+      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+    } finally {
+    }
+
+    handleEditOdsOpen(editOdsOpen)
+  }
+
+  const handleCancelEditOds = () => {
+    setEditOdsOpen(false)
+  }
+
 
   const actions = [
     {
@@ -52,12 +89,24 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   return (
     <div className="flex flex-col lg:flex-row relative border-t-2">
       <div className="p-4 text-[#3C14A4]">
-        <h2 className="text-2xl font-bold mb-0 capitalize">{team?.nomeEquipe.toLowerCase()}</h2>
+        <div className='flex gap-2'>
+          <h2 className="text-2xl font-bold capitalize">{team?.nomeEquipe}</h2>
+          <ModeEditIcon className='mt-1 cursor-pointer' />
+        </div>
         <h3>TIME</h3>
         <div className="mt-4 mb-6 capitalize">
-          <p className='font-semibold'>
-            {team?.odsList.map(ods => ods.descricao).join(', ')}
-          </p>
+          {editOdsOpen ? <EditOds
+            loading={status.isLoading}
+            initialOds={team?.odsList || []}
+            onSave={handleEditOdsSave}
+            onCancel={handleCancelEditOds}
+          /> : <div className='flex gap-2'>
+            <p className='font-semibold'>
+              {team?.odsList.map(ods => ods.descricao).join(', ')}
+            </p>
+            <ModeEditIcon onClick={() => handleEditOdsOpen(editOdsOpen)} className='cursor-pointer' />
+          </div>}
+
           <p>ODS</p>
         </div>
         <div className='flex flex-col gap-4 w-full'>

@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { persistStore } from "redux-persist"
 import { studentsApiSlice } from "../api/studentApi"
-import { teamApiSlice } from "../api/teamApi.slice"
 import { userApiSlice } from "../api/userApi.slice"
 import { persistedAuthReducer } from './persistors/auth.slice'
 import { persistedUserLoginReducer } from "./persistors/userInfo.slice"
@@ -15,7 +14,6 @@ export const store = configureStore({
     loadingBarState: loadingBarReducer,
     userInfo: persistedUserLoginReducer,
     [studentsApiSlice.reducerPath]: studentsApiSlice.reducer,
-    [teamApiSlice.reducerPath]: teamApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
   },
 
@@ -24,7 +22,6 @@ export const store = configureStore({
       serializableCheck: false,
     }).concat(
       studentsApiSlice.middleware,
-      teamApiSlice.middleware,
       userApiSlice.middleware,
     )
   }

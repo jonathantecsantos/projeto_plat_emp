@@ -1,12 +1,12 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useMemo, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useGetAllTeamsQuery } from "../../../api/teamApi.slice"
 import { RoutesNames } from '../../../globals'
 import { TeamsResponse } from "../../../model/team"
 import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from "../table"
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
+import { useGetAllTeamsQuery } from '../../../api/studentApi'
 
 export const Teams = () => {
   const { data: teams, refetch, isLoading, error } = useGetAllTeamsQuery()

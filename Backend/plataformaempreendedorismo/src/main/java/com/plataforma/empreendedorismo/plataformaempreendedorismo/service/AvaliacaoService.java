@@ -2,6 +2,7 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoEquipeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
@@ -139,4 +140,16 @@ public class AvaliacaoService {
                 .collect(Collectors.toList());
     }
 
+    public List<AvaliacaoRecord> getAvaliacoesPorTipoProfessor(Long idFormatoAvaliacao, Long idAvaliador) {
+
+        List<Avaliacao> avaliacaos = avaliacaoRepository.findAvaliacoesByAvaliadorAndFormato(idFormatoAvaliacao, idAvaliador);
+
+        return avaliacaos.stream()
+                .map(avaliacao -> new AvaliacaoRecord(
+                        avaliacao.getIdCriterioAvaliacao(),
+                        avaliacao.getIdSubcriterioAvaliacao(),
+                        avaliacao.getNota())
+                ).collect(Collectors.toList());
+
+    }
 }

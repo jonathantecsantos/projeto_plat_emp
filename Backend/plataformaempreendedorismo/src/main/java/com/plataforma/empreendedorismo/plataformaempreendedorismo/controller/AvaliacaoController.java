@@ -2,14 +2,15 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.CriterioAvaliacao;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoEquipeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -71,7 +72,6 @@ public class AvaliacaoController {
     })
     @PutMapping("/editar")
     public ResponseEntity<String> editarAvaliacaoEquipe(@RequestBody List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord){
-
         try {
             avaliacaoService.editarAvaliacaoEquipe(avaliacaoEquipeRecord);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -91,5 +91,16 @@ public class AvaliacaoController {
     @GetMapping(value = "/equipes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ListaEquipesAvaliadasRecord>> getEquipes(@RequestParam Long idTipoAvaliacao, @RequestParam Long idAvaliador){
         return ResponseEntity.ok(avaliacaoService.buscarEquipes(idTipoAvaliacao, idAvaliador));
+    }
+
+    @Operation(summary = "Buscar Avaliação por Tipo e Avaliador", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Avaliação não encontrada"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
+    })
+    @GetMapping(value = "/formato/{idFormatoAvaliacao}/avaliador/{idAvaliador}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AvaliacaoRecord>> getAvaliacoesPorTipoProfessor(@PathVariable Long idFormatoAvaliacao, @PathVariable Long idAvaliador){
+        return ResponseEntity.ok(avaliacaoService.getAvaliacoesPorTipoProfessor(idFormatoAvaliacao, idAvaliador));
     }
 }

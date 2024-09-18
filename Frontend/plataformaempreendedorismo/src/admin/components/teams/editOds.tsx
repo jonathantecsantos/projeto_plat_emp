@@ -6,7 +6,7 @@ import { useGetOdsQuery } from '../../../api/studentApi'
 import { Ods } from '../../../model/ods'
 
 interface EditOdsProps {
-  initialOds: Ods[] 
+  initialOds: Ods[]
   onSave: (selectedOds: Ods[]) => void
   onCancel: () => void
   loading: boolean | undefined
@@ -41,7 +41,7 @@ export const EditOds = ({ initialOds, onSave, onCancel, loading }: EditOdsProps)
           getOptionLabel={(option) => option.descricao}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           onChange={(_event, value) => setSelectedOds(value)}
-          renderInput={(params) => <TextField {...params} label="Editar ODS" variant='filled' />}
+          renderInput={(params) => <TextField {...params} label="Editar ODS" />}
         />
       )}
       <div className='flex gap-4 w-full mt-2'>

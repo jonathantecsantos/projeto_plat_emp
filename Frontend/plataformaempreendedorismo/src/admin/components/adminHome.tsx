@@ -8,7 +8,7 @@ export const AdminHomeComponent = () => {
   const userGlobalState = useSelector((state: RootState) => state.userInfo.data)
   return (<div className="flex">
     <div className="w-3/4 p-10 bg-white">
-      <h1 className="text-2xl font-bold mb-6">Bem-vindo ao seu painel, {userGlobalState.username}</h1>
+      <h1 className="text-2xl font-bold mb-6">Bem-vindo ao seu painel {userGlobalState.username}</h1>
       <p className="mb-8">admin@escola.com</p>
 
       <div className="space-y-6">

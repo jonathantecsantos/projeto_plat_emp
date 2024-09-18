@@ -8,6 +8,7 @@ import { logout } from "../../../redux/reducers/auth.slice"
 import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
+import { BannerImage } from './adminBanner'
 
 interface AdminPage {
   mainContent: ReactNode
@@ -69,8 +70,8 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
           <LeftMenu />
         </div>
         <main className="overflow-x-hidden overflow-y-auto w-full">
-          {/* <BannerImage /> */}
-          <div className="p-4 h-[calc(100%-9rem)] mt-20">
+          <BannerImage />
+          <div className="p-4 h-[calc(100%-9rem)]">
             <BreadcrumbComponent />
             {mainContent}
           </div>

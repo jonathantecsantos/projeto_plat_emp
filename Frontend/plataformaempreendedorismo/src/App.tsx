@@ -1,10 +1,6 @@
 import { AppBarOptions } from './components/common/appBar';
 
 const App = () => {
-  // const { data:team } = useGetTeamByIdQuery(id)
-  // const { data: students } = useGetAllStudentsQuery()
-  // const [createStudent] = useCreateStudentMutation()
-
 
   return (
     <div>

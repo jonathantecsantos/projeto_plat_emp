@@ -18,7 +18,7 @@ const createStudentSchema = z.object({
   turma: z.string().min(1, "Turma é obrigatória"),
   isLider: z.boolean(),
   isViceLider: z.boolean(),
-  idOds: z.preprocess((val) => Number(val), z.number().int().nullable()),
+  // idOds: z.preprocess((val) => Number(val), z.number().int().nullable()),
   idEquipe: z.preprocess((val) => Number(val), z.number().int().nullable()),
 })
 
@@ -42,7 +42,7 @@ export const CreateStudent = () => {
       turma: searchParams.get('turma') || '',
       isLider: searchParams.get('isLider') === 'true',
       isViceLider: searchParams.get('isViceLider') === 'true',
-      idOds: searchParams.get('idOds') ? Number(searchParams.get('idOds')) : null,
+      // idOds: searchParams.get('idOds') ? Number(searchParams.get('idOds')) : null,
       idEquipe: searchParams.get('idEquipe') ? Number(searchParams.get('idEquipe')) : null,
     },
   })
@@ -139,7 +139,7 @@ export const CreateStudent = () => {
             />
             {errors.turma && <p className="text-red-500 text-sm mt-1">{errors.turma.message}</p>}
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="idOds" className="block text-sm font-medium text-gray-700">ID ODS</label>
             <input
               id="idOds"
@@ -149,7 +149,7 @@ export const CreateStudent = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
             {errors.idOds && <p className="text-red-500 text-sm mt-1">{errors.idOds.message}</p>}
-          </div>
+          </div> */}
           <div>
             <label htmlFor="idEquipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
             <input

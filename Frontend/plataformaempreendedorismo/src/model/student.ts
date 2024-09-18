@@ -27,20 +27,5 @@ export interface CreateOrUpdateStudent {
   turma: string
   isLider: boolean
   isViceLider: boolean
-  idOds: number | null
   idEquipe: number | null
 }
-
-// export interface StudentsResponse {
-//   id: number
-//   cpf: string
-//   nome: string
-//   email: string
-//   turma: string
-//   isLider: boolean
-//   isViceLider: boolean
-//   idEquipe: number
-//   nomeEquipe: string
-//   idObs: number
-// }
-

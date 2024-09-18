@@ -1,21 +1,40 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
+import { Banner } from '../model/banner'
+import { Evaluation, EvaluationById, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
-import { TeamIdResponse } from '../model/team'
-import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
+import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
+import { authFetchBaseQuery } from '../redux/auth.middleware'
+import { Ods } from '../model/ods'
 
 //atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
+
   endpoints: (build) => ({
+
+    //IMPORTS
+    uploadFile: build.mutation({
+      query: (body) => ({
+        url: '/api/upload/arquivo',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: (_result, _error) => [
+        { type: 'Student', id: 'LIST' },
+        { type: 'Teacher', id: 'LIST' },
+      ],
+    }),
+
+    //STUDENT
     getStudent: build.query<StudentIdResponse, number>({
       query: (id) => `/alunos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Student', id }],
     }),
-    
+
     getAllStudents: build.query<StudentsResponse[], void>({
       query: () => `/alunos`,
       transformResponse: (response: StudentsResponse[]) => {
@@ -65,14 +84,56 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    //TEAM ENDPOINTS -> Para o invalidatesTags falta adicionar o restante
+    //TEAM -> Para o invalidatesTags falta adicionar o restante
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Team', id }],
     }),
 
+    getAllTeams: build.query<TeamsResponse[], void>({
+      query: () => '/equipes',
+      transformResponse: (response: TeamsResponse[]) => {
+        return response.sort((a, b) => a.nome.localeCompare(b.nome))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Team', id } as const)),
+            { type: 'Team', id: 'LIST' },
+          ]
+          : [{ type: 'Team', id: 'LIST' }],
+    }),
 
-    //TEACHER ENDPOINTS
+    updateTeam: build.mutation<UpdateTeam, { id: any; data: Partial<UpdateTeam> }>({
+      query: ({ id, data }) => ({
+        url: `/equipes/editar`,
+        method: 'PUT',
+        body: { id, ...data },
+      }),
+      invalidatesTags: (_result, _error, { id, }: any) => [
+        { type: 'Team', id },
+      ],
+    }),
+
+
+
+    //ODS
+    getOds: build.query<Ods[], void>({
+      query: () => '/ods',
+      transformResponse: (response: Ods[]) => {
+        return response.sort((a, b) => a.codigo.localeCompare(b.codigo))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Ods', id } as const)),
+            { type: 'Ods', id: 'LIST' },
+          ]
+          : [{ type: 'Ods', id: 'LIST' }],
+    }),
+
+
+    //TEACHER 
     getTeacher: build.query<TeacherIdResponse, number>({
       query: (id) => `/professores/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Teacher', id }],
@@ -126,12 +187,80 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id }
       ],
     }),
+
+    //BANNER
+    getBannerById: build.query<Banner, number>({
+      query: (id) => `/banner/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Banner', id }],
+    }),
+
+    createBanner: build.mutation<void, FormData>({
+      query: (data) => ({
+        url: `/banner/cadastrar`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: [{ type: 'Banner', id: 'LIST' }],
+    }),
+
+    updateBanner: build.mutation<FormData, { id: number; data: FormData }>({
+      query: ({ data }) => ({
+        url: `/banner/editar`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Banner', id }],
+    }),
+
+    //EVALUATION
+    getEvaluationById: build.query<EvaluationById, number>({
+      query: (id) => `/avaliacoes/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
+    }),
+
+    postEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+      query: ({ data }) => ({
+        url: `/avaliacoes`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+        { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+      ],
+    }),
+
+    putEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+      query: ({ data }) => ({
+        url: `/avaliacoes/editar`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+        { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+      ],
+    }),
+
+    getTeamsEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation>({
+      query: ({ evaluationTypeId, evaluatorId }) => `/avaliacoes/equipes?idTipoAvaliacao=${evaluationTypeId}&idAvaliador=${evaluatorId}`,
+      transformResponse: (response: TeamEvaluationResponse[]) => {
+        return response.sort((a, b) => a.nome.localeCompare(b.nome))
+      },
+      providesTags: (result, _error, { evaluationTypeId }) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: 'Evaluation', id } as const)),
+            { type: 'Evaluation', id: `LIST_${evaluationTypeId}` },
+          ]
+          : [{ type: 'Evaluation', id: `LIST_${evaluationTypeId}` }],
+    }),
+
+
   }),
 })
 
 export const {
-  //Teams
-  useGetTeamByIdQuery,
+  //Imports
+  useUploadFileMutation,
 
   //Students
   useGetStudentQuery,
@@ -140,12 +269,31 @@ export const {
   useUpdateStudentMutation,
   useDeleteStudentMutation,
 
+  //Teams
+  useGetTeamByIdQuery,
+  useGetAllTeamsQuery,
+  useUpdateTeamMutation,
+
+  //Ods
+  useGetOdsQuery,
+
   //Teachers
   useGetTeacherQuery,
   useGetTeachersQuery,
   useCreateTeacherMutation,
   useUpdateTeacherMutation,
   useDeleteTeacherMutation,
+
+  //Banner
+  useGetBannerByIdQuery,
+  useCreateBannerMutation,
+  useUpdateBannerMutation,
+
+  //Evaluations
+  useGetEvaluationByIdQuery,
+  useGetTeamsEvaluationsQuery,
+  usePostEvaluationMutation,
+  usePutEvaluationMutation,
 
 } = studentsApiSlice
 

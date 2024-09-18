@@ -1,6 +1,7 @@
+import { useParams } from "react-router-dom"
 import { BannerPreviewComponent } from "../admin/components/banner/bannerPreview"
 
 export const BannerPreviewPage = () => {
-  //provavelmente terá loading baseado no id
-  return <BannerPreviewComponent id={0} />
+  const { id } = useParams()
+  return <BannerPreviewComponent id={Number(id)} />
 }

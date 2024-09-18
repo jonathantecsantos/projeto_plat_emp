@@ -43,7 +43,7 @@ export const AdminHeader = ({ onSearch, onRefresh, addButtonName, onAdd, placeho
           // label={"Pesquisar por nome ou ID"}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="w-80 px-4 py-2 border border-gray-300 
+          className="sm:w-80 px-4 py-2 border border-gray-300 
           rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-700"
         />
       </div>

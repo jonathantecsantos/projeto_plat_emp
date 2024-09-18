@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Login, LoginResponse } from '../utils/types'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Login, LoginResponse } from '../utils/types';
 
 
 
@@ -18,16 +18,6 @@ export const userApiSlice = createApi({
       }),
       invalidatesTags: ['Users'],
 
-      transformResponse: (response: LoginResponse): LoginResponse => ({
-        data: {
-          username: response.data.username,
-          token: response.data.token,
-          userId: response.data.userId,
-          profile: response.data.profile,
-        },
-        message: response.message
-      }),
-
 
       // onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
       onQueryStarted: async (queryFulfilled) => {
@@ -44,10 +34,6 @@ export const userApiSlice = createApi({
         }
       },
     }),
-    //
-    //get
-    //edit
-    //del
   }),
 })
 

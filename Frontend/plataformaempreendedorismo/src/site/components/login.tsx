@@ -1,5 +1,4 @@
 import { LoadingButton } from "@mui/lab";
-import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RoutesNames } from "../../globals";
@@ -9,21 +8,21 @@ import { Login } from "../../utils/types";
 export const LoginComponent = () => {
   const [user, setUser] = useState<Login>()
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
+  // const { enqueueSnackbar } = useSnackbar()
 
-  const { login, isLoading } = UserApiService()
+  const { isLoading } = UserApiService()
 
   const handleLogin = async () => {
-    try {
-      const response = await login({
-        username: user?.username!,
-        password: user?.password!
-      })
-      if (response)
+    // try {
+    //   const response = await login({
+    //     username: user?.username!,
+    //     password: user?.password!
+    //   })
+      // if (response)
         navigate(RoutesNames.adminHome)
-    } catch (error) {
-      enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
-    }
+    // } catch (error) {
+    //   enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
+    // }
   }
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

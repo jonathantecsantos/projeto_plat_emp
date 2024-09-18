@@ -1,14 +1,11 @@
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useUploadFileMutation } from '../../../api/import.slice'
-import { toggleLoading } from '../../../redux/reducers/loadingBar.slice'
+import { useUploadFileMutation } from '../../../api/studentApi'
 import { ImportType } from '../../../utils/types'
 import { UploadComponent } from './uploadCard'
 
 export const EvaluatorsUpload = () => {
   const [file, setFile] = useState<File | null>(null)
-  const dispatch = useDispatch()
   const [uploadFile, { isLoading }] = useUploadFileMutation()
   const { enqueueSnackbar } = useSnackbar()
   const [uploaded, setUploaded] = useState(false)
@@ -22,7 +19,6 @@ export const EvaluatorsUpload = () => {
 
   const handleSubmit = async () => {
     if (file) {
-      dispatch(toggleLoading())
       const formData = new FormData()
       formData.append('file', file)
       formData.append('tipo', ImportType.evaluator)
@@ -38,8 +34,6 @@ export const EvaluatorsUpload = () => {
         console.error('Erro ao enviar o arquivo de avaliadores:', error)
         enqueueSnackbar('Erro ao enviar o arquivo de avaliadores. Por favor, tente novamente.', { variant: 'error' })
         setUploaded(false)
-      } finally {
-        dispatch(toggleLoading())
       }
     } else {
       enqueueSnackbar('Por favor, selecione um arquivo antes de enviar.', { variant: 'warning' })

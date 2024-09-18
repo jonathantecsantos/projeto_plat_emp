@@ -3,12 +3,12 @@ import { Divider } from "@mui/material"
 import { ReactNode } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-// import logo from '../../assets/logo.svg'
 import { RoutesNames } from "../../../globals"
 import { logout } from "../../../redux/reducers/auth.slice"
 import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
+import { BannerImage } from './adminBanner'
 
 interface AdminPage {
   mainContent: ReactNode
@@ -28,9 +28,10 @@ const AdminAppBar = () => {
         {userGlobalState.profile}: {userGlobalState.username}
       </div> */}
       <div className="flex-grow"></div>
-      <div className="flex gap-2 items-center"
+      <div className="flex gap-2 items-center bg-white p-2 rounded-lg"
         onClick={() => {
           dispatch(logout())
+          // dispatch(clearEvaluations())
           navigate(RoutesNames.home)
         }} >
         <LogoutIcon className="text-right cursor-pointer" />
@@ -43,17 +44,10 @@ const AdminAppBar = () => {
 }
 
 const LeftMenu = () => {
-  // const backgroundImageUrl = logo
   const navigate = useNavigate()
-
   return (
-    <div className=" text-[#3C14A4] h-full">
+    <div className=" text-[#3C14A4] h-full z-30">
       <div className="w-full p-4">
-        {/* <img
-          src={backgroundImageUrl}
-          className="-z-10 mb-4 cursor-pointer"
-          onClick={() => navigate(RoutesNames.home)}
-        /> */}
         <h2
           onClick={() => navigate(RoutesNames.home)}
           className="cursor-pointer font-bold text-center text-white bg-gradient-to-r from-indigo-500 to-indigo-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
@@ -75,11 +69,13 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
         <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto">
           <LeftMenu />
         </div>
-        <main className="overflow-x-hidden overflow-y-auto w-full mt-8">
-          <div className="p-4">
+        <main className="overflow-x-hidden overflow-y-auto w-full">
+          <BannerImage />
+          <div className="p-4 h-[calc(100%-9rem)]">
             <BreadcrumbComponent />
             {mainContent}
           </div>
+          {/* <FooterImage /> */}
         </main>
       </div>
     </div>

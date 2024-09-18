@@ -55,7 +55,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
       email: student?.email || '',
       turma: student?.turma || '',
       idEquipe: student?.equipe?.id || teamData?.id || 0,
-      idOds: student?.equipe?.ods?.id || 0,
+      // idOds: student?.equipe?.odsList?.id || 0,
       isLider: student?.isLider || false,
       isViceLider: student?.isViceLider || false
     }
@@ -131,12 +131,12 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="ods" className="block text-sm font-medium text-gray-700">ID ODS</label>
             <input
               id="ods"
               type="number"
-              value={student?.equipe?.ods.id || ''}
+              value={student?.equipe?.odsList.id || ''}
               disabled={!!teamData?.id}
               onChange={(e) => {
                 const odsId = parseInt(e.target.value)
@@ -144,8 +144,8 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
                   ...prevData!,
                   equipe: {
                     ...prevData!.equipe,
-                    ods: {
-                      ...prevData!.equipe.ods,
+                    odsList: {
+                      ...prevData!.equipe.odsList,  
                       id: odsId
                     }
                   }
@@ -153,7 +153,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
               }}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
-          </div>
+          </div> */}
           <div>
             <label htmlFor="equipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
             <input
@@ -199,7 +199,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
         </div>
         <div className='my-4 flex justify-between text-sm'>
           <span>Equipe: {student?.equipe?.nome || teamData?.nomeEquipe}</span>
-          {student?.equipe?.ods && <span>{student?.equipe.ods?.codigo}: {student?.equipe.ods?.descricao}</span>}
+          {/* {student?.equipe?.odsList && <span>{student?.equipe.odsList?.codigo}: {student?.equipe.odsList?.descricao}</span>} */}
         </div>
 
         <div className={`flex items-center justify-between`}>

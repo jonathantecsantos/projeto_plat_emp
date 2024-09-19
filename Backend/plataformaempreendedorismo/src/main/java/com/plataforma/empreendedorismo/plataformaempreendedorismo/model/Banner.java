@@ -25,7 +25,7 @@ public class Banner {
     private String textoDescricaoQ0;
 
     @OneToMany(mappedBy = "banner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Anexo> anexos = new ArrayList<>();
+    private List<AnexoBanner> anexos = new ArrayList<>();
 
     @Column(name = "EQUIPE_Q1")
     private String equipeQ1;
@@ -78,7 +78,7 @@ public class Banner {
     @Column(name = "VISAO_IMPACTO_Q3")
     private String visaoImpactoQ3;
 
-    public Banner(CadastroBannerRecord cadastroBannerRecord, List<Anexo> anexos) {
+    public Banner(CadastroBannerRecord cadastroBannerRecord, List<AnexoBanner> anexos) {
         this.textoDescricaoQ0 = cadastroBannerRecord.textoDescricaoQ0();
         this.anexos = anexos;
         this.equipeQ1 = cadastroBannerRecord.equipeQ1();

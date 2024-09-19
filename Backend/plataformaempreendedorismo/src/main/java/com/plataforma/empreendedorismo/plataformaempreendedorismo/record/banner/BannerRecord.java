@@ -1,6 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Anexo;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.AnexoBanner;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Banner;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public record BannerRecord(
         String resultadosCurtoPrazoQ3,
         String resultadosMedioPrazoQ3,
         String visaoImpactoQ3,
-        List<Anexo> anexos
+        List<AnexoBanner> anexos
 ) {
     public BannerRecord(Banner banner){
         this(banner.getId(), banner.getTextoDescricaoQ0(),banner.getEquipeQ1(),banner.getParceiroQ1(),

@@ -99,8 +99,8 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "404", description = "Avaliação não encontrada"),
             @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
     })
-    @GetMapping(value = "/formato/{idFormatoAvaliacao}/avaliador/{idAvaliador}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AvaliacaoRecord>> getAvaliacoesPorTipoProfessor(@PathVariable Long idFormatoAvaliacao, @PathVariable Long idAvaliador){
-        return ResponseEntity.ok(avaliacaoService.getAvaliacoesPorTipoProfessor(idFormatoAvaliacao, idAvaliador));
+    @GetMapping(value = "/formato/{idFormatoAvaliacao}/avaliador/{idAvaliador}/equipe/{idEquipe}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AvaliacaoRecord>> getAvaliacoesPorTipoProfessor(@PathVariable Long idFormatoAvaliacao, @PathVariable Long idAvaliador,  @PathVariable Long idEquipe){
+        return ResponseEntity.ok(avaliacaoService.getAvaliacoesPorTipoProfessor(idFormatoAvaliacao, idAvaliador, idEquipe));
     }
 }

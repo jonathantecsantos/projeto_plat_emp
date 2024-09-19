@@ -140,9 +140,9 @@ public class AvaliacaoService {
                 .collect(Collectors.toList());
     }
 
-    public List<AvaliacaoRecord> getAvaliacoesPorTipoProfessor(Long idFormatoAvaliacao, Long idAvaliador) {
+    public List<AvaliacaoRecord> getAvaliacoesPorTipoProfessor(Long idFormatoAvaliacao, Long idAvaliador, Long idEquipe) {
 
-        List<Avaliacao> avaliacaos = avaliacaoRepository.findAvaliacoesByAvaliadorAndFormato(idFormatoAvaliacao, idAvaliador);
+        List<Avaliacao> avaliacaos = avaliacaoRepository.findAvaliacoesByAvaliadorAndFormatoAndEquipe(idFormatoAvaliacao, idAvaliador, idEquipe);
 
         return avaliacaos.stream()
                 .map(avaliacao -> new AvaliacaoRecord(

@@ -64,16 +64,16 @@ public class ProfessorService {
 
     private void validaProfessorCadastro(ProfessorCadastroRecord professorCadastroRecord) throws ValidarProfessorException {
         Professor professor = professorRepository.findByEquipeId(professorCadastroRecord.idEquipe());
-        if(professor != null){
-            throw new ValidarProfessorException("A equipe já possui um Professor");
-        }
+//        if(professor != null){
+//            throw new ValidarProfessorException("A equipe já possui um Professor");
+//        }
     }
 
     private void validaProfessorEdicao(ProfessorEditarRecord professorEditarRecord) throws ValidarProfessorException {
         Professor professor = professorRepository.findByEquipeId(professorEditarRecord.idEquipe());
-        if(professor != null && professor.getId() != professorEditarRecord.id()){
-            throw new ValidarProfessorException("A equipe já possui um Professor");
-        }
+//        if(professor != null && professor.getId() != professorEditarRecord.id()){
+//            throw new ValidarProfessorException("A equipe já possui um Professor");
+//        }
     }
 
     private void atualizaProfessor(Professor professor, ProfessorEditarRecord professorEditarRecord) {

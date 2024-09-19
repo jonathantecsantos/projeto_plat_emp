@@ -124,7 +124,7 @@ CREATE TABLE professor (
   FOREIGN KEY (equipe_id) REFERENCES equipe(id)
 );
 
-CREATE TABLE anexo (
+CREATE TABLE anexo_banner (
     id INT AUTO_INCREMENT PRIMARY KEY,
     banner_id INT,
     nome_anexo VARCHAR(255),

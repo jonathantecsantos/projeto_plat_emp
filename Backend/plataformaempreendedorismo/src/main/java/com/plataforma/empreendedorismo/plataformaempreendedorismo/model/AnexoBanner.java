@@ -7,12 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="anexo")
+@Entity(name="anexo_banner")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Anexo {
+public class AnexoBanner {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

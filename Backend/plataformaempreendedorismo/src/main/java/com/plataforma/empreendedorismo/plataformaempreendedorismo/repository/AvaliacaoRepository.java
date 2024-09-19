@@ -13,11 +13,13 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
     @Query(value = "SELECT av.* FROM avaliacao av " +
             "JOIN criterio_avaliacao ca ON av.id_criterio_avaliacao = ca.id " +
             "WHERE ca.id_formato_avaliacao = :idFormatoAvaliacao " +
-            "AND av.id_avaliador = :idAvaliador",
+            "AND av.id_avaliador = :idAvaliador " +
+            "AND av.id_equipe = :idEquipe",
             nativeQuery = true)
-    List<Avaliacao> findAvaliacoesByAvaliadorAndFormato(
+    List<Avaliacao> findAvaliacoesByAvaliadorAndFormatoAndEquipe(
             @Param("idFormatoAvaliacao") Long idFormatoAvaliacao,
-            @Param("idAvaliador") Long idAvaliador);
+            @Param("idAvaliador") Long idAvaliador,
+            @Param("idEquipe") Long idEquipe);
 
 
 }

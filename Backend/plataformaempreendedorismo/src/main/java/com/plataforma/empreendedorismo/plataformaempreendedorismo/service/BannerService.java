@@ -1,6 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Anexo;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.AnexoBanner;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Banner;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
@@ -70,7 +70,7 @@ public class BannerService {
 
         bannerRepository.save(banner);
 
-        List<Anexo> anexos = salvarAnexos(files, banner);
+        List<AnexoBanner> anexos = salvarAnexos(files, banner);
 
         banner.getAnexos().clear();
         banner.getAnexos().addAll(anexos);
@@ -118,7 +118,7 @@ public class BannerService {
         tratarAndSalvarInfosBanner(banner, bannerRecord);
 
         if (files != null && !files.isEmpty()) {
-            List<Anexo> anexosExistentes = tratarAnexos(files, banner);
+            List<AnexoBanner> anexosExistentes = tratarAnexos(files, banner);
             banner.setAnexos(anexosExistentes);
         }
     }
@@ -180,32 +180,32 @@ public class BannerService {
         }
     }
 
-    private List<Anexo> tratarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
-        List<Anexo> anexosExistentes = banner.getAnexos();
+    private List<AnexoBanner> tratarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
+        List<AnexoBanner> anexosExistentes = banner.getAnexos();
         List<String> novosNomesAnexos = files.stream()
                 .map(MultipartFile::getOriginalFilename)
                 .toList();
 
-        List<Anexo> anexosParaRemover = anexosExistentes.stream()
+        List<AnexoBanner> anexosParaRemover = anexosExistentes.stream()
                 .filter(anexo -> !novosNomesAnexos.contains(anexo.getNomeAnexo()))
                 .collect(Collectors.toList());
 
         anexosExistentes.removeAll(anexosParaRemover);
         anexoRepository.deleteAll(anexosParaRemover);
 
-        List<Anexo> novosAnexos = salvarAnexos(files, banner);
+        List<AnexoBanner> novosAnexos = salvarAnexos(files, banner);
         anexosExistentes.addAll(novosAnexos);
 
         return anexosExistentes;
     }
 
-    private List<Anexo> salvarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
-        List<Anexo> anexos = new ArrayList<>();
+    private List<AnexoBanner> salvarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
+        List<AnexoBanner> anexos = new ArrayList<>();
         for (MultipartFile file : files) {
             String fileName = file.getOriginalFilename();
             if (anexoRepository.findByBannerAndNomeAnexo(banner, fileName) == null) {
                 fileName = saveFile(file);
-                Anexo anexo = new Anexo();
+                AnexoBanner anexo = new AnexoBanner();
                 anexo.setBanner(banner);
                 anexo.setNomeAnexo(fileName);
                 anexo.setCaminhoAnexo(caminhoBase + fileName);

@@ -3,7 +3,7 @@ import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useLocation } from "react-router-dom"
-import { useGetEvaluationByIdQuery, useGetTeamsEvaluationsQuery, usePostEvaluationMutation, usePutEvaluationMutation } from "../../../api/studentApi"
+import { useGetEvaluationByIdQuery, useGetEvaluationDataQuery, useGetTeamsEvaluationsQuery, usePostEvaluationMutation, usePutEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
@@ -71,6 +71,13 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
       evaluatorId: teamData.teamEvaluation.evaluatorId
     })
+
+  const { data: dljResponse } = useGetEvaluationDataQuery({
+    idAvaliador: teamData.teamEvaluation.evaluatorId,
+    idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId
+  })
+
+  console.log(dljResponse)
 
   const [postEvaluation] = usePostEvaluationMutation()
   const [putEvaluation] = usePutEvaluationMutation()

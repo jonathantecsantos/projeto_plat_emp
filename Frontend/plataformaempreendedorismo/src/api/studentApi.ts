@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { Banner } from '../model/banner'
-import { Evaluation, EvaluationById, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
+import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
@@ -218,6 +218,18 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
     }),
 
+    getEvaluationData: build.query<EvaluationData[], { idFormatoAvaliacao: number; idAvaliador: number }>({
+      query: ({ idFormatoAvaliacao, idAvaliador }) =>
+        `/avaliacoes/formato/${idFormatoAvaliacao}/avaliador/${idAvaliador}`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Evaluation', id } as const)),
+            { type: 'Evaluation', id: 'LIST' },
+          ]
+          : [{ type: 'Evaluation', id: 'LIST' }],
+    }),
+
     postEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
       query: ({ data }) => ({
         url: `/avaliacoes`,
@@ -294,6 +306,7 @@ export const {
   useGetTeamsEvaluationsQuery,
   usePostEvaluationMutation,
   usePutEvaluationMutation,
+  useGetEvaluationDataQuery
 
 } = studentsApiSlice
 

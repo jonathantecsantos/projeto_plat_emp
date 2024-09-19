@@ -53,3 +53,9 @@ export interface TeamEvaluationResponse {
   nome: string
   equipeAvaliada: boolean
 }
+
+export interface EvaluationData {
+  idCriterioAvaliacao: number
+  idSubcriterioAvaliacao: number
+  nota: number
+}

@@ -1,43 +1,22 @@
-import LogoutIcon from '@mui/icons-material/Logout'
 import { Divider } from "@mui/material"
 import { ReactNode } from "react"
-import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { RoutesNames } from "../../../globals"
-import { logout } from "../../../redux/reducers/auth.slice"
+import { BannerImage } from './adminBanner'
 import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
-import { BannerImage } from './adminBanner'
+import { Logout } from "./logout"
 
 interface AdminPage {
   mainContent: ReactNode
 }
 
 const AdminAppBar = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  // const userGlobalState = useSelector((state: RootState) => state.userInfo.data)
-
   return (
     <div className="flex  text-[#3C14A4] justify-between lg:p-4 p-1 px-4 fixed top-0 left-0 right-0 z-10">
       <div className="block lg:hidden">
         <DrawerComponent />
-      </div>
-      {/* <div className='lg:block hidden first-letter:uppercase mx-56'>
-        {userGlobalState.profile}: {userGlobalState.username}
-      </div> */}
-      <div className="flex-grow"></div>
-      <div className="flex gap-2 items-center bg-white p-2 rounded-lg"
-        onClick={() => {
-          dispatch(logout())
-          // dispatch(clearEvaluations())
-          navigate(RoutesNames.home)
-        }} >
-        <LogoutIcon className="text-right cursor-pointer" />
-        <button className="text-right cursor-pointer">
-          Logout
-        </button>
       </div>
     </div>
   )
@@ -72,7 +51,10 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
         <main className="overflow-x-hidden overflow-y-auto w-full">
           <BannerImage />
           <div className="p-4 h-[calc(100%-9rem)]">
-            <BreadcrumbComponent />
+            <div className="flex">
+              <BreadcrumbComponent />
+              <Logout />
+            </div>
             {mainContent}
           </div>
           {/* <FooterImage /> */}

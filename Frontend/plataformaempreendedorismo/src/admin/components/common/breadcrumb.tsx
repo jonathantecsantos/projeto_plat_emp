@@ -20,7 +20,7 @@ const BreadcrumbWrapperStyled = styled('div')(({ theme }) => ({
   paddingInline: 10,
   boxSizing: 'border-box',
   [theme.breakpoints.up('sm')]: {
-    paddingInline: 20,
+    paddingInline: 10,
   }
 }))
 

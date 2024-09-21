@@ -40,9 +40,11 @@ export const HandleNextTeamComponent = ({
       return;
     }
 
-    const nextAvailableTeam = teamsEvaluationsList.find(
-      (team) => !team.equipeAvaliada
-    );
+    const nextAvailableTeam = teamsEvaluationsList.find((team) => !team.equipeAvaliada && team.id != currentTeamId);
+
+    // const nextAvailableTeam = teamsEvaluationsList.slice(currentTeamIndex + 1).find(
+    //   (team) => !team.equipeAvaliada
+    // );
 
     if (nextAvailableTeam) {
       navigate(evaluationType.replace(":id", nextAvailableTeam?.id.toString()), {
@@ -50,7 +52,8 @@ export const HandleNextTeamComponent = ({
           id: nextAvailableTeam.id,
           nomeEquipe: nextAvailableTeam.nome,
           teams: teamsEvaluationsList,
-          teamEvaluation: state.teamData.teamEvaluation
+          teamEvaluation: state.teamData.teamEvaluation,
+          resetSelection: true,
         },
       });
       onComplete();
@@ -66,7 +69,7 @@ export const HandleNextTeamComponent = ({
   }
 
   return (
-   <div>
+    <div>
       {teamEvaluationAvailable ? <div className="text-center p-4 mt-16">
         <div className='bg-red-200'>
           {JSON.stringify(teamsEvaluationsList, null, 2)}
@@ -101,6 +104,6 @@ export const HandleNextTeamComponent = ({
           </Typography>
         ) : null}
       </div> : 'Todos os times já foram avaliados.'}
-   </div>
+    </div>
   )
 }

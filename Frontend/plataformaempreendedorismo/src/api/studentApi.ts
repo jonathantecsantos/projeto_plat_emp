@@ -218,37 +218,37 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
     }),
 
-    getEvaluationData: build.query<EvaluationData[], { idFormatoAvaliacao: number; idAvaliador: number }>({
-      query: ({ idFormatoAvaliacao, idAvaliador }) =>
-        `/avaliacoes/formato/${idFormatoAvaliacao}/avaliador/${idAvaliador}`,
-      providesTags: (result) =>
-        result
-          ? [
-            ...result.map(({ id }: any) => ({ type: 'Evaluation', id } as const)),
-            { type: 'Evaluation', id: 'LIST' },
-          ]
-          : [{ type: 'Evaluation', id: 'LIST' }],
+    getEvaluationData: build.query<EvaluationData[], { idFormatoAvaliacao: number, idAvaliador: number, idEquipe: number }>({
+      query: ({ idFormatoAvaliacao, idAvaliador, idEquipe }) =>
+        `/avaliacoes/formato/${idFormatoAvaliacao}/avaliador/${idAvaliador}/equipe/${idEquipe}`,
+      providesTags: (_result, _error, { idFormatoAvaliacao, idAvaliador, idEquipe }) => [
+        { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` },
+      ]
     }),
 
-    postEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+    postEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId?: any, idFormatoAvaliacao?: number, idAvaliador?: number, idEquipe?: number }>({
       query: ({ data }) => ({
         url: `/avaliacoes`,
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+      invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+        { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` },
+        { type: 'Evaluation', id: idFormatoAvaliacao }
       ],
     }),
 
-    putEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+    putEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId?: any, idFormatoAvaliacao?: number, idAvaliador?: number, idEquipe?: number }>({
       query: ({ data }) => ({
         url: `/avaliacoes/editar`,
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+      invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+        { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` }, // Invalida o cache específico do getEvaluationData
+        { type: 'Evaluation', id: idFormatoAvaliacao }
       ],
     }),
 

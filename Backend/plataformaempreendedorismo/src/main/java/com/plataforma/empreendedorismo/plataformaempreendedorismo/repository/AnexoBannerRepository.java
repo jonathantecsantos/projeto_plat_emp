@@ -4,6 +4,6 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.AnexoBan
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Banner;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AnexoRepository extends JpaRepository<AnexoBanner, Long> {
+public interface AnexoBannerRepository extends JpaRepository<AnexoBanner, Long> {
     AnexoBanner findByBannerAndNomeAnexo(Banner banner, String nomeAnexo);
 }

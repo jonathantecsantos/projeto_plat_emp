@@ -5,7 +5,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Banner;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AnexoRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AnexoBannerRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.BannerRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import jakarta.transaction.Transactional;
@@ -41,7 +41,7 @@ public class BannerService {
     private BannerRepository bannerRepository;
 
     @Autowired
-    private AnexoRepository anexoRepository;
+    private AnexoBannerRepository anexoBannerRepository;
 
     @Transactional
     public void criarBanner(List<MultipartFile> files,CadastroBannerRecord cadastroBannerRecord) throws Exception {
@@ -191,7 +191,7 @@ public class BannerService {
                 .collect(Collectors.toList());
 
         anexosExistentes.removeAll(anexosParaRemover);
-        anexoRepository.deleteAll(anexosParaRemover);
+        anexoBannerRepository.deleteAll(anexosParaRemover);
 
         List<AnexoBanner> novosAnexos = salvarAnexos(files, banner);
         anexosExistentes.addAll(novosAnexos);
@@ -203,7 +203,7 @@ public class BannerService {
         List<AnexoBanner> anexos = new ArrayList<>();
         for (MultipartFile file : files) {
             String fileName = file.getOriginalFilename();
-            if (anexoRepository.findByBannerAndNomeAnexo(banner, fileName) == null) {
+            if (anexoBannerRepository.findByBannerAndNomeAnexo(banner, fileName) == null) {
                 fileName = saveFile(file);
                 AnexoBanner anexo = new AnexoBanner();
                 anexo.setBanner(banner);
@@ -212,7 +212,7 @@ public class BannerService {
                 anexos.add(anexo);
             }
         }
-        anexoRepository.saveAll(anexos);
+        anexoBannerRepository.saveAll(anexos);
         return anexos;
     }
 }

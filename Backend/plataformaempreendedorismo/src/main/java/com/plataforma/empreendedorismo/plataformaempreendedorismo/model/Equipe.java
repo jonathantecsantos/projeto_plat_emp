@@ -29,6 +29,10 @@ public class Equipe {
     @JoinColumn(name = "BANNER_ID", referencedColumnName = "id")
     private Banner banner;
 
+    @OneToOne
+    @JoinColumn(name = "PROTOTIPO_ID", referencedColumnName = "id")
+    private Prototipo prototipo;
+
     @ManyToMany
     @JoinTable(
             name = "equipe_ods",

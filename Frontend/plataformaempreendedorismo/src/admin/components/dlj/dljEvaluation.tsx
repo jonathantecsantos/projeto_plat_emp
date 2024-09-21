@@ -194,7 +194,21 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
     try {
       dispatch(toggleLoading())
 
-      alreadyEvaluated ? await putEvaluation({ data: payload, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap() : await postEvaluation({ data: payload, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap()
+      alreadyEvaluated ?
+        await putEvaluation({
+          data: payload,
+          evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
+          idAvaliador: teamData.teamEvaluation.evaluatorId,
+          idEquipe: teamData.id,
+          idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId
+        }).unwrap() :
+        await postEvaluation({
+          data: payload,
+          evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
+          idAvaliador: teamData.teamEvaluation.evaluatorId,
+          idEquipe: teamData.id,
+          idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId
+        }).unwrap()
 
       setOpen(false)
       setShowSuccess(true)
@@ -268,7 +282,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
                 {alreadyEvaluated ? 'Editar' : 'Finalizar'}
               </Button>
             </div>
-            {alreadyEvaluated && <p className="text-red-300">Avaliado!</p>} 
+            {alreadyEvaluated && <p className="text-red-300">Avaliado!</p>}
           </div>
           <Dialog open={open} onClose={() => setOpen(false)}>
             <DialogContent>

@@ -1,18 +1,21 @@
-import { Slider, Typography } from "@mui/material";
+import { LinearProgress, Slider, Typography } from "@mui/material";
 import { SubcriterioAvaliacao } from "../../../model/evaluationFormat";
 
 interface SubcriterionSliderProps {
-  subcriterio: SubcriterioAvaliacao;
-  value: number; 
-  onChange: (id: number, value: number) => void;
+  subcriterio: SubcriterioAvaliacao
+  value: number
+  onChange: (id: number, value: number) => void
+  isLoading: boolean
 }
 
-export const SubcriterionSlider = ({ subcriterio, value, onChange }: SubcriterionSliderProps) => {
+export const SubcriterionSlider = ({ subcriterio, value, onChange, isLoading }: SubcriterionSliderProps) => {
 
   const handleSliderChange = (_event: Event, newValue: number | number[]) => {
     const finalValue = newValue as number;
     onChange(subcriterio.id, finalValue);
   };
+
+  if (isLoading) return <div className='text-center'><LinearProgress color="inherit" style={{ height: '1px' }} /></div>
 
   return (
     <div className="">
@@ -21,7 +24,7 @@ export const SubcriterionSlider = ({ subcriterio, value, onChange }: Subcriterio
       </Typography>
       <div className="p-4 sm:w-1/2 flex-col justify-center mx-auto ">
         <Slider
-          style={{ color: "#65558F"}}
+          style={{ color: "#65558F" }}
           size="medium"
           value={value || 0}
           max={subcriterio.notaMaxima}

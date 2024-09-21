@@ -71,11 +71,6 @@ export const HandleNextTeamComponent = ({
   return (
     <div>
       {teamEvaluationAvailable ? <div className="text-center p-4 mt-16">
-        <div className='bg-red-200'>
-          {JSON.stringify(teamsEvaluationsList, null, 2)}
-        </div>
-        {JSON.stringify(state.teamData.teamEvaluation, null, 2)}
-
         <Typography variant="h5" color="green">
           <CheckIcon />  Avaliação do time {state.teamData?.nomeEquipe} realizada com sucesso!
         </Typography>

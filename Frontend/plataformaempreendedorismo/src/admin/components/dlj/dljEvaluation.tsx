@@ -1,8 +1,9 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, LinearProgress } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useGetEvaluationByIdQuery, useGetEvaluationDataQuery, useGetTeamsEvaluationsQuery, usePostEvaluationMutation, usePutEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation, EvaluationData, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
@@ -10,9 +11,6 @@ import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
 import { EvaluationProps } from "../../../utils/types"
 import { EvaluationHeader } from "../common/evaluationHeader"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-
-
 
 interface QuestionItemProps {
   subcriterio: SubcriterioAvaliacao
@@ -91,7 +89,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
     idAvaliador: teamData.teamEvaluation.evaluatorId,
     idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId,
     idEquipe: teamData.id
-  })
+  }, )
   const navigate = useNavigate()
 
   const [postEvaluation] = usePostEvaluationMutation()
@@ -102,9 +100,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
   const [showSuccess, setShowSuccess] = useState(false)
-  const location = useLocation()
   const { enqueueSnackbar } = useSnackbar()
-  const currentTeamData = location.state?.teamData || teamData
 
 
   const alreadyEvaluated = teams?.some(team => team.id === teamData.id && team.equipeAvaliada === true)
@@ -144,7 +140,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       setSelectedOptions([])
       setTotalPoints(0)
     }
-  }, [dljQuestions, dljResponse, currentTeamData])
+  }, [dljQuestions, dljResponse])
 
 
 

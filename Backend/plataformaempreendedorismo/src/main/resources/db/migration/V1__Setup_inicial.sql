@@ -36,14 +36,26 @@ CREATE TABLE ods (
                      descricao VARCHAR(250)
 );
 
+CREATE TABLE prototipo (
+                           id int NOT NULL AUTO_INCREMENT,
+                           instituicao_impacto_social varchar(500) DEFAULT null,
+                           problema_principal varchar(500) DEFAULT null,
+                           proposta_valor varchar(500) DEFAULT null,
+                           vantagem_competitiva varchar(500) DEFAULT null,
+                           principais_necessidades varchar(500) default null,
+                           parcerias varchar(500) DEFAULT null,
+                           tipo_apoio varchar(500) DEFAULT null,
+                           PRIMARY KEY (id)
+);
+
 CREATE TABLE equipe (
                         id INT PRIMARY KEY AUTO_INCREMENT,
                         nome VARCHAR(100) NOT null,
                         banner_id INT null,
-                        ods_id INT not null,
+                        prototipo_id INT null,
                         link_pitch VARCHAR(250) null,
                         FOREIGN KEY (banner_id) REFERENCES banner(ID),
-                        FOREIGN KEY (ods_id) REFERENCES ods(ID)
+                        FOREIGN KEY (prototipo_id) REFERENCES prototipo(ID)
 );
 
 CREATE TABLE aluno (
@@ -224,17 +236,6 @@ CREATE TABLE registro_avaliacao (
                                     CONSTRAINT id_equipe_fk2 FOREIGN KEY (id_equipe) REFERENCES equipe (id)
 );
 
-CREATE TABLE prototipo (
-                           id int NOT NULL AUTO_INCREMENT,
-                           instituicao_impacto_social varchar(500) DEFAULT null,
-                           problema_principal varchar(500) DEFAULT null,
-                           proposta_valor varchar(500) DEFAULT null,
-                           vantagem_competitiva varchar(500) DEFAULT null,
-                           principais_necessidades varchar(500) default null,
-                           parcerias varchar(500) DEFAULT null,
-                           tipo_apoio varchar(500) DEFAULT null,
-                           PRIMARY KEY (id)
-);
 
 CREATE TABLE anexo_prototipo (
                                  id INT AUTO_INCREMENT PRIMARY KEY,

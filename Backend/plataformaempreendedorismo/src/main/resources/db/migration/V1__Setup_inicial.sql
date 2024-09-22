@@ -236,17 +236,6 @@ CREATE TABLE registro_avaliacao (
                                     CONSTRAINT id_equipe_fk2 FOREIGN KEY (id_equipe) REFERENCES equipe (id)
 );
 
-
-CREATE TABLE anexo_prototipo (
-                                 id INT AUTO_INCREMENT PRIMARY KEY,
-                                 prototipo_id INT,
-                                 equipe_id INT,
-                                 nome_anexo VARCHAR(255),
-                                 caminho_anexo VARCHAR(500),
-                                 FOREIGN KEY (prototipo_id) REFERENCES prototipo (id),
-                                 FOREIGN KEY (equipe_id) REFERENCES equipe (id)
-);
-
 CREATE TABLE tipo_anexo_prototipo (
                                       id int NOT NULL AUTO_INCREMENT,
                                       descricao varchar(255) DEFAULT null,
@@ -258,3 +247,16 @@ insert into tipo_anexo_prototipo (descricao) values
                                                  ('ANEXO'),
                                                  ('MEMORIAL_DESCRITIVO'),
                                                  ('ESQUEMA');
+
+CREATE TABLE anexo_prototipo (
+                                 id INT AUTO_INCREMENT PRIMARY KEY,
+                                 prototipo_id INT,
+                                 equipe_id INT,
+                                 tipo_anexo_prototipo_id INT,
+                                 nome_anexo VARCHAR(255),
+                                 caminho_anexo VARCHAR(500),
+                                 FOREIGN KEY (prototipo_id) REFERENCES prototipo (id),
+                                 FOREIGN KEY (tipo_anexo_prototipo_id) REFERENCES tipo_anexo_prototipo (id),
+                                 FOREIGN KEY (equipe_id) REFERENCES equipe (id)
+);
+

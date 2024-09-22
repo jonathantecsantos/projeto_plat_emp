@@ -1,36 +1,50 @@
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent } from "@mui/material"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, LinearProgress } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { useLocation } from "react-router-dom"
-import { useGetEvaluationByIdQuery, useGetTeamsEvaluationsQuery, usePostEvaluationMutation, usePutEvaluationMutation } from "../../../api/studentApi"
+import { useNavigate } from "react-router-dom"
+import { useGetEvaluationByIdQuery, useGetEvaluationDataQuery, useGetTeamsEvaluationsQuery, usePostEvaluationMutation, usePutEvaluationMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
-import { CriterioAvaliacao, Evaluation, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
+import { CriterioAvaliacao, Evaluation, EvaluationData, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
 import { EvaluationProps } from "../../../utils/types"
 import { EvaluationHeader } from "../common/evaluationHeader"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
 
-
 interface QuestionItemProps {
   subcriterio: SubcriterioAvaliacao
   isDisabled: boolean
+  dljResponse: EvaluationData[]
+  isLoading: boolean
   onSelectionChange: (id: number, isSelected: boolean, points: number) => void
 }
-
-
-export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: QuestionItemProps) => {
+export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange, dljResponse, isLoading }: QuestionItemProps) => {
   const [isSelected, setIsSelected] = useState(subcriterio.valorPadrao)
+
+  // Sempre que dljResponse mudar, atualize a seleção se houver dados
+  useEffect(() => {
+    const responseItem = dljResponse.find(
+      (item) => item.idSubcriterioAvaliacao === subcriterio.id
+    )
+    if (responseItem) {
+      setIsSelected(responseItem.nota > 0) // Atualizando o estado visual baseado no dljResponse
+    } else {
+      setIsSelected(subcriterio.valorPadrao)
+    }
+  }, [dljResponse, subcriterio.id])
 
   const handleOptionChange = (selected: boolean) => {
     setIsSelected(selected)
     onSelectionChange(subcriterio.id, selected, subcriterio.notaMaxima)
   }
 
+  if (isLoading) return <div className='text-center'><LinearProgress color="inherit" style={{ height: '1px' }} /></div>
+
   return (
     <div className={`border p-4 rounded-lg mb-4 flex justify-between items-center 
-        ${isDisabled ? "opacity-50 pointer-events-none" : ""} ${isSelected ? "bg-gray-100" : "bg-white"}`
-    }>
+        ${isDisabled ? "opacity-50 pointer-events-none" : ""} ${isSelected ? "bg-gray-100" : "bg-white"}`}
+    >
       <div>
         <p className="text-lg font-medium text-primary">{subcriterio.descricao}</p>
         <div className="flex mt-2">
@@ -63,7 +77,6 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange }: Que
     </div>
   )
 }
-
 export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const { data: dljQuestions, isLoading } = useGetEvaluationByIdQuery(1) //id dlj = 1
   const { data: teams, } = useGetTeamsEvaluationsQuery(
@@ -72,29 +85,47 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       evaluatorId: teamData.teamEvaluation.evaluatorId
     })
 
+  const { data: dljResponse, isLoading: dljLoading } = useGetEvaluationDataQuery({
+    idAvaliador: teamData.teamEvaluation.evaluatorId,
+    idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId,
+    idEquipe: teamData.id
+  }, )
+  const navigate = useNavigate()
+
   const [postEvaluation] = usePostEvaluationMutation()
   const [putEvaluation] = usePutEvaluationMutation()
+
   const [selectedOptions, setSelectedOptions] = useState<number[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
   const [showSuccess, setShowSuccess] = useState(false)
-  const location = useLocation()
   const { enqueueSnackbar } = useSnackbar()
-  const currentTeamData = location.state?.teamData || teamData;
 
 
   const alreadyEvaluated = teams?.some(team => team.id === teamData.id && team.equipeAvaliada === true)
 
 
   useEffect(() => {
-    if (dljQuestions) {
+    if (dljQuestions && dljResponse) {
       const initialSelectedOptions: number[] = []
       let initialTotalPoints = 0
 
       dljQuestions.forEach((criterio: CriterioAvaliacao) => {
         criterio.subcriterioAvaliacaos.forEach((subcriterio: SubcriterioAvaliacao) => {
-          if (subcriterio.valorPadrao) {
+          // Verifica se existe uma resposta no dljResponse para o subcritério
+          const responseItem = dljResponse.find(
+            (item) => item.idSubcriterioAvaliacao === subcriterio.id
+          )
+
+          if (responseItem) {
+            // Se a nota for maior que 0, considera como selecionado e soma os pontos
+            if (responseItem.nota > 0) {
+              initialSelectedOptions.push(subcriterio.id)
+              initialTotalPoints += responseItem.nota
+            }
+          } else if (subcriterio.valorPadrao) {
+            // Se não houver resposta no dljResponse, usa o valor padrão
             initialSelectedOptions.push(subcriterio.id)
             initialTotalPoints += subcriterio.notaMaxima
           }
@@ -106,28 +137,40 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
     }
 
     return () => {
-      setSelectedOptions([]);
-      setTotalPoints(0);
-    };
-  }, [dljQuestions, currentTeamData])
+      setSelectedOptions([])
+      setTotalPoints(0)
+    }
+  }, [dljQuestions, dljResponse])
+
+
 
   const handleSelectionChange = (id: number, isSelected: boolean, points: number) => {
     let updatedSelectedOptions = [...selectedOptions]
     let updatedTotalPoints = totalPoints
 
+    // Verifique se o item foi selecionado
     if (isSelected) {
-      if (updatedTotalPoints + points > 100) return
-      updatedSelectedOptions.push(id)
-      updatedTotalPoints += points
+      if (!updatedSelectedOptions.includes(id)) {
+        // Verifica se adicionar os pontos ultrapassa 100
+        if (updatedTotalPoints + points <= 100) {
+          updatedSelectedOptions.push(id)
+          updatedTotalPoints += points
+        } else {
+          enqueueSnackbar('A pontuação total não pode exceder 100 pontos.', { variant: 'warning' })
+          return
+        }
+      }
     } else {
-      updatedSelectedOptions = updatedSelectedOptions.filter((selectedId) => selectedId !== id)
-      updatedTotalPoints -= points
+      // Se estiver desmarcando, subtraia os pontos
+      if (updatedSelectedOptions.includes(id)) {
+        updatedSelectedOptions = updatedSelectedOptions.filter((selectedId) => selectedId !== id)
+        updatedTotalPoints = Math.max(0, updatedTotalPoints - points) // Garante que não seja negativo
+      }
     }
 
     setSelectedOptions(updatedSelectedOptions)
     setTotalPoints(updatedTotalPoints)
   }
-
 
   const handlePostEvaluation = async () => {
     if (!teamData || !dljQuestions || dljQuestions.length === 0) {
@@ -147,7 +190,21 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
     try {
       dispatch(toggleLoading())
 
-      alreadyEvaluated ? await putEvaluation({ data: payload, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap() : await postEvaluation({ data: payload, evaluationTypeId: teamData.teamEvaluation.evaluationTypeId }).unwrap()
+      alreadyEvaluated ?
+        await putEvaluation({
+          data: payload,
+          evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
+          idAvaliador: teamData.teamEvaluation.evaluatorId,
+          idEquipe: teamData.id,
+          idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId
+        }).unwrap() :
+        await postEvaluation({
+          data: payload,
+          evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,
+          idAvaliador: teamData.teamEvaluation.evaluatorId,
+          idEquipe: teamData.id,
+          idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId
+        }).unwrap()
 
       setOpen(false)
       setShowSuccess(true)
@@ -158,6 +215,10 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
       setOpen(false)
       dispatch(toggleLoading())
     }
+  }
+
+  const handleBackToList = () => {
+    navigate(RoutesNames.dljTeams)
   }
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
@@ -188,8 +249,10 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
             <div key={criterio.id} className="mb-6">
               {criterio.subcriterioAvaliacaos.map((subcriterio: SubcriterioAvaliacao) => (
                 <QuestionItem
+                  isLoading={dljLoading}
                   key={subcriterio.id}
                   subcriterio={subcriterio}
+                  dljResponse={dljResponse || []}
                   isDisabled={
                     (subcriterio.id === 2 && selectedOptions.includes(1)) ||
                     (subcriterio.id === 1 && selectedOptions.includes(2))
@@ -200,15 +263,22 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
             </div>
           ))}
           <div className="flex flex-col justify-end gap-4 items-end mt-6">
-            {JSON.stringify(teamData.teamEvaluation, null, 2)}
             <p className="text-lg font-bold">
               Pontuação total: {totalPoints} pontos
             </p>
-            {alreadyEvaluated && <p className="text-red-400">Este time já foi avaliado.</p>}
-            <Button variant="contained" className="bg-[#5741A6] normal-case"
-              disabled={totalPoints > 100 || isLoading} onClick={() => setOpen(true)}>
-              {alreadyEvaluated ? 'Editar' : 'Finalizar'}
-            </Button>
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={handleBackToList}
+                className="px-2 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-600  text-sm h-10">
+                <ArrowBackIcon />
+              </button>
+              <Button variant="contained" className="bg-[#5741A6] normal-case"
+                disabled={totalPoints > 100 || isLoading} onClick={() => setOpen(true)}>
+                {alreadyEvaluated ? 'Editar' : 'Finalizar'}
+              </Button>
+            </div>
+            {alreadyEvaluated && <p className="text-red-300">Avaliado!</p>}
           </div>
           <Dialog open={open} onClose={() => setOpen(false)}>
             <DialogContent>

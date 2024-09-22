@@ -28,9 +28,9 @@ export const DrawerComponent = () => {
       aria-label="open drawer"
       edge="start"
       onClick={handleDrawerToggle}
-      className="block lg:hidden"
+      className="block lg:hidde"
     >
-      <MenuIcon />
+      <MenuIcon  className='rounded-md bg-[#fefefe] text-ring-custom'/>
     </IconButton>
   </>
 

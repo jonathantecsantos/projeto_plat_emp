@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { Banner } from '../model/banner'
-import { Evaluation, EvaluationById, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
+import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse } from '../model/student'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
@@ -218,25 +218,37 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Evaluation', id }],
     }),
 
-    postEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+    getEvaluationData: build.query<EvaluationData[], { idFormatoAvaliacao: number, idAvaliador: number, idEquipe: number }>({
+      query: ({ idFormatoAvaliacao, idAvaliador, idEquipe }) =>
+        `/avaliacoes/formato/${idFormatoAvaliacao}/avaliador/${idAvaliador}/equipe/${idEquipe}`,
+      providesTags: (_result, _error, { idFormatoAvaliacao, idAvaliador, idEquipe }) => [
+        { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` },
+      ]
+    }),
+
+    postEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId?: any, idFormatoAvaliacao?: number, idAvaliador?: number, idEquipe?: number }>({
       query: ({ data }) => ({
         url: `/avaliacoes`,
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+      invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+        { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` },
+        // { type: 'Evaluation', id: idFormatoAvaliacao } 
       ],
     }),
 
-    putEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId: any }>({
+    putEvaluation: build.mutation<void, { data: Evaluation[], evaluationTypeId?: any, idFormatoAvaliacao?: number, idAvaliador?: number, idEquipe?: number }>({
       query: ({ data }) => ({
         url: `/avaliacoes/editar`,
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: (_result, _error, { evaluationTypeId }) => [
+      invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
+        { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` }, // Invalida o cache específico do getEvaluationData
+        // { type: 'Evaluation', id: idFormatoAvaliacao }
       ],
     }),
 
@@ -294,6 +306,7 @@ export const {
   useGetTeamsEvaluationsQuery,
   usePostEvaluationMutation,
   usePutEvaluationMutation,
+  useGetEvaluationDataQuery
 
 } = studentsApiSlice
 

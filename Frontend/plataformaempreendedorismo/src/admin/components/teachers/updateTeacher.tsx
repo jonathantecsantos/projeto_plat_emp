@@ -19,8 +19,8 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
   const { data, isLoading } = useGetTeacherQuery(id, { skip: !!teamData })
 
   const [teacher, setTeacher] = useState<TeacherIdResponse | null>(null)
-  const [updateTeacher, { isSuccess }] = useUpdateTeacherMutation()
-  const [createTecher] = useCreateTeacherMutation()
+  const [updateTeacher, { isSuccess, isLoading: updating }] = useUpdateTeacherMutation()
+  const [createTecher, { isLoading: creating }] = useCreateTeacherMutation()
   const [success, setSucess] = useState(isSuccess)
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
@@ -153,9 +153,9 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
           <LoadingButton
             className='bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]'
             variant='contained'
-            loading={isLoading}
+            loading={updating || creating}
             type="submit"
-            disabled={isLoading}
+            disabled={updating || creating}
           >
             {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className='mr-1' />}
             {teamData?.nomeEquipe ? <span>Adicionar</span> : <span>Editar</span>}

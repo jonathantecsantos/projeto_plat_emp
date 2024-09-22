@@ -19,8 +19,8 @@ interface UpdateOrCreateStudentProps {
 export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStudentProps) => {
   const { data, isLoading } = useGetStudentQuery(id, { skip: !!teamData?.id })
   const [student, setStudent] = useState<StudentIdResponse | null>(null)
-  const [updateStudent, { isSuccess }] = useUpdateStudentMutation()
-  const [createStudent] = useCreateStudentMutation()
+  const [updateStudent, { isSuccess, isLoading: updating }] = useUpdateStudentMutation()
+  const [createStudent, { isLoading: creating }] = useCreateStudentMutation()
   const [success, setSucess] = useState(isSuccess)
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
@@ -222,9 +222,9 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
           <LoadingButton
             className='bg-ring-custom normal-case mt-8 shadow-md hover:bg-[#8668FFCC]'
             variant='contained'
-            loading={isLoading}
+            loading={creating || updating}
             type="submit"
-            disabled={isLoading}
+            disabled={creating || updating}
           >
             {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className='mr-1' />}
             {teamData?.nomeEquipe ? <span>Adicionar</span> : <span>Editar</span>}

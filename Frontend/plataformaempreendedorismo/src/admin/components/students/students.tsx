@@ -45,7 +45,7 @@ export const Students = () => {
     if (!students) return []
     return students.filter((student) =>
       student.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.id.toString().includes(searchTerm)
+      student.equipeRecord.nome.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }, [students, searchTerm])
 
@@ -77,7 +77,7 @@ export const Students = () => {
     <AdminHeader onSearch={handleSearch} onRefresh={refetch}
       onAdd={() => navigate(RoutesNames.student)}
       // addButtonName='Adicionar Aluno'
-      placeholder='Pesquisar por nome ou ID' />
+      placeholder='Pesquisar por nome do aluno ou turma' />
     <div className="my-8 flex justify-center font-semibold gap-1">
       <p>Nenhum aluno disponível, realize a</p>
       <span onClick={() => navigate(RoutesNames.uploadFiles)}
@@ -93,9 +93,10 @@ export const Students = () => {
 
   return (
     <div className="flex flex-col h-full">
+      {/* {JSON.stringify(students![0])} */}
       <div className="sticky top-0 z-10">
         <AdminHeader onSearch={handleSearch} onRefresh={refetch}
-          placeholder='Pesquisar por nome ou ID'
+          placeholder='Pesquisar por nome do aluno ou turma'
           // addButtonName='Adicionar Aluno'
           onAdd={() => navigate(RoutesNames.student)} />
       </div>

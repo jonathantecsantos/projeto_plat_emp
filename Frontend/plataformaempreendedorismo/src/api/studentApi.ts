@@ -266,6 +266,14 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Evaluation', id: `LIST_${evaluationTypeId}` }],
     }),
 
+    createTeamPrototyping: build.mutation<void, FormData>({
+      query: (data) => ({
+        url: `/prototipo/cadastrar`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+
 
   }),
 })
@@ -306,7 +314,10 @@ export const {
   useGetTeamsEvaluationsQuery,
   usePostEvaluationMutation,
   usePutEvaluationMutation,
-  useGetEvaluationDataQuery
+  useGetEvaluationDataQuery,
+
+  //Prototype
+  useCreateTeamPrototypingMutation,
 
 } = studentsApiSlice
 

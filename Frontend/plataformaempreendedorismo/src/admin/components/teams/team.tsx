@@ -194,7 +194,9 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               <span>Relatório de inscrição</span>
             </div>
           </li>
-          <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
+          <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
+            onClick={() => navigate(RoutesNames.prototyping.replace(':id', id.toString()))}
+          >
             <DescriptionIcon fontSize='large' />
             <div className="flex-1 flex justify-center">
               <span>Prototipação</span>

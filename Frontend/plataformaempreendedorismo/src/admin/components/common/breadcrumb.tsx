@@ -59,7 +59,8 @@ const routes = [
         path: RoutesNames.team,
         breadcrumb: 'Time',
       },
-    ]
+    ],
+
   }
 ]
 
@@ -71,13 +72,16 @@ export const BreadcrumbComponent = (props: {
   const breadcrumbs = useReactRouterBreadcrumbs(routes)
   const unLink = [
     '/z',
-    '/blabla'
+    '/blabla',
+    // '/prototyping'
   ]
 
   return (
     <BreadcrumbWrapperStyled {...props.props}>
       {breadcrumbs.map((args, index) => {
         const isBannerRoute = location.pathname.includes(RoutesNames.banner.replace(':id', ''));
+        const isPrototypingRoute = location.pathname.includes(RoutesNames.prototyping.replace(':id', ''));
+
         const teamRoute = RoutesNames.team.replace(':id', location.pathname.split('/').pop() || '');
 
         return <React.Fragment key={index}>
@@ -97,7 +101,10 @@ export const BreadcrumbComponent = (props: {
               <div style={colorUnlink}> {args.breadcrumb} {args.match.params.id}</div> :
               ArrayUtils.checkEqualsFromArrays([args.match.pathname], unLink) ?
                 <div style={colorUnlink}>{args.match.route?.breadcrumb as string}</div> :
-                <Link style={breadcrumbLinkDecoration} to={isBannerRoute ? teamRoute : args.match.pathname}>{args.breadcrumb}</Link>}
+                <Link style={breadcrumbLinkDecoration}
+                  to={isBannerRoute || isPrototypingRoute ? teamRoute : args.match.pathname}>
+                  {args.breadcrumb}
+                </Link>}
           </span>
         </React.Fragment>
       })}

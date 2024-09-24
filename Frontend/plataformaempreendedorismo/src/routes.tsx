@@ -24,6 +24,7 @@ import { TeachersPage } from './pages/teachers'
 import { TeamPage } from './pages/team'
 import { TeamsPage } from './pages/teams'
 import { UploadFilesPage } from './pages/uploadFiles'
+import { TeamPrototypingPage } from './pages/teamPrototyping'
 
 export const router = createBrowserRouter([
   {
@@ -117,5 +118,9 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.expoDleiTeam,
     element: <ProtectedRoute children={<ExpoDleiEvaluationPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.prototyping,
+    element: <ProtectedRoute children={<TeamPrototypingPage />} allowedRoles={[]} />
   },
 ])

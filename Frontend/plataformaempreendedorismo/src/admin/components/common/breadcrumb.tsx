@@ -40,12 +40,8 @@ const routes = [
     ]
   },
   {
-    path: RoutesNames.bannerPreview,
-    breadcrumb: 'Banner Preview'
-  },
-  {
     path: RoutesNames.banner,
-    breadcrumb: 'Banner Time'
+    breadcrumb: 'Banner'
   },
   {
     path: RoutesNames.teachers,
@@ -60,8 +56,11 @@ const routes = [
         breadcrumb: 'Time',
       },
     ],
-
-  }
+  },
+  {
+    path: RoutesNames.prototyping,
+    breadcrumb: 'Prototipação',
+  },
 ]
 
 
@@ -82,7 +81,7 @@ export const BreadcrumbComponent = (props: {
         const isBannerRoute = location.pathname.includes(RoutesNames.banner.replace(':id', ''));
         const isPrototypingRoute = location.pathname.includes(RoutesNames.prototyping.replace(':id', ''));
 
-        const teamRoute = RoutesNames.team.replace(':id', location.pathname.split('/').pop() || '');
+        const teamRoute = RoutesNames.team.replace(':id', location.pathname.split('/').pop()?.slice(0) || '');
 
         return <React.Fragment key={index}>
           {/* HOME */}

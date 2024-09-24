@@ -35,11 +35,11 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="w-full pt-2 border-r-2 print:border-r-0 border-[#10BBEF] flex break-words break-all gap-2 
             print:gap-[1px]">
               <p className="text-[#10BBEF] pl-4 print:pr-1">Alunos:</p>
-              {team?.alunos.map((student) => <p className="h-fit">{student.nome},</p>)}
+              {team?.alunos?.map((student) => <p className="h-fit">{student?.nome},</p>)}
             </div>
             <div className="w-full pt-2 border-l-2 border-[#10BBEF] flex">
               <p className="text-[#10BBEF] pl-4 print:pl-2">Orientadores:</p>
-              <p className="break-words break-all  px-2 print:px-1">{team?.professor.nome}</p>
+              <p className="break-words break-all  px-2 print:px-1">{team?.professor?.nome}</p>
             </div>
           </div>
         </div>

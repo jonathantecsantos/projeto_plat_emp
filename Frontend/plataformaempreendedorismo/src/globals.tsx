@@ -1,7 +1,7 @@
 export const RoutesNames = {
   home: '/',
   login: '/login',
-  banner: '/banner/:id',
+  banner: '/teams/banner/:id',
   bannerPreview: '/banner-preview/:id',
   companyDetails: '/company-details',
   repository: 'repository',
@@ -30,7 +30,7 @@ export const RoutesNames = {
   expoDleiTeams: '/expoDlei',
   expoDleiTeam: '/expoDlei/:id',
 
-  prototyping: '/prototyping/:id',
+  prototyping: '/teams/prototyping/:id',
 }
 
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 

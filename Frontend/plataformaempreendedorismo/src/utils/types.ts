@@ -64,20 +64,42 @@ export const capitalizeTeamName = (name: string) => {
 };
 
 
-// interface CheckIfTeamEvaluatedProps {
-//   evaluatedTeams: EvaluationState['evaluatedTeams'];
-//   teamId: number;
-//   evaluationType: string;
-// }
-
-// export const checkIfTeamEvaluated = ({
-//   evaluatedTeams,
-//   teamId,
-//   evaluationType
-// }: CheckIfTeamEvaluatedProps): boolean => {
-//   return evaluatedTeams.some(
-//     (evaluation) =>
-//       evaluation.teamId === teamId &&
-//       evaluation.evaluationType === evaluationType
-//   );
-// };
+export const Institutions = [
+  'Abrigo de Animais Arca do Tota',
+  'APAE',
+  'Associação Casa de Acolhida Maria Rosa Mística',
+  'Associação Casa de Acolhida Nossa Senhora de Lourdes',
+  'Associação dos Amigos dos Animais Abandonados de Campina Grande (A4)',
+  'Casa da Criança Drº João Moura',
+  'Casa da Lili',
+  'Casa de Acolhida São Paulo da Cruz',
+  'Casa do Menino',
+  'Casa São Domingos Sávio',
+  'CENTRAC - Centro de Arte e Cultura',
+  'Centro de Recuperação Homens de Cristo',
+  'Comissão Pastoral da Terra – CPT',
+  'COTRAMARE - Cooperativa de Trabalhadores de Materiais Recicláveis',
+  'Fazenda do Sol',
+  'Fraternidade Irmãos de Francisco',
+  'Hospital da FAP',
+  'Instituto dos Cegos',
+  'Instituto Nacional do Semiárido - INSA',
+  'Ismi Social',
+  'Lar da Sagrada Face',
+  'Lar Doce Aconchego',
+  'Movimento dos Atingidos pela Barragem de Acauã',
+  'Pastoral da Criança',
+  'Pastoral da Mulher',
+  'Pastoral da Pessoa Idosa',
+  'Pastoral da Saúde',
+  'Pastoral da Sobriedade',
+  'Pastoral das Necessidades Especiais (Surdos, cegos, cadeirantes, etc)',
+  'Pastoral de Acesso à Justiça e Direitos Humanos',
+  'Pastoral de Pessoas em Situação de Rua',
+  'Pastoral Operária',
+  'PATAC - Programa de Aplicação de Tecnologia Apropriada às Comunidades',
+  'PEASA - Programa de Estudos e Ações para o Semiárido',
+  'Répteis da Caatinga',
+  'Santuário da Divina Misericórdia',
+  'São Vicente de Paulo',
+]

@@ -26,6 +26,7 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error) => [
         { type: 'Student', id: 'LIST' },
         { type: 'Teacher', id: 'LIST' },
+        { type: 'Team', id: 'teamById' },
       ],
     }),
 
@@ -87,7 +88,10 @@ export const studentsApiSlice = createApi({
     //TEAM -> Para o invalidatesTags falta adicionar o restante
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Team', id }],
+      providesTags: (result, _error, id) => [
+        { type: 'Team', id },
+        { type: 'Team', id: 'teamById' },
+        { type: 'Team', id: result?.nomeEquipe }],
     }),
 
     getAllTeams: build.query<TeamsResponse[], void>({

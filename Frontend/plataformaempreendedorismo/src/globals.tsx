@@ -20,7 +20,7 @@ export const RoutesNames = {
 
   dljTeams: '/dlj',
   dljTeam: '/dlj/:id',
-  
+
   pitchTeams: '/pitch',
   pitchTeam: '/pitch/:id',
 
@@ -34,7 +34,7 @@ export const RoutesNames = {
 }
 
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 
-focus:ring-2 focus:ring-custom text-sm sm:leading-6 text-black`
+text-sm sm:leading-6 text-black p-2 w-full text-black`
 
 export const defaultMB = `md:mb-4 mb-2`
 

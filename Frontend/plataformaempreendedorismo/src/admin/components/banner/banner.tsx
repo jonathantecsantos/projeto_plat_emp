@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Banner } from "../../../model/banner";
-import { useCreateBannerMutation } from "../../../api/studentApi";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { z } from "zod";
+import { useCreateBannerMutation } from "../../../api/studentApi";
+import { Banner } from "../../../model/banner";
 
 const bannerSchema = z.object({
   atividadeChaveQ1: z.string().max(200, "Máximo de 200 caracteres permitidos"),
@@ -76,7 +76,7 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
 
   const [errors, setErrors] = useState<Partial<Record<keyof BannerFormData, string>>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -95,14 +95,14 @@ export const BannerComponent = ({ id }: Pick<Banner, 'id'>) => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       file: e.target.files ? e.target.files[0] : null,
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       bannerSchema.parse(formData);

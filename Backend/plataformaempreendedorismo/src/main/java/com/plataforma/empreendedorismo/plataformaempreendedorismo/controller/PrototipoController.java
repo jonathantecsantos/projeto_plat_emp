@@ -1,8 +1,8 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.prototipo.AnexoPrototipoRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.prototipo.CadastroPrototipoRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.prototipo.TipoAnexoPrototipoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.prototipo.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.TipoAnexoPrototipoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.PrototipoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,4 +67,45 @@ public class PrototipoController {
         return tipoAnexoPrototipoRepository.findAll().stream().map(TipoAnexoPrototipoRecord::new).toList();
     }
 
+    @Operation(summary = "Buscar prototipo por id da Equipe", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
+    })
+    @GetMapping(value = "/{idEquipe}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PrototipoRecord buscarPrototipoPorIdEquipe(@PathVariable Long idEquipe){
+        return prototipoService.buscarPrototipoPorIdEquipe(idEquipe);
+    }
+
+    @Operation(summary = "Editar Prototipo", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Prototipo editado com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao editar Prototipo")
+    })
+    @PutMapping(value = "/editar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<String> editar(@RequestParam List<MultipartFile> files,
+                                         @RequestParam List<Long> tipoAnexoIds,
+                                         @RequestPart("dtoPrototipo") EditarPrototipoRecord dtoPrototipo){
+
+
+        try {
+            List<AnexoPrototipoRecord> anexos = new ArrayList<>();
+
+            for (int i = 0; i < files.size(); i++) {
+                Long tipoAnexoId = tipoAnexoIds.get(i);
+                MultipartFile file = files.get(i);
+                anexos.add(new AnexoPrototipoRecord(file, tipoAnexoId));
+            }
+
+            prototipoService.editarPrototipo(anexos, dtoPrototipo);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Prototipo atualizada com sucesso!");
+        } catch (MaxUploadSizeExceededException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tamanho máximo de arquivo excedido. Por favor, envie arquivos menores.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao editar prototipo: " + e.getMessage());
+        }
+
+    }
 }

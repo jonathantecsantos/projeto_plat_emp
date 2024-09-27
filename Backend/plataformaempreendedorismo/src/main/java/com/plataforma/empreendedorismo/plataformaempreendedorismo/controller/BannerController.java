@@ -53,7 +53,7 @@ public class BannerController {
     @Operation(summary = "Buscar banner por id da Equipe", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Aluno")
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
     })
     @GetMapping(value = "/{idEquipe}", produces = MediaType.APPLICATION_JSON_VALUE)
     public BannerRecord buscarBannerPorIdEquipe(@PathVariable Long idEquipe){
@@ -62,8 +62,8 @@ public class BannerController {
 
     @Operation(summary = "Editar Banner", method = "PUT")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Aluno editado com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Erro ao editar aluno")
+            @ApiResponse(responseCode = "200", description = "Banner editado com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao editar Banner")
     })
     @PutMapping(value = "/editar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})

@@ -140,7 +140,7 @@ public class PrototipoService {
     }
 
     private void tratarAndSalvarPrototipo(Prototipo prototipo, EditarPrototipoRecord dtoPrototipo) {
-        if(dtoPrototipo.instituicaoImpactoSocial() != null && dtoPrototipo.instituicaoImpactoSocial().isEmpty()){
+        if(dtoPrototipo.instituicaoImpactoSocial() != null && !dtoPrototipo.instituicaoImpactoSocial().isEmpty()){
             prototipo.setInstituicaoImpactoSocial(dtoPrototipo.instituicaoImpactoSocial());
         }
 

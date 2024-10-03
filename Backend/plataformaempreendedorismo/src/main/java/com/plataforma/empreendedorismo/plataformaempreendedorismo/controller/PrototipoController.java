@@ -87,7 +87,7 @@ public class PrototipoController {
     @PutMapping(value = "/editar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<String> editar(@RequestParam(required = false) List<MultipartFile> files,
-                                         @RequestParam List<Long> tipoAnexoIds,
+                                         @RequestParam(required = false) List<Long> tipoAnexoIds,
                                          @RequestPart("dtoPrototipo") EditarPrototipoRecord dtoPrototipo){
 
 

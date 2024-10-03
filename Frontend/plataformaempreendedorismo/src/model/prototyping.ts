@@ -36,3 +36,16 @@ export interface Prototype {
   parcerias: string
   tipoApoio: string
 }
+
+
+export interface TeamPrototypeById {
+  id: number;
+  instituicaoImpactoSocial: string;
+  problemaPrincipal: string;
+  propostaValor: string;
+  vantagemCompetitiva: string;
+  principaisNecessidades: string;
+  parcerias: string;
+  tipoApoio: string;
+  anexos: AnexoPrototype[];
+}

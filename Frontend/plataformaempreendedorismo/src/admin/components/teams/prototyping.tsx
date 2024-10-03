@@ -1,12 +1,14 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { useCreateTeamPrototypingMutation, useGetTeamPrototypingByIdQuery, useUpdateTeamPrototypingMutation } from "../../../api/studentApi"
+import { inputClasses } from "../../../globals"
+import { AnexoTypes, Prototype } from "../../../model/prototyping"
 import { Institutions } from "../../../utils/types"
 import { InputComponent } from "../common/input"
-import { AnexoTypes, Prototype } from "../../../model/prototyping"
-import { inputClasses } from "../../../globals"
-import { useCreateTeamPrototypingMutation } from "../../../api/studentApi"
 
 export const TeamPrototyping = ({ id }: { id: number }) => {
   const [createTeamPrototype] = useCreateTeamPrototypingMutation()
+  const { data: teamPrototyping } = useGetTeamPrototypingByIdQuery(id)
+  const [updateTeamPrototype] = useUpdateTeamPrototypingMutation()
   const [institution, setInstitution] = useState<string | null>(null)
   const [visibleItems, setVisibleItems] = useState(5) // Inicia com 5 itens visíveis
   const [formValues, setFormValues] = useState<Prototype>({
@@ -19,6 +21,22 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     parcerias: "",
     tipoApoio: "",
   })
+
+  useEffect(() => {
+    if (teamPrototyping) {
+      setFormValues({
+        idEquipe: id,
+        instituicaoImpactoSocial: teamPrototyping.instituicaoImpactoSocial || '',
+        problemaPrincipal: teamPrototyping.problemaPrincipal || '',
+        propostaValor: teamPrototyping.propostaValor || '',
+        vantagemCompetitiva: teamPrototyping.vantagemCompetitiva || '',
+        principaisNecessidades: teamPrototyping.principaisNecessidades || '',
+        parcerias: teamPrototyping.parcerias || '',
+        tipoApoio: teamPrototyping.tipoApoio || '',
+      })
+      setInstitution(teamPrototyping.instituicaoImpactoSocial || null) // Para o campo de Instituições
+    }
+  }, [teamPrototyping, id])
 
   // Estados para gerenciar os arquivos
   const [cronogramaFile, setCronogramaFile] = useState<File | null>(null)
@@ -84,7 +102,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         formDataToSend.append('tipoAnexoIds', tipoAnexoId.toString())
       })
 
-      const cadastroPrototipoRecord = {
+      let cadastroPrototipoRecord = {
         idEquipe: formValues.idEquipe,
         instituicaoImpactoSocial: formValues.instituicaoImpactoSocial,
         problemaPrincipal: formValues.problemaPrincipal,
@@ -95,11 +113,23 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         tipoApoio: formValues.tipoApoio,
       }
 
+      const cadastroPrototipoRecordWithIdPrototipo = teamPrototyping
+        ? { ...cadastroPrototipoRecord, idPrototipo: teamPrototyping?.id }
+        : cadastroPrototipoRecord
+
+
+
       // Adiciona o CadastroPrototipoRecord como um JSON Blob ao FormData
-      const jsonBlob = new Blob([JSON.stringify(cadastroPrototipoRecord)], {
+      const jsonBlob = new Blob([JSON.stringify(cadastroPrototipoRecordWithIdPrototipo)], {
         type: 'application/json',
       })
-      formDataToSend.append('cadastroPrototipoRecord ', jsonBlob)
+
+      if (teamPrototyping) {
+        formDataToSend.append('dtoPrototipo', jsonBlob)
+
+      } else {
+        formDataToSend.append('cadastroPrototipoRecord ', jsonBlob)
+      }
 
       //debug
       const blobText = await jsonBlob.text()
@@ -109,9 +139,26 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       })
 
 
-      await createTeamPrototype(formDataToSend).unwrap()
-      alert('Prototipo cadastrado com sucesso!')
+      if (teamPrototyping) {
+        try {
+          await updateTeamPrototype({ id, data: formDataToSend }).unwrap()
+          alert('Prototipo atualizado com sucesso!')
+        } catch (error) {
+          //tratar erro
+          console.error(error)
+        }
+      } else {
+        try {
+          await createTeamPrototype(formDataToSend).unwrap()
+          alert('Prototipo cadastrado com sucesso!')
+        } catch (error) {
+          //tratar erro
+          console.error(error)
+        }
+      }
+
     } catch (error: any) {
+      //tratar erro
       console.log(error?.data)
     }
 
@@ -119,6 +166,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   }
 
   const handleShowMoreToggle = () => {
+
     // Mostra mais 15 itens a cada clique
     setVisibleItems((prev) => prev + 15)
   }
@@ -126,6 +174,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   return (
     <form onSubmit={handleSubmit}
       className="text-center p-8 bg-gradient-to-b from-[#3B1E86] to-[#4319AF] text-white rounded-lg">
+      {JSON.stringify(formValues, null, 2)}
       <h1 className="font-bold text-2xl max-w-4xl mx-auto mb-6">
         DLEI 2024 - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
       </h1>
@@ -156,6 +205,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         {/* Ver mais botão */}
         {visibleItems < Institutions.length && (
           <button
+            type="button"
             onClick={handleShowMoreToggle}
             className="mt-4 text-[#4319AF] font-semibold transition-all hover:text-[#5741A6] hover:underline"
           >

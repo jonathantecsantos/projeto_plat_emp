@@ -4,6 +4,7 @@ import { inputClasses } from "../../../globals"
 import { AnexoTypes, Prototype } from "../../../model/prototyping"
 import { Institutions } from "../../../utils/types"
 import { InputComponent } from "../common/input"
+import { FileDownload } from "./fileDownload"
 
 export const TeamPrototyping = ({ id }: { id: number }) => {
   const [createTeamPrototype] = useCreateTeamPrototypingMutation()
@@ -40,7 +41,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
   // Estados para gerenciar os arquivos
   const [cronogramaFile, setCronogramaFile] = useState<File | null>(null)
-  const [anexoFile, setAnexoFile] = useState<File | null>(null)
+  const [anexosFile, setAnexoFile] = useState<File[]>([])
   const [memorialFile, setMemorialFile] = useState<File | null>(null)
   const [esquemaFiles, setEsquemaFiles] = useState<File[]>([])
 
@@ -63,7 +64,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   }
 
   const handleAnexoChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAnexoFile(e.target.files?.[0] || null)
+    setAnexoFile(Array.from(e.target.files || []))
   }
 
   const handleMemorialChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,8 +86,10 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       if (cronogramaFile) {
         filesToSend.push({ file: cronogramaFile, tipoAnexoId: AnexoTypes.CRONOGRAMA_CONSTRUCAO.id })
       }
-      if (anexoFile) {
-        filesToSend.push({ file: anexoFile, tipoAnexoId: AnexoTypes.ANEXO.id })
+      if (anexosFile) {
+        anexosFile.forEach((file) => {
+          filesToSend.push({ file, tipoAnexoId: AnexoTypes.ANEXO.id })
+        })
       }
       if (memorialFile) {
         filesToSend.push({ file: memorialFile, tipoAnexoId: AnexoTypes.MEMORIAL_DESCRITIVO.id })
@@ -166,15 +169,15 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   }
 
   const handleShowMoreToggle = () => {
-
     // Mostra mais 15 itens a cada clique
     setVisibleItems((prev) => prev + 15)
   }
 
+  //tratar loading
+
   return (
     <form onSubmit={handleSubmit}
       className="text-center p-8 bg-gradient-to-b from-[#3B1E86] to-[#4319AF] text-white rounded-lg">
-      {JSON.stringify(formValues, null, 2)}
       <h1 className="font-bold text-2xl max-w-4xl mx-auto mb-6">
         DLEI 2024 - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
       </h1>
@@ -303,6 +306,10 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           id={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao}
           className={inputClasses}
         />
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao} />
+        )}
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
@@ -311,11 +318,17 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         </p>
         <input
           type="file"
+          multiple
           placeholder="Digite sua resposta"
           onChange={handleAnexoChange}
           id={AnexoTypes.ANEXO.descricao}
           className={inputClasses}
         />
+
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.ANEXO.descricao} />
+        )}
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
@@ -329,6 +342,10 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           id={AnexoTypes.MEMORIAL_DESCRITIVO.descricao}
           className={inputClasses}
         />
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.MEMORIAL_DESCRITIVO.descricao} />
+        )}
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
@@ -343,6 +360,10 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           id={AnexoTypes.ESQUEMA.descricao}
           className={inputClasses}
         />
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.ESQUEMA.descricao} />
+        )}
       </div>
 
 

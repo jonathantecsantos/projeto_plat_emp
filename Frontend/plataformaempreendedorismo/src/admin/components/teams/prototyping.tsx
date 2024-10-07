@@ -86,6 +86,17 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+
+    if (anexosFile.length > 3) {
+      enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Anexos!', { variant: 'error' })
+      return
+    }
+
+    if (esquemaFiles.length > 3) {
+      enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Esquemas!', { variant: 'error' })
+      return
+    }
+    
     try {
       const formDataToSend = new FormData()
 
@@ -111,6 +122,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         formDataToSend.append('files', file)
         formDataToSend.append('tipoAnexoIds', tipoAnexoId.toString())
       })
+
+      //criar maneira de validar os campos de inputs esquemaFiles e anexosFile para nao deixar enviar mais de 3 itens
 
       let cadastroPrototipoRecord = {
         idEquipe: formValues.idEquipe,

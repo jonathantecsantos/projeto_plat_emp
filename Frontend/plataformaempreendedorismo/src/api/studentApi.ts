@@ -6,11 +6,12 @@ import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../m
 import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { Ods } from '../model/ods'
+import { TeamPrototypeById } from '../model/prototyping'
 
-//atualizar as configurações de api para incluir o teamApiSlice e tornar essa config unica
+
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -85,7 +86,7 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    //TEAM -> Para o invalidatesTags falta adicionar o restante
+    //TEAM -
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
       providesTags: (result, _error, id) => [
@@ -204,7 +205,8 @@ export const studentsApiSlice = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: [{ type: 'Banner', id: 'LIST' }],
+      //invalidar a tag de banner por id
+      // invalidatesTags: [{ type: 'Banner', id: 'LIST' }],
     }),
 
     updateBanner: build.mutation<FormData, { id: number; data: FormData }>({
@@ -239,7 +241,6 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
         { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` },
-        // { type: 'Evaluation', id: idFormatoAvaliacao } 
       ],
     }),
 
@@ -252,7 +253,6 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
         { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` }, // Invalida o cache específico do getEvaluationData
-        // { type: 'Evaluation', id: idFormatoAvaliacao }
       ],
     }),
 
@@ -270,12 +270,29 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Evaluation', id: `LIST_${evaluationTypeId}` }],
     }),
 
+    //Prototype
+    getTeamPrototypingById: build.query<TeamPrototypeById, number>({
+      query: (id) => `/prototipo/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Prototype', id }],
+    }),
+
+
     createTeamPrototyping: build.mutation<void, FormData>({
       query: (data) => ({
         url: `/prototipo/cadastrar`,
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ({ id }: any) => [{ type: 'Prototype', id, }]
+    }),
+
+    updateTeamPrototyping: build.mutation<FormData, { id: number; data: FormData }>({
+      query: ({ data }) => ({
+        url: `/prototipo/editar`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Prototype', id }],
     }),
 
 
@@ -322,6 +339,8 @@ export const {
 
   //Prototype
   useCreateTeamPrototypingMutation,
+  useGetTeamPrototypingByIdQuery,
+  useUpdateTeamPrototypingMutation,
 
 } = studentsApiSlice
 

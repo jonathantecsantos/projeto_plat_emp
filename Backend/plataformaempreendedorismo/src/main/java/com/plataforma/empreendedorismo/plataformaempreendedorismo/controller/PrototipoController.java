@@ -36,16 +36,18 @@ public class PrototipoController {
             @ApiResponse(responseCode = "500", description = "Erro ao criar prototipo")
     })
     @PostMapping(value = "/cadastrar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> cadastrarPrototipo(@RequestParam List<MultipartFile> files,
-                                                     @RequestParam List<Long> tipoAnexoIds,
+    public ResponseEntity<String> cadastrarPrototipo(@RequestParam(required = false)  List<MultipartFile> files,
+                                                     @RequestParam(required = false)  List<Long> tipoAnexoIds,
                                                      @RequestPart("cadastroPrototipoRecord") CadastroPrototipoRecord cadastroPrototipoRecord) {
         try {
             List<AnexoPrototipoRecord> anexos = new ArrayList<>();
 
-            for (int i = 0; i < files.size(); i++) {
-                Long tipoAnexoId = tipoAnexoIds.get(i);
-                MultipartFile file = files.get(i);
-                anexos.add(new AnexoPrototipoRecord(file, tipoAnexoId));
+            if (files != null && !files.isEmpty()) {
+                for (int i = 0; i < files.size(); i++) {
+                    Long tipoAnexoId = tipoAnexoIds.get(i);
+                    MultipartFile file = files.get(i);
+                    anexos.add(new AnexoPrototipoRecord(file, tipoAnexoId));
+                }
             }
 
             prototipoService.criarPrototipo(anexos, cadastroPrototipoRecord);
@@ -84,18 +86,20 @@ public class PrototipoController {
     })
     @PutMapping(value = "/editar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<String> editar(@RequestParam List<MultipartFile> files,
-                                         @RequestParam List<Long> tipoAnexoIds,
+    public ResponseEntity<String> editar(@RequestParam(required = false) List<MultipartFile> files,
+                                         @RequestParam(required = false) List<Long> tipoAnexoIds,
                                          @RequestPart("dtoPrototipo") EditarPrototipoRecord dtoPrototipo){
 
 
         try {
             List<AnexoPrototipoRecord> anexos = new ArrayList<>();
 
-            for (int i = 0; i < files.size(); i++) {
-                Long tipoAnexoId = tipoAnexoIds.get(i);
-                MultipartFile file = files.get(i);
-                anexos.add(new AnexoPrototipoRecord(file, tipoAnexoId));
+            if (files != null && !files.isEmpty()) {
+                for (int i = 0; i < files.size(); i++) {
+                    Long tipoAnexoId = tipoAnexoIds.get(i);
+                    MultipartFile file = files.get(i);
+                    anexos.add(new AnexoPrototipoRecord(file, tipoAnexoId));
+                }
             }
 
             prototipoService.editarPrototipo(anexos, dtoPrototipo);

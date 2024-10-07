@@ -119,6 +119,7 @@ public class PrototipoService {
         return equipeOptional.map(equipe -> new PrototipoRecord(equipe.getPrototipo())).orElse(null);
     }
 
+    @Transactional
     public void editarPrototipo(List<AnexoPrototipoRecord> files, EditarPrototipoRecord dtoPrototipo) throws Exception {
         Prototipo prototipo = prototipoRepository.getReferenceById(dtoPrototipo.idPrototipo());
         atualizarPrototipo(files, prototipo, dtoPrototipo);
@@ -137,10 +138,12 @@ public class PrototipoService {
         }else{
             throw new Exception("Equipe não encotrada!");
         }
+
+        prototipoRepository.save(prototipo);
     }
 
     private void tratarAndSalvarPrototipo(Prototipo prototipo, EditarPrototipoRecord dtoPrototipo) {
-        if(dtoPrototipo.instituicaoImpactoSocial() != null && dtoPrototipo.instituicaoImpactoSocial().isEmpty()){
+        if(dtoPrototipo.instituicaoImpactoSocial() != null && !dtoPrototipo.instituicaoImpactoSocial().isEmpty()){
             prototipo.setInstituicaoImpactoSocial(dtoPrototipo.instituicaoImpactoSocial());
         }
 

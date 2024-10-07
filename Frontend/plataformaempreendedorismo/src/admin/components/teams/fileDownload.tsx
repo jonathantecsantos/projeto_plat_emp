@@ -25,12 +25,12 @@ export const FileDownload = ({ anexos, type }: FileDownloadProps) => {
             {anexosFiltrados.map(anexo => (
               <div key={anexo.id}
                 className="flex items-center border border-gray-300 p-2 rounded-md shadow-sm flex-shrink-0 flex-grow w-32 h-12">
-                <ImageIcon className="text-blue-500 mr-2" />
+                <ImageIcon className="text-indigo-700 mr-2" />
                 <span className="flex-grow overflow-hidden whitespace-nowrap text-ellipsis">
                   {anexo.nomeAnexo}
                 </span>
                 <DownloadIcon
-                  className="text-green-500 cursor-pointer"
+                  className="text-ring-custom cursor-pointer"
                   onClick={() => downloadFile(anexo.nomeAnexo)}
                 />
               </div>

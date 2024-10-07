@@ -1,3 +1,6 @@
+import { LoadingButton } from "@mui/lab"
+import { CircularProgress } from "@mui/material"
+import { useSnackbar } from "notistack"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useCreateTeamPrototypingMutation, useGetTeamPrototypingByIdQuery, useUpdateTeamPrototypingMutation } from "../../../api/studentApi"
 import { inputClasses } from "../../../globals"
@@ -5,12 +8,16 @@ import { AnexoTypes, Prototype } from "../../../model/prototyping"
 import { Institutions } from "../../../utils/types"
 import { InputComponent } from "../common/input"
 import { FileDownload } from "./fileDownload"
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+
 
 export const TeamPrototyping = ({ id }: { id: number }) => {
-  const [createTeamPrototype] = useCreateTeamPrototypingMutation()
-  const { data: teamPrototyping } = useGetTeamPrototypingByIdQuery(id)
-  const [updateTeamPrototype] = useUpdateTeamPrototypingMutation()
+  const [createTeamPrototype, { isLoading: creating, isSuccess: created }] = useCreateTeamPrototypingMutation()
+  const { data: teamPrototyping, isLoading } = useGetTeamPrototypingByIdQuery(id)
+  const [updateTeamPrototype, { isLoading: updating, isSuccess: updated }] = useUpdateTeamPrototypingMutation()
   const [institution, setInstitution] = useState<string | null>(null)
+  const [success, setSucess] = useState(created || updated)
+  const { enqueueSnackbar } = useSnackbar()
   const [visibleItems, setVisibleItems] = useState(5) // Inicia com 5 itens visíveis
   const [formValues, setFormValues] = useState<Prototype>({
     idEquipe: id,
@@ -145,23 +152,25 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       if (teamPrototyping) {
         try {
           await updateTeamPrototype({ id, data: formDataToSend }).unwrap()
-          alert('Prototipo atualizado com sucesso!')
-        } catch (error) {
-          //tratar erro
+          enqueueSnackbar('Prototipo atualizado com sucesso!', { variant: 'success' })
+          setSucess(true)
+        } catch (error: any) {
+          enqueueSnackbar(`${error?.data}`, { variant: 'error' })
           console.error(error)
         }
       } else {
         try {
           await createTeamPrototype(formDataToSend).unwrap()
-          alert('Prototipo cadastrado com sucesso!')
-        } catch (error) {
-          //tratar erro
+          enqueueSnackbar('Prototipo cadastrado com sucesso!', { variant: 'success' })
+          setSucess(true)
+        } catch (error: any) {
+          enqueueSnackbar(`${error?.data}`, { variant: 'error' })
           console.error(error)
         }
       }
 
     } catch (error: any) {
-      //tratar erro
+      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
       console.log(error?.data)
     }
 
@@ -173,7 +182,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     setVisibleItems((prev) => prev + 15)
   }
 
-  //tratar loading
+  if (isLoading) return <div className='text-center'><CircularProgress /></div>
+
 
   return (
     <form onSubmit={handleSubmit}
@@ -367,12 +377,20 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       </div>
 
 
-      <button
+      <LoadingButton
+        loading={creating || updating}
+        disabled={creating || updating}
+        variant="contained"
         type="submit"
-        className="mt-6 p-3 bg-[#5741A6] hover:bg-white hover:text-green-600 transition-all text-white rounded-lg shadow-lg"
-      >
-        Cadastrar
-      </button>
+        className="mt-6 p-3 normal-case bg-[#5741A6]
+        hover:bg-white hover:text-green-600 transition-all text-white rounded-lg shadow-lg">
+        {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
+
+        <span>
+          {teamPrototyping ? updating ? 'Editando...' : updated ? 'Editado' : 'Editar' :
+            creating ? 'Cadastrando...' : created ? 'Cadastrado' : 'Cadastrar'}
+        </span>
+      </LoadingButton>
     </form>
   )
 }

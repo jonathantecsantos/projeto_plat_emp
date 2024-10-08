@@ -1,13 +1,23 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { LoadingButton } from "@mui/lab"
+import { CircularProgress } from "@mui/material"
+import { useSnackbar } from "notistack"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { useCreateTeamPrototypingMutation, useGetTeamPrototypingByIdQuery, useUpdateTeamPrototypingMutation } from "../../../api/studentApi"
+import { inputClasses } from "../../../globals"
+import { AnexoTypes, Prototype } from "../../../model/prototyping"
 import { Institutions } from "../../../utils/types"
 import { InputComponent } from "../common/input"
-import { AnexoTypes, Prototype } from "../../../model/prototyping"
-import { inputClasses } from "../../../globals"
-import { useCreateTeamPrototypingMutation } from "../../../api/studentApi"
+import { FileDownload } from "./fileDownload"
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+
 
 export const TeamPrototyping = ({ id }: { id: number }) => {
-  const [createTeamPrototype] = useCreateTeamPrototypingMutation()
+  const [createTeamPrototype, { isLoading: creating, isSuccess: created }] = useCreateTeamPrototypingMutation()
+  const { data: teamPrototyping, isLoading } = useGetTeamPrototypingByIdQuery(id)
+  const [updateTeamPrototype, { isLoading: updating, isSuccess: updated }] = useUpdateTeamPrototypingMutation()
   const [institution, setInstitution] = useState<string | null>(null)
+  const [success, setSucess] = useState(created || updated)
+  const { enqueueSnackbar } = useSnackbar()
   const [visibleItems, setVisibleItems] = useState(5) // Inicia com 5 itens visíveis
   const [formValues, setFormValues] = useState<Prototype>({
     idEquipe: id,
@@ -20,9 +30,25 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     tipoApoio: "",
   })
 
+  useEffect(() => {
+    if (teamPrototyping) {
+      setFormValues({
+        idEquipe: id,
+        instituicaoImpactoSocial: teamPrototyping.instituicaoImpactoSocial || '',
+        problemaPrincipal: teamPrototyping.problemaPrincipal || '',
+        propostaValor: teamPrototyping.propostaValor || '',
+        vantagemCompetitiva: teamPrototyping.vantagemCompetitiva || '',
+        principaisNecessidades: teamPrototyping.principaisNecessidades || '',
+        parcerias: teamPrototyping.parcerias || '',
+        tipoApoio: teamPrototyping.tipoApoio || '',
+      })
+      setInstitution(teamPrototyping.instituicaoImpactoSocial || null) // Para o campo de Instituições
+    }
+  }, [teamPrototyping, id])
+
   // Estados para gerenciar os arquivos
   const [cronogramaFile, setCronogramaFile] = useState<File | null>(null)
-  const [anexoFile, setAnexoFile] = useState<File | null>(null)
+  const [anexosFile, setAnexoFile] = useState<File[]>([])
   const [memorialFile, setMemorialFile] = useState<File | null>(null)
   const [esquemaFiles, setEsquemaFiles] = useState<File[]>([])
 
@@ -45,7 +71,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   }
 
   const handleAnexoChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAnexoFile(e.target.files?.[0] || null)
+    setAnexoFile(Array.from(e.target.files || []))
   }
 
   const handleMemorialChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +86,17 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+
+    if (anexosFile.length > 3) {
+      enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Anexos!', { variant: 'error' })
+      return
+    }
+
+    if (esquemaFiles.length > 3) {
+      enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Esquemas!', { variant: 'error' })
+      return
+    }
+    
     try {
       const formDataToSend = new FormData()
 
@@ -67,8 +104,10 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       if (cronogramaFile) {
         filesToSend.push({ file: cronogramaFile, tipoAnexoId: AnexoTypes.CRONOGRAMA_CONSTRUCAO.id })
       }
-      if (anexoFile) {
-        filesToSend.push({ file: anexoFile, tipoAnexoId: AnexoTypes.ANEXO.id })
+      if (anexosFile) {
+        anexosFile.forEach((file) => {
+          filesToSend.push({ file, tipoAnexoId: AnexoTypes.ANEXO.id })
+        })
       }
       if (memorialFile) {
         filesToSend.push({ file: memorialFile, tipoAnexoId: AnexoTypes.MEMORIAL_DESCRITIVO.id })
@@ -84,7 +123,9 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         formDataToSend.append('tipoAnexoIds', tipoAnexoId.toString())
       })
 
-      const cadastroPrototipoRecord = {
+      //criar maneira de validar os campos de inputs esquemaFiles e anexosFile para nao deixar enviar mais de 3 itens
+
+      let cadastroPrototipoRecord = {
         idEquipe: formValues.idEquipe,
         instituicaoImpactoSocial: formValues.instituicaoImpactoSocial,
         problemaPrincipal: formValues.problemaPrincipal,
@@ -95,11 +136,23 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         tipoApoio: formValues.tipoApoio,
       }
 
+      const cadastroPrototipoRecordWithIdPrototipo = teamPrototyping
+        ? { ...cadastroPrototipoRecord, idPrototipo: teamPrototyping?.id }
+        : cadastroPrototipoRecord
+
+
+
       // Adiciona o CadastroPrototipoRecord como um JSON Blob ao FormData
-      const jsonBlob = new Blob([JSON.stringify(cadastroPrototipoRecord)], {
+      const jsonBlob = new Blob([JSON.stringify(cadastroPrototipoRecordWithIdPrototipo)], {
         type: 'application/json',
       })
-      formDataToSend.append('cadastroPrototipoRecord ', jsonBlob)
+
+      if (teamPrototyping) {
+        formDataToSend.append('dtoPrototipo', jsonBlob)
+
+      } else {
+        formDataToSend.append('cadastroPrototipoRecord ', jsonBlob)
+      }
 
       //debug
       const blobText = await jsonBlob.text()
@@ -109,9 +162,28 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       })
 
 
-      await createTeamPrototype(formDataToSend).unwrap()
-      alert('Prototipo cadastrado com sucesso!')
+      if (teamPrototyping) {
+        try {
+          await updateTeamPrototype({ id, data: formDataToSend }).unwrap()
+          enqueueSnackbar('Prototipo atualizado com sucesso!', { variant: 'success' })
+          setSucess(true)
+        } catch (error: any) {
+          enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+          console.error(error)
+        }
+      } else {
+        try {
+          await createTeamPrototype(formDataToSend).unwrap()
+          enqueueSnackbar('Prototipo cadastrado com sucesso!', { variant: 'success' })
+          setSucess(true)
+        } catch (error: any) {
+          enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+          console.error(error)
+        }
+      }
+
     } catch (error: any) {
+      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
       console.log(error?.data)
     }
 
@@ -122,6 +194,9 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     // Mostra mais 15 itens a cada clique
     setVisibleItems((prev) => prev + 15)
   }
+
+  if (isLoading) return <div className='text-center'><CircularProgress /></div>
+
 
   return (
     <form onSubmit={handleSubmit}
@@ -156,6 +231,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         {/* Ver mais botão */}
         {visibleItems < Institutions.length && (
           <button
+            type="button"
             onClick={handleShowMoreToggle}
             className="mt-4 text-[#4319AF] font-semibold transition-all hover:text-[#5741A6] hover:underline"
           >
@@ -253,6 +329,10 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           id={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao}
           className={inputClasses}
         />
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao} />
+        )}
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
@@ -261,11 +341,17 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         </p>
         <input
           type="file"
+          multiple
           placeholder="Digite sua resposta"
           onChange={handleAnexoChange}
           id={AnexoTypes.ANEXO.descricao}
           className={inputClasses}
         />
+
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.ANEXO.descricao} />
+        )}
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
@@ -279,6 +365,10 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           id={AnexoTypes.MEMORIAL_DESCRITIVO.descricao}
           className={inputClasses}
         />
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.MEMORIAL_DESCRITIVO.descricao} />
+        )}
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
@@ -293,15 +383,27 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           id={AnexoTypes.ESQUEMA.descricao}
           className={inputClasses}
         />
+        {teamPrototyping?.anexos && (
+          <FileDownload anexos={teamPrototyping.anexos}
+            type={AnexoTypes.ESQUEMA.descricao} />
+        )}
       </div>
 
 
-      <button
+      <LoadingButton
+        loading={creating || updating}
+        disabled={creating || updating}
+        variant="contained"
         type="submit"
-        className="mt-6 p-3 bg-[#5741A6] hover:bg-white hover:text-green-600 transition-all text-white rounded-lg shadow-lg"
-      >
-        Cadastrar
-      </button>
+        className="mt-6 p-3 normal-case bg-[#5741A6]
+        hover:bg-white hover:text-green-600 transition-all text-white rounded-lg shadow-lg">
+        {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
+
+        <span>
+          {teamPrototyping ? updating ? 'Editando...' : updated ? 'Editado' : 'Editar' :
+            creating ? 'Cadastrando...' : created ? 'Cadastrado' : 'Cadastrar'}
+        </span>
+      </LoadingButton>
     </form>
   )
 }

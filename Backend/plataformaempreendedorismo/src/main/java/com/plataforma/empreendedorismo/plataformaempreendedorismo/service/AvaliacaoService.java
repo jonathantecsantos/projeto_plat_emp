@@ -5,6 +5,9 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliac
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.FormatoAvaliacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.ClassificacaoGeralTimesRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.DatalhamentoClassificacaoFormatoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.DetalhamentoNotasTimeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -150,6 +153,59 @@ public class AvaliacaoService {
                         avaliacao.getIdSubcriterioAvaliacao(),
                         avaliacao.getNota())
                 ).collect(Collectors.toList());
+
+    }
+
+    public List<ClassificacaoGeralTimesRecord> buscarClassificacao() {
+        List<Object[]> results = avaliacaoRepository.findEquipeNotaOrderByTotalNotaDesc();
+
+        return results.stream()
+                .map(result -> new ClassificacaoGeralTimesRecord(
+                        (String) result[0],
+                        (Double) result[1]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<DatalhamentoClassificacaoFormatoRecord> buscarClassificacaoPorFormato(Long idFormatoAvaliacao) {
+        List<Object[]> results = avaliacaoRepository.findClassificacaoPorEquipeEFormato(idFormatoAvaliacao);
+
+        return results.stream()
+                .map(result -> new DatalhamentoClassificacaoFormatoRecord(
+                        (String) result[0],
+                        (String) result[1],
+                        (Double) result[2]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<DetalhamentoNotasTimeRecord> buscarNotasPorTime(Long idEquipe) {
+        List<Object[]> results = avaliacaoRepository.findNotasPorTime(idEquipe);
+
+        return results.stream()
+                .map(result -> new DetalhamentoNotasTimeRecord(
+                        (String) result[0],
+                        (String) result[1],
+                        (String) result[2],
+                        (String) result[3],
+                        (Double) result[4]
+                ))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<DetalhamentoNotasTimeRecord> buscarRelatorioGeral() {
+        List<Object[]> results = avaliacaoRepository.getRelatorioClassificatorio();
+
+        return results.stream()
+                .map(result -> new DetalhamentoNotasTimeRecord(
+                        (String) result[0],
+                        (String) result[1],
+                        (String) result[2],
+                        (String) result[3],
+                        (Double) result[4]
+                ))
+                .collect(Collectors.toList());
 
     }
 }

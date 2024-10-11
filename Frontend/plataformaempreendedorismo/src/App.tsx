@@ -6,7 +6,8 @@ const App = () => {
     <div>
       <AppBarOptions />
       <div className="flex flex-col justify-center mt-6 items-center">
-        <p>Common User Home Page</p>
+        {/* <p>Common User Home Page</p> */}
+        {/* <WebSocketOdds />  */}
       </div>
     </div>
   );

@@ -7,11 +7,12 @@ import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
+import { RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
 
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -270,7 +271,7 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Evaluation', id: `LIST_${evaluationTypeId}` }],
     }),
 
-    //Prototype
+    //PROTOTYPE
     getTeamPrototypingById: build.query<TeamPrototypeById, number>({
       query: (id) => `/prototipo/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Prototype', id }],
@@ -295,6 +296,62 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Prototype', id }],
     }),
 
+    //REPORTS
+    getTeamsReports: build.query<RelatorioGeral[], void>({
+      query: () => `/relatorios/relatorio-geral`,
+      // transformResponse: (response: RelatorioGeral[]) => {
+      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
+      // },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getTeamReport: build.query<ReportTeamId[], number>({
+      query: (idEquipe) => `/relatorios/notas-equipe/${idEquipe}`,
+      // transformResponse: (response: ReportTeamId[]) => {
+      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
+      // },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getTeamClassification: build.query<ReportClassification[], void>({
+      query: () => `/relatorios/classificacao`,
+      // transformResponse: (response: ReportClassification[]) => {
+      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
+      // },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getTeamReportClassificationByFormat: build.query<ReportClassificationByFormat[], number>({
+      query: (idFormatoAvaliacao) => `/relatorios/classificacao-por-formato/${idFormatoAvaliacao}`,
+      // transformResponse: (response: ReportClassificationByFormat[]) => {
+      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
+      // },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    })
 
   }),
 })
@@ -337,10 +394,16 @@ export const {
   usePutEvaluationMutation,
   useGetEvaluationDataQuery,
 
-  //Prototype
+  //PROTOTYPE
   useCreateTeamPrototypingMutation,
   useGetTeamPrototypingByIdQuery,
   useUpdateTeamPrototypingMutation,
+
+  //REPORTS
+  useGetTeamsReportsQuery,
+  useGetTeamReportQuery,
+  useGetTeamClassificationQuery,
+  useGetTeamReportClassificationByFormatQuery,
 
 } = studentsApiSlice
 

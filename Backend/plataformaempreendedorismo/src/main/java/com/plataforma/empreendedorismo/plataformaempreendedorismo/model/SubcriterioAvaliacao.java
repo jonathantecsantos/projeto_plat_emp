@@ -28,4 +28,6 @@ public class SubcriterioAvaliacao {
 
     private Boolean valorPadrao;
 
+    private Integer ordemRelatorio;
+
 }

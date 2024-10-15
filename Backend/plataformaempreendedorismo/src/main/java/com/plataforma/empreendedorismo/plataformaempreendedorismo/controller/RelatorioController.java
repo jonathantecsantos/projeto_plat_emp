@@ -54,14 +54,14 @@ public class RelatorioController {
         return avaliacaoService.buscarNotasPorTime(idEquipe);
     }
 
-    @Operation(summary = "Relatório geral de notas por Equipe", method = "GET")
+    @Operation(summary = "Itens do Relatório", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
     })
-    @GetMapping(value = "/relatorio-geral",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<DetalhamentoNotasTimeRecord> getRelatorioGeral(){
-        return avaliacaoService.buscarRelatorioGeral();
+    @GetMapping(value = "/itens-relatorio",produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ItensRelatorioRecord> getRelatorioGeral(){
+        return avaliacaoService.buscarItensDoRelatorio();
     }
 
 }

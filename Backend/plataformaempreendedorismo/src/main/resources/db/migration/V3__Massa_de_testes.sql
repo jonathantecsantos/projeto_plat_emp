@@ -1,0 +1,241 @@
+INSERT INTO avaliador (nome, instituicao) VALUES
+                                              ('Catarina', 'PUC-Rio'),
+                                              ('João', 'UFRGS'),
+                                              ('Laura', 'UFMG'),
+                                              ('Rafael', 'UFRJ'),
+                                              ('Ana', 'UERN'),
+                                              ('Sofia', 'IFPB'),
+                                              ('Ricardo', 'UNB'),
+                                              ('Carla', 'UFMS'),
+                                              ('Sofia', 'UFPB'),
+                                              ('Bruno', 'UNB'),
+                                              ('Lucas', 'UNICAMP'),
+                                              ('Miguel', 'UNB'),
+                                              ('Sofia', 'UFBA'),
+                                              ('Bruno', 'UNESP'),
+                                              ('Pedro', 'UNB'),
+                                              ('Alice', 'UFSC'),
+                                              ('Alice', 'UFT'),
+                                              ('Miguel', 'UNICAMP');
+
+INSERT INTO equipe (nome, banner_id, prototipo_id, link_pitch) VALUES
+                                                                   ('Unidos pela Inovação', NULL, NULL, NULL),
+                                                                   ('Time A', NULL, NULL, NULL),
+                                                                   ('Desenvolvedores', NULL, NULL, NULL),
+                                                                   ('Força Jovem', NULL, NULL, NULL),
+                                                                   ('Futuristas', NULL, NULL, NULL),
+                                                                   ('Aliança Empreendedora', NULL, NULL, NULL),
+                                                                   ('Criativos', NULL, NULL, NULL),
+                                                                   ('Equipa V', NULL, NULL, NULL),
+                                                                   ('Poder do Trabalho em Equipe', NULL, NULL, NULL),
+                                                                   ('Desbravadores', NULL, NULL, NULL),
+                                                                   ('Empreendedores', NULL, NULL, NULL),
+                                                                   ('Pioneiros', NULL, NULL, NULL),
+                                                                   ('Time B', NULL, NULL, NULL),
+                                                                   ('Guerreiros do Futuro', NULL, NULL, NULL),
+                                                                   ('Aventureiros', NULL, NULL, NULL),
+                                                                   ('Visionários', NULL, NULL, NULL),
+                                                                   ('Transformadores', NULL, NULL, NULL),
+                                                                   ('Colaboradores', NULL, NULL, NULL);
+
+INSERT INTO aluno (cpf,nome,email,turma,is_lider,is_vice_lider,equipe_id) VALUES
+                                                                              -- Equipe 1
+                                                                              ('09661141401', 'JONATHAN SANTOS PINTO', 'jonathan@gmail.com', '1A', 1, 0, 1),
+                                                                              ('09661141402', 'RODOLFO MARINHO', 'rodolfo@gmail.com', '2D', 0, 1, 1),
+                                                                              ('09661141403', 'MARCOS SILVA', 'marcos@gmail.com', '1B', 0, 0, 1),
+                                                                              ('09661141404', 'FABIOLA OLIVEIRA', 'fabiola@gmail.com', '1C', 0, 0, 1),
+                                                                              ('09661141405', 'CARLOS ALBERTO', 'carlos@gmail.com', '2A', 0, 0, 1),
+                                                                              ('09661141406', 'SANDRA PEREIRA', 'sandra@gmail.com', '2B', 0, 0, 1),
+                                                                              ('09661141407', 'ANA LUCIA', 'ana@gmail.com', '2C', 0, 0, 1),
+                                                                              ('09661141408', 'GABRIELA SOUSA', 'gabriela@gmail.com', '1A', 0, 0, 1),
+
+                                                                              -- Equipe 2
+                                                                              ('09661141409', 'PAULO HENRIQUE', 'paulo@gmail.com', '1B', 1, 0, 2),
+                                                                              ('09661141410', 'ISABELLA RIOS', 'isabella@gmail.com', '1C', 0, 1, 2),
+                                                                              ('09661141411', 'LEONARDO MOTA', 'leonardo@gmail.com', '2A', 0, 0, 2),
+                                                                              ('09661141412', 'NATALIA REIS', 'natalia@gmail.com', '2B', 0, 0, 2),
+                                                                              ('09661141413', 'JULIO CESAR', 'julio@gmail.com', '2C', 0, 0, 2),
+                                                                              ('09661141414', 'VITORIA LIMA', 'vitoria@gmail.com', '1A', 0, 0, 2),
+                                                                              ('09661141415', 'SILVIA MELO', 'silvia@gmail.com', '1B', 0, 0, 2),
+                                                                              ('09661141416', 'JOSUE SOARES', 'josue@gmail.com', '1C', 0, 0, 2),
+
+                                                                              -- Equipe 3
+                                                                              ('09661141417', 'Rafael Costa', 'rafael.costa@gmail.com', '2A', 1, 0, 3),
+                                                                              ('09661141418', 'Fábio Lima', 'fabio.lima@gmail.com', '2B', 0, 1, 3),
+                                                                              ('09661141419', 'Camila Pereira', 'camila@gmail.com', '2C', 0, 0, 3),
+                                                                              ('09661141420', 'Thiago Santos', 'thiago@gmail.com', '1A', 0, 0, 3),
+                                                                              ('09661141421', 'Bruno Oliveira', 'bruno@gmail.com', '1B', 0, 0, 3),
+                                                                              ('09661141422', 'Joana Silva', 'joana@gmail.com', '1C', 0, 0, 3),
+                                                                              ('09661141423', 'Rita Almeida', 'rita@gmail.com', '2A', 0, 0, 3),
+                                                                              ('09661141424', 'Luiz Fernando', 'luiz@gmail.com', '2B', 0, 0, 3),
+
+                                                                              -- Equipe 4
+                                                                              ('09661141425', 'Marta Silva', 'marta@gmail.com', '1A', 1, 0, 4),
+                                                                              ('09661141426', 'Daniel Costa', 'daniel@gmail.com', '2C', 0, 1, 4),
+                                                                              ('09661141427', 'Tatiane Sousa', 'tatiane@gmail.com', '2B', 0, 0, 4),
+                                                                              ('09661141428', 'Diego Alves', 'diego@gmail.com', '1B', 0, 0, 4),
+                                                                              ('09661141429', 'Alice Ferreira', 'alice@gmail.com', '2A', 0, 0, 4),
+                                                                              ('09661141430', 'Cristhian Almeida', 'cristhian@gmail.com', '1C', 0, 0, 4),
+                                                                              ('09661141431', 'Lucas Andrade', 'lucas@gmail.com', '2B', 0, 0, 4),
+                                                                              ('09661141432', 'Natália Rocha', 'natalia.rocha@gmail.com', '1A', 0, 0, 4),
+
+                                                                              -- Equipe 5
+                                                                              ('09661141433', 'Fernando Araújo', 'fernando@gmail.com', '1A', 1, 0, 5),
+                                                                              ('09661141434', 'Patrícia Santos', 'patricia@gmail.com', '1C', 0, 1, 5),
+                                                                              ('09661141435', 'Roberta Lima', 'roberta@gmail.com', '2B', 0, 0, 5),
+                                                                              ('09661141436', 'Lucas Silva', 'lucas.silva@gmail.com', '2A', 0, 0, 5),
+                                                                              ('09661141437', 'Rodrigo Almeida', 'rodrigo@gmail.com', '1B', 0, 0, 5),
+                                                                              ('09661141438', 'Maria Clara', 'mariaclara@gmail.com', '1C', 0, 0, 5),
+                                                                              ('09661141439', 'Aline Oliveira', 'aline@gmail.com', '2B', 0, 0, 5),
+                                                                              ('09661141440', 'Gustavo Freitas', 'gustavo@gmail.com', '2C', 0, 0, 5),
+
+                                                                              -- Equipe 6
+                                                                              ('09661141441', 'Vinícius Silva', 'vinicius@gmail.com', '1A', 1, 0, 6),
+                                                                              ('09661141442', 'Mário Gomes', 'mario@gmail.com', '2D', 0, 1, 6),
+                                                                              ('09661141443', 'Rafael Mendes', 'rafael.mendes@gmail.com', '2C', 0, 0, 6),
+                                                                              ('09661141444', 'Juliana Souza', 'juliana.souza@gmail.com', '1B', 0, 0, 6),
+                                                                              ('09661141445', 'Ana Clara', 'anaclara@gmail.com', '1C', 0, 0, 6),
+                                                                              ('09661141446', 'Henrique Rocha', 'henrique.rocha@gmail.com', '2A', 0, 0, 6),
+                                                                              ('09661141447', 'Ricardo Lima', 'ricardo.lima@gmail.com', '2B', 0, 0, 6),
+                                                                              ('09661141448', 'Sofia Almeida', 'sofia.almeida@gmail.com', '2D', 0, 0, 6),
+
+                                                                              -- Equipe 7
+                                                                              ('09661141449', 'Júlio Santos', 'julio.santos@gmail.com', '1A', 1, 0, 7),
+                                                                              ('09661141450', 'Lívia Oliveira', 'livia@gmail.com', '1B', 0, 1, 7),
+                                                                              ('09661141451', 'Ricardo Lima', 'ricardo@gmail.com', '2C', 0, 0, 7),
+                                                                              ('09661141452', 'Bruno Ribeiro', 'bruno.ribeiro@gmail.com', '2A', 0, 0, 7),
+                                                                              ('09661141453', 'Patrícia Gomes', 'patricia.gomes@gmail.com', '1C', 0, 0, 7),
+                                                                              ('09661141454', 'Mariana Alves', 'mariana.alves@gmail.com', '1B', 0, 0, 7),
+                                                                              ('09661141455', 'Tiago Ferreira', 'tiago.ferreira@gmail.com', '2B', 0, 0, 7),
+                                                                              ('09661141456', 'Ricardo Soares', 'ricardo.soares@gmail.com', '2D', 0, 0, 7),
+
+                                                                              -- Equipe 8
+                                                                              ('09661141457', 'Leonardo Oliveira', 'leonardo@gmail.com', '1A', 1, 0, 8),
+                                                                              ('09661141458', 'Clara Santos', 'clara.santos@gmail.com', '2D', 0, 1, 8),
+                                                                              ('09661141459', 'Juliano Costa', 'juliano.costa@gmail.com', '1B', 0, 0, 8),
+                                                                              ('09661141460', 'Maria Silva', 'maria.silva@gmail.com', '1C', 0, 0, 8),
+                                                                              ('09661141461', 'Ana Luiza', 'ana.luiza@gmail.com', '2A', 0, 0, 8),
+                                                                              ('09661141462', 'Gabriel Ferreira', 'gabriel.ferreira@gmail.com', '2B', 0, 0, 8),
+                                                                              ('09661141463', 'Tatiane Almeida', 'tatiane.almeida@gmail.com', '2C', 0, 0, 8),
+                                                                              ('09661141464', 'Carlos Alberto', 'carlos.alberto@gmail.com', '1B', 0, 0, 8),
+
+                                                                              -- Equipe 9
+                                                                              ('09661141465', 'Isabella Lima', 'isabella.lima@gmail.com', '1A', 1, 0, 9),
+                                                                              ('09661141466', 'Jorge Costa', 'jorge.costa@gmail.com', '2C', 0, 1, 9),
+                                                                              ('09661141467', 'Robson Ribeiro', 'robson.ribeiro@gmail.com', '2A', 0, 0, 9),
+                                                                              ('09661141468', 'Fernanda Almeida', 'fernanda.almeida@gmail.com', '1B', 0, 0, 9),
+                                                                              ('09661141469', 'Vinícius Souza', 'vinicius.souza@gmail.com', '1C', 0, 0, 9),
+                                                                              ('09661141470', 'Marcelly Gomes', 'marcelly.gomes@gmail.com', '2B', 0, 0, 9),
+                                                                              ('09661141471', 'Thiago Santos', 'thiago.santos@gmail.com', '2D', 0, 0, 9),
+                                                                              ('09661141472', 'Gabriela Lima', 'gabriela.lima@gmail.com', '2C', 0, 0, 9),
+
+                                                                              -- Equipe 10
+                                                                              ('09661141473', 'Fernando Reis', 'fernando.reis@gmail.com', '1A', 1, 0, 10),
+                                                                              ('09661141474', 'Leonardo Lima', 'leonardo.lima@gmail.com', '1B', 0, 1, 10),
+                                                                              ('09661141475', 'Eliane Santos', 'eliane.santos@gmail.com', '1C', 0, 0, 10),
+                                                                              ('09661141476', 'Rafaela Silva', 'rafaela.silva@gmail.com', '2A', 0, 0, 10),
+                                                                              ('09661141477', 'Carlos Dias', 'carlos.dias@gmail.com', '2B', 0, 0, 10),
+                                                                              ('09661141478', 'Rodrigo Mendes', 'rodrigo.mendes@gmail.com', '2C', 0, 0, 10),
+                                                                              ('09661141479', 'Thiago Oliveira', 'thiago.oliveira@gmail.com', '1A', 0, 0, 10),
+                                                                              ('09661141480', 'Mariana Ramos', 'mariana.ramos@gmail.com', '2D', 0, 0, 10),
+
+                                                                              -- Equipe 11
+                                                                              ('09661141481', 'Luana Almeida', 'luana.almeida@gmail.com', '1B', 1, 0, 11),
+                                                                              ('09661141482', 'Roberta Ferreira', 'roberta.ferreira@gmail.com', '1C', 0, 1, 11),
+                                                                              ('09661141483', 'Felipe Silva', 'felipe.silva@gmail.com', '2A', 0, 0, 11),
+                                                                              ('09661141484', 'Juliana Lima', 'juliana.lima@gmail.com', '2B', 0, 0, 11),
+                                                                              ('09661141485', 'Gabriel Santos', 'gabriel.santos@gmail.com', '1A', 0, 0, 11),
+                                                                              ('09661141486', 'Ana Clara', 'ana.clara@gmail.com', '1B', 0, 0, 11),
+                                                                              ('09661141487', 'Thais Almeida', 'thais.almeida@gmail.com', '2C', 0, 0, 11),
+                                                                              ('09661141488', 'Marcelo Costa', 'marcelo.costa@gmail.com', '2D', 0, 0, 11),
+
+                                                                              -- Equipe 12
+                                                                              ('09661141489', 'Tiago Freitas', 'tiago.freitas@gmail.com', '1B', 1, 0, 12),
+                                                                              ('09661141490', 'Vanessa Pereira', 'vanessa.pereira@gmail.com', '1A', 0, 1, 12),
+                                                                              ('09661141491', 'Marcelo Gomes', 'marcelo.gomes@gmail.com', '1C', 0, 0, 12),
+                                                                              ('09661141492', 'Ellen Oliveira', 'ellen.oliveira@gmail.com', '2A', 0, 0, 12),
+                                                                              ('09661141493', 'Larissa Santos', 'larissa.santos@gmail.com', '2B', 0, 0, 12),
+                                                                              ('09661141494', 'Rafael Almeida', 'rafael.almeida@gmail.com', '2C', 0, 0, 12),
+                                                                              ('09661141495', 'Pedro Costa', 'pedro.costa@gmail.com', '1A', 0, 0, 12),
+                                                                              ('09661141496', 'Tatiane Lima', 'tatiane.lima@gmail.com', '1B', 0, 0, 12),
+
+                                                                              -- Equipe 13
+                                                                              ('09661141497', 'Carla Silva', 'carla.silva@gmail.com', '1A', 1, 0, 13),
+                                                                              ('09661141498', 'Fernando Almeida', 'fernando.almeida@gmail.com', '2B', 0, 1, 13),
+                                                                              ('09661141499', 'Ana Paula', 'anapaula@gmail.com', '1C', 0, 0, 13),
+                                                                              ('09661141500', 'Victor Hugo', 'victorhugol@gmail.com', '2A', 0, 0, 13),
+                                                                              ('09661141501', 'Rodrigo Silva', 'rodrigo.silva@gmail.com', '2B', 0, 0, 13),
+                                                                              ('09661141502', 'Juliana Costa', 'juliana.costa@gmail.com', '1B', 0, 0, 13),
+                                                                              ('09661141503', 'Patricia Ramos', 'patricia.ramos@gmail.com', '1A', 0, 0, 13),
+                                                                              ('09661141504', 'Leandro Lima', 'leandro.lima@gmail.com', '2C', 0, 0, 13),
+
+                                                                              -- Equipe 14
+                                                                              ('09661141505', 'Bianca Santos', 'bianca.santos@gmail.com', '1A', 1, 0, 14),
+                                                                              ('09661141506', 'Marcos Paulo', 'marcos.paulo@gmail.com', '1C', 0, 1, 14),
+                                                                              ('09661141507', 'Patrícia Lima', 'patricia.lima@gmail.com', '2B', 0, 0, 14),
+                                                                              ('09661141508', 'Carlos Eduardo', 'carlos.eduardo@gmail.com', '1B', 0, 0, 14),
+                                                                              ('09661141509', 'Eliane Ferreira', 'eliane.ferreira@gmail.com', '2C', 0, 0, 14),
+                                                                              ('09661141510', 'Felipe Castro', 'felipe.castro@gmail.com', '1A', 0, 0, 14),
+                                                                              ('09661141511', 'Luana Almeida', 'luana.almeida@gmail.com', '2D', 0, 0, 14),
+                                                                              ('09661141512', 'Anderson Lima', 'anderson.lima@gmail.com', '2B', 0, 0, 14),
+
+                                                                              -- Equipe 15
+                                                                              ('09661141513', 'Eduardo Ribeiro', 'eduardo.ribeiro@gmail.com', '1B', 1, 0, 15),
+                                                                              ('09661141514', 'Nathalia Lima', 'nathalia.lima@gmail.com', '1A', 0, 1, 15),
+                                                                              ('09661141515', 'Bruna Almeida', 'bruna.almeida@gmail.com', '1C', 0, 0, 15),
+                                                                              ('09661141516', 'Thiago Costa', 'thiago.costa@gmail.com', '2A', 0, 0, 15),
+                                                                              ('09661141517', 'Jéssica Martins', 'jessica.martins@gmail.com', '2B', 0, 0, 15),
+                                                                              ('09661141518', 'Samuel Ramos', 'samuel.ramos@gmail.com', '2C', 0, 0, 15),
+                                                                              ('09661141519', 'Tiago Lima', 'tiago.lima@gmail.com', '2A', 0, 0, 15),
+                                                                              ('09661141520', 'Mariana Almeida', 'mariana.almeida@gmail.com', '2D', 0, 0, 15),
+
+                                                                              -- Equipe 16
+                                                                              ('09661141521', 'Isabella Costa', 'isabella.costa@gmail.com', '1B', 1, 0, 16),
+                                                                              ('09661141522', 'Felipe Lima', 'felipe.lima@gmail.com', '1C', 0, 1, 16),
+                                                                              ('09661141523', 'Tatiane Santos', 'tatiane.santos@gmail.com', '1A', 0, 0, 16),
+                                                                              ('09661141524', 'Bruno Ferreira', 'bruno.ferreira@gmail.com', '2A', 0, 0, 16),
+                                                                              ('09661141525', 'Lucas Silva', 'lucas.silva@gmail.com', '2B', 0, 0, 16),
+                                                                              ('09661141526', 'Raquel Almeida', 'raquel.almeida@gmail.com', '2C', 0, 0, 16),
+                                                                              ('09661141527', 'Vinícius Almeida', 'vinicius.almeida@gmail.com', '2D', 0, 0, 16),
+                                                                              ('09661141528', 'Rafaela Gomes', 'rafaela.gomes@gmail.com', '1B', 0, 0, 16),
+
+                                                                              -- Equipe 17
+                                                                              ('09661141529', 'Luan Martins', 'luan.martins@gmail.com', '1A', 1, 0, 17),
+                                                                              ('09661141530', 'Talita Lima', 'talita.lima@gmail.com', '1C', 0, 1, 17),
+                                                                              ('09661141531', 'Pedro Alves', 'pedro.alves@gmail.com', '1B', 0, 0, 17),
+                                                                              ('09661141532', 'Karina Santos', 'karina.santos@gmail.com', '2A', 0, 0, 17),
+                                                                              ('09661141533', 'Vinícius Costa', 'vinicius.costa@gmail.com', '2B', 0, 0, 17),
+                                                                              ('09661141534', 'César Lima', 'cesar.lima@gmail.com', '2C', 0, 0, 17),
+                                                                              ('09661141535', 'Letícia Ferreira', 'leticia.ferreira@gmail.com', '2D', 0, 0, 17),
+                                                                              ('09661141536', 'Juliano Santos', 'juliano.santos@gmail.com', '1A', 0, 0, 17),
+
+                                                                              -- Equipe 18
+                                                                              ('09661141537', 'Gustavo Oliveira', 'gustavo.oliveira@gmail.com', '1A', 1, 0, 18),
+                                                                              ('09661141538', 'Camila Costa', 'camila.costa@gmail.com', '1B', 0, 1, 18),
+                                                                              ('09661141539', 'Alberto Soares', 'alberto.soares@gmail.com', '1C', 0, 0, 18),
+                                                                              ('09661141540', 'Lívia Santos', 'livia.santos@gmail.com', '2A', 0, 0, 18),
+                                                                              ('09661141541', 'Paulo Almeida', 'paulo.almeida@gmail.com', '2B', 0, 0, 18),
+                                                                              ('09661141542', 'Tatiane Lima', 'tatiane.lima@gmail.com', '2C', 0, 0, 18),
+                                                                              ('09661141543', 'Fábio Martins', 'fabio.martins@gmail.com', '2D', 0, 0, 18),
+                                                                              ('09661141544', 'Jessica Santos', 'jessica.santos@gmail.com', '2A', 0, 0, 18);
+
+INSERT INTO db_empreendedorismo.professor (nome, cpf, email, equipe_id)
+VALUES
+    ('José Lopes', '11001010101', 'jose.lopes@gmail.com', 1),
+    ('Maria Silva', '11001010102', 'maria.silva@gmail.com', 2),
+    ('Carlos Almeida', '11001010103', 'carlos.almeida@gmail.com', 3),
+    ('Ana Pereira', '11001010104', 'ana.pereira@gmail.com', 4),
+    ('Fernando Santos', '11001010105', 'fernando.santos@gmail.com', 5),
+    ('Juliana Costa', '11001010106', 'juliana.costa@gmail.com', 6),
+    ('Roberto Ferreira', '11001010107', 'roberto.ferreira@gmail.com', 7),
+    ('Patricia Lima', '11001010108', 'patricia.lima@gmail.com', 8),
+    ('Rafael Mendes', '11001010109', 'rafael.mendes@gmail.com', 9),
+    ('Luana Martins', '11001010110', 'luana.martins@gmail.com', 10),
+    ('Fábio Soares', '11001010111', 'fabio.soares@gmail.com', 11),
+    ('Bruna Rocha', '11001010112', 'bruna.rocha@gmail.com', 12),
+    ('Cláudio Ribeiro', '11001010113', 'claudio.ribeiro@gmail.com', 13),
+    ('Isabela Nascimento', '11001010114', 'isabela.nascimento@gmail.com', 14),
+    ('Vinícius Almeida', '11001010115', 'vinicius.almeida@gmail.com', 15),
+    ('Tatiane Santos', '11001010116', 'tatiane.santos@gmail.com', 16),
+    ('Gustavo Lima', '11001010117', 'gustavo.lima@gmail.com', 17),
+    ('Camila Ferreira', '11001010118', 'camila.ferreira@gmail.com', 18);

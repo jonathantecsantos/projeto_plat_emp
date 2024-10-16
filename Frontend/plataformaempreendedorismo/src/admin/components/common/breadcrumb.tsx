@@ -61,6 +61,30 @@ const routes = [
     path: RoutesNames.prototyping,
     breadcrumb: 'Prototipação',
   },
+  {
+    path: RoutesNames.teamsNotes,
+    breadcrumb: 'Notas',
+  },
+  {
+    path: RoutesNames.classification,
+    breadcrumb: 'Classificação',
+  },
+  {
+    path: RoutesNames.classificationDljTeams,
+    breadcrumb: 'Classificação - DLJ',
+  },
+  {
+    path: RoutesNames.classificationPitch,
+    breadcrumb: 'Classificação - Pitch',
+  },
+  {
+    path: RoutesNames.classificationSharkTank,
+    breadcrumb: 'Classificação - Shark Tank',
+  },
+  {
+    path: RoutesNames.classificationExpoDlei,
+    breadcrumb: 'Classificação - Expo Dlei',
+  },
 ]
 
 

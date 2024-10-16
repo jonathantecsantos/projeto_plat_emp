@@ -32,7 +32,7 @@ export const RoutesNames = {
 
   prototyping: '/teams/prototyping/:id',
 
-  classification: '/classifications',
+  classification: '/classification',
   classificationDljTeams: '/dlj-classification',
   classificationPitch: '/pitch-classification',
   classificationSharkTank: '/sharTank-classification',

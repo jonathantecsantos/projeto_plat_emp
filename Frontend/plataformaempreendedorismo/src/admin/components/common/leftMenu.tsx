@@ -112,7 +112,7 @@ const menuItems: MenuItemType[] = [
     insideItems: [
       {
         insideName: 'Classificação',
-        routeName: '',
+        routeName: RoutesNames.classification,
       },
       {
         insideName: 'Lista Assinatura',

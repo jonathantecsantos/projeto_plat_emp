@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.controller.ItensRelatorioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoRecord;
@@ -12,6 +13,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -26,6 +28,9 @@ public class AvaliacaoService {
 
     @Autowired
     private CriterioAvaliacaoRepository criterioAvaliacaoRepository;
+
+    @Autowired
+    private SubcriterioAvaliacaoRepository subcriterioAvaliacaoRepository;
 
     @Autowired
     private FormatoAvaliacaoRepository formatoAvaliacaoRepository;
@@ -207,5 +212,11 @@ public class AvaliacaoService {
                 ))
                 .collect(Collectors.toList());
 
+    }
+
+    public List<ItensRelatorioRecord> buscarItensDoRelatorio() {
+        return subcriterioAvaliacaoRepository.findAll(Sort.by("ordemRelatorio")).stream()
+                .map(subcriterioAvaliacao -> new ItensRelatorioRecord(subcriterioAvaliacao.getDescricao(),subcriterioAvaliacao.getOrdemRelatorio()))
+                .collect(Collectors.toList());
     }
 }

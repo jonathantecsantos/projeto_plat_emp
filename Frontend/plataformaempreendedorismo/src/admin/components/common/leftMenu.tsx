@@ -6,7 +6,6 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import GroupIcon from '@mui/icons-material/Group'
 import GroupsIcon from '@mui/icons-material/Groups'
 import SettingsIcon from '@mui/icons-material/Settings'
-import StorageIcon from '@mui/icons-material/Storage'
 import { Divider } from '@mui/material'
 import Collapse from '@mui/material/Collapse'
 import List from '@mui/material/List'
@@ -89,21 +88,7 @@ const menuItems: MenuItemType[] = [
         insideName: 'Professores',
         routeName: RoutesNames.teachers,
       },
-      {
-        insideName: 'Avaliadores',
-        routeName: '',
-      },
-      {
-        insideName: 'Coordenadores',
-        routeName: '',
-      },
     ],
-  },
-  {
-    outsideName: 'Repositório',
-    outsideIcon: <StorageIcon />,
-    subItens: false,
-    routeName: `/${RoutesNames.repository}`,
   },
   {
     outsideName: 'Relatórios',
@@ -111,16 +96,28 @@ const menuItems: MenuItemType[] = [
     subItens: true,
     insideItems: [
       {
+        insideName: 'Notas',
+        routeName: RoutesNames.teamsNotes,
+      },
+      {
         insideName: 'Classificação',
         routeName: RoutesNames.classification,
       },
       {
-        insideName: 'Lista Assinatura',
-        routeName: '',
+        insideName: 'DLJ',
+        routeName: RoutesNames.classificationDljTeams,
       },
       {
-        insideName: 'Ficha de Inscrição',
-        routeName: '',
+        insideName: 'Pitch',
+        routeName: RoutesNames.classificationPitch,
+      },
+      {
+        insideName: 'Shark Tank',
+        routeName: RoutesNames.classificationSharkTank,
+      },
+      {
+        insideName: 'Expo Dlei',
+        routeName: RoutesNames.classificationExpoDlei,
       },
     ],
   },

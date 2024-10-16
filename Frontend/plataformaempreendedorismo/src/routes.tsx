@@ -5,6 +5,11 @@ import { RoutesNames } from './globals'
 import { AdminHomePage } from './pages/adminHome'
 import { BannerPage } from './pages/banner'
 import { BannerPreviewPage } from './pages/bannerPreview'
+import { ClassificationPage } from './pages/classification'
+import { DljClassificationPage } from './pages/classificationDlj'
+import { ExpoDleiClassificationPage } from './pages/classificationExpoDlei'
+import { PitchClassificationPage } from './pages/classificationPitch'
+import { SharkTankClassificationPage } from './pages/classificationSharkTank'
 import { CompanyDetailsPage } from './pages/companyDetails'
 import { ContactPage } from './pages/contact'
 import { DLJEvaluationPage } from './pages/dljTeamEvaluation'
@@ -22,10 +27,11 @@ import { StudentsDetailsPage } from './pages/students'
 import { TeacherPage } from './pages/teacher'
 import { TeachersPage } from './pages/teachers'
 import { TeamPage } from './pages/team'
-import { TeamsPage } from './pages/teams'
-import { UploadFilesPage } from './pages/uploadFiles'
+import { TeamNotesPage } from './pages/teamNotes'
 import { TeamPrototypingPage } from './pages/teamPrototyping'
-import { ClassificationPage } from './pages/classification'
+import { TeamsPage } from './pages/teams'
+import { TeamsNotesPage } from './pages/teamsNotes'
+import { UploadFilesPage } from './pages/uploadFiles'
 
 export const router = createBrowserRouter([
   {
@@ -127,5 +133,29 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.classification,
     element: <ProtectedRoute children={<ClassificationPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.classificationDljTeams,
+    element: <ProtectedRoute children={<DljClassificationPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.classificationPitch,
+    element: <ProtectedRoute children={<PitchClassificationPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.classificationSharkTank,
+    element: <ProtectedRoute children={<SharkTankClassificationPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.classificationExpoDlei,
+    element: <ProtectedRoute children={<ExpoDleiClassificationPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.teamsNotes,
+    element: <ProtectedRoute children={<TeamsNotesPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.teamNotes,
+    element: <ProtectedRoute children={<TeamNotesPage />} allowedRoles={[]} />
   },
 ])

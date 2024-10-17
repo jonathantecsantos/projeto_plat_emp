@@ -60,8 +60,18 @@ public class RelatorioController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
     })
     @GetMapping(value = "/itens-relatorio",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ItensRelatorioRecord> getRelatorioGeral(){
+    public List<ItensRelatorioRecord> getItensRelatorioGeral(){
         return avaliacaoService.buscarItensDoRelatorio();
+    }
+
+    @Operation(summary = "Relatório geral de notas por Equipe", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
+    })
+    @GetMapping(value = "/relatorio-geral",produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<DetalhamentoNotasTimeRecord> getRelatorioGeral(){
+        return avaliacaoService.buscarRelatorioGeral();
     }
 
 }

@@ -40,9 +40,9 @@ public class EquipeService {
     public ListaDadosEquipeRecord getEquipeDTO(Long equipeId) {
         Equipe equipe = equipeRepository.findById(equipeId).orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
         List<Aluno> alunos = alunoRepository.findByEquipeId(equipeId);
-        Professor professor = professorRepository.findByEquipeId(equipeId);
+        List<Professor> professor = professorRepository.findByEquipeId(equipeId);
 
-        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor, equipe.getOdsList());
+        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor.stream().toList(), equipe.getOdsList());
     }
 
     public Equipe buscarEquipePorId(Long id) throws Exception {

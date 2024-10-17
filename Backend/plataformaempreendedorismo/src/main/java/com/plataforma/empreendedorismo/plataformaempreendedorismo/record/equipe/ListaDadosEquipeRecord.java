@@ -10,7 +10,7 @@ import java.util.List;
 public record ListaDadosEquipeRecord(
         String nomeEquipe,
         List<Aluno> alunos,
-        Professor professor,
+        List<Professor> professor,
         List<Ods> odsList
 ) {
 }

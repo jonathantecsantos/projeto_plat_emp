@@ -33,9 +33,7 @@ export const TeamsNotesComponent = () => {
   const filteredTeams = useMemo(() => {
     if (!teams) return []
     return teams.filter((team) =>
-      team.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      team.id.toString().includes(searchTerm)
-    )
+      team.nome.toLowerCase().includes(searchTerm.toLowerCase()))
   }, [teams, searchTerm])
 
   const handleSearch = (query: string) => {
@@ -48,7 +46,7 @@ export const TeamsNotesComponent = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="sticky top-0 z-10">
-        <AdminHeader onSearch={handleSearch} onRefresh={refetch} placeholder='Pesquisar por nome ou ID'
+        <AdminHeader onSearch={handleSearch} onRefresh={refetch} placeholder='Pesquisar por nome'
         // onAdd={() => navigate(RoutesNames.team)}
         // addButtonName='Adicionar Equipe'
         />
@@ -68,7 +66,7 @@ export const TeamsNotesComponent = () => {
               <>
                 {/* <td className="px-4 py-2">{team.id}</td> */}
                 <td className="px-4 py-2 capitalize">{team.nome.toLowerCase()}</td>
-                <td className="px-4 py-2">{team.linkPitch ? team.linkPitch : '--'}</td>
+                <td className="px-4 py-2">{team.linkPitch ? team.linkPitch : ''}</td>
               </>
             )}
             onClickRow={(team: TableComponentClickRowProps<TeamsResponse>) => {

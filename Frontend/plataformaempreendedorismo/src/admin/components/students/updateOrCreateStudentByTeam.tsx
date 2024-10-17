@@ -2,11 +2,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import { LoadingButton } from "@mui/lab"
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { FormEvent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
-import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
+import { useCreateStudentMutation, useGetAllTeamsQuery, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
 import { formatCPF } from '../../../utils/types'
 
@@ -18,6 +18,7 @@ interface UpdateOrCreateStudentProps {
 
 export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStudentProps) => {
   const { data, isLoading } = useGetStudentQuery(id, { skip: !!teamData?.id })
+  const {data: teams } = useGetAllTeamsQuery()
   const [student, setStudent] = useState<StudentIdResponse | null>(null)
   const [updateStudent, { isSuccess, isLoading: updating }] = useUpdateStudentMutation()
   const [createStudent, { isLoading: creating }] = useCreateStudentMutation()
@@ -37,6 +38,17 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
       [field]: value,
     }))
   }
+
+  const handleSelectChange = (e: any) => {
+    const selectedTeamId = e.target.value;
+    setStudent((prevData) => ({
+      ...prevData!,
+      equipe: {
+        ...prevData!.equipe,
+        id: selectedTeamId,
+      }
+    }));
+  };
 
   const handleCheckboxChange = (key: 'isLider' | 'isViceLider', checked: boolean) => {
     setStudent((prevData) => ({
@@ -130,51 +142,38 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
               onChange={(e) => handleInputChange('turma', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
-          </div>
-          {/* <div>
-            <label htmlFor="ods" className="block text-sm font-medium text-gray-700">ID ODS</label>
-            <input
-              id="ods"
-              type="number"
-              value={student?.equipe?.odsList.id || ''}
-              disabled={!!teamData?.id}
-              onChange={(e) => {
-                const odsId = parseInt(e.target.value)
-                setStudent((prevData) => ({
-                  ...prevData!,
-                  equipe: {
-                    ...prevData!.equipe,
-                    odsList: {
-                      ...prevData!.equipe.odsList,  
-                      id: odsId
-                    }
-                  }
-                }))
-              }}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div> */}
-          <div>
-            <label htmlFor="equipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
-            <input
-              id="equipe"
-              type="number"
-              value={student?.equipe?.id || teamData?.id}
-              disabled={!!teamData?.id}
-              onChange={(e) => {
-                const equipeId = parseInt(e.target.value)
-                setStudent((prevData) => ({
-                  ...prevData!,
-                  equipe: {
-                    ...prevData!.equipe,
-                    id: equipeId
-                  }
-                }))
-              }}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
+          </div>   
         </div>
+        <FormControl className='sm:w-1/2 sm:pr-2' variant="outlined">
+          <InputLabel id="team-select-label" className='mt-2'>Equipe</InputLabel>
+          <Select
+          className='py-1 mt-2 rounded-md'
+            labelId="team-select-label"
+            id="equipe"
+            value={!!teamData?.id ? teamData.id : student?.equipe?.id || ''} // Valor atual selecionado
+            onChange={handleSelectChange}
+            label="Equipe"
+            disabled={!!teamData?.id} // Desabilita se teamData já estiver preenchido
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '4px', // borda arredondada
+                border: '1px solid #D1D5DB', // cor da borda
+                padding: '5px 10px', // padding para ajustar
+              },
+              '& .MuiSelect-select': {
+                paddingTop: '5px',
+                paddingBottom: '5px',
+                fontSize: '15px', // tamanho da fonte ajustado
+              }
+            }}
+          >
+            {teams?.map((team) => (
+              <MenuItem key={team.id} value={team.id}>
+                {team.nome}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex items-center">
             <input
@@ -198,7 +197,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
           </div>
         </div>
         <div className='my-4 flex justify-between text-sm'>
-          <span>Equipe: {student?.equipe?.nome || teamData?.nomeEquipe}</span>
+          {/* <span>Equipe: {student?.equipe?.nome || teamData?.nomeEquipe}</span> */}
           {/* {student?.equipe?.odsList && <span>{student?.equipe.odsList?.codigo}: {student?.equipe.odsList?.descricao}</span>} */}
         </div>
 

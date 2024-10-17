@@ -242,6 +242,7 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
         { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` },
+        { type: 'Report', id: `LIST` },
       ],
     }),
 
@@ -254,6 +255,7 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
         { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` }, // Invalida o cache específico do getEvaluationData
+        { type: 'Report', id: `LIST` },
       ],
     }),
 

@@ -36,6 +36,7 @@ function renderTableHeader(columns: string[]) {
 
 export const TableComponent = <T,>(props: TableComponentProps<T>) => {
   const [page, setPage] = useState(0);
+  //todo-winnicius => adicionar toogle global das tabelas
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export const TableComponent = <T,>(props: TableComponentProps<T>) => {
   const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
 
   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
+    //todo-winnicius => adicionar toogle global das tabelas => passar valor selecionado para o estado global
     setRowsPerPage(+event.target.value);
     setPage(0);
   };

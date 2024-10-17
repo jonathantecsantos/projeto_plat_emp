@@ -96,7 +96,7 @@ const menuItems: MenuItemType[] = [
     subItens: true,
     insideItems: [
       {
-        insideName: 'Notas',
+        insideName: 'Notas por Time',
         routeName: RoutesNames.teamsNotes,
       },
       {

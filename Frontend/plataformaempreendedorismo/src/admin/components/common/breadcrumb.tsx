@@ -30,6 +30,14 @@ const routes = [
     breadcrumb: 'Página inicial'
   },
   {
+    path: RoutesNames.adminHome,
+    breadcrumb: 'Painel'
+  },
+  {
+    path: RoutesNames.uploadFiles,
+    breadcrumb: 'Importações'
+  },
+  {
     path: RoutesNames.students,
     breadcrumb: 'Alunos',
     children: [

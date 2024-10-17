@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { formatCPF } from "../../../utils/types"
 import { CircularProgress } from "@mui/material"
 import { LoadingButton } from '@mui/lab'
+import { TeamSelect } from '../common/teamSelect'
 
 interface UpdateOrCreateTeacherProps {
   id: number
@@ -109,7 +110,7 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="idEquipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
             <input
               id="idEquipe"
@@ -128,10 +129,25 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
               }}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
+          </div> */}
+          <div className='mt-4'>
+            <TeamSelect
+              className='py-1 mt-2 rounded-md w-56'
+              onChange={(e) => {
+                const equipeId = parseInt(e.target.value)
+                setTeacher((prevData) => ({
+                  ...prevData!,
+                  equipe: {
+                    ...prevData!.equipe,
+                    id: equipeId
+                  }
+                }))
+              }}
+              value={!!teamData?.id ? teamData.id : teacher?.equipe?.id || null}
+              disable={!!teamData?.id}
+            />
           </div>
-        </div>
-        <div className='my-4 flex justify-between text-sm'>
-          <span>Equipe: {teacher?.equipe?.nome || teamData?.nomeEquipe}</span>
+
         </div>
         <div className={`flex items-center justify-between`}>
           <div className='flex gap-4'>

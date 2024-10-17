@@ -1,12 +1,12 @@
-import { Divider } from "@mui/material"
+import { Avatar, Divider } from "@mui/material"
 import { ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { RoutesNames } from "../../../globals"
-import { BannerImage } from './adminBanner'
 import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
 import { Logout } from "./logout"
+import { BannerImage } from "./adminBanner"
 
 interface AdminPage {
   mainContent: ReactNode
@@ -26,13 +26,19 @@ const LeftMenu = () => {
   const navigate = useNavigate()
   return (
     <div className=" text-[#3C14A4] h-full z-30">
-      <div className="w-full p-4">
+      {/* <div className="w-full p-4">
         <h2
           onClick={() => navigate(RoutesNames.home)}
           className="cursor-pointer font-bold text-center text-white bg-gradient-to-r from-indigo-500 to-indigo-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
         >
           Plataforma Empreendedorismo
         </h2>
+      </div> */}
+      <div className="w-full p-6 flex justify-center"
+        onClick={() => navigate(RoutesNames.adminHome)}>
+        <Avatar alt="admin avatar"
+        className=" bg-[#3C14A4] shadow-md cursor-pointer transform hover:scale-105 transition-transform duration-300 w-16 h-16"
+        />
       </div>
       <Divider variant="middle" color="white" />
       <LeftMenuComponent />
@@ -50,6 +56,7 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
         </div>
         <main className="overflow-x-hidden overflow-y-auto w-full">
           <BannerImage />
+          {/* <div className="h-12"></div> */}
           <div className="p-4 h-[calc(100%-9rem)]">
             <div className="flex">
               <BreadcrumbComponent />

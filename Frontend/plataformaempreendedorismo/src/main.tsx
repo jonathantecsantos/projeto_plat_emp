@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, Container, CssBaseline } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import ptBR from "date-fns/locale/pt-BR"
@@ -28,7 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           </div>
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
             {/* <CssBaseline /> */}
-            {/* <Container maxWidth="xs"> */}
+            {/* <Container maxWidth="xl"> */}
             <Box sx={{ my: 0 }}>
               <RouterProvider router={router} />
               <Footer />

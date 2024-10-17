@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
 import { formatCPF } from '../../../utils/types'
+import { TeamSelect } from '../common/teamSelect'
 
 interface UpdateOrCreateStudentProps {
   id: number;
@@ -37,6 +38,17 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
       [field]: value,
     }))
   }
+
+  const handleSelectChange = (e: any) => {
+    const selectedTeamId = e.target.value;
+    setStudent((prevData) => ({
+      ...prevData!,
+      equipe: {
+        ...prevData!.equipe,
+        id: selectedTeamId,
+      }
+    }));
+  };
 
   const handleCheckboxChange = (key: 'isLider' | 'isViceLider', checked: boolean) => {
     setStudent((prevData) => ({
@@ -131,50 +143,12 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
-          {/* <div>
-            <label htmlFor="ods" className="block text-sm font-medium text-gray-700">ID ODS</label>
-            <input
-              id="ods"
-              type="number"
-              value={student?.equipe?.odsList.id || ''}
-              disabled={!!teamData?.id}
-              onChange={(e) => {
-                const odsId = parseInt(e.target.value)
-                setStudent((prevData) => ({
-                  ...prevData!,
-                  equipe: {
-                    ...prevData!.equipe,
-                    odsList: {
-                      ...prevData!.equipe.odsList,  
-                      id: odsId
-                    }
-                  }
-                }))
-              }}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div> */}
-          <div>
-            <label htmlFor="equipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
-            <input
-              id="equipe"
-              type="number"
-              value={student?.equipe?.id || teamData?.id}
-              disabled={!!teamData?.id}
-              onChange={(e) => {
-                const equipeId = parseInt(e.target.value)
-                setStudent((prevData) => ({
-                  ...prevData!,
-                  equipe: {
-                    ...prevData!.equipe,
-                    id: equipeId
-                  }
-                }))
-              }}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
         </div>
+        <TeamSelect
+          onChange={handleSelectChange}
+          value={!!teamData?.id ? teamData.id : student?.equipe?.id || null}
+          disable={!!teamData?.id}
+        />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex items-center">
             <input
@@ -198,7 +172,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
           </div>
         </div>
         <div className='my-4 flex justify-between text-sm'>
-          <span>Equipe: {student?.equipe?.nome || teamData?.nomeEquipe}</span>
+          {/* <span>Equipe: {student?.equipe?.nome || teamData?.nomeEquipe}</span> */}
           {/* {student?.equipe?.odsList && <span>{student?.equipe.odsList?.codigo}: {student?.equipe.odsList?.descricao}</span>} */}
         </div>
 

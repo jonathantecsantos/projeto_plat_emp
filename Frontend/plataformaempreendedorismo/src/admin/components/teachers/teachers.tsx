@@ -1,7 +1,4 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-// import MoreVertIcon from '@mui/icons-material/MoreVert'
-// import RemoveIcon from '@mui/icons-material/Remove';
-// import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import ClearIcon from '@mui/icons-material/Clear'
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton } from '@mui/material'
 import { useSnackbar } from "notistack"
@@ -43,9 +40,7 @@ export const TeachersComponent = () => {
   const filteredStudents = useMemo(() => {
     if (!teachers) return []
     return teachers.filter((teacher) =>
-      teacher.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      teacher.id.toString().includes(searchTerm)
-    )
+      teacher.nome.toLowerCase().includes(searchTerm.toLowerCase()))
   }, [teachers, searchTerm])
 
   const handleSearch = (query: string) => {
@@ -75,7 +70,7 @@ export const TeachersComponent = () => {
   if (teachers!.length <= 0) return <div>
     <AdminHeader onSearch={handleSearch} onRefresh={refetch}
       onAdd={() => navigate(RoutesNames.teacher)}
-      placeholder='Pesquisar por nome ou ID' />
+      placeholder='Pesquisar por nome' />
     <div className="my-8 flex justify-center font-semibold gap-1">
       <p>Nenhum professor disponível, realize a</p>
       <span onClick={() => navigate(RoutesNames.uploadFiles)}

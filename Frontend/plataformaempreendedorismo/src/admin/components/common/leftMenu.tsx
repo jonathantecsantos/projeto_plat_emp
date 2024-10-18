@@ -100,6 +100,10 @@ const menuItems: MenuItemType[] = [
         routeName: RoutesNames.teamsNotes,
       },
       {
+        insideName: 'Relátorio Geral',
+        routeName: RoutesNames.generalReport,
+      },
+      {
         insideName: 'Classificação',
         routeName: RoutesNames.classification,
       },

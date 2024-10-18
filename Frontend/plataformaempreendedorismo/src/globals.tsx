@@ -33,13 +33,14 @@ export const RoutesNames = {
   prototyping: '/teams/prototyping/:id',
 
   classification: '/classification',
+  generalReport: '/general-report',
   classificationDljTeams: '/dlj-classification',
   classificationPitch: '/pitch-classification',
   classificationSharkTank: '/sharTank-classification',
   classificationExpoDlei: '/expoDlei-classification',
 
   teamsNotes: '/notes',
-  teamNotes: '/notes/:id'
+  teamNotes: '/notes/:id',
 
 }
 

@@ -6,9 +6,9 @@ import * as locales from '@mui/material/locale'
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles'
 import { CommonUtils } from 'essencials'
 import { useMemo, useState } from 'react'
+import { renderTableHeader } from '../table'
 import TablePaginationActions from '../table/actions'
 import { StyledTableCell, StyledTableRow } from '../table/common'
-import { renderTableHeader } from '../table'
 
 interface Score {
   totalNota: number | string

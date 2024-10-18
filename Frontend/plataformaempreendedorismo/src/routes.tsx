@@ -32,6 +32,7 @@ import { TeamPrototypingPage } from './pages/teamPrototyping'
 import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
+import { GeneralReportPage } from './pages/generalReport'
 
 export const router = createBrowserRouter([
   {
@@ -157,5 +158,9 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.teamNotes,
     element: <ProtectedRoute children={<TeamNotesPage />} allowedRoles={[]} />
+  },
+  {
+    path: RoutesNames.generalReport,
+    element: <ProtectedRoute children={<GeneralReportPage />} allowedRoles={[]} />
   },
 ])

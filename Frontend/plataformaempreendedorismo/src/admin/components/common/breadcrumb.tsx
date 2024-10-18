@@ -74,6 +74,10 @@ const routes = [
     breadcrumb: 'Notas',
   },
   {
+    path: RoutesNames.generalReport,
+    breadcrumb: 'Relatório Geral',
+  },
+  {
     path: RoutesNames.classification,
     breadcrumb: 'Classificação',
   },

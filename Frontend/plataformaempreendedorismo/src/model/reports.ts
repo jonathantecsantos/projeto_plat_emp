@@ -4,7 +4,16 @@ export interface RelatorioGeral {
   formato: string
   criterio: string
   subcriterio: string
+  idSubcriterio: number
   totalNota: number
+}
+
+//relatorios/itens - relatorio
+export interface ItensRelatorio {
+  idSubcriterio: number
+  descricaoSubcriterio: string
+  descricaoCriterio: string,
+  ordemRelatorio: number
 }
 
 //relatorios/notas-equipe/{idEquipe}

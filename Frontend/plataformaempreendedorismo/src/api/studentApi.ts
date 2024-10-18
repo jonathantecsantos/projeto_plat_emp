@@ -7,7 +7,7 @@ import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
-import { RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
+import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
 
 
 export const studentsApiSlice = createApi({
@@ -313,6 +313,20 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Report', id: `LIST` }],
     }),
 
+    getTeamsReportItems: build.query<ItensRelatorio[], void>({
+      query: () => `/relatorios/itens-relatorio`,
+      // transformResponse: (response: RelatorioGeral[]) => {
+      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
+      // },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ idSubcriterio }) => ({ type: 'Report', id: idSubcriterio } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
     getTeamReport: build.query<ReportTeamId[], number>({
       query: (idEquipe) => `/relatorios/notas-equipe/${idEquipe}`,
       // transformResponse: (response: ReportTeamId[]) => {
@@ -403,6 +417,7 @@ export const {
 
   //REPORTS
   useGetTeamsReportsQuery,
+  useGetTeamsReportItemsQuery,
   useGetTeamReportQuery,
   useGetTeamClassificationQuery,
   useGetTeamReportClassificationByFormatQuery,

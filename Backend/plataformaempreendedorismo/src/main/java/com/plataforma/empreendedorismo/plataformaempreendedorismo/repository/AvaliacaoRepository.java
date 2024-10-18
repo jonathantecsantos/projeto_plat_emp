@@ -41,7 +41,7 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             @Param("idFormatoAvaliacao") Long idFormatoAvaliacao
     );
 
-    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sum(av.nota) as total_nota from avaliacao av " +
+    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sa.id as id_subcriterio, sum(av.nota) as total_nota from avaliacao av " +
             "join equipe e on e.id = av.id_equipe " +
             "join criterio_avaliacao ca on ca.id = av.id_criterio_avaliacao " +
             "join subcriterio_avaliacao sa on sa.id = av.id_subcriterio_avaliacao " +
@@ -52,7 +52,7 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             nativeQuery = true)
     List<Object[]> findNotasPorTime(@Param("idEquipe") Long idEquipe);
 
-    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sum(av.nota) as total_nota from avaliacao av " +
+    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sa.id as id_subcriterio, sum(av.nota) as total_nota from avaliacao av " +
             "join equipe e on e.id = av.id_equipe " +
             "join criterio_avaliacao ca on ca.id = av.id_criterio_avaliacao " +
             "join subcriterio_avaliacao sa on sa.id = av.id_subcriterio_avaliacao " +

@@ -5,6 +5,7 @@ public record DetalhamentoNotasTimeRecord(
         String formato,
         String criterio,
         String subcriterio,
+        Integer idSubcriterio,
         Double totalNota
 
 ) {

@@ -193,7 +193,8 @@ public class AvaliacaoService {
                         (String) result[1],
                         (String) result[2],
                         (String) result[3],
-                        (Double) result[4]
+                        (Integer) result[4],
+                        (Double) result[5]
                 ))
                 .collect(Collectors.toList());
 
@@ -208,7 +209,8 @@ public class AvaliacaoService {
                         (String) result[1],
                         (String) result[2],
                         (String) result[3],
-                        (Double) result[4]
+                        (Integer) result[4],
+                        (Double) result[5]
                 ))
                 .collect(Collectors.toList());
 
@@ -216,7 +218,7 @@ public class AvaliacaoService {
 
     public List<ItensRelatorioRecord> buscarItensDoRelatorio() {
         return subcriterioAvaliacaoRepository.findAll(Sort.by("ordemRelatorio")).stream()
-                .map(subcriterioAvaliacao -> new ItensRelatorioRecord(subcriterioAvaliacao.getDescricao(),subcriterioAvaliacao.getOrdemRelatorio()))
+                .map(subcriterioAvaliacao -> new ItensRelatorioRecord(subcriterioAvaliacao.getId(),subcriterioAvaliacao.getDescricao(),subcriterioAvaliacao.getCriterioAvaliacao().getDescricao(),subcriterioAvaliacao.getOrdemRelatorio()))
                 .collect(Collectors.toList());
     }
 }

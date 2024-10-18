@@ -7,7 +7,6 @@ import { TableComponentSetCurrPageProps } from "../table/common"
 
 export const DljClassificationComponent = () => {
   const { data: dljClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(1)
-
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {
@@ -21,8 +20,8 @@ export const DljClassificationComponent = () => {
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading dljClassification.</p>
-
-
+  if (!dljClassification?.length) return <p className="text-center mt-10">Nenhuma nota disponível até o momento.</p>
+  
   return <div>
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto">

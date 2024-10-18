@@ -22,7 +22,7 @@ const StyledTableTitleCell = styled(TableCell)(({ }) => ({
   padding: 5,
 }));
 
-function renderTableHeader(columns: string[]) {
+export function renderTableHeader(columns: string[]) {
   return (
     <TableHead>
       <TableRow>

@@ -22,7 +22,7 @@ export const ExpoDleiClassificationComponent = () => {
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading expoDleiClassification.</p>
-
+  if (!expoDleiClassification?.length) return <p className="text-center mt-10">Nenhuma nota disponível até o momento.</p>
 
   return <div>
     <div className="flex flex-col h-full">

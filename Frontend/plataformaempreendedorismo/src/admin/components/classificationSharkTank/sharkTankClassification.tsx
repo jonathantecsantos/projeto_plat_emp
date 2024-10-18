@@ -8,7 +8,6 @@ import { TableComponentSetCurrPageProps } from "../table/common"
 
 export const SharkTankClassificationComponent = () => {
   const { data: sharkTankClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(3)
-
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {
@@ -22,7 +21,7 @@ export const SharkTankClassificationComponent = () => {
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading sharkTankClassification.</p>
-
+  if (!sharkTankClassification?.length) return <p className="text-center mt-10">Nenhuma nota disponível até o momento.</p>
 
   return <div>
     <div className="flex flex-col h-full">

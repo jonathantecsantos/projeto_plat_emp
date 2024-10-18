@@ -71,11 +71,11 @@ const routes = [
   },
   {
     path: RoutesNames.teamsNotes,
-    breadcrumb: 'Notas',
+    breadcrumb: 'Notas por Time',
   },
   {
     path: RoutesNames.generalReport,
-    breadcrumb: 'Relatório Geral',
+    breadcrumb: 'Notas Gerais',
   },
   {
     path: RoutesNames.classification,

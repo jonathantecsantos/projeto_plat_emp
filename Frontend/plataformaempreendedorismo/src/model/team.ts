@@ -28,6 +28,6 @@ export interface Team extends TeamsResponse {
 export interface TeamIdResponse {
   nomeEquipe: string
   alunos: Student[]
-  professor: Teacher
+  professor: Teacher[]
   odsList: Ods[]
 }

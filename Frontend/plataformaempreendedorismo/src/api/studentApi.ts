@@ -301,9 +301,6 @@ export const studentsApiSlice = createApi({
     //REPORTS
     getTeamsReports: build.query<RelatorioGeral[], void>({
       query: () => `/relatorios/relatorio-geral`,
-      // transformResponse: (response: RelatorioGeral[]) => {
-      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
-      // },
       providesTags: (result) =>
         result
           ? [
@@ -315,9 +312,6 @@ export const studentsApiSlice = createApi({
 
     getTeamsReportItems: build.query<ItensRelatorio[], void>({
       query: () => `/relatorios/itens-relatorio`,
-      // transformResponse: (response: RelatorioGeral[]) => {
-      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
-      // },
       providesTags: (result) =>
         result
           ? [
@@ -329,9 +323,6 @@ export const studentsApiSlice = createApi({
 
     getTeamReport: build.query<ReportTeamId[], number>({
       query: (idEquipe) => `/relatorios/notas-equipe/${idEquipe}`,
-      // transformResponse: (response: ReportTeamId[]) => {
-      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
-      // },
       providesTags: (result) =>
         result
           ? [
@@ -343,9 +334,6 @@ export const studentsApiSlice = createApi({
 
     getTeamClassification: build.query<ReportClassification[], void>({
       query: () => `/relatorios/classificacao`,
-      // transformResponse: (response: ReportClassification[]) => {
-      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
-      // },
       providesTags: (result) =>
         result
           ? [
@@ -357,9 +345,6 @@ export const studentsApiSlice = createApi({
 
     getTeamReportClassificationByFormat: build.query<ReportClassificationByFormat[], number>({
       query: (idFormatoAvaliacao) => `/relatorios/classificacao-por-formato/${idFormatoAvaliacao}`,
-      // transformResponse: (response: ReportClassificationByFormat[]) => {
-      //   return response.sort((a, b) => a.equipe.localeCompare(b.equipe))
-      // },
       providesTags: (result) =>
         result
           ? [

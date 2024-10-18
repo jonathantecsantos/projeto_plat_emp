@@ -45,10 +45,10 @@ export const TeamNotesComponent = ({ id }: TeamNotesProps) => {
             bodyList={teamNotes || []}
             bodyRowBuilder={(teamNotes: ReportTeamId) => (
               <>
-                <td className="px-4 py-2 capitalize">{teamNotes.formato}</td>
-                <td className="px-4 py-2 capitalize">{teamNotes.criterio}</td>
-                <td className="px-4 py-2 capitalize">{teamNotes.subcriterio}</td>
-                <td className="px-4 py-2 capitalize">{teamNotes.totalNota}</td>
+                <td className="px-4 py-2 capitalize text-nowrap">{teamNotes.formato}</td>
+                <td className="px-4 py-2 capitalize text-nowrap">{teamNotes.criterio}</td>
+                <td className="px-4 py-2 capitalize text-nowrap">{teamNotes.subcriterio}</td>
+                <td className="px-4 py-2 capitalize text-nowrap">{teamNotes.totalNota}</td>
               </>
             )}
           />

@@ -31,6 +31,17 @@ export const RoutesNames = {
   expoDleiTeam: '/expoDlei/:id',
 
   prototyping: '/teams/prototyping/:id',
+
+  classification: '/classification',
+  generalReport: '/general-report',
+  classificationDljTeams: '/dlj-classification',
+  classificationPitch: '/pitch-classification',
+  classificationSharkTank: '/sharTank-classification',
+  classificationExpoDlei: '/expoDlei-classification',
+
+  teamsNotes: '/notes',
+  teamNotes: '/notes/:id',
+
 }
 
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 

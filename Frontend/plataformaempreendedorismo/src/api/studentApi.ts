@@ -7,11 +7,12 @@ import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
+import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
 
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -241,6 +242,7 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
         { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` },
+        { type: 'Report', id: `LIST` },
       ],
     }),
 
@@ -253,6 +255,7 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { evaluationTypeId, idAvaliador, idEquipe, idFormatoAvaliacao }) => [
         { type: 'Evaluation', id: `LIST_${evaluationTypeId}` }, // Invalida apenas o evaluationTypeId correspondente
         { type: 'Evaluation', id: `LIST_${idFormatoAvaliacao}_${idAvaliador}_${idEquipe}` }, // Invalida o cache específico do getEvaluationData
+        { type: 'Report', id: `LIST` },
       ],
     }),
 
@@ -270,7 +273,7 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Evaluation', id: `LIST_${evaluationTypeId}` }],
     }),
 
-    //Prototype
+    //PROTOTYPE
     getTeamPrototypingById: build.query<TeamPrototypeById, number>({
       query: (id) => `/prototipo/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Prototype', id }],
@@ -295,6 +298,61 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Prototype', id }],
     }),
 
+    //REPORTS
+    getTeamsReports: build.query<RelatorioGeral[], void>({
+      query: () => `/relatorios/relatorio-geral`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getTeamsReportItems: build.query<ItensRelatorio[], void>({
+      query: () => `/relatorios/itens-relatorio`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ idSubcriterio }) => ({ type: 'Report', id: idSubcriterio } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getTeamReport: build.query<ReportTeamId[], number>({
+      query: (idEquipe) => `/relatorios/notas-equipe/${idEquipe}`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getTeamClassification: build.query<ReportClassification[], void>({
+      query: () => `/relatorios/classificacao`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getTeamReportClassificationByFormat: build.query<ReportClassificationByFormat[], number>({
+      query: (idFormatoAvaliacao) => `/relatorios/classificacao-por-formato/${idFormatoAvaliacao}`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ equipe }) => ({ type: 'Report', equipe } as const)),
+            { type: 'Report', id: `LIST` },
+          ]
+          : [{ type: 'Report', id: `LIST` }],
+    })
 
   }),
 })
@@ -337,10 +395,17 @@ export const {
   usePutEvaluationMutation,
   useGetEvaluationDataQuery,
 
-  //Prototype
+  //PROTOTYPE
   useCreateTeamPrototypingMutation,
   useGetTeamPrototypingByIdQuery,
   useUpdateTeamPrototypingMutation,
+
+  //REPORTS
+  useGetTeamsReportsQuery,
+  useGetTeamsReportItemsQuery,
+  useGetTeamReportQuery,
+  useGetTeamClassificationQuery,
+  useGetTeamReportClassificationByFormatQuery,
 
 } = studentsApiSlice
 

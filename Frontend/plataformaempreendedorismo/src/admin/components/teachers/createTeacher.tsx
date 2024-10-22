@@ -3,13 +3,14 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { RoutesNames } from '../../../globals'
 import { useCreateTeacherMutation } from '../../../api/studentApi'
 import { formatCPF } from '../../../utils/types'
+import { TeamSelect } from '../common/teamSelect'
 
 const createTeacherSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -29,7 +30,7 @@ export const CreateTeacher = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeacherForm>({
+  const { control,register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeacherForm>({
     resolver: zodResolver(createTeacherSchema),
     defaultValues: {
       nome: searchParams.get('nome') || '',
@@ -104,14 +105,21 @@ export const CreateTeacher = () => {
             />
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
           </div>
-          <div>
-            <label htmlFor="idEquipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
-            <input
-              id="idEquipe"
-              type="number"
-              {...register('idEquipe')}
-              onChange={(e) => handleInputChange('idEquipe', e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          <div className='mt-4'>
+            <Controller
+              name="idEquipe"
+              control={control}
+              render={({ field }) => (
+                <TeamSelect
+                  className='w-56 py-1 rounded-md mt-2'
+                  value={field.value}  // Valor atual
+                  onChange={(teamId) => {
+                    field.onChange(teamId)
+                    handleInputChange('idEquipe', teamId.toString())
+                    // Sincronizando com o searchParams
+                  }}
+                />
+              )}
             />
             {errors.idEquipe && <p className="text-red-500 text-sm mt-1">{errors.idEquipe.message}</p>}
           </div>

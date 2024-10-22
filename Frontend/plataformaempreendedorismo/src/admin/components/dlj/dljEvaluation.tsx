@@ -89,7 +89,7 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
     idAvaliador: teamData.teamEvaluation.evaluatorId,
     idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId,
     idEquipe: teamData.id
-  }, )
+  },)
   const navigate = useNavigate()
 
   const [postEvaluation] = usePostEvaluationMutation()
@@ -254,8 +254,9 @@ export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
                   subcriterio={subcriterio}
                   dljResponse={dljResponse || []}
                   isDisabled={
-                    (subcriterio.id === 2 && selectedOptions.includes(1)) ||
-                    (subcriterio.id === 1 && selectedOptions.includes(2))
+                    //subcriterioAvaliacaos.id que vem na resposta /avaliacoes/1 29 == valor padrao true
+                    (subcriterio.id === 29 && selectedOptions.includes(30)) ||
+                    (subcriterio.id === 30 && selectedOptions.includes(29))
                   }
                   onSelectionChange={handleSelectionChange}
                 />

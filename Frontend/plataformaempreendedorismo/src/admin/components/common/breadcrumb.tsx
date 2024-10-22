@@ -30,6 +30,14 @@ const routes = [
     breadcrumb: 'Página inicial'
   },
   {
+    path: RoutesNames.adminHome,
+    breadcrumb: 'Painel'
+  },
+  {
+    path: RoutesNames.uploadFiles,
+    breadcrumb: 'Importações'
+  },
+  {
     path: RoutesNames.students,
     breadcrumb: 'Alunos',
     children: [
@@ -60,6 +68,34 @@ const routes = [
   {
     path: RoutesNames.prototyping,
     breadcrumb: 'Prototipação',
+  },
+  {
+    path: RoutesNames.teamsNotes,
+    breadcrumb: 'Notas por Time',
+  },
+  {
+    path: RoutesNames.generalReport,
+    breadcrumb: 'Notas Gerais',
+  },
+  {
+    path: RoutesNames.classification,
+    breadcrumb: 'Classificação',
+  },
+  {
+    path: RoutesNames.classificationDljTeams,
+    breadcrumb: 'Classificação - DLJ',
+  },
+  {
+    path: RoutesNames.classificationPitch,
+    breadcrumb: 'Classificação - Pitch',
+  },
+  {
+    path: RoutesNames.classificationSharkTank,
+    breadcrumb: 'Classificação - Shark Tank',
+  },
+  {
+    path: RoutesNames.classificationExpoDlei,
+    breadcrumb: 'Classificação - Expo Dlei',
   },
 ]
 

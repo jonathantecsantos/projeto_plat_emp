@@ -3,13 +3,14 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import { useCreateStudentMutation } from '../../../api/studentApi'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { RoutesNames } from '../../../globals'
 import { formatCPF } from '../../../utils/types'
+import { TeamSelect } from '../common/teamSelect'
 
 const createStudentSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -33,7 +34,7 @@ export const CreateStudent = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateStudentForm>({
+  const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateStudentForm>({
     resolver: zodResolver(createStudentSchema),
     defaultValues: {
       nome: searchParams.get('nome') || '',
@@ -139,25 +140,21 @@ export const CreateStudent = () => {
             />
             {errors.turma && <p className="text-red-500 text-sm mt-1">{errors.turma.message}</p>}
           </div>
-          {/* <div>
-            <label htmlFor="idOds" className="block text-sm font-medium text-gray-700">ID ODS</label>
-            <input
-              id="idOds"
-              type="number"
-              {...register('idOds')}
-              onChange={(e) => handleInputChange('idOds', e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-            {errors.idOds && <p className="text-red-500 text-sm mt-1">{errors.idOds.message}</p>}
-          </div> */}
           <div>
-            <label htmlFor="idEquipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
-            <input
-              id="idEquipe"
-              type="number"
-              {...register('idEquipe')}
-              onChange={(e) => handleInputChange('idEquipe', e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            <Controller
+              name="idEquipe"
+              control={control}
+              render={({ field }) => (
+                <TeamSelect
+                  className='sm:w-60 py-1 mt-2 rounded-md'
+                  value={field.value}  // Valor atual
+                  onChange={(teamId) => {
+                    field.onChange(teamId)
+                    handleInputChange('idEquipe', teamId.toString())
+                    // Sincronizando com o searchParams
+                  }}
+                />
+              )}
             />
             {errors.idEquipe && <p className="text-red-500 text-sm mt-1">{errors.idEquipe.message}</p>}
           </div>

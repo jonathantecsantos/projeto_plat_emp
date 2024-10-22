@@ -1,4 +1,4 @@
-package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
+package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.SubcriterioAvaliacao;
 

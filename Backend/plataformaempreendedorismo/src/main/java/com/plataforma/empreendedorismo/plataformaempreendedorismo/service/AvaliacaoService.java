@@ -1,6 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.controller.ItensRelatorioRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.ItensRelatorioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliacao.AvaliacaoRecord;

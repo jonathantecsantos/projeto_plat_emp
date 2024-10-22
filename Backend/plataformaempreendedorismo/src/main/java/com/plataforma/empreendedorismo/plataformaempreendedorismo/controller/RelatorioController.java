@@ -3,10 +3,12 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.ClassificacaoGeralTimesRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.DatalhamentoClassificacaoFormatoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.DetalhamentoNotasTimeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.relatorio.ItensRelatorioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("relatorios")
 @Tag(name="Relatorio")
+@SecurityRequirement(name = "bearerToken")
 public class RelatorioController {
 
     @Autowired

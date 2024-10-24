@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ public class EventoController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados"),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Evento> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<Evento> buscarPorId(@PathVariable Long id) {
         Optional<Evento> evento = eventoService.buscarPorId(id);
 
         if (evento.isPresent()) {
@@ -64,7 +65,7 @@ public class EventoController {
             @ApiResponse(responseCode = "500", description = "Erro ao editar evento")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Evento> atualizarEvento(@PathVariable Integer id, @RequestBody EventoRecord eventoAtualizado) {
+    public ResponseEntity<Evento> atualizarEvento(@PathVariable Long id, @RequestBody EventoRecord eventoAtualizado) {
         try {
             Evento evento = eventoService.atualizarEvento(id, eventoAtualizado);
             return ResponseEntity.ok(evento);
@@ -79,8 +80,24 @@ public class EventoController {
             @ApiResponse(responseCode = "204", description = "Evento não encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarEvento(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarEvento(@PathVariable Long id) {
         eventoService.deletarEvento(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Validar Evento", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Evento não encontrada"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados"),
+    })
+    @GetMapping("/{id}/validade")
+    public ResponseEntity<Boolean> validarEvento(@PathVariable Long id) {
+        try {
+            boolean valido = eventoService.isEventoValido(id);
+            return ResponseEntity.ok(valido);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

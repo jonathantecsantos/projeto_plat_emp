@@ -8,6 +8,8 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.Tip
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,7 @@ public class EventoService {
         return eventoRepository.findAll();
     }
 
-    public Optional<Evento> buscarPorId(Integer id) {
+    public Optional<Evento> buscarPorId(Long id) {
         return eventoRepository.findById(id);
     }
 
@@ -33,15 +35,15 @@ public class EventoService {
         evento.setDataInicio(eventoRecord.dataInicio());
         evento.setDataFim(eventoRecord.dataFim());
         Optional<TipoEvento> eventoOptional = tipoEventoRepository.findById(eventoRecord.idEvento());
-        if(eventoOptional.isPresent()){
+        if (eventoOptional.isPresent()) {
             evento.setTipoEvento(eventoOptional.get());
-        }else{
+        } else {
             throw new Exception("Evento não encontrado");
         }
         return eventoRepository.save(evento);
     }
 
-    public Evento atualizarEvento(Integer id, EventoRecord eventoAtualizado) {
+    public Evento atualizarEvento(Long id, EventoRecord eventoAtualizado) {
         Optional<Evento> eventoExistente = eventoRepository.findById(id);
 
         if (eventoExistente.isPresent()) {
@@ -54,8 +56,31 @@ public class EventoService {
         throw new RuntimeException("Evento não encontrado com ID: " + id);
     }
 
-    public void deletarEvento(Integer id) {
+    public void deletarEvento(Long id) {
         eventoRepository.deleteById(id);
+    }
+
+    public boolean isEventoValido(Long id) {
+        Optional<Evento> eventoOptional = eventoRepository.findById(id);
+
+        if (eventoOptional.isPresent()) {
+            Evento evento = eventoOptional.get();
+
+            LocalDateTime dataInicio = evento.getDataInicio().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
+            LocalDateTime dataFim = evento.getDataFim().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
+            LocalDateTime agora = LocalDateTime.now();
+
+            return (agora.isAfter(dataInicio) || agora.isEqual(dataInicio)) &&
+                    (agora.isBefore(dataFim) || agora.isEqual(dataFim));
+        }else {
+            throw new RuntimeException("Evento não encontrado com ID: " + id);
+        }
     }
 }
 

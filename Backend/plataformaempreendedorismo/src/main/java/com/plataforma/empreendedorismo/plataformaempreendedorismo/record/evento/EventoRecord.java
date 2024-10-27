@@ -1,4 +1,4 @@
-package com.plataforma.empreendedorismo.plataformaempreendedorismo.record;
+package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.evento;
 
 import java.util.Date;
 

@@ -28,17 +28,18 @@ public class Usuario implements UserDetails {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "role")
+    private EnumRole enumRole;
 
-    public Usuario(String login, String encryptedPassword, Role role) {
+    public Usuario(String login, String encryptedPassword, EnumRole enumRole) {
         this.login = login;
         this.senha = encryptedPassword;
-        this.role = role;
+        this.enumRole = enumRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(this.role.name()));
+        return List.of(new SimpleGrantedAuthority(this.enumRole.name()));
     }
 
     @Override

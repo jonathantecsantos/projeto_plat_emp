@@ -36,8 +36,9 @@ public class SecurityConfigurations {
                                 "/api-docs/swagger-config"
 
                         ).permitAll()
-                        .requestMatchers(HttpMethod.POST,"/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/login/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/auth/resetar-senha").hasRole("ADMIN")
 
                         //Alunos
                         .requestMatchers(HttpMethod.GET,"/alunos").hasRole("ADMIN")

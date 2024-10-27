@@ -1,7 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Evento;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.EventoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.evento.EventoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.EventoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

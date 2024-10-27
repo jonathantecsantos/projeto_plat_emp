@@ -4,6 +4,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.A
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoListaDadosRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.UsuarioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AlunoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,15 +61,13 @@ public class AlunoController {
     })
     @SecurityRequirement(name = "bearerToken")
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<String> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
+    public ResponseEntity<UsuarioRecord> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
 
         try {
-            alunoService.criarAluno(alunoCadastroRecord);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Aluno cadastrado com sucesso!");
+            UsuarioRecord usuarioRecord = alunoService.criarAluno(alunoCadastroRecord);
+            return ResponseEntity.ok(usuarioRecord);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao criar aluno: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 

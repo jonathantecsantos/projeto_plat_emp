@@ -1,6 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class ProcessadorArquivoService {
     private ImportacaoService importacaoService;
 
     @Autowired
-    private AlunoRepository alunoRepository;
+    private AlunoService alunoService;
 
     @Autowired
     private OdsRepository odsRepository;
@@ -195,12 +196,19 @@ public class ProcessadorArquivoService {
         log.info("Iniciando processamento de Alunos");
 
         Aluno aluno = new Aluno();
+        String cpf = "";
+        String email= "";
+        String nome = "";
+        String turma = "";
+        boolean isLider = false;
+        boolean isViceLider = false;
+
         Equipe equipe = new Equipe();
 
         if (row.getCell(0) != null) {
-            String cpf = String.valueOf(row.getCell(0));
-            if(validarCPF(cpf)){
-                aluno.setCpf(cpf);
+            String valueCpf = String.valueOf(row.getCell(0));
+            if(validarCPF(valueCpf)){
+                cpf = valueCpf;
             }else{
                 System.out.printf("Erro CPF");
             }
@@ -209,40 +217,32 @@ public class ProcessadorArquivoService {
         }
 
         if(row.getCell(1) != null){
-            String valueNome = String.valueOf(row.getCell(1));
-            aluno.setNome(valueNome.toUpperCase());
+            nome = String.valueOf(row.getCell(1));
         }
 
         if(row.getCell(2) != null){
-            String email = String.valueOf(row.getCell(2));
-            aluno.setEmail(email);
+            email = String.valueOf(row.getCell(2));
         }
 
         if(row.getCell(3) != null){
-            String turma = String.valueOf(row.getCell(3));
-            aluno.setTurma(turma);
+            turma = String.valueOf(row.getCell(3));
         }
 
         if(row.getCell(4) != null){
-            String isLider = String.valueOf(row.getCell(4));
+            String valueIsLider = String.valueOf(row.getCell(4));
 
-            if (isLider.equals("SIM")){
-                aluno.setIsLider(true);
-            }else{
-                aluno.setIsLider(false);
+            if (valueIsLider.equals("SIM")){
+                isLider = true;
             }
         }
 
         if(row.getCell(5) != null){
-            String isViceLider = String.valueOf(row.getCell(5));
+            String valueIsViceLider = String.valueOf(row.getCell(5));
 
-            if (isViceLider.equals("SIM")){
-                aluno.setIsViceLider(true);
-            }else{
-                aluno.setIsViceLider(false);
+            if (valueIsViceLider.equals("SIM")){
+                isViceLider = true;
             }
         }
-
 
         if(row.getCell(9) != null) {
             String entradaEquipe = String.valueOf(row.getCell(9));
@@ -257,16 +257,18 @@ public class ProcessadorArquivoService {
 
                 equipe.setOdsList(odsList);
                 equipeRepository.saveAndFlush(equipe);
-                aluno.setEquipe(equipe);
+
             }else{
                 processarOds(row, odsList);
                 equipe.setOdsList(odsList);
                 equipeRepository.saveAndFlush(equipe);
-                aluno.setEquipe(equipe);
             }
         }
 
-        alunoRepository.save(aluno);
+        AlunoCadastroRecord alunoCadastroRecord = new AlunoCadastroRecord(cpf,email,nome,turma,
+                isLider,isViceLider,equipe.getId());
+
+        alunoService.persistirAlunoAndCriarAcesso(alunoCadastroRecord,equipe);
     }
 
     private void processarOds(Row row, List<Ods> odsList) throws Exception {

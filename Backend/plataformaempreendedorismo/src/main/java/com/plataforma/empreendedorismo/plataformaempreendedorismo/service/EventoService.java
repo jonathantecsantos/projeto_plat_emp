@@ -2,7 +2,7 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Evento;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.TipoEvento;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.EventoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.evento.EventoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EventoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.TipoEventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

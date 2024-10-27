@@ -23,7 +23,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("Plataforma Empreendedorismo")
                     .withSubject(usuario.getLogin())
-                    .withClaim("role", usuario.getRole().name())
+                    .withClaim("enumRole", usuario.getEnumRole().name())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritimo);
         } catch (JWTCreationException exception){

@@ -87,6 +87,10 @@ public class SecurityConfigurations {
                         .requestMatchers("/relatorios/itens-relatorio").hasAnyRole("ADMIN")
                         .requestMatchers("/relatorios/relatorio-geral").hasAnyRole("ADMIN")
 
+                        //Eventos
+                        .requestMatchers("/eventos/{id}/validade").permitAll()
+                        .requestMatchers("/eventos/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
 

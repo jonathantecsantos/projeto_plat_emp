@@ -24,7 +24,7 @@ public class EventoController {
     @Autowired
     private EventoService eventoService;
 
-    @Operation(summary = "Busca dados do Evento", method = "GET")
+    @Operation(summary = "Busca Eventos", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Evento não encontrada"),

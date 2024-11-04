@@ -8,6 +8,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.Equipe
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("equipes")
 @Tag(name="Equipe")
+@SecurityRequirement(name = "bearerToken")
 public class EquipeController {
 
     @Autowired

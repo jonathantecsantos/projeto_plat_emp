@@ -1,10 +1,12 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.EnumRole;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.UsuarioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import jakarta.transaction.Transactional;
@@ -27,11 +29,19 @@ public class AlunoService {
     @Autowired
     private EquipeService equipeService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Transactional
-    public void criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
+    public UsuarioRecord criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
         Equipe equipe = equipeService.buscarEquipePorId(alunoCadastroRecord.idEquipe());
         validaLiderAndViceLider(TipoOperacaoEnum.CADASTRAR ,null , alunoCadastroRecord, null,equipe);
-        alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
+        return persistirAlunoAndCriarAcesso(alunoCadastroRecord, equipe);
+    }
+
+    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe){
+        Aluno aluno = alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
+        return usuarioService.criarUsuario(aluno.getEmail(), EnumRole.ROLE_ALUNO);
     }
 
     @Transactional

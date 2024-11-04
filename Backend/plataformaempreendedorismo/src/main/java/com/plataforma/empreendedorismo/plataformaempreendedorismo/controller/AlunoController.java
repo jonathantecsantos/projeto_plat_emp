@@ -4,11 +4,13 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.A
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoListaDadosRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.UsuarioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.AlunoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ public class AlunoController {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Aluno")
     })
+    @SecurityRequirement(name = "bearerToken")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AlunoListaDadosRecord> listaDadosAlunos(){
         return alunoRepository.findAll().stream().map(AlunoListaDadosRecord::new).toList();
@@ -45,6 +48,7 @@ public class AlunoController {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados dos Alunos")
     })
+    @SecurityRequirement(name = "bearerToken")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AlunoRecord buscaAlunoPorId(@PathVariable Long id){
         return  alunoService.buscarAlunoPorId(id);
@@ -55,16 +59,15 @@ public class AlunoController {
             @ApiResponse(responseCode = "201", description = "Aluno cadastrado com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao criar aluno")
     })
+    @SecurityRequirement(name = "bearerToken")
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<String> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
+    public ResponseEntity<UsuarioRecord> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
 
         try {
-            alunoService.criarAluno(alunoCadastroRecord);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Aluno cadastrado com sucesso!");
+            UsuarioRecord usuarioRecord = alunoService.criarAluno(alunoCadastroRecord);
+            return ResponseEntity.ok(usuarioRecord);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao criar aluno: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -73,6 +76,7 @@ public class AlunoController {
             @ApiResponse(responseCode = "200", description = "Aluno deletado com sucesso"),
             @ApiResponse(responseCode = "204", description = "Aluno não encontrado")
     })
+    @SecurityRequirement(name = "bearerToken")
     @DeleteMapping("/apagar/{id}")
     public ResponseEntity<String> apagar (@PathVariable Long id){
         try{
@@ -91,6 +95,7 @@ public class AlunoController {
             @ApiResponse(responseCode = "200", description = "Aluno editado com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao editar aluno")
     })
+    @SecurityRequirement(name = "bearerToken")
     @PutMapping("/editar")
     public ResponseEntity<String> editar(@RequestBody @Valid AlunoEditarRecord alunoEditarRecord){
         try {

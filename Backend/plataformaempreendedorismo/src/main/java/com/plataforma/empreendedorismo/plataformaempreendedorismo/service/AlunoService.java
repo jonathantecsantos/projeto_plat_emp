@@ -10,24 +10,24 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.enuns.TipoOperacaoEnum;
 import util.exceptions.ValidaAlunoException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class AlunoService {
+    private final AlunoRepository alunoRepository;
+    private final EquipeRepository equipeRepository;
+    private final EquipeService equipeService;
 
-    @Autowired
-    private AlunoRepository alunoRepository;
-
-    @Autowired
-    private EquipeRepository equipeRepository;
-
-    @Autowired
-    private EquipeService equipeService;
+    AlunoService(AlunoRepository alunoRepository,EquipeRepository equipeRepository, EquipeService equipeService){
+        this.alunoRepository = alunoRepository;
+        this.equipeRepository = equipeRepository;
+        this.equipeService = equipeService;
+    }
 
     @Autowired
     private UsuarioService usuarioService;
@@ -35,13 +35,8 @@ public class AlunoService {
     @Transactional
     public UsuarioRecord criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
         Equipe equipe = equipeService.buscarEquipePorId(alunoCadastroRecord.idEquipe());
-        validaLiderAndViceLider(TipoOperacaoEnum.CADASTRAR ,null , alunoCadastroRecord, null,equipe);
-        return persistirAlunoAndCriarAcesso(alunoCadastroRecord, equipe);
-    }
-
-    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe){
-        Aluno aluno = alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
-        return usuarioService.criarUsuario(aluno.getEmail(), EnumRole.ROLE_ALUNO);
+        validaLiderAndViceLider(TipoOperacaoEnum.CADASTRAR ,alunoCadastroRecord , null,equipe);
+        alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
     }
 
     @Transactional
@@ -49,20 +44,19 @@ public class AlunoService {
         Aluno aluno = alunoRepository.getReferenceById(alunoEditarRecord.id());
         Equipe equipe = equipeRepository.getReferenceById(alunoEditarRecord.idEquipe());
 
-        validaLiderAndViceLider(TipoOperacaoEnum.EDITAR ,aluno , null, alunoEditarRecord,equipe);
+        validaLiderAndViceLider(TipoOperacaoEnum.EDITAR , null, alunoEditarRecord,equipe);
         atualizarAluno(aluno, alunoEditarRecord);
 
     }
 
     private void validaLiderAndViceLider(TipoOperacaoEnum tipo,
-                                         Aluno aluno,
                                          AlunoCadastroRecord alunoCadastroRecord,
                                          AlunoEditarRecord alunoEditarRecord,
                                          Equipe equipe) throws ValidaAlunoException {
         if (tipo.equals(TipoOperacaoEnum.CADASTRAR)){
             validarLiderAndViceLiderCadastro(equipe, alunoCadastroRecord);
         } else{
-            validaLiderAndViceLiderEdicao(aluno, alunoEditarRecord, equipe);
+            validaLiderAndViceLiderEdicao(alunoEditarRecord, equipe);
         }
     }
 
@@ -79,10 +73,10 @@ public class AlunoService {
         }
     }
 
-    private void validaLiderAndViceLiderEdicao(Aluno aluno, AlunoEditarRecord alunoEditarRecord, Equipe equipe) throws ValidaAlunoException {
+    private void validaLiderAndViceLiderEdicao(AlunoEditarRecord alunoEditarRecord, Equipe equipe) throws ValidaAlunoException {
         validarLiderancaDupla(alunoEditarRecord);
-        validarSeExisteLider(aluno, equipe);
-        validarSeExisteViceLider(aluno, equipe);
+        validarSeExisteLider(alunoEditarRecord, equipe);
+        validarSeExisteViceLider(alunoEditarRecord, equipe);
 
     }
 
@@ -92,17 +86,17 @@ public class AlunoService {
         }
     }
 
-    private void validarSeExisteViceLider(Aluno aluno, Equipe equipe) throws ValidaAlunoException {
+    private void validarSeExisteViceLider(AlunoEditarRecord aluno, Equipe equipe) throws ValidaAlunoException {
         for(Aluno alunoList : equipe.getAlunos()) {
-            if(alunoList.getIsViceLider() && alunoList != aluno){
+            if(Boolean.TRUE.equals(alunoList.getIsViceLider() && !Objects.equals(alunoList.getId(),aluno.id())) && Boolean.TRUE.equals(aluno.isViceLider())){
                 throw new ValidaAlunoException("Já existe um Vice-Líder no time!");
             }
         }
     }
 
-    private void validarSeExisteLider(Aluno aluno, Equipe equipe) throws ValidaAlunoException {
+    private void validarSeExisteLider(AlunoEditarRecord aluno, Equipe equipe) throws ValidaAlunoException {
         for(Aluno alunoList : equipe.getAlunos()) {
-            if(alunoList.getIsLider() && alunoList != aluno){
+            if(Boolean.TRUE.equals(alunoList.getIsLider() && !Objects.equals(alunoList.getId(), aluno.id())) && Boolean.TRUE.equals(aluno.isLider())){
                 throw new ValidaAlunoException("Já existe um Líder no time!");
             }
         }

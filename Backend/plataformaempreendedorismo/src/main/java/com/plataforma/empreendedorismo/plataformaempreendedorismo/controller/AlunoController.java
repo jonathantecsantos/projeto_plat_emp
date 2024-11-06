@@ -32,7 +32,7 @@ public class AlunoController {
     @Autowired
     private AlunoService alunoService;
 
-    @Operation(summary = "Listar todos os Alunos", method = "GET")
+    @Operation(summary = "Listar Alunos", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados do Aluno")

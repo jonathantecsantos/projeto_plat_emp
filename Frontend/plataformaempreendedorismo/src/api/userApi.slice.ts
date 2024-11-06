@@ -12,7 +12,7 @@ export const userApiSlice = createApi({
   endpoints: (build) => ({
     userLogin: build.mutation<LoginResponse, Login>({
       query: (body) => ({
-        url: `/api/v1/auth/login`,
+        url: `/auth`,
         method: 'POST',
         body,
       }),
@@ -22,9 +22,9 @@ export const userApiSlice = createApi({
       // onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
       onQueryStarted: async (queryFulfilled) => {
         try {
-          const { username } = await queryFulfilled;
+          const { login } = await queryFulfilled;
           // Executar ações no início da mutation ser bem sucedida
-          console.log('onQueryStarted => Usuario logado com sucesso:', username);
+          console.log('onQueryStarted => Usuario logado com sucesso:', login);
           // Por exemplo, disparar uma ação Redux
           //chamar um loading
           //atualizar valores do cookie

@@ -1,17 +1,15 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import GroupIcon from '@mui/icons-material/Group';
 import SchoolIcon from '@mui/icons-material/School';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
 import { RoutesNames } from '../../globals';
 
 export const AdminHomeComponent = () => {
   const navigate = useNavigate()
-  const userGlobalState = useSelector((state: RootState) => state.userInfo.data)
+  // const userGlobalState = useSelector((state: RootState) => state.userInfo.data)
   return (<div className="flex">
     <div className="w-3/4 p-4 bg-white">
-      <h1 className="text-2xl font-bold mb-6">Bem-vindo ao seu painel {userGlobalState.username}</h1>
+      <h1 className="text-2xl font-bold mb-6">Bem-vindo ao seu painel </h1>
       <p className="mb-8">admin@escola.com</p>
 
       <div className="space-y-6">

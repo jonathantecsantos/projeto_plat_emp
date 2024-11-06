@@ -1,9 +1,9 @@
 import { CookieUtils } from "essencials"
 import { useDispatch } from "react-redux"
 import { useUserLoginMutation } from "../api/userApi.slice"
+import { login as loginAction } from '../redux/reducers/auth.slice'
 import { setUserInfo } from "../redux/reducers/userInfo.slice"
 import { Login } from "../utils/types"
-import { login as loginAction } from '../redux/reducers/auth.slice'
 
 
 export const UserApiService = () => {
@@ -13,8 +13,7 @@ export const UserApiService = () => {
   const login = async (payload: Login) => {
     try {
       const result = await userLogin(payload).unwrap()
-      CookieUtils.setCookie({ 'tk': result.data.token }, 1)
-      CookieUtils.setCookie({ 'un': result.data.username }, 1)
+      CookieUtils.setCookie({ 'tk': result.tokenJWT }, 1)
 
       dispatch(setUserInfo(result))
       dispatch(loginAction(result))

@@ -30,8 +30,8 @@ export const TeacherCard = ({ teacher }: TeacherCard) => {
     }
   }
 
-  return <div key={teacher?.id} className={`p-4 border rounded-lg shadow-md w-fit min-h-20 relative bg-[#5741A6] text-[#cecece]`}>
-    <div className='min-w-56 w-fit'>
+  return <div key={teacher?.id} className={`p-4 border rounded-lg shadow-md max-w-80 min-h-20 relative bg-[#5741A6] text-[#cecece]`}>
+    <div className='flex justify-between'>
       <p className={`text-lg font-bold capitalize text-white mr-2`}>
         {teacher?.nome.toLowerCase()}
       </p>

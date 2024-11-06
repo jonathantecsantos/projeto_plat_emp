@@ -22,7 +22,7 @@ export const LoginComponent = () => {
         navigate(RoutesNames.adminHome)
     // } catch (error) {
     //   enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
-    // }
+    // } 
   }
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

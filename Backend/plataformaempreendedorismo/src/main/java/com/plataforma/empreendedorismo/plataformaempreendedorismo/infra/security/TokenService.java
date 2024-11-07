@@ -49,6 +49,7 @@ public class TokenService {
 
             return JWT.create()
                     .withIssuer("Plataforma Empreendedorismo")
+                    .withSubject(usuario.getLogin())
                     .withClaim("id", id)
                     .withClaim("email", email)
                     .withClaim("username",username)

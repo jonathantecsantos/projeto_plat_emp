@@ -6,13 +6,6 @@ export enum ImportType {
   teacher = 'PROFESSOR'
 }
 
-export const roles = {
-  admin: 'ROLE_ADMIN',
-  aluno: 'ROLE_ALUNO',
-  professor: 'ROLE_PROFESSOR',
-  coordenador: 'ROLE_COORDENADOR',
-  avaliador: 'ROLE_AVALIADOR',
-}
 
 export enum Roles {
   Admin = 'ROLE_ADMIN',

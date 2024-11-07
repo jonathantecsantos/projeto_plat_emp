@@ -18,6 +18,7 @@ export const UserApiService = () => {
       const decodedToken: LoginTokenJWT = jwtDecode(result.tokenJWT)
       
       CookieUtils.setCookie({ 'tk': result.tokenJWT }, Number(decodedToken.exp))
+      CookieUtils.setCookie({ 'un': decodedToken.username }, Number(decodedToken.exp))
 
       dispatch(setUserInfo({
         tokenJWT: result.tokenJWT,

@@ -1,10 +1,12 @@
+import { useSelector } from "react-redux";
 import { RoutesNames } from "../../../globals";
 import { EvalutionType } from "../../../utils/types";
 import { TeamsTable } from "../common/teamsTableEvaluations";
+import { RootState } from "../../../redux/store";
 
 export const SharkTankTeams = () => {
-  // const userGlobalState = useSelector((state: RootState) => state.userInfo.data)
+  const userGlobalStateID = useSelector((state: RootState) => state.userInfo.id)
 
   return <TeamsTable routeName={RoutesNames.sharkTankTeam}
-    teamEvaluation={{ evaluationTypeId: EvalutionType.SHARKTANK, evaluatorId: import.meta.env.VITE_AVALIADOR_ID }} />;
+    teamEvaluation={{ evaluationTypeId: EvalutionType.SHARKTANK, evaluatorId: userGlobalStateID }} />;
 };

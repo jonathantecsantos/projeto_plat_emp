@@ -32,7 +32,7 @@ import { TeamPrototypingPage } from './pages/teamPrototyping'
 import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
-import { roles } from './utils/types'
+import { Roles } from './utils/types'
 
 export const router = createBrowserRouter([
   {
@@ -57,110 +57,110 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.bannerPreview,
-    element: <ProtectedRoute children={<BannerPreviewPage />} allowedRoles={[roles.admin]} />,
+    element: <ProtectedRoute children={<BannerPreviewPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />,
   },
   {
     path: RoutesNames.uploadFiles,
-    element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={[roles.admin]} />,
+    element: <ProtectedRoute children={<UploadFilesPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />,
   },
   {
     path: RoutesNames.students,
-    element: <ProtectedRoute children={<StudentsDetailsPage />} allowedRoles={[roles.admin]} />,
+    element: <ProtectedRoute children={<StudentsDetailsPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />,
   },
   {
     path: RoutesNames.student,
-    element: <ProtectedRoute children={<StudentPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<StudentPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.adminHome,
-    element: <ProtectedRoute children={<AdminHomePage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<AdminHomePage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.teachers,
-    element: <ProtectedRoute children={<TeachersPage />} allowedRoles={[roles.admin]} />,
+    element: <ProtectedRoute children={<TeachersPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />,
   },
   {
     path: RoutesNames.teacher,
-    element: <ProtectedRoute children={<TeacherPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<TeacherPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.teams,
-    element: <ProtectedRoute children={<TeamsPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<TeamsPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.team,
-    element: <ProtectedRoute children={<TeamPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<TeamPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.banner,
-    element: <ProtectedRoute children={<BannerPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<BannerPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.dljTeams,
-    element: <ProtectedRoute children={<DLJPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<DLJPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.dljTeam,
-    element: <ProtectedRoute children={<DLJEvaluationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<DLJEvaluationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.pitchTeams,
-    element: <ProtectedRoute children={<PitchPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<PitchPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.pitchTeam,
-    element: <ProtectedRoute children={<PitchEvaluationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<PitchEvaluationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.sharkTankTeams,
-    element: <ProtectedRoute children={<SharkTankPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<SharkTankPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.sharkTankTeam,
-    element: <ProtectedRoute children={<SharkTankEvaluationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<SharkTankEvaluationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.expoDleiTeams,
-    element: <ProtectedRoute children={<ExpoDleiPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<ExpoDleiPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.expoDleiTeam,
-    element: <ProtectedRoute children={<ExpoDleiEvaluationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<ExpoDleiEvaluationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.prototyping,
-    element: <ProtectedRoute children={<TeamPrototypingPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<TeamPrototypingPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.classification,
-    element: <ProtectedRoute children={<ClassificationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<ClassificationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.classificationDljTeams,
-    element: <ProtectedRoute children={<DljClassificationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<DljClassificationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.classificationPitch,
-    element: <ProtectedRoute children={<PitchClassificationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<PitchClassificationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.classificationSharkTank,
-    element: <ProtectedRoute children={<SharkTankClassificationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<SharkTankClassificationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.classificationExpoDlei,
-    element: <ProtectedRoute children={<ExpoDleiClassificationPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<ExpoDleiClassificationPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.teamsNotes,
-    element: <ProtectedRoute children={<TeamsNotesPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<TeamsNotesPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.teamNotes,
-    element: <ProtectedRoute children={<TeamNotesPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<TeamNotesPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
     path: RoutesNames.generalReport,
-    element: <ProtectedRoute children={<GeneralReportPage />} allowedRoles={[roles.admin]} />
+    element: <ProtectedRoute children={<GeneralReportPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
 ])

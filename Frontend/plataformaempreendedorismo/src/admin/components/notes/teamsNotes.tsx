@@ -57,16 +57,14 @@ export const TeamsNotesComponent = () => {
             colums={[
               // 'ID',
               'Nome',
-              'Link Pitch'
+              // 'Link Pitch'
             ]}
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredTeams!}
             bodyRowBuilder={(team: TeamsResponse) => (
               <>
-                {/* <td className="px-4 py-2">{team.id}</td> */}
                 <td className="px-4 py-2 capitalize">{team.nome.toLowerCase()}</td>
-                <td className="px-4 py-2">{team.linkPitch ? team.linkPitch : ''}</td>
               </>
             )}
             onClickRow={(team: TableComponentClickRowProps<TeamsResponse>) => {

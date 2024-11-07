@@ -4,32 +4,33 @@ import { useNavigate } from "react-router-dom";
 import { RoutesNames } from "../../globals";
 import { UserApiService } from "../../services/login";
 import { Login } from "../../utils/types";
+import { useSnackbar } from "notistack";
 
 export const LoginComponent = () => {
   const [user, setUser] = useState<Login>()
   const navigate = useNavigate()
-  // const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
 
-  const { isLoading } = UserApiService()
+  const { isLoading, login } = UserApiService()
 
   const handleLogin = async () => {
-    // try {
-    //   const response = await login({
-    //     username: user?.username!,
-    //     password: user?.password!
-    //   })
-      // if (response)
+    try {
+      const response = await login({
+        login: user?.login!,
+        senha: user?.senha!
+      })
+      if (response)
         navigate(RoutesNames.adminHome)
-    // } catch (error) {
-    //   enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
-    // } 
+    } catch (error) {
+      enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
+    }
   }
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const username = e.target.value
     setUser({
       ...user,
-      username: username
+      login: username
     } as Login)
   }
 
@@ -37,7 +38,7 @@ export const LoginComponent = () => {
     const password = e.target.value
     setUser({
       ...user,
-      password: password
+      senha: password
     } as Login)
   }
 

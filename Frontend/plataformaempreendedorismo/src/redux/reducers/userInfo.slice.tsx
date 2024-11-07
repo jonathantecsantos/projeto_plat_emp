@@ -3,13 +3,7 @@ import { LoginResponse } from '../../utils/types';
 
 
 const initialState: LoginResponse = {
-  data: {
-    token: '',
-    id: 0,
-    username: '',
-    profile: '',
-  },
-  message: ""
+  tokenJWT: '',
 }
 
 const userInfoSlice = createSlice({

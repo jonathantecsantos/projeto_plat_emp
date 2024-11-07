@@ -31,15 +31,25 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <p className="break-words break-all text-[#10BBEF]">Projeto:</p>
             <p className="break-words break-all px-2 print:px-1">{team?.nomeEquipe}</p>
           </div>
-          <div className="flex text-start h-36 print:h-[70px] bg-white">
-            <div className="w-full pt-2 border-r-2 print:border-r-0 border-[#10BBEF] flex break-words break-all gap-2 
-            print:gap-[1px]">
-              <p className="text-[#10BBEF] pl-4 print:pr-1">Alunos:</p>
-              {team?.alunos?.map((student) => <p className="h-fit">{student?.nome},</p>)}
+          {/* Seção de Alunos */}
+          <div className="flex text-start bg-white">
+            <div className="w-full h-36 print:h-[70px] pt-2 border-r-2 print:border-r-0 border-[#10BBEF] flex items-start">
+              <p className="text-[#10BBEF] pl-4 print:pl-2">Alunos:</p>
+              <div className="flex flex-wrap gap-2 print:gap-1">
+                {team?.alunos?.map((student, index) => (
+                  <p key={index} className="ml-2">{student?.nome},</p>
+                ))}
+              </div>
             </div>
-            <div className="w-full pt-2 border-l-2 border-[#10BBEF] flex">
+
+            {/* Seção de Orientadores */}
+            <div className="w-full pt-2 border-l-2 border-[#10BBEF] flex items-start">
               <p className="text-[#10BBEF] pl-4 print:pl-2">Orientadores:</p>
-              <p className="break-words break-all  px-2 print:px-1">{team?.professor?.nome}</p>
+              <div className="flex flex-wrap gap-2 print:gap-1">
+                {team?.professor?.map((professor, index) => (
+                  <p key={index} className="ml-2">{professor?.nome},</p>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -216,7 +226,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-[#6C4796] w-[290px] pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-[#6C4796] print:w-[220px]">
               Resultados Curto Prazo
             </div>
-            <div className="border-x-4 print:border-x-[2px] border-t-4 print:border-t-[2px] border-l-8 print:border-l-[6px] border-[#6C4796] rounded-t-md print:rounded-t-lg p-6 print:px-1 print:pt-3 w-full  bg-white print:h-[65px] h-24"> 
+            <div className="border-x-4 print:border-x-[2px] border-t-4 print:border-t-[2px] border-l-8 print:border-l-[6px] border-[#6C4796] rounded-t-md print:rounded-t-lg p-6 print:px-1 print:pt-3 w-full  bg-white print:h-[65px] h-24">
               <p className="break-words break-all  py-2">{banner?.resultadosCurtoPrazoQ3}</p>
             </div>
           </div>

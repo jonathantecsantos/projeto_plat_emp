@@ -5,7 +5,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import PrintIcon from '@mui/icons-material/Print'
 import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
-import { CircularProgress, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
+import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGetTeamByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
@@ -150,7 +150,12 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
 
         </div>
         <div className='flex flex-col gap-4 w-full'>
-          {/* {team?.professor && <TeacherCard teacher={team?.professor} />} */}
+          <div className="max-w-xl grid sm:grid-cols-2 gap-4">
+            {team?.professor && team.professor.map((teacher, idx) => (
+              <TeacherCard key={idx} teacher={teacher} />
+            ))}
+          </div>
+          <Divider />
           <div className='max-w-xl relative'>
             <div className='grid sm:grid-cols-2 gap-4 mb-14'>
               {sortedStudents.map((student, idx) => <StudentCard student={student} key={idx} />)}

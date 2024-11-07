@@ -6,6 +6,22 @@ export enum ImportType {
   teacher = 'PROFESSOR'
 }
 
+export const roles = {
+  admin: 'ROLE_ADMIN',
+  aluno: 'ROLE_ALUNO',
+  professor: 'ROLE_PROFESSOR',
+  coordenador: 'ROLE_COORDENADOR',
+  avaliador: 'ROLE_AVALIADOR',
+}
+
+export enum Roles {
+  Admin = 'ROLE_ADMIN',
+  Aluno = 'ROLE_ALUNO',
+  Professor = 'ROLE_PROFESSOR',
+  Coordenador = 'ROLE_COORDENADOR',
+  Avaliador = 'ROLE_AVALIADOR',
+}
+
 export enum EvalutionType {
   DLJ = 1,
   PITCH = 2,
@@ -20,20 +36,30 @@ export interface User {
 
 
 export interface Login {
+  login: string
+  senha: string
+}
+
+// export interface LoginResponse {
+//   data: {
+//     token: string
+//     id: number
+//     username: string
+//     profile: string
+//   }
+//   message: string
+// }
+export interface LoginTokenJWT {
+  id: number
+  email: string
   username: string
-  password: string
+  enumRole?: Roles
+  exp: string
 }
 
-export interface LoginResponse {
-  data: {
-    token: string
-    id: number
-    username: string
-    profile: string
-  }
-  message: string
+export interface LoginResponse extends LoginTokenJWT {
+  tokenJWT: string
 }
-
 
 export type UserId = Pick<User, 'userId'>
 

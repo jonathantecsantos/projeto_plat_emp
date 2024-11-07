@@ -4,6 +4,10 @@ import { LoginResponse } from '../../utils/types';
 
 const initialState: LoginResponse = {
   tokenJWT: '',
+  email: '',
+  exp: '',
+  id: 0,
+  username: ''
 }
 
 const userInfoSlice = createSlice({

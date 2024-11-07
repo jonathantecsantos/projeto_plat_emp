@@ -34,14 +34,6 @@ const authSlice = createSlice({
       const token = CookieUtils.getCookie('tk')
       state.isAuthenticated = !!token
       state.token = token
-      if (token) {
-        try {
-          const decoded: DecodedToken = jwtDecode(token);
-          state.enumRole = decoded.enumRole;
-        } catch (error) {
-          console.error('Token inválido', error);
-        }
-      }
     },
     login(state, action: PayloadAction<LoginResponse>) {
       state.token = action.payload.tokenJWT

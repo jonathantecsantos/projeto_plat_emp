@@ -3,14 +3,17 @@ import GroupIcon from '@mui/icons-material/Group';
 import SchoolIcon from '@mui/icons-material/School';
 import { useNavigate } from 'react-router-dom';
 import { RoutesNames } from '../../globals';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 export const AdminHomeComponent = () => {
   const navigate = useNavigate()
-  // const userGlobalState = useSelector((state: RootState) => state.userInfo.data)
+  const userGlobalState = useSelector((state: RootState) => state.userInfo)
+  
   return (<div className="flex">
     <div className="w-3/4 p-4 bg-white">
-      <h1 className="text-2xl font-bold mb-6">Bem-vindo ao seu painel </h1>
-      <p className="mb-8">admin@escola.com</p>
+      <h1 className="text-2xl font-bold mb-6">Bem-vindo ao seu painel {userGlobalState?.username}</h1>
+      <p className="mb-8">{userGlobalState?.email}</p>
 
       <div className="space-y-6">
         <div className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm bg-blue-50">

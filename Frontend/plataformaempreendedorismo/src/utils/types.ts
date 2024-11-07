@@ -14,6 +14,14 @@ export const roles = {
   avaliador: 'ROLE_AVALIADOR',
 }
 
+export enum Roles {
+  Admin = 'ROLE_ADMIN',
+  Aluno = 'ROLE_ALUNO',
+  Professor = 'ROLE_PROFESSOR',
+  Coordenador = 'ROLE_COORDENADOR',
+  Avaliador = 'ROLE_AVALIADOR',
+}
+
 export enum EvalutionType {
   DLJ = 1,
   PITCH = 2,
@@ -41,8 +49,15 @@ export interface Login {
 //   }
 //   message: string
 // }
+export interface LoginTokenJWT {
+  id: number
+  email: string
+  username: string
+  enumRole?: Roles
+  exp: string
+}
 
-export interface LoginResponse {
+export interface LoginResponse extends LoginTokenJWT {
   tokenJWT: string
 }
 

@@ -1,1 +1,0 @@
-package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;

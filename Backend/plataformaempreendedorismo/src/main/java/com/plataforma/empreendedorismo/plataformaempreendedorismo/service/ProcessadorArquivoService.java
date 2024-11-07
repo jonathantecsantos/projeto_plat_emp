@@ -162,7 +162,12 @@ public class ProcessadorArquivoService {
         }
 
         if(row.getCell(2) != null){
-            String formatoAvaliacao = String.valueOf(row.getCell(2));
+            String email = String.valueOf(row.getCell(2));
+            avaliador.setEmail(email);
+        }
+
+        if(row.getCell(3) != null){
+            String formatoAvaliacao = String.valueOf(row.getCell(3));
             FormatoAvaliacao formatoAvaliacaoEncontrado = formatoAvaliacaoRepository.findByDescricao(formatoAvaliacao);
 
             ArrayList<FormatoAvaliacao> formatoAvaliacaos = new ArrayList<>();

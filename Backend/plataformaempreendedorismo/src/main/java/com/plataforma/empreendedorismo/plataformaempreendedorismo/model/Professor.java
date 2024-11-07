@@ -29,6 +29,9 @@ public class Professor {
     @OneToOne
     private Equipe equipe;
 
+    @OneToOne(mappedBy = "professor")
+    private Usuario usuario;
+
     public Professor(ProfessorCadastroRecord professorCadastroRecord, Equipe equipe) {
         this.nome = professorCadastroRecord.nome().toUpperCase();
         this.cpf = professorCadastroRecord.cpf();

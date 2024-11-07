@@ -2,5 +2,8 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.securi
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.EnumRole;
 
-public record RegisterDTO(String login, String senha, EnumRole enumRole) {
+public record RegisterDTO(
+        String login,
+        String senha,
+        EnumRole enumRole) {
 }

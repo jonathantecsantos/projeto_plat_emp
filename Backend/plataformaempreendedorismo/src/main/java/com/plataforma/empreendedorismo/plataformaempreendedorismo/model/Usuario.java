@@ -31,6 +31,26 @@ public class Usuario implements UserDetails {
     @Column(name = "role")
     private EnumRole enumRole;
 
+    @OneToOne
+    @JoinColumn(name = "avaliador_id")
+    private Avaliador avaliador;
+
+    @OneToOne
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
+
+    @OneToOne
+    @JoinColumn(name = "aluno_id")
+    private Aluno aluno;
+
+    @OneToOne
+    @JoinColumn(name = "administrador_id")
+    private Administrador administrador;
+
+    @OneToOne
+    @JoinColumn(name = "coordenador_id")
+    private Coordenador coordenador;
+
     public Usuario(String login, String encryptedPassword, EnumRole enumRole) {
         this.login = login;
         this.senha = encryptedPassword;

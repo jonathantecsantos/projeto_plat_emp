@@ -20,9 +20,38 @@ public class TokenService {
     public String gerarToken(Usuario usuario){
         try {
             var algoritimo = Algorithm.HMAC256(secret);
+
+            Long id = null;
+            String email = null;
+            String username = null;
+
+            if (usuario.getAvaliador() != null) {
+                id = usuario.getAvaliador().getId();
+                email = usuario.getAvaliador().getEmail();
+                username = usuario.getAvaliador().getNome();
+            } else if (usuario.getProfessor() != null) {
+                id = usuario.getProfessor().getId();
+                email = usuario.getProfessor().getEmail();
+                username = usuario.getProfessor().getNome();
+            } else if (usuario.getAluno() != null) {
+                id = usuario.getAluno().getId();
+                email = usuario.getAluno().getEmail();
+                username = usuario.getAluno().getNome();
+            }else if(usuario.getAdministrador() != null) {
+                id = usuario.getAdministrador().getId();
+                email = usuario.getAdministrador().getEmail();
+                username = usuario.getAdministrador().getNome();
+            }else if(usuario.getCoordenador() != null) {
+                id = usuario.getCoordenador().getId();
+                email = usuario.getCoordenador().getEmail();
+                username = usuario.getCoordenador().getNome();
+            }
+
             return JWT.create()
                     .withIssuer("Plataforma Empreendedorismo")
-                    .withSubject(usuario.getLogin())
+                    .withClaim("id", id)
+                    .withClaim("email", email)
+                    .withClaim("username",username)
                     .withClaim("enumRole", usuario.getEnumRole().name())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritimo);

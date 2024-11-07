@@ -54,18 +54,18 @@ public class  AutenticacaoController {
         }
     }
 
-    @Operation(summary = "Registarar Usuario", method = "POST")
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.usuarioRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-        Usuario newUser = new Usuario(data.login(), encryptedPassword, data.enumRole());
-
-        this.usuarioRepository.save(newUser);
-
-        return ResponseEntity.ok().build();
-    }
+//    @Operation(summary = "Registarar Usuario", method = "POST")
+//    @PostMapping("/register")
+//    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
+//        if(this.usuarioRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
+//
+//        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
+//        Usuario newUser = new Usuario(data.login(), encryptedPassword, data.enumRole());
+//
+//        this.usuarioRepository.save(newUser);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     @Operation(summary = "Redefinir Senha", method = "POST")
     @SecurityRequirement(name = "bearerToken")

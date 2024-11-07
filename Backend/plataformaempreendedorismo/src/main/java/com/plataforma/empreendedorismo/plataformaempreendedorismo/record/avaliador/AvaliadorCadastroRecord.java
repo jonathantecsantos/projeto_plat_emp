@@ -7,6 +7,7 @@ import java.util.List;
 public record AvaliadorCadastroRecord(
         String instituicao,
         String nome,
+        String email,
         List<FormatoAvaliacao> formatoAvaliacoes
 ) {
 }

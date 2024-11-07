@@ -31,6 +31,9 @@ public class Aluno {
 
     private Boolean isViceLider;
 
+    @OneToOne(mappedBy = "aluno")
+    private Usuario usuario;
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "equipe_id")

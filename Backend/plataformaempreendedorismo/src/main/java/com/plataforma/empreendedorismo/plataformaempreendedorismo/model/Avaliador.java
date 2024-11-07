@@ -25,6 +25,11 @@ public class Avaliador {
 
     private String nome;
 
+    private String email;
+
+    @OneToOne(mappedBy = "avaliador")
+    private Usuario usuario;
+
     @ManyToMany
     @JoinTable(
             name = "avaliador_formato",
@@ -36,6 +41,7 @@ public class Avaliador {
     public Avaliador(AvaliadorCadastroRecord avaliadorCadastroRecord) {
         this.instituicao = avaliadorCadastroRecord.instituicao();
         this.nome = avaliadorCadastroRecord.nome().toUpperCase();
+        this.email = avaliadorCadastroRecord.email();
         this.formatosAvaliacoes = avaliadorCadastroRecord.formatoAvaliacoes();
     }
 

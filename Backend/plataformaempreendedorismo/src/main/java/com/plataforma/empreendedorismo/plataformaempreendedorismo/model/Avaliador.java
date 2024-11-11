@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Avaliador {
 
+    private static final long serialVersionUID = -5969290162613347430L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

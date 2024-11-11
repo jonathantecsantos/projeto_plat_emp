@@ -15,6 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Professor {
 
+    private static final long serialVersionUID = 465216990111003501L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

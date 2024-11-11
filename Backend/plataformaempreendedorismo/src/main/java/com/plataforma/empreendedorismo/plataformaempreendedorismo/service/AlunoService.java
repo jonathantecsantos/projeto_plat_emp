@@ -39,9 +39,10 @@ public class AlunoService {
         return persistirAlunoAndCriarAcesso(alunoCadastroRecord, equipe);
     }
 
+    @Transactional
     public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe){
         Aluno aluno = alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
-        return usuarioService.criarUsuario(aluno.getEmail(), EnumRole.ROLE_ALUNO);
+        return usuarioService.criarUsuario(aluno, aluno.getEmail(), EnumRole.ROLE_ALUNO);
     }
 
     @Transactional

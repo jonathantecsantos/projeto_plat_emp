@@ -1,4 +1,4 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario;
 
-public record ResetarSenhaUsuarioRecord(String emailUsuario, String role) {
+public record ResetarSenhaUsuarioRecord(Long idObjeto, String emailUsuario, String role) {
 }

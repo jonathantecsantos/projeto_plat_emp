@@ -15,6 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Aluno {
 
+    private static final long serialVersionUID = -5627515392010755843L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

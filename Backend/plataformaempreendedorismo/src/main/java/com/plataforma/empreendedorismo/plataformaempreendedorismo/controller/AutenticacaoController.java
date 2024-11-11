@@ -4,7 +4,6 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.infra.security
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Usuario;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.security.DadosAutenticacaoRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.security.DadosTokenJWT;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.security.RegisterDTO;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.RedefinirSenhaUsuarioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.ResetarSenhaUsuarioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.UsuarioRecord;
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import util.exceptions.RoleIncorretaException;
 import util.exceptions.SenhaIncorretaException;
@@ -84,7 +82,7 @@ public class  AutenticacaoController {
     @PostMapping("/resetar-senha")
     public ResponseEntity<Object> redefinir(@RequestBody ResetarSenhaUsuarioRecord data){
         try{
-            UsuarioRecord usuarioRecord = usuarioService.resetarSenhaPadrao(data.emailUsuario(), data.role());
+            UsuarioRecord usuarioRecord = usuarioService.resetarSenhaPadrao(data);
             return ResponseEntity.ok(usuarioRecord);
         }catch(RoleIncorretaException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

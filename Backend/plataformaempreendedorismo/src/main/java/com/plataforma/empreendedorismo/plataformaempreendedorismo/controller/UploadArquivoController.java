@@ -36,7 +36,7 @@ public class UploadArquivoController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @PostMapping(value = "/arquivo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> salvarArquivo(@RequestParam("file")MultipartFile file, @RequestParam String tipo){
+    public ResponseEntity<String> salvarArquivo(@RequestParam("file")MultipartFile file, @RequestParam String tipo, @RequestParam Long idUsuario){
         log.info("Recebendo o arquivo: ", file.getOriginalFilename());
 
         try{
@@ -44,7 +44,7 @@ public class UploadArquivoController {
 
             new Thread(() -> {
                 try {
-                    processadorArquivoService.processarPlanilha(workbook, tipo);
+                    processadorArquivoService.processarPlanilha(workbook, tipo,idUsuario);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

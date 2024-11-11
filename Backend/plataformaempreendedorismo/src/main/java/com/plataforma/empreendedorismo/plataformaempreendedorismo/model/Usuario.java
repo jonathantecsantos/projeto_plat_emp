@@ -51,10 +51,24 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "coordenador_id")
     private Coordenador coordenador;
 
-    public Usuario(String login, String encryptedPassword, EnumRole enumRole) {
+    public Usuario(String login, String encryptedPassword, EnumRole enumRole, Object entidade) {
         this.login = login;
         this.senha = encryptedPassword;
         this.enumRole = enumRole;
+
+        if (entidade instanceof Avaliador) {
+            this.avaliador = (Avaliador) entidade;
+        } else if (entidade instanceof Professor) {
+            this.professor = (Professor) entidade;
+        } else if (entidade instanceof Aluno) {
+            this.aluno = (Aluno) entidade;
+        } else if (entidade instanceof Administrador) {
+            this.administrador = (Administrador) entidade;
+        } else if (entidade instanceof Coordenador) {
+            this.coordenador = (Coordenador) entidade;
+        } else {
+            throw new IllegalArgumentException("Entidade desconhecida para o construtor de Usuario");
+        }
     }
 
     @Override

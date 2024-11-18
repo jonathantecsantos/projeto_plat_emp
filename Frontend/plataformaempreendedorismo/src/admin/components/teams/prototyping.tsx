@@ -245,7 +245,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           DEPOIS DA VISITA ÀS INSTITUIÇÕES DE IMPACTO SOCIAL (IIS) E DO QUE VIVENCIAMOS NO HACKATHON DAY, QUAL O PROBLEMA PRINCIPAL E DEFINITIVO DA IIS QUE VOCÊS ESCOLHERAM, QUE ESTÁ ASSOCIADO AOS ODS's, PARA O QUAL FOI CONCEBIDA UM PROTÓTIPO / SOLUÇÃO INICIAL?
         </p>
         <InputComponent
-          placeholder="Digite sua resposta"
+          placeholder="Digite sua resposta para o problema principal"
           id="problemaPrincipal"
           type="text"
           value={formValues.problemaPrincipal}
@@ -259,7 +259,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           QUAL A PROPOSTA DE VALOR DO PROTÓTIPO DA SOLUÇÃO, ISTO É, COMO O PRODUTO OU SERVIÇO IDEALIZADO RESOLVE O PROBLEMA DA IIS ESCOLHIDA PELO SEU TIME?
         </p>
         <InputComponent
-          placeholder="Digite sua resposta"
+          placeholder="Digite sua resposta para a proposta de valor"
           id="propostaValor"
           type="text"
           value={formValues.propostaValor}
@@ -273,7 +273,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           QUANDO COMPARADA COM OUTRAS SOLUÇÕES JÁ EXISTENTES NO MERCADO,  QUAIS AS VANTAGENS COMPETITIVAS DO PROTÓTIPO DA SOLUÇÃO IDEALIZADA PELO TIME P/ RESOLVER O PROBLEMA DA IIS?
         </p>
         <InputComponent
-          placeholder="Digite sua resposta"
+          placeholder="Digite sua resposta para as vantagens competitivas"
           id="vantagemCompetitiva"
           type="text"
           value={formValues.vantagemCompetitiva}
@@ -287,7 +287,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           QUAIS AS PRINCIPAIS NECESSIDADES DO SEU TIME P/ DESENVOLVIMENTO COMPLETO DO PROTÓTIPO DA SOLUÇÃO?
         </p>
         <InputComponent
-          placeholder="Digite sua resposta"
+          placeholder="Digite sua resposta para as principais necessidades"
           id="principaisNecessidades"
           value={formValues.principaisNecessidades}
           onChange={(e) => handleValueChange(e.target.value, "principaisNecessidades")}
@@ -299,7 +299,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           QUAIS PARCERIAS SERIAM BEM-VINDAS PARA O APRIMORAMENTO DO PROTÓTIPO DA SOLUÇÃO, TAIS COMO: EMPRESAS ESTABELECIDAS, LABORATÓRIOS DE UNIVERSIDADES, ENTIDADES DO SISTEMA S, PARQUE TECNOLÓGICO, INCUBADORA DE EMPRESA?
         </p>
         <InputComponent
-          placeholder="Digite sua resposta"
+          placeholder="Digite sua resposta para as parcerias"
           id="parcerias"
           value={formValues.parcerias}
           onChange={(e) => handleValueChange(e.target.value, "parcerias")}
@@ -311,7 +311,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           QUE TIPO DE APOIO SERIA NECESSÁRIO DESSAS ENTIDADES / EMPRESAS / ICTs PARCEIRAS?
         </p>
         <InputComponent
-          placeholder="Digite sua resposta"
+          placeholder="Digite sua resposta para o tipo de apoio"
           id="tipoApoio"
           value={formValues.tipoApoio}
           onChange={(e) => handleValueChange(e.target.value, "tipoApoio")}
@@ -324,7 +324,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         </p>
         <input
           type="file"
-          placeholder="Digite sua resposta"
           onChange={handleCronogramaChange}
           id={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao}
           className={inputClasses}
@@ -342,7 +341,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <input
           type="file"
           multiple
-          placeholder="Digite sua resposta"
           onChange={handleAnexoChange}
           id={AnexoTypes.ANEXO.descricao}
           className={inputClasses}
@@ -360,7 +358,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         </p>
         <input
           type="file"
-          placeholder="Digite sua resposta"
           onChange={handleMemorialChange}
           id={AnexoTypes.MEMORIAL_DESCRITIVO.descricao}
           className={inputClasses}
@@ -378,7 +375,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <input
           type="file"
           multiple
-          placeholder="Digite sua resposta"
           onChange={handleEsquemaChange}
           id={AnexoTypes.ESQUEMA.descricao}
           className={inputClasses}

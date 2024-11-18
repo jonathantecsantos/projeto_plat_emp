@@ -3,13 +3,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RoutesNames } from "../../globals";
 import { UserApiService } from "../../services/login";
-import { Login } from "../../utils/types";
+import { Login, Roles } from "../../utils/types";
 import { useSnackbar } from "notistack";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 export const LoginComponent = () => {
   const [user, setUser] = useState<Login>()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
+  const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
   const { isLoading, login } = UserApiService()
 
@@ -20,7 +23,12 @@ export const LoginComponent = () => {
         senha: user?.senha!
       })
       if (response)
-        navigate(RoutesNames.adminHome)
+        if (userGlobalState?.enumRole == Roles.Aluno) {
+          //change later for userGlobalState?.teamID
+          navigate(RoutesNames.team.replace(':id', userGlobalState?.id?.toString()))
+        } else {
+          navigate(RoutesNames.adminHome)
+        }
     } catch (error) {
       enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
     }

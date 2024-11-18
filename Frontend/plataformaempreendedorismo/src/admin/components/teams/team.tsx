@@ -101,13 +101,13 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   if (error) return <p>Error loading team</p>
 
   const sortedStudents = []
-  const leader = team?.alunos.find(aluno => aluno.isLider)
-  const viceLeader = team?.alunos.find(aluno => aluno.isViceLider)
-  const members = team?.alunos.filter(aluno => !aluno.isLider && !aluno.isViceLider)
+  const leader = team?.alunos?.find(aluno => aluno?.isLider)
+  const viceLeader = team?.alunos?.find(aluno => aluno?.isViceLider)
+  const members = team?.alunos?.filter(aluno => !aluno?.isLider && !aluno?.isViceLider)
 
-  if (leader) sortedStudents.push(leader)
-  if (viceLeader) sortedStudents.push(viceLeader)
-  if (members) sortedStudents.push(...members)
+  if (leader) sortedStudents?.push(leader)
+  if (viceLeader) sortedStudents?.push(viceLeader)
+  if (members) sortedStudents?.push(...members)
 
   return (
     <div className="flex flex-col lg:flex-row relative border-t-2">
@@ -137,7 +137,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             onCancel={handleCancelEditOds}
           /> :
             <div className='flex-col'>
-              {team?.odsList.map((ods, index) => (
+              {team?.odsList?.map((ods, index) => (
                 <p key={index} className="font-semibold">
                   {ods.descricao}
                 </p>

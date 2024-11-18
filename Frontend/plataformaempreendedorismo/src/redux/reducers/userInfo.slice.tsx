@@ -7,7 +7,8 @@ const initialState: LoginResponse = {
   email: '',
   exp: '',
   id: 0,
-  username: ''
+  username: '',
+  enumRole: undefined,
 }
 
 const userInfoSlice = createSlice({

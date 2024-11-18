@@ -85,7 +85,7 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesNames.teams,
-    element: <ProtectedRoute children={<TeamsPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
+    element: <ProtectedRoute children={<TeamsPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno]} />
   },
   {
     path: RoutesNames.team,

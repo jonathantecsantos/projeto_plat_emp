@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Administrador {
 
+    private static final long serialVersionUID = 219305154466140296L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

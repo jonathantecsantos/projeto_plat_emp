@@ -1,9 +1,11 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Avaliador;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.EnumRole;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliador.AvaliadorEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliador.AvaliadorRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliador.AvaliadorCadastroRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.UsuarioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AvaliadorRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class AvaliadorService {
 
     @Autowired
     private AvaliadorRepository avaliadorRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Transactional
     public void criarAvaliador(AvaliadorCadastroRecord avaliadorCadastroRecord) {
@@ -48,5 +53,11 @@ public class AvaliadorService {
         if(avaliadorEditarRecord.formatosAvaliacoes()!= null){
             avaliador.setFormatosAvaliacoes(avaliadorEditarRecord.formatosAvaliacoes());
         }
+    }
+
+    @Transactional
+    public UsuarioRecord criarAvaliadorAndCriarAcesso(AvaliadorCadastroRecord avaliadorCadastroRecord) {
+        Avaliador avaliador = avaliadorRepository.save(new Avaliador(avaliadorCadastroRecord));
+        return usuarioService.criarUsuario(avaliador,avaliadorCadastroRecord.email(), EnumRole.ROLE_AVALIADOR);
     }
 }

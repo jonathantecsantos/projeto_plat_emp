@@ -2,6 +2,9 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliador.AvaliadorCadastroRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.coordenador.CoordenadorCadastroRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +15,7 @@ import util.enuns.TipoImportacaoEnum;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -37,11 +37,17 @@ public class ProcessadorArquivoService {
     private FormatoAvaliacaoRepository formatoAvaliacaoRepository;
 
     @Autowired
-    private AvaliadorRepository avaliadorRepository;
+    private ProfessorService professorService;
 
     @Autowired
-    private ProfessorRepository professorRepository;
-    public void processarPlanilha(Workbook workbook, String tipo) throws Exception {
+    private CoordenadorService coordenadorService;
+
+    @Autowired
+    private AvaliadorService avaliadorService;
+
+    @Autowired
+    private AdministradorRepository administradorRepository;
+    public void processarPlanilha(Workbook workbook, String tipo, Long idUsuario) throws Exception {
 
         String nomeProcesso = "";
 
@@ -52,12 +58,14 @@ public class ProcessadorArquivoService {
             case ALUNO -> String.valueOf(TipoImportacaoEnum.ALUNO);
             case AVALIADOR -> String.valueOf(TipoImportacaoEnum.AVALIADOR);
             case PROFESSOR -> String.valueOf(TipoImportacaoEnum.PROFESSOR);
+            case COORDENADOR -> String.valueOf(TipoImportacaoEnum.COORDENADOR);
             default -> throw new Exception("Erro!");
         };
 
         LocalDateTime dataHoraAtual = LocalDateTime.now();
         Date date = Timestamp.valueOf(dataHoraAtual);
-        Importacao importacao = importacaoService.registrarImportacao(date,null,nomeProcesso,"Jonathan",false );
+        Optional<Administrador> administrador = administradorRepository.findById(idUsuario);
+        Importacao importacao = importacaoService.registrarImportacao(date,null,nomeProcesso,administrador.get().getNome(),false );
 
         try {
             Sheet sheet = workbook.getSheetAt(0);
@@ -96,6 +104,7 @@ public class ProcessadorArquivoService {
                     case ALUNO -> processarImportacaoAluno(row);
                     case AVALIADOR -> processarImportacaoAvaliador(row);
                     case PROFESSOR -> processarImportacaoProfessor(row);
+                    case COORDENADOR -> processarImportacaoCoordenador(row);
                 }
 
             }
@@ -112,24 +121,47 @@ public class ProcessadorArquivoService {
 
     }
 
-    private void processarImportacaoProfessor(Row row) {
-        log.info("Iniciando processamento de Professores");
+    private void processarImportacaoCoordenador(Row row) {
+        log.info("Iniciando processamento de Coordenador");
 
-        Professor professor = new Professor();
+        String nome = "";
+        String cpf = "";
+        String email = "";
 
         if(row.getCell(0) != null) {
-            String nome = String.valueOf(row.getCell(0));
-            professor.setNome(nome.toUpperCase());
+            nome = String.valueOf(row.getCell(0));
         }
 
         if(row.getCell(1) != null) {
-            String cpf = String.valueOf(row.getCell(1));
-            professor.setCpf(cpf);
+            cpf = String.valueOf(row.getCell(1));
         }
 
         if(row.getCell(2) != null) {
-            String email = String.valueOf(row.getCell(2));
-            professor.setEmail(email);
+            email = String.valueOf(row.getCell(2));
+        }
+
+        CoordenadorCadastroRecord coordenadorCadastroRecord = new CoordenadorCadastroRecord(nome,cpf,email);
+        coordenadorService.persistirCoordenadorAndCriarAcesso(coordenadorCadastroRecord);
+    }
+
+    private void processarImportacaoProfessor(Row row) throws Exception {
+        log.info("Iniciando processamento de Professores");
+
+        String nome = "";
+        String cpf = "";
+        String email = "";
+        Long idEquipe = 0L;
+
+        if(row.getCell(0) != null) {
+            nome = String.valueOf(row.getCell(0));
+        }
+
+        if(row.getCell(1) != null) {
+            cpf = String.valueOf(row.getCell(1));
+        }
+
+        if(row.getCell(2) != null) {
+            email = String.valueOf(row.getCell(2));
         }
 
         if(row.getCell(3) != null) {
@@ -138,46 +170,48 @@ public class ProcessadorArquivoService {
             Equipe equipeEncontrada = equipeRepository.findByNome(equipe.toUpperCase());
 
             if(equipeEncontrada != null){
-                professor.setEquipe(equipeEncontrada);
+               idEquipe = equipeEncontrada.getId();
             }
         }
 
-        professorRepository.save(professor);
+        ProfessorCadastroRecord professorCadastroRecord = new ProfessorCadastroRecord(nome, cpf,email,idEquipe);
+        professorService.persistirProfessorAndCriarAcesso(professorCadastroRecord);
 
     }
 
     private void processarImportacaoAvaliador(Row row) {
         log.info("Iniciando processamento de Avaliadores");
 
-        Avaliador avaliador = new Avaliador();
+        ArrayList<FormatoAvaliacao> formatoAvaliacaos = new ArrayList<>();
+
+        String nome = "";
+        String instituicao = "";
+        String email = "";
+        String formatoAvaliacao = "";
 
         if(row.getCell(0) != null){
-            String nome = String.valueOf(row.getCell(0));
-            avaliador.setNome(nome.toUpperCase());
+            nome = String.valueOf(row.getCell(0));
         }
 
         if(row.getCell(1) != null){
-            String instituicao = String.valueOf(row.getCell(1));
-            avaliador.setInstituicao(instituicao.toUpperCase());
+            instituicao = String.valueOf(row.getCell(1));
         }
 
         if(row.getCell(2) != null){
-            String email = String.valueOf(row.getCell(2));
-            avaliador.setEmail(email);
+            email = String.valueOf(row.getCell(2));
         }
 
         if(row.getCell(3) != null){
-            String formatoAvaliacao = String.valueOf(row.getCell(3));
+            formatoAvaliacao = String.valueOf(row.getCell(3));
             FormatoAvaliacao formatoAvaliacaoEncontrado = formatoAvaliacaoRepository.findByDescricao(formatoAvaliacao);
 
-            ArrayList<FormatoAvaliacao> formatoAvaliacaos = new ArrayList<>();
             if( formatoAvaliacaoEncontrado != null){
                 formatoAvaliacaos.add(formatoAvaliacaoEncontrado);
-                avaliador.setFormatosAvaliacoes(formatoAvaliacaos);
             }
         }
 
-        avaliadorRepository.save(avaliador);
+        AvaliadorCadastroRecord avaliadorCadastroRecord = new AvaliadorCadastroRecord(instituicao.toUpperCase(),nome.toUpperCase(),email,formatoAvaliacaos);
+        avaliadorService.criarAvaliadorAndCriarAcesso(avaliadorCadastroRecord);
 
     }
 
@@ -194,13 +228,10 @@ public class ProcessadorArquivoService {
 
         equipeRepository.save(equipe);
     }
-
-    @Transactional
     public void processarImportacaoAluno(Row row) throws Exception {
 
         log.info("Iniciando processamento de Alunos");
 
-        Aluno aluno = new Aluno();
         String cpf = "";
         String email= "";
         String nome = "";
@@ -340,12 +371,17 @@ public class ProcessadorArquivoService {
                 break;
             case AVALIADOR:
                 expectedHeader = new String[]{
-                        "NOME_AVALIADOR", "INSTITUICAO", "FORMATO_AVALIACAO"
+                        "NOME_AVALIADOR", "INSTITUICAO", "EMAIL", "FORMATO_AVALIACAO"
                 };
                 break;
             case PROFESSOR:
                 expectedHeader = new String[]{
                         "NOME_PROFESSOR", "CPF","EMAIL", "EQUIPE"
+                };
+                break;
+            case COORDENADOR:
+                expectedHeader = new String[]{
+                        "NOME_COORDENADOR", "CPF","EMAIL"
                 };
                 break;
         }

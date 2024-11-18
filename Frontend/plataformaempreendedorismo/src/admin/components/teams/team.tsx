@@ -111,7 +111,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
 
   return (
     <div className="flex flex-col lg:flex-row relative border-t-2">
-      <div className="p-4 text-[#3C14A4]">
+      <div className="p-4 text-[#3C14A4] flex-1">
         <div className='flex gap-2'>
           {editTeamNameOpen ? (
             <EditTeamName
@@ -149,39 +149,47 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </div> : null}
 
         </div>
-        <div className='flex flex-col gap-4 w-full'>
-          <div className="max-w-xl grid sm:grid-cols-2 gap-4">
+        <div className='flex flex-col gap-4 w-full relative'>
+          <div className="flex gap-4 flex-wrap">
             {team?.professor && team.professor.map((teacher, idx) => (
               <TeacherCard key={idx} teacher={teacher} />
             ))}
           </div>
           <Divider />
-          <div className='max-w-xl relative'>
-            <div className='grid sm:grid-cols-2 gap-4 mb-14'>
-              {sortedStudents.map((student, idx) => <StudentCard student={student} key={idx} />)}
-            </div>
-            <SpeedDial
-              ariaLabel="SpeedDial"
-              className={`absolute right-4 -bottom-4 ${!sortedStudents.length ? 'left-96' : ''}`}
-              sx={{
-                '& .MuiFab-primary': {
-                  backgroundColor: '#5741A6',
-                  '&:hover': {
-                    backgroundColor: '#5222A2',
-                  },
-                },
-              }}
-              icon={<SpeedDialIcon />}>
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={action.onClick}
-                />
-              ))}
-            </SpeedDial>
+
+          <div className='flex gap-4 flex-wrap'>
+            {leader && <StudentCard student={leader} />}
+            {viceLeader && <StudentCard student={viceLeader} />}
           </div>
+          <Divider />
+
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {members?.map((member, idx) => (
+              <StudentCard key={idx} student={member} />
+            ))}
+          </div>
+          
+          <SpeedDial
+            ariaLabel="SpeedDial"
+            className={`absolute right-0 -bottom-20 xl:-right-20 xl:-bottom-1 ${!sortedStudents.length ? 'left-96' : ''}`}
+            sx={{
+              '& .MuiFab-primary': {
+                backgroundColor: '#5741A6',
+                '&:hover': {
+                  backgroundColor: '#5222A2',
+                },
+              },
+            }}
+            icon={<SpeedDialIcon />}>
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+                onClick={action.onClick}
+              />
+            ))}
+          </SpeedDial>
 
           {/* {team?.professor?.equipe.linkPitch && <div className='bg-gray-100 p-4 border rounded-lg shadow-md lg:w-4/5 w-full'>
             <h3 className="text-lg font-bold">Pitch:</h3>
@@ -191,7 +199,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </div>} */}
         </div>
       </div>
-      <div className={`w-full lg:w-72 rounded-md p-4  lg:h-fit text-nowrap ${!sortedStudents.length ? 'hidden' : ''}`}>
+      <div className={`w-full lg:w-72 rounded-md p-4 lg:h-fit text-nowrap ${!sortedStudents.length ? 'hidden' : ''}`}>
         <ul className="space-y-4 mt-36">
           <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
             <ContentPasteIcon fontSize='large' />

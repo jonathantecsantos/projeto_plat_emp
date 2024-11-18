@@ -87,7 +87,7 @@ export const StudentCard = ({ student }: StudentCard) => {
   // const displayStudent = updatedStudent || student;
 
   return (
-    <div key={student.id} className={`p-4 border rounded-lg shadow-md max-w-80 min-h-20 relative
+    <div key={student.id} className={`p-4 border rounded-lg shadow-md w-full max-w-96 min-h-20 relative
   ${student?.isLider || student?.isViceLider ? 'bg-[#9F8FD9] text-[#210077]' : 'bg-gray-100'}`}>
 
       <div className='flex justify-between'>

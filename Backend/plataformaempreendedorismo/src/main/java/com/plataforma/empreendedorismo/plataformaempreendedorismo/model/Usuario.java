@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,22 +32,27 @@ public class Usuario implements UserDetails {
     @Column(name = "role")
     private EnumRole enumRole;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "avaliador_id")
     private Avaliador avaliador;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "professor_id")
     private Professor professor;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "administrador_id")
     private Administrador administrador;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "coordenador_id")
     private Coordenador coordenador;

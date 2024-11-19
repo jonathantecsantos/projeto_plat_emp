@@ -1,17 +1,7 @@
-import AssessmentIcon from '@mui/icons-material/Assessment'
-import ClassIcon from '@mui/icons-material/Class'
-import ResultIcon from '@mui/icons-material/EmojiEvents'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import GroupIcon from '@mui/icons-material/Group'
-import GroupsIcon from '@mui/icons-material/Groups'
-import HomeIcon from '@mui/icons-material/Home'
-import ImportExportIcon from '@mui/icons-material/ImportExport'
-import LeaderboardIcon from '@mui/icons-material/Leaderboard'
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
+import PasswordIcon from '@mui/icons-material/Password'
 import SettingsIcon from '@mui/icons-material/Settings'
-import StarIcon from '@mui/icons-material/Star'
-import RepoIcon from '@mui/icons-material/Storage'
 import { Collapse, IconButton, List, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 import React, { ReactNode, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -36,66 +26,11 @@ interface ItemProps extends MenuItemProps {
 
 const menuItems: MenuItemProps[] = [
   {
-    outsideIcon: <HomeIcon />,
-    outsideName: 'Admin',
+    outsideIcon: <PasswordIcon />,
+    outsideName: 'Redefinir senha',
     subItens: false,
-    routeName: `${RoutesNames.adminHome}`
-  },
-  {
-    outsideName: 'Importações',
-    outsideIcon: <ImportExportIcon />,
-    subItens: false,
-    routeName: `${RoutesNames.uploadFiles}`,
-  },
-  {
-    outsideName: 'Times',
-    outsideIcon: <GroupIcon />,
-    subItens: true,
-    insideItems: [{
-      insideIcon: <ClassIcon />,
-      insideName: 'Banner',
-      routeName: `${RoutesNames.bannerPreview}`,
-    },
-    {
-      insideIcon: <GroupsIcon />,
-      insideName: 'Alunos',
-      routeName: `${RoutesNames.students}`,
-    },
-    {
-      insideIcon: <PersonAddAlt1Icon />,
-      insideName: 'Aluno',
-      routeName: `${RoutesNames.student}`,
-    },
-    ],
-  },
-  {
-    outsideName: 'Repositório',
-    outsideIcon: <RepoIcon />,
-    subItens: false,
-    routeName: `/${RoutesNames.repository}`,
-  },
-  {
-    outsideName: 'Avaliação',
-    outsideIcon: <AssessmentIcon />,
-    subItens: true,
-    insideItems: [
-      {
-        insideName: 'Avaliar',
-        insideIcon: <StarIcon />,
-        routeName: `${''}`,
-      },
-      {
-        insideName: 'Classificação',
-        insideIcon: <LeaderboardIcon />,
-        routeName: `${''}`,
-      },
-      {
-        insideName: 'Res. Final',
-        insideIcon: <ResultIcon />,
-        routeName: `${''}`,
-      },
-    ],
-  },
+    routeName: `${RoutesNames.studentsSettings}`
+  }
 ]
 
 const Item = (props: ItemProps) => {
@@ -135,7 +70,11 @@ const Item = (props: ItemProps) => {
   )
 }
 
-export const AuthMenuComponent = () => {
+interface AuthMenuComponentProps {
+  email?: string
+}
+
+export const AuthMenuComponent = ({ email }: AuthMenuComponentProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
 
@@ -148,7 +87,7 @@ export const AuthMenuComponent = () => {
   }
 
   const handleMenuItemClick = (routeName: string) => {
-    navigate(routeName)
+    navigate(routeName, { state: { email } })
     handleClose()
   }
 

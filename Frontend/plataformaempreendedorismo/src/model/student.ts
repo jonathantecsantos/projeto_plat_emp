@@ -29,3 +29,9 @@ export interface CreateOrUpdateStudent {
   isViceLider: boolean
   idEquipe: number | null
 }
+
+export interface StudentSettings {
+  emailUsuario: string
+  senhaAntiga: string
+  novaSenha: string
+}

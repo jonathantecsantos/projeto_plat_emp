@@ -1,18 +1,16 @@
-import { LoadingButton } from "@mui/lab";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { RoutesNames } from "../../globals";
-import { UserApiService } from "../../services/login";
-import { Login, Roles } from "../../utils/types";
-import { useSnackbar } from "notistack";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { LoadingButton } from "@mui/lab"
+import { jwtDecode } from "jwt-decode"
+import { useSnackbar } from "notistack"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { RoutesNames } from "../../globals"
+import { UserApiService } from "../../services/login"
+import { Login, LoginTokenJWT, Roles } from "../../utils/types"
 
 export const LoginComponent = () => {
   const [user, setUser] = useState<Login>()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
   const { isLoading, login } = UserApiService()
 
@@ -22,13 +20,15 @@ export const LoginComponent = () => {
         login: user?.login!,
         senha: user?.senha!
       })
-      if (response)
-        if (userGlobalState?.enumRole == Roles.Aluno) {
-          //change later for userGlobalState?.teamID
-          navigate(RoutesNames.team.replace(':id', userGlobalState?.id?.toString()))
+      if (response) {
+        const { tokenJWT } = response
+        const decodedToken: LoginTokenJWT = jwtDecode(tokenJWT)
+        if (decodedToken.enumRole == Roles.Aluno) {
+          navigate(RoutesNames.team.replace(':id', decodedToken.id?.toString()))
         } else {
           navigate(RoutesNames.adminHome)
         }
+      }
     } catch (error) {
       enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
     }
@@ -85,5 +85,5 @@ export const LoginComponent = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}

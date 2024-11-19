@@ -6,7 +6,12 @@ import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
 import { Logout } from "./logout"
+// import { BannerImage } from "./adminBanner"
+import { useSelector } from "react-redux"
+import { RootState } from "../../../redux/store"
+import { Roles } from "../../../utils/types"
 import { BannerImage } from "./adminBanner"
+// import { FooterImage } from "./adminFooter"
 
 interface AdminPage {
   mainContent: ReactNode
@@ -26,18 +31,10 @@ const LeftMenu = () => {
   const navigate = useNavigate()
   return (
     <div className=" text-[#3C14A4] h-full z-30">
-      {/* <div className="w-full p-4">
-        <h2
-          onClick={() => navigate(RoutesNames.home)}
-          className="cursor-pointer font-bold text-center text-white bg-gradient-to-r from-indigo-500 to-indigo-900 p-2 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
-        >
-          Plataforma Empreendedorismo
-        </h2>
-      </div> */}
       <div className="w-full p-6 flex justify-center"
         onClick={() => navigate(RoutesNames.adminHome)}>
         <Avatar alt="admin avatar"
-        className=" bg-[#3C14A4] shadow-md cursor-pointer transform hover:scale-105 transition-transform duration-300 w-16 h-16"
+          className=" bg-[#3C14A4] shadow-md cursor-pointer transform hover:scale-105 transition-transform duration-300 w-16 h-16"
         />
       </div>
       <Divider variant="middle" color="white" />
@@ -47,26 +44,32 @@ const LeftMenu = () => {
 }
 
 export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
+  const userGlobalState = useSelector((state: RootState) => state.userInfo)
+
   return (
-    <div className="flex h-screen flex-col">
-      <AdminAppBar />
+    <div className="flex h-screen flex-col relative">
+      {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> : <AdminAppBar />}
       <div className="flex flex-1 overflow-hidden">
-        <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto">
-          <LeftMenu />
-        </div>
+        {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> :
+          <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto">
+            <LeftMenu />
+          </div>}
+
         <main className="overflow-x-hidden overflow-y-auto w-full">
           <BannerImage />
-          {/* <div className="h-12"></div> */}
           <div className="p-4 h-[calc(100%-9rem)]">
             <div className="flex">
-              <BreadcrumbComponent />
+              {userGlobalState?.enumRole == Roles.Aluno ? <div className="w-full mt-10"></div> : <BreadcrumbComponent />}
               <Logout />
             </div>
             {mainContent}
+            {/* <div className="mt-20">
+              <FooterImage />
+            </div> */}
           </div>
-          {/* <FooterImage /> */}
         </main>
       </div>
+
     </div>
   )
 }

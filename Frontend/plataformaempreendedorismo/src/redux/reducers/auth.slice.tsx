@@ -49,6 +49,7 @@ const authSlice = createSlice({
     },
     logout(state) {
       CookieUtils.deleteCookie('tk')
+      CookieUtils.deleteCookie('un')
       state.isAuthenticated = false
       state.token = null
       state.enumRole = null

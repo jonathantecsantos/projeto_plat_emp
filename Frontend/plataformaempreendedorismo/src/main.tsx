@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import { PersistGate } from "redux-persist/integration/react"
-import Footer from "./components/common/footer.tsx"
 import { LoadingBarLinearComponent } from './components/common/loadingBar.tsx'
 import './index.css'
 import { persistor, store } from './redux/store.ts'
@@ -31,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             {/* <Container maxWidth="xl"> */}
             <Box sx={{ my: 0 }}>
               <RouterProvider router={router} />
-              <Footer />
+              {/* <Footer /> */}
             </Box>
             {/* </Container> */}
           </LocalizationProvider>

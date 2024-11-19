@@ -1,7 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Login, LoginResponse } from '../utils/types';
-
-
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Login, LoginResponse } from '../utils/types'
 
 export const userApiSlice = createApi({
   reducerPath: 'userApi',
@@ -17,22 +15,6 @@ export const userApiSlice = createApi({
         body,
       }),
       invalidatesTags: ['Users'],
-
-
-      // onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
-      onQueryStarted: async (queryFulfilled) => {
-        try {
-          const { login } = await queryFulfilled;
-          // Executar ações no início da mutation ser bem sucedida
-          console.log('onQueryStarted => Usuario logado com sucesso:', login);
-          // Por exemplo, disparar uma ação Redux
-          //chamar um loading
-          //atualizar valores do cookie
-          // dispatch({ type: 'user/addSuccess', payload: user });
-        } catch (error) {
-          console.error("Erro ao efetuar login:", error);
-        }
-      },
     }),
   }),
 })

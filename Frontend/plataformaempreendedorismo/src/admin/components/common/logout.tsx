@@ -2,11 +2,10 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { RoutesNames } from "../../../globals"
+import { logout } from '../../../redux/reducers/auth.slice'
 import { clearUserInfo } from '../../../redux/reducers/userInfo.slice'
 import { persistor, RootState } from '../../../redux/store'
-import { logout } from '../../../redux/reducers/auth.slice'
 import { AuthMenuComponent } from './authMenu'
-import { Roles } from '../../../utils/types'
 
 export const Logout = () => {
   const dispatch = useDispatch();
@@ -15,7 +14,7 @@ export const Logout = () => {
 
   return (
     <div className='flex items-center'>
-      {userGlobalState?.enumRole === Roles.Aluno && userGlobalState?.email ? (
+      {userGlobalState?.email ? (
         <AuthMenuComponent email={userGlobalState.email} />
       ) : null}
       <div

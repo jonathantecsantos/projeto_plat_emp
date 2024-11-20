@@ -11,8 +11,8 @@ export const RoutesNames = {
 
   students: '/students',
   student: '/students/:id',
-  studentsSettings: '/students/settings',
-  
+  settings: '/settings',
+
   teachers: '/teachers',
   teacher: '/teachers/:id',
 

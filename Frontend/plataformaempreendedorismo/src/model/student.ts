@@ -30,8 +30,3 @@ export interface CreateOrUpdateStudent {
   idEquipe: number | null
 }
 
-export interface StudentSettings {
-  emailUsuario: string
-  senhaAntiga: string
-  novaSenha: string
-}

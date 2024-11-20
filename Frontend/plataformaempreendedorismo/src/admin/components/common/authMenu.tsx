@@ -29,7 +29,7 @@ const menuItems: MenuItemProps[] = [
     outsideIcon: <PasswordIcon />,
     outsideName: 'Redefinir senha',
     subItens: false,
-    routeName: `${RoutesNames.studentsSettings}`
+    routeName: `${RoutesNames.settings}`
   }
 ]
 

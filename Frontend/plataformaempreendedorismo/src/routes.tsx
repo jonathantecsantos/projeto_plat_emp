@@ -24,6 +24,7 @@ import { SharkTankEvaluationPage } from './pages/sharkTankTeamEvaluation'
 import { SharkTankPage } from './pages/sharkTankTeams'
 import { StudentPage } from './pages/student'
 import { StudentsDetailsPage } from './pages/students'
+import { StudentSettingsPage } from './pages/studentSettings'
 import { TeacherPage } from './pages/teacher'
 import { TeachersPage } from './pages/teachers'
 import { TeamPage } from './pages/team'
@@ -33,7 +34,6 @@ import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { Roles } from './utils/types'
-import { StudentSettingsPage } from './pages/studentSettings'
 
 export const router = createBrowserRouter([
   {
@@ -73,7 +73,7 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute children={<StudentPage />} allowedRoles={[Roles.Admin, Roles.Professor]} />
   },
   {
-    path: RoutesNames.studentsSettings,
+    path: RoutesNames.settings,
     element: <ProtectedRoute children={<StudentSettingsPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno]} />
   },
   {

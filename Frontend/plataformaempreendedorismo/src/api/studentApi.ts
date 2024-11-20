@@ -1,13 +1,14 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { Banner } from '../model/banner'
 import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
-import { CreateOrUpdateStudent, StudentIdResponse, StudentSettings, StudentsResponse } from '../model/student'
-import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
-import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
-import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
 import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
+import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse,  } from '../model/student'
+import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
+import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
+import { authFetchBaseQuery } from '../redux/auth.middleware'
+import { UserSettings } from '../model/user'
 
 
 export const studentsApiSlice = createApi({
@@ -17,6 +18,15 @@ export const studentsApiSlice = createApi({
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
   endpoints: (build) => ({
+
+    //USERS
+    passwordUserReset: build.mutation<UserSettings, Partial<UserSettings>>({
+      query: (data) => ({
+        url: `/auth/redefinir-senha`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
 
     //IMPORTS
     uploadFile: build.mutation({
@@ -87,13 +97,7 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    passwordStudentReset: build.mutation<StudentSettings, Partial<StudentSettings>>({
-      query: (data) => ({
-        url: `/auth/redefinir-senha`,
-        method: 'POST',
-        body: data,
-      }),
-    }),
+   
     //TEAM -
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
@@ -127,7 +131,6 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id },
       ],
     }),
-
 
 
     //ODS
@@ -365,6 +368,9 @@ export const studentsApiSlice = createApi({
 })
 
 export const {
+  //Users
+  usePasswordUserResetMutation,
+
   //Imports
   useUploadFileMutation,
 
@@ -374,7 +380,6 @@ export const {
   useCreateStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,
-  usePasswordStudentResetMutation,
 
   //Teams
   useGetTeamByIdQuery,
@@ -403,12 +408,12 @@ export const {
   usePutEvaluationMutation,
   useGetEvaluationDataQuery,
 
-  //PROTOTYPE
+  //Prototype
   useCreateTeamPrototypingMutation,
   useGetTeamPrototypingByIdQuery,
   useUpdateTeamPrototypingMutation,
 
-  //REPORTS
+  //Reports
   useGetTeamsReportsQuery,
   useGetTeamsReportItemsQuery,
   useGetTeamReportQuery,

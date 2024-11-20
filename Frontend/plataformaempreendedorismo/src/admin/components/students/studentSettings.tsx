@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { z } from 'zod'
-import { usePasswordStudentResetMutation } from '../../../api/studentApi'
+import { usePasswordUserResetMutation } from '../../../api/studentApi'
 
 
 const studentPasswordSchema = z.object({
@@ -25,7 +25,7 @@ interface StudentSettingsProps {
 
 export const StudentSettings = ({ email }: StudentSettingsProps) => {
   const { enqueueSnackbar } = useSnackbar()
-  const [passordReset, { isLoading, isSuccess }] = usePasswordStudentResetMutation()
+  const [passordReset, { isLoading, isSuccess }] = usePasswordUserResetMutation()
   const [success, setSucess] = useState(isSuccess)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -93,13 +93,13 @@ export const StudentSettings = ({ email }: StudentSettingsProps) => {
           <div className="relative">
             <input
               id="novaSenha"
-              type={showPassword ? 'text' : 'password'} 
+              type={showPassword ? 'text' : 'password'}
               {...register('novaSenha')}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)} 
+              onClick={() => setShowPassword(!showPassword)}
               className="absolute inset-y-0 right-2 flex items-center text-gray-500"
             >
               {!showPassword ? <VisibilityOff /> : <Visibility />}
@@ -110,7 +110,7 @@ export const StudentSettings = ({ email }: StudentSettingsProps) => {
           )}
         </div>
 
-       
+
         <div className={`flex items-center justify-between`}>
           <div className='flex gap-4'>
             <button
@@ -131,7 +131,7 @@ export const StudentSettings = ({ email }: StudentSettingsProps) => {
             {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
             <span>Redefinir Senha</span>
           </LoadingButton>
-  
+
         </div>
       </form>
     </div>

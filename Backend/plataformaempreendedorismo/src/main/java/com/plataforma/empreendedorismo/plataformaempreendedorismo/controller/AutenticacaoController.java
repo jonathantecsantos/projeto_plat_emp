@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import util.exceptions.RoleIncorretaException;
@@ -41,14 +42,16 @@ public class  AutenticacaoController {
     @CrossOrigin(allowedHeaders = "*")
     @Operation(summary = "Efetuar Login", method = "POST")
     @PostMapping
-    public ResponseEntity<Object> efetuarLogin(@RequestBody @Valid DadosAutenticacaoRecord dados) throws Exception {
+    public ResponseEntity<Object> efetuarLogin(@RequestBody @Valid DadosAutenticacaoRecord dados) throws InternalAuthenticationServiceException, BadCredentialsException {
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         try{
             var authentication = manager.authenticate(authenticationToken);
             var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
             return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
-        }catch (BadCredentialsException e){
+        } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (InternalAuthenticationServiceException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Usuário inexistente ou senha inválida!");
         }
     }
 

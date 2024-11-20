@@ -149,21 +149,21 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </div> : null}
 
         </div>
-        <div className='flex flex-col xl:gap-4 gap-2 w-full relative'>
-          <div className="flex gap-4 flex-wrap">
+        <div className='flex flex-col xl:gap-2 gap-2 w-full relative'>
+          <div className="flex gap-2 flex-wrap">
             {team?.professor && team.professor.map((teacher, idx) => (
               <TeacherCard key={idx} teacher={teacher} />
             ))}
           </div>
           <Divider />
 
-          <div className='flex xl:gap-4 gap-2 flex-wrap'>
+          <div className='flex xl:gap-2 gap-2 flex-wrap'>
             {leader && <StudentCard student={leader} />}
             {viceLeader && <StudentCard student={viceLeader} />}
           </div>
           <Divider />
 
-          <div className="mt-4 flex xl:gap-4 gap-2 flex-wrap">
+          <div className="mt-4 flex xl:gap-2 gap-2 flex-wrap">
             {members?.map((member, idx) => (
               <StudentCard key={idx} student={member} />
             ))}

@@ -24,6 +24,7 @@ public class TokenService {
             Long id = null;
             String email = null;
             String username = null;
+            Long idEquipe = null;
 
             if (usuario.getAvaliador() != null) {
                 id = usuario.getAvaliador().getId();
@@ -33,10 +34,12 @@ public class TokenService {
                 id = usuario.getProfessor().getId();
                 email = usuario.getProfessor().getEmail();
                 username = usuario.getProfessor().getNome();
+                idEquipe = usuario.getProfessor().getEquipe().getId();
             } else if (usuario.getAluno() != null) {
                 id = usuario.getAluno().getId();
                 email = usuario.getAluno().getEmail();
                 username = usuario.getAluno().getNome();
+                idEquipe = usuario.getAluno().getEquipe().getId();
             }else if(usuario.getAdministrador() != null) {
                 id = usuario.getAdministrador().getId();
                 email = usuario.getAdministrador().getEmail();
@@ -54,6 +57,7 @@ public class TokenService {
                     .withClaim("email", email)
                     .withClaim("username",username)
                     .withClaim("enumRole", usuario.getEnumRole().name())
+                    .withClaim("idEquipe", idEquipe)
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritimo);
         } catch (JWTCreationException exception){

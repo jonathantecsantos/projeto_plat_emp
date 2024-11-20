@@ -26,7 +26,8 @@ export const UserApiService = () => {
         id: decodedToken.id,
         username: decodedToken.username,
         exp: decodedToken.exp,
-        enumRole: decodedToken.enumRole
+        enumRole: decodedToken.enumRole,
+        idEquipe: decodedToken.idEquipe
       }))
 
       dispatch(loginAction(result))

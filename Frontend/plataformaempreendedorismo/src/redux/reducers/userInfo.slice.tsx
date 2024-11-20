@@ -9,6 +9,7 @@ const initialState: LoginResponse = {
   id: 0,
   username: '',
   enumRole: undefined,
+  idEquipe: 0,
 }
 
 const userInfoSlice = createSlice({

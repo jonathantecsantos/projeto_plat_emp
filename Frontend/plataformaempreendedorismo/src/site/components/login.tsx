@@ -24,13 +24,13 @@ export const LoginComponent = () => {
         const { tokenJWT } = response
         const decodedToken: LoginTokenJWT = jwtDecode(tokenJWT)
         if (decodedToken.enumRole == Roles.Aluno) {
-          navigate(RoutesNames.team.replace(':id', decodedToken.id?.toString()))
+          navigate(RoutesNames.team.replace(':id', decodedToken.idEquipe?.toString()))
         } else {
           navigate(RoutesNames.adminHome)
         }
       }
-    } catch (error) {
-      enqueueSnackbar('Erro ao realizar login', { variant: 'error' })
+    } catch (error: any) {
+      enqueueSnackbar(error?.data || 'Erro ao realizar login', { variant: 'error' })
     }
   }
 

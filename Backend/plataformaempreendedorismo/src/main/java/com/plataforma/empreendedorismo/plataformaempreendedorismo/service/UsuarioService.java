@@ -79,11 +79,17 @@ public class UsuarioService {
         }
 
     }
+    public void apagarUsuario(Usuario usuario){
+        usuarioRepository.deleteById(usuario.getId());
+    }
+    public Usuario buscarUsuarioPorLogin(String login){
+       return usuarioRepository.getReferenceByLogin(login);
+    }
 
     @Transactional
     public UsuarioRecord redefinirSenha(RedefinirSenhaUsuarioRecord usuario) throws SenhaIncorretaException {
 
-        Usuario usuarioReference = usuarioRepository.getReferenceByLogin(usuario.emailUsuario());
+        Usuario usuarioReference = buscarUsuarioPorLogin(usuario.emailUsuario());
 
         if (usuarioReference != null) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -105,7 +111,7 @@ public class UsuarioService {
         try {
             EnumRole userRole = EnumRole.valueOf(data.role().toUpperCase());
 
-            Usuario usuarioReference = usuarioRepository.getReferenceByLogin(data.emailUsuario());
+            Usuario usuarioReference = buscarUsuarioPorLogin(data.emailUsuario());
 
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 

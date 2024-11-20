@@ -44,7 +44,7 @@ export interface Login {
 // }
 export interface LoginTokenJWT {
   id: number
-  idEquipe: number
+  idEquipe: number | null
   email: string
   username: string
   enumRole?: Roles

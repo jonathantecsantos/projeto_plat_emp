@@ -1,44 +1,46 @@
+import CheckIcon from '@mui/icons-material/Check'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import ClearIcon from '@mui/icons-material/Clear'
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton } from '@mui/material'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, Menu, MenuItem } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useDeleteStudentMutation, useGetAllStudentsQuery } from '../../../api/studentApi'
+import { useDeleteStudentMutation, useGetAllStudentsQuery, usePasswordResetMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { StudentsResponse } from '../../../model/student'
+import { Roles } from '../../../utils/types'
 import { AdminHeader } from '../common/adminHeader'
 import { TableComponent } from '../table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
-import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close';
 
 
 export const Students = () => {
   const { data: students, isLoading, error, refetch } = useGetAllStudentsQuery()
-  // const studentsGlobalState = useSelector((state: RootState) => state.studentsApi);
-  // const studentsData = studentsGlobalState.queries['getAllStudents(undefined)']?.data || [];
+  // const studentsGlobalState = useSelector((state: RootState) => state.studentsApi)
+  // const studentsData = studentsGlobalState.queries['getAllStudents(undefined)']?.data || []
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
 
-  const [open, setOpen] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState<StudentsResponse>()
   const [deleteStudent] = useDeleteStudentMutation()
-
+  const [actionType, setActionType] = useState<'delete' | 'resetPassword' | null>(null)
+  const [passordReset] = usePasswordResetMutation()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [openDialog, setOpenDialog] = useState(false)
 
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
   const tableComponentSetCurrPage = tableComponentSetCurrPageRef.current
   if (tableComponentSetCurrPage) tableComponentSetCurrPage({ page: 0 })
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (students) {
-      if (students?.length <= 0) {
-        console.log('students refetch')
-        refetch()
-      }
+    if (students?.length === 0) {
+      console.log('students refetch')
+      refetch()
     }
-  }, [])
+  }, [students, refetch])
 
 
   const filteredStudents = useMemo(() => {
@@ -53,23 +55,65 @@ export const Students = () => {
     setSearchParams({ search: query })
   }
 
-  const handleClickOpen = ({ student }: { student: StudentsResponse }) => {
-    setSelectedStudent(student)
-    setOpen(true)
+  const handleCloseMenu = () => {
+    setAnchorEl(null)
   }
 
-  const handleDeleteStudent = async () => {
-    if (selectedStudent) {
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, student: StudentsResponse) => {
+    setSelectedStudent(student)
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleOpenDialog = (type: 'delete' | 'resetPassword', student: StudentsResponse) => {
+    setActionType(type)
+    setOpenDialog(true)
+    setSelectedStudent(student)
+    handleCloseMenu()
+  }
+
+  const handleCloseDialog = () => {
+    setActionType(null)
+    setSelectedStudent(undefined)
+    setOpenDialog(false)
+  }
+
+  const handleConfirmAction = async () => {
+    if (actionType === 'delete' && selectedStudent) {
       try {
         await deleteStudent(selectedStudent.id)
-        enqueueSnackbar(`Aluno: ${selectedStudent.nome}, excluído com sucesso!`, { variant: 'success' })
+        enqueueSnackbar(`Aluno(a): ${selectedStudent.nome}, excluído com sucesso!`, { variant: 'success' })
         refetch()
-        setOpen(false)
       } catch (error) {
         enqueueSnackbar('Erro ao excluir, consulte um administrador.', { variant: 'error' })
       }
+    } else if (actionType === 'resetPassword' && selectedStudent) {
+      try {
+        const response = await passordReset({
+          idObjeto: selectedStudent.id,
+          emailUsuario: selectedStudent.email,
+          role: Roles.Aluno,
+        })
+        enqueueSnackbar(`Senha do aluno(a): ${selectedStudent.nome} foi resetada com sucesso!`, { variant: 'success' })
+        enqueueSnackbar(
+          <div>
+            <p><strong>Login:</strong> {response?.data?.login}</p>
+            <p><strong>Senha:</strong> {response?.data?.senha}</p>
+          </div>,
+          {
+            variant: 'info',
+            persist: true,
+            action: (key) => (
+              <CloseIcon className='hover:cursor-pointer hover:text-red-500' onClick={() => closeSnackbar(key)} color="inherit" />
+            ),
+          }
+        ) 
+      } catch (error) {
+        enqueueSnackbar('Erro ao resetar senha, consulte um administrador.', { variant: 'error' })
+      }
     }
+    handleCloseDialog()
   }
+
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading students.</p>
@@ -93,7 +137,6 @@ export const Students = () => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* {JSON.stringify(students![0])} */}
       <div className="sticky top-0 z-10">
         <AdminHeader onSearch={handleSearch} onRefresh={refetch}
           placeholder='Pesquisar por nome do aluno ou turma'
@@ -129,42 +172,60 @@ export const Students = () => {
                 <td className="px-4 py-2">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
                 <td className="px-4 py-2">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
                 <td className="px-4 py-2 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
-                <td className="">
+                <td className="px-4 py-2">
                   <IconButton
+                  className='hover:text-white'
                     aria-controls="long-menu"
                     aria-haspopup="true"
                     onClick={(event) => {
                       event.stopPropagation()
-                      handleClickOpen({ student })
-
+                      handleOpenMenu(event, student)
                     }}
                   >
-                    <ClearIcon style={{
-                      width: 15,
-                      height: 15,
-                    }} className='hover:text-red-500' />
+                    <MoreVertIcon />
                   </IconButton>
-                </td>
-              </>
+                  <Menu
+                  variant='selectedMenu'
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleCloseMenu}
+                  >
+                    <MenuItem onClick={(event) => {
+                      event.stopPropagation()
+                      handleOpenDialog('delete', selectedStudent!)
+                    }}>Excluir
+                    </MenuItem>
+
+                    <MenuItem onClick={(event) =>{
+                      event.stopPropagation()
+                      handleOpenDialog('resetPassword', selectedStudent!)
+                    }}>Resetar Senha
+                  </MenuItem>
+                </Menu>
+              </td>
+          </>
             )}
-            onClickRow={(student: TableComponentClickRowProps<StudentsResponse>) => {
-              navigate(RoutesNames.student.replace(':id', student.item?.id.toString()))
-            }}
+          onClickRow={(student: TableComponentClickRowProps<StudentsResponse>) => {
+            navigate(RoutesNames.student.replace(':id', student.item?.id.toString()))
+          }}
           />
         </div>
       </div>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogContent>
-          <span>
-            Deseja realmente excluir o aluno: {selectedStudent?.nome.toLowerCase()}?
-          </span>
+          {actionType === 'delete' && (
+            <span>Deseja realmente excluir o aluno(a): {selectedStudent?.nome.toLowerCase()}?</span>
+          )}
+          {actionType === 'resetPassword' && (
+            <span>Deseja realmente resetar a senha do aluno(a): {selectedStudent?.nome.toLowerCase()}?</span>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} style={{ textTransform: 'none', color: 'gray' }}>
+          <Button onClick={handleCloseDialog} style={{ textTransform: 'none', color: 'gray' }}>
             Cancelar
           </Button>
-          <Button onClick={handleDeleteStudent} style={{ textTransform: 'none', color: 'red' }}>
-            Excluir
+          <Button onClick={handleConfirmAction} style={{ textTransform: 'none', color: actionType === 'delete' ? 'red' : 'blue' }}>
+            {actionType === 'delete' ? 'Excluir' : 'Resetar Senha'}
           </Button>
         </DialogActions>
       </Dialog>

@@ -136,7 +136,7 @@ export const TeachersComponent = () => {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>
           <span>
-            Deseja realmente excluir o professor: {selectedTeacher?.nome.toLowerCase()}?
+            Deseja realmente excluir o professor(a): {selectedTeacher?.nome.toLowerCase()}?
           </span>
         </DialogContent>
         <DialogActions>

@@ -4,11 +4,11 @@ import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluat
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
 import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
-import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse,  } from '../model/student'
+import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse, } from '../model/student'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
+import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
-import { UserSettings } from '../model/user'
 
 
 export const studentsApiSlice = createApi({
@@ -26,6 +26,17 @@ export const studentsApiSlice = createApi({
         method: 'POST',
         body: data,
       }),
+    }),
+    passwordReset: build.mutation<PasswordResetResponse, Partial<PasswordResetRequest>>({
+      query: (data) => ({
+        url: `/auth/resetar-senha`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }: any) => [
+        { type: 'Student', id: 'LIST' },
+        { type: 'Team', id },
+      ],
     }),
 
     //IMPORTS
@@ -97,7 +108,7 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-   
+
     //TEAM -
     getTeamById: build.query<TeamIdResponse, number>({
       query: (id) => `/equipes/${id}`,
@@ -370,6 +381,7 @@ export const studentsApiSlice = createApi({
 export const {
   //Users
   usePasswordUserResetMutation,
+  usePasswordResetMutation,
 
   //Imports
   useUploadFileMutation,

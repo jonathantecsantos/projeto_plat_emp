@@ -76,7 +76,7 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
 
   return (
-    <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md">
+    <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md border-t-2">
       <h2 className="text-3xl font-bold text-center mb-4">{`${teamData ? 'Adicionar' : 'Editar'} Professor`}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

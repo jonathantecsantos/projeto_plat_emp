@@ -13,26 +13,25 @@ import { AdminHeader } from '../common/adminHeader'
 import { TableComponent } from '../table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
 import CloseIcon from '@mui/icons-material/Close';
+import { LoadingButton } from '@mui/lab'
 
 
 export const Students = () => {
   const { data: students, isLoading, error, refetch } = useGetAllStudentsQuery()
+  const [deleteStudent, { isLoading: studentDelet }] = useDeleteStudentMutation()
+  const [passordReset, { isLoading: resetPassword }] = usePasswordResetMutation()
   // const studentsGlobalState = useSelector((state: RootState) => state.studentsApi)
   // const studentsData = studentsGlobalState.queries['getAllStudents(undefined)']?.data || []
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
 
   const [selectedStudent, setSelectedStudent] = useState<StudentsResponse>()
-  const [deleteStudent] = useDeleteStudentMutation()
   const [actionType, setActionType] = useState<'delete' | 'resetPassword' | null>(null)
-  const [passordReset] = usePasswordResetMutation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openDialog, setOpenDialog] = useState(false)
-
   const navigate = useNavigate()
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
   const tableComponentSetCurrPage = tableComponentSetCurrPageRef.current
-  if (tableComponentSetCurrPage) tableComponentSetCurrPage({ page: 0 })
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   useEffect(() => {
@@ -42,6 +41,11 @@ export const Students = () => {
     }
   }, [students, refetch])
 
+  useEffect(() => {
+    if (tableComponentSetCurrPage) {
+      tableComponentSetCurrPage({ page: 0 });
+    }
+  }, [students])
 
   const filteredStudents = useMemo(() => {
     if (!students) return []
@@ -97,16 +101,16 @@ export const Students = () => {
         enqueueSnackbar(
           <div>
             <p><strong>Login:</strong> {response?.data?.login}</p>
-            <p><strong>Senha:</strong> {response?.data?.senha}</p>
+            <p><strong>Nova senha:</strong> {response?.data?.senha}</p>
           </div>,
           {
             variant: 'info',
             persist: true,
             action: (key) => (
-              <CloseIcon className='hover:cursor-pointer hover:text-red-500' onClick={() => closeSnackbar(key)} color="inherit" />
+              <CloseIcon className='hover:cursor-pointer hover:text-red-500' onClick={() => closeSnackbar(key)} color="primary" />
             ),
           }
-        ) 
+        )
       } catch (error) {
         enqueueSnackbar('Erro ao resetar senha, consulte um administrador.', { variant: 'error' })
       }
@@ -174,7 +178,7 @@ export const Students = () => {
                 <td className="px-4 py-2 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
                 <td className="px-4 py-2">
                   <IconButton
-                  className='hover:text-white'
+                    className='hover:text-white'
                     aria-controls="long-menu"
                     aria-haspopup="true"
                     onClick={(event) => {
@@ -185,7 +189,7 @@ export const Students = () => {
                     <MoreVertIcon />
                   </IconButton>
                   <Menu
-                  variant='selectedMenu'
+                    variant='selectedMenu'
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={handleCloseMenu}
@@ -196,18 +200,18 @@ export const Students = () => {
                     }}>Excluir
                     </MenuItem>
 
-                    <MenuItem onClick={(event) =>{
+                    <MenuItem onClick={(event) => {
                       event.stopPropagation()
                       handleOpenDialog('resetPassword', selectedStudent!)
                     }}>Resetar Senha
-                  </MenuItem>
-                </Menu>
-              </td>
-          </>
+                    </MenuItem>
+                  </Menu>
+                </td>
+              </>
             )}
-          onClickRow={(student: TableComponentClickRowProps<StudentsResponse>) => {
-            navigate(RoutesNames.student.replace(':id', student.item?.id.toString()))
-          }}
+            onClickRow={(student: TableComponentClickRowProps<StudentsResponse>) => {
+              navigate(RoutesNames.student.replace(':id', student.item?.id.toString()))
+            }}
           />
         </div>
       </div>
@@ -224,9 +228,22 @@ export const Students = () => {
           <Button onClick={handleCloseDialog} style={{ textTransform: 'none', color: 'gray' }}>
             Cancelar
           </Button>
-          <Button onClick={handleConfirmAction} style={{ textTransform: 'none', color: actionType === 'delete' ? 'red' : 'blue' }}>
+          <LoadingButton
+            style={{
+              textTransform: 'none',
+              color: actionType === 'delete' ? '#D72638' : 'blue',
+              backgroundColor: 'transparent',
+              borderRadius: '0.375rem',
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.3s',
+            }}
+            variant='contained'
+            loading={resetPassword || studentDelet}
+            disabled={resetPassword || studentDelet}
+            onClick={handleConfirmAction}
+          >
             {actionType === 'delete' ? 'Excluir' : 'Resetar Senha'}
-          </Button>
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </div>

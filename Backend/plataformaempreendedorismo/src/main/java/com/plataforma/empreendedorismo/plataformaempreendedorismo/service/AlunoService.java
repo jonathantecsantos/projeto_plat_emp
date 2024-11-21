@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import util.enuns.TipoOperacaoEnum;
 import util.exceptions.ValidaAlunoException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -82,8 +83,8 @@ public class AlunoService {
 
     private void validaLiderAndViceLiderEdicao(Aluno aluno, AlunoEditarRecord alunoEditarRecord, Equipe equipe) throws ValidaAlunoException {
         validarLiderancaDupla(alunoEditarRecord);
-        validarSeExisteLider(aluno, equipe);
-        validarSeExisteViceLider(aluno, equipe);
+        validarSeExisteLider(alunoEditarRecord, equipe);
+        validarSeExisteViceLider(alunoEditarRecord, equipe);
 
     }
 
@@ -93,21 +94,25 @@ public class AlunoService {
         }
     }
 
-    private void validarSeExisteViceLider(Aluno aluno, Equipe equipe) throws ValidaAlunoException {
-        for(Aluno alunoList : equipe.getAlunos()) {
-            if(alunoList.getIsViceLider() && alunoList != aluno){
-                throw new ValidaAlunoException("Já existe um Vice-Líder no time!");
+    private void validarSeExisteViceLider(AlunoEditarRecord aluno, Equipe equipe) throws ValidaAlunoException {
+        if(Boolean.TRUE.equals(aluno.isViceLider())) {
+            for (Aluno alunoList : equipe.getAlunos()) {
+                if (alunoList.getIsViceLider() && !Objects.equals(alunoList.getId(), aluno.id())) {
+                    throw new ValidaAlunoException("Já existe um Vice-Líder no time!");
+                }
             }
         }
     }
 
-    private void validarSeExisteLider(Aluno aluno, Equipe equipe) throws ValidaAlunoException {
-        for(Aluno alunoList : equipe.getAlunos()) {
-            if(alunoList.getIsLider() && alunoList != aluno){
-                throw new ValidaAlunoException("Já existe um Líder no time!");
+    private void validarSeExisteLider(AlunoEditarRecord aluno, Equipe equipe) throws ValidaAlunoException {
+
+        if(Boolean.TRUE.equals(aluno.isLider())){
+            for(Aluno alunoList : equipe.getAlunos()) {
+                if(alunoList.getIsLider() && !Objects.equals(alunoList.getId(), aluno.id())){
+                    throw new ValidaAlunoException("Já existe um Líder no time!");
+                }
             }
         }
-
     }
 
     public void atualizarAluno(Aluno aluno, AlunoEditarRecord alunoEditarRecord) {

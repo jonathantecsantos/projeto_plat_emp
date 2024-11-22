@@ -82,11 +82,15 @@ const menuItems: MenuItemType[] = [
     insideItems: [
       {
         insideName: 'Alunos',
-        routeName: `${RoutesNames.students}`,
+        routeName: RoutesNames.students,
       },
       {
         insideName: 'Professores',
         routeName: RoutesNames.teachers,
+      },
+      {
+        insideName: 'Avaliadores',
+        routeName: RoutesNames.evaluators,
       },
     ],
   },

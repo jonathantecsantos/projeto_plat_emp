@@ -9,11 +9,12 @@ import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../m
 import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
+import { Evaluator } from '../model/evaluator'
 
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -35,6 +36,7 @@ export const studentsApiSlice = createApi({
       }),
       invalidatesTags: (_result, _error, { id }: any) => [
         { type: 'Student', id: 'LIST' },
+        { type: 'Teacher', id: 'LIST' },
         { type: 'Team', id },
       ],
     }),
@@ -240,6 +242,37 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Banner', id }],
     }),
 
+    //EVALUATOR
+    getEvaluators: build.query<Evaluator[], void>({
+      query: () => `/avaliadores`,
+      transformResponse: (response: Evaluator[]) => {
+        return response.sort((a, b) => a.nome.localeCompare(b.nome))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Evaluator', id } as const)),
+            { type: 'Evaluator', id: 'LIST' },
+          ]
+          : [{ type: 'Evaluator', id: 'LIST' }],
+    }),
+
+    getEvaluatorById: build.query<Evaluator, number>({
+      query: (id) => `/avaliadores/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Evaluator', id }],
+    }),
+
+    deleteEvaluator: build.mutation<void, any>({
+      query: (id) => ({
+        url: `/avaliadores/apagar/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Evaluator', id },
+        { type: 'Evaluator', id: 'LIST' },
+      ],
+    }),
+
     //EVALUATION
     getEvaluationById: build.query<EvaluationById, number>({
       query: (id) => `/avaliacoes/${id}`,
@@ -413,6 +446,11 @@ export const {
   useCreateBannerMutation,
   useUpdateBannerMutation,
 
+  //Evaluators
+  useGetEvaluatorsQuery,
+  useGetEvaluatorByIdQuery,
+  useDeleteEvaluatorMutation,
+  
   //Evaluations
   useGetEvaluationByIdQuery,
   useGetTeamsEvaluationsQuery,

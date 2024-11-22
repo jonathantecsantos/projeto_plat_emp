@@ -34,6 +34,7 @@ import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { Roles } from './utils/types'
+import { EvaluatorsPage } from './pages/evaluators'
 
 export const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.teacher,
     element: <ProtectedRoute children={<TeacherPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+  },
+  {
+    path: RoutesNames.evaluators,
+    element: <ProtectedRoute children={<EvaluatorsPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />,
   },
   {
     path: RoutesNames.teams,

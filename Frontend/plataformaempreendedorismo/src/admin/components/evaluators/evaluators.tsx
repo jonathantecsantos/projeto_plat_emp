@@ -1,31 +1,27 @@
-import CheckIcon from '@mui/icons-material/Check'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, Menu, MenuItem } from '@mui/material'
-import { useSnackbar } from 'notistack'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useDeleteStudentMutation, useGetAllStudentsQuery, usePasswordResetMutation } from '../../../api/studentApi'
-import { RoutesNames } from '../../../globals'
-import { StudentsResponse } from '../../../model/student'
-import { Roles } from '../../../utils/types'
-import { AdminHeader } from '../common/adminHeader'
-import { TableComponent } from '../table'
-import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
 import CloseIcon from '@mui/icons-material/Close';
-import { LoadingButton } from '@mui/lab'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, Menu, MenuItem } from '@mui/material'
+import { useSnackbar } from "notistack"
+import { useState, useRef, useEffect, useMemo } from "react"
+import { useSearchParams, useNavigate } from "react-router-dom"
+import { RoutesNames } from "../../../globals"
+import { Roles } from "../../../utils/types"
+import { AdminHeader } from "../common/adminHeader"
+import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
+import { useDeleteEvaluatorMutation, useGetEvaluatorsQuery, usePasswordResetMutation } from "../../../api/studentApi"
+import { TableComponent } from '../table';
+import { LoadingButton } from '@mui/lab';
+import { Evaluator } from '../../../model/evaluator';
 
-
-export const Students = () => {
-  const { data: students, isLoading, error, refetch } = useGetAllStudentsQuery()
-  const [deleteStudent, { isLoading: studentDelet }] = useDeleteStudentMutation()
+export const EvaluatorsComponent = () => {
+  const { data: evaluators, isLoading, error, refetch } = useGetEvaluatorsQuery()
+  const [deleteEvaluator, { isLoading: evaluatorDelete }] = useDeleteEvaluatorMutation()
   const [passordReset, { isLoading: resetPassword }] = usePasswordResetMutation()
-  // const studentsGlobalState = useSelector((state: RootState) => state.studentsApi)
-  // const studentsData = studentsGlobalState.queries['getAllStudents(undefined)']?.data || []
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
 
-  const [selectedStudent, setSelectedStudent] = useState<StudentsResponse>()
+  const [selectedEvaluator, setSelectedEvaluator] = useState<Evaluator>()
   const [actionType, setActionType] = useState<'delete' | 'resetPassword' | null>(null)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openDialog, setOpenDialog] = useState(false)
@@ -35,25 +31,25 @@ export const Students = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (students?.length === 0) {
-      console.log('students refetch')
+    if (evaluators?.length === 0) {
+      console.log('evaluators refetch')
       refetch()
     }
-  }, [students, refetch])
+  }, [evaluators, refetch])
 
   useEffect(() => {
     if (tableComponentSetCurrPage) {
       tableComponentSetCurrPage({ page: 0 });
     }
-  }, [students])
+  }, [evaluators])
 
-  const filteredStudents = useMemo(() => {
-    if (!students) return []
-    return students.filter((student) =>
-      student.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.equipeRecord.nome.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEvaluators = useMemo(() => {
+    if (!evaluators) return []
+    return evaluators.filter((evaluator) =>
+      evaluator.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      evaluator.instituicao.toLowerCase().includes(searchTerm.toLowerCase())
     )
-  }, [students, searchTerm])
+  }, [evaluators, searchTerm])
 
   const handleSearch = (query: string) => {
     setSearchParams({ search: query })
@@ -63,41 +59,41 @@ export const Students = () => {
     setAnchorEl(null)
   }
 
-  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, student: StudentsResponse) => {
-    setSelectedStudent(student)
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, evaluator: Evaluator) => {
+    setSelectedEvaluator(evaluator)
     setAnchorEl(event.currentTarget)
   }
 
-  const handleOpenDialog = (type: 'delete' | 'resetPassword', student: StudentsResponse) => {
+  const handleOpenDialog = (type: 'delete' | 'resetPassword', evaluator: Evaluator) => {
     setActionType(type)
     setOpenDialog(true)
-    setSelectedStudent(student)
+    setSelectedEvaluator(evaluator)
     handleCloseMenu()
   }
 
   const handleCloseDialog = () => {
     setActionType(null)
-    setSelectedStudent(undefined)
+    setSelectedEvaluator(undefined)
     setOpenDialog(false)
   }
 
   const handleConfirmAction = async () => {
-    if (actionType === 'delete' && selectedStudent) {
+    if (actionType === 'delete' && selectedEvaluator) {
       try {
-        await deleteStudent(selectedStudent.id)
-        enqueueSnackbar(`Aluno(a): ${selectedStudent.nome}, excluído com sucesso!`, { variant: 'success' })
+        await deleteEvaluator(selectedEvaluator.id)
+        enqueueSnackbar(`Avaliador(a): ${selectedEvaluator.nome}, excluído com sucesso!`, { variant: 'success' })
         refetch()
       } catch (error) {
         enqueueSnackbar('Erro ao excluir, consulte um administrador.', { variant: 'error' })
       }
-    } else if (actionType === 'resetPassword' && selectedStudent) {
+    } else if (actionType === 'resetPassword' && selectedEvaluator) {
       try {
         const response = await passordReset({
-          idObjeto: selectedStudent.id,
-          emailUsuario: selectedStudent.email,
-          role: Roles.Aluno,
+          idObjeto: selectedEvaluator.id,
+          emailUsuario: selectedEvaluator.instituicao,
+          role: Roles.Avaliador,
         })
-        enqueueSnackbar(`Senha do aluno(a): ${selectedStudent.nome} foi resetada com sucesso!`, { variant: 'success' })
+        enqueueSnackbar(`Senha do avaliador(a): ${selectedEvaluator.nome} foi resetada com sucesso!`, { variant: 'success' })
         enqueueSnackbar(
           <div>
             <p><strong>Login:</strong> {response?.data?.login}</p>
@@ -120,14 +116,14 @@ export const Students = () => {
 
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
-  if (error) return <p className="text-center">Error loading students.</p>
-  if (students!.length <= 0) return <div>
+  if (error) return <p className="text-center">Error loading evaluators.</p>
+  if (evaluators!.length <= 0) return <div>
     <AdminHeader onSearch={handleSearch} onRefresh={refetch}
       onAdd={() => navigate(RoutesNames.student)}
       // addButtonName='Adicionar Aluno'
-      placeholder='Pesquisar por nome do aluno ou turma' />
+      placeholder='Pesquisar por nome do avaliador ou instituição' />
     <div className="my-8 flex justify-center font-semibold gap-1">
-      <p>Nenhum aluno disponível, realize a</p>
+      <p>Nenhum avaliador disponível, realize a </p>
       <span onClick={() => navigate(RoutesNames.uploadFiles)}
         className='hover:font-bold cursor-pointer'>
         importação
@@ -138,11 +134,12 @@ export const Students = () => {
     </div>
   </div>
 
+
   return (
     <div className="flex flex-col h-full">
       <div className="sticky top-0 z-10">
         <AdminHeader onSearch={handleSearch} onRefresh={refetch}
-          placeholder='Pesquisar por nome do aluno ou turma'
+          placeholder='Pesquisar por nome do avaliador ou instituição'
           // addButtonName='Adicionar Aluno'
           onAdd={() => navigate(RoutesNames.student)} />
       </div>
@@ -151,30 +148,32 @@ export const Students = () => {
           <TableComponent
             colums={[
               // 'ID',
-              'CPF',
+              // 'CPF',
               'Nome',
-              'Email',
-              'Turma',
-              'Líder',
-              'Vice Líder',
+              'Instituição',
+              // 'Turma',
+              // 'Líder',
+              // 'Vice Líder',
               // 'ID Equipe',
-              'Equipe',
+              // 'Equipe',
               // 'ID Obs',
               'Ação'
             ]}
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
             setCurrPageRef={tableComponentSetCurrPageRef}
-            bodyList={filteredStudents!}
-            bodyRowBuilder={(student: StudentsResponse) => (
+            bodyList={filteredEvaluators!}
+            bodyRowBuilder={(evaluator: Evaluator) => (
               <>
                 {/* <td className="px-4 py-2">{student.id}</td> */}
-                <td className="px-4">{student.cpf}</td>
-                <td className="px-4 capitalize">{student.nome.toLowerCase()}</td>
-                <td className="px-4">{student.email}</td>
-                <td className="px-4 uppercase">{student.turma}</td>
-                <td className="px-4">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
-                <td className="px-4">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
-                <td className="px-4 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
+                {/* <td className="px-4">{evaluator.cpf}</td> */}
+                <td className="px-4 capitalize">{evaluator?.nome?.toLowerCase()}</td>
+                <td className="px-4 capitalize">{evaluator?.instituicao?.toLowerCase()}</td>
+
+                {/* <td className="px-4">{evaluator.email}</td> */}
+                {/* <td className="px-4 uppercase">{evaluator.instituição}</td> */}
+                {/* <td className="px-4">{evaluator.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td> */}
+                {/* <td className="px-4">{evaluator.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td> */}
+                {/* <td className="px-4 capitalize">{evaluator.equipeRecord.nome.toLowerCase()}</td> */}
                 <td className="px-4">
                   <IconButton
                     className='hover:text-white no-row-click'
@@ -182,7 +181,7 @@ export const Students = () => {
                     aria-haspopup="true"
                     onClick={(event) => {
                       event.stopPropagation()
-                      handleOpenMenu(event, student)
+                      handleOpenMenu(event, evaluator)
                     }}
                   >
                     <MoreVertIcon />
@@ -194,19 +193,19 @@ export const Students = () => {
                     open={Boolean(anchorEl)}
                     onClose={handleCloseMenu}>
                     <MenuItem className='no-row-click'
-                      onClick={() => handleOpenDialog('delete', selectedStudent!)}>
+                      onClick={() => handleOpenDialog('delete', selectedEvaluator!)}>
                       Excluir
                     </MenuItem>
 
                     <MenuItem className='no-row-click'
-                      onClick={() => handleOpenDialog('resetPassword', selectedStudent!)}>
+                      onClick={() => handleOpenDialog('resetPassword', selectedEvaluator!)}>
                       Resetar Senha
                     </MenuItem>
                   </Menu>
                 </td>
               </>
             )}
-            onClickRow={(student: TableComponentClickRowProps<StudentsResponse>) => {
+            onClickRow={(student: TableComponentClickRowProps<Evaluator>) => {
               //controle de envio de rotas no click da action
               const target = student.target as HTMLElement
               if (target.closest('.no-row-click')) {
@@ -220,10 +219,10 @@ export const Students = () => {
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogContent>
           {actionType === 'delete' && (
-            <span>Deseja realmente excluir o aluno(a): {selectedStudent?.nome.toLowerCase()}?</span>
+            <span>Deseja realmente excluir o avaliador(a): {selectedEvaluator?.nome.toLowerCase()}?</span>
           )}
           {actionType === 'resetPassword' && (
-            <span>Deseja realmente resetar a senha do aluno(a): {selectedStudent?.nome.toLowerCase()}?</span>
+            <span>Deseja realmente resetar a senha do avaliador(a): {selectedEvaluator?.nome.toLowerCase()}?</span>
           )}
         </DialogContent>
         <DialogActions>
@@ -240,8 +239,8 @@ export const Students = () => {
               transition: 'background-color 0.3s',
             }}
             variant='contained'
-            loading={resetPassword || studentDelet}
-            disabled={resetPassword || studentDelet}
+            loading={resetPassword || evaluatorDelete}
+            disabled={resetPassword || evaluatorDelete}
             onClick={handleConfirmAction}
           >
             {actionType === 'delete' ? 'Excluir' : 'Resetar Senha'}

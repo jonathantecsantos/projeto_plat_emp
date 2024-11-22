@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliador.AvaliadorCadastroRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ public class Avaliador {
     private Usuario usuario;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "avaliador_formato",
             joinColumns = {@JoinColumn(name = "id_avaliador", referencedColumnName = "id")},
@@ -39,11 +41,11 @@ public class Avaliador {
     )
     private List<FormatoAvaliacao> formatosAvaliacoes = new ArrayList<>();
 
-    public Avaliador(AvaliadorCadastroRecord avaliadorCadastroRecord) {
+    public Avaliador(AvaliadorCadastroRecord avaliadorCadastroRecord, List<FormatoAvaliacao> formatosAvaliacoes) {
         this.instituicao = avaliadorCadastroRecord.instituicao();
         this.nome = avaliadorCadastroRecord.nome().toUpperCase();
         this.email = avaliadorCadastroRecord.email();
-        this.formatosAvaliacoes = avaliadorCadastroRecord.formatoAvaliacoes();
+        this.formatosAvaliacoes = formatosAvaliacoes;
     }
 
 }

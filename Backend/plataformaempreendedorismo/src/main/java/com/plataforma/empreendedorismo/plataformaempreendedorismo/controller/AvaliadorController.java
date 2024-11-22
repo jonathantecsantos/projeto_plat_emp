@@ -95,7 +95,7 @@ public class AvaliadorController {
     @PutMapping("/editar")
     public ResponseEntity<String> editar(@RequestBody @Valid AvaliadorEditarRecord avaliadorEditarRecord){
         try {
-            avaliadorService.editarProfessor(avaliadorEditarRecord);
+            avaliadorService.editarAvaliador(avaliadorEditarRecord);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Avaliador atualizado com sucesso!");
         }catch (Exception e){

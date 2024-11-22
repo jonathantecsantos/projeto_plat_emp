@@ -23,6 +23,7 @@ public class FormatoAvaliacao {
 
     private String descricao;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "formatoAvaliacao", cascade = CascadeType.ALL, orphanRemoval = true)
     List<CriterioAvaliacao> criterios = new ArrayList<>();
 

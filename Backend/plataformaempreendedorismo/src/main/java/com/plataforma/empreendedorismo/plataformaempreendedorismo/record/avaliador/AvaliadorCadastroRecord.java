@@ -8,6 +8,6 @@ public record AvaliadorCadastroRecord(
         String instituicao,
         String nome,
         String email,
-        List<FormatoAvaliacao> formatoAvaliacoes
+        List<Long> idFormatosAvaliacoes
 ) {
 }

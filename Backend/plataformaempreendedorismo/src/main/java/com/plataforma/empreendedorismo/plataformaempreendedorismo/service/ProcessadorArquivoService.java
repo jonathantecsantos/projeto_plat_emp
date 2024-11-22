@@ -182,7 +182,7 @@ public class ProcessadorArquivoService {
     private void processarImportacaoAvaliador(Row row) {
         log.info("Iniciando processamento de Avaliadores");
 
-        ArrayList<FormatoAvaliacao> formatoAvaliacaos = new ArrayList<>();
+        ArrayList<Long> formatoAvaliacaos = new ArrayList<>();
 
         String nome = "";
         String instituicao = "";
@@ -206,7 +206,7 @@ public class ProcessadorArquivoService {
             FormatoAvaliacao formatoAvaliacaoEncontrado = formatoAvaliacaoRepository.findByDescricao(formatoAvaliacao);
 
             if( formatoAvaliacaoEncontrado != null){
-                formatoAvaliacaos.add(formatoAvaliacaoEncontrado);
+                formatoAvaliacaos.add(formatoAvaliacaoEncontrado.getId());
             }
         }
 

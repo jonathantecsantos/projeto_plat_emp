@@ -10,7 +10,7 @@ public record AvaliadorEditarRecord (
     Long id,
     String nome,
     String instituicao,
-    List<FormatoAvaliacao> formatosAvaliacoes
+    List<Long> idFormatosAvaliacoes
 ){
 
 }

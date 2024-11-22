@@ -11,10 +11,11 @@ export const RoutesNames = {
 
   students: '/students',
   student: '/students/:id',
-  settings: '/settings',
 
   teachers: '/teachers',
   teacher: '/teachers/:id',
+
+  evaluators: '/evaluators',
 
   teams: '/teams',
   team: '/teams/:id',
@@ -42,6 +43,9 @@ export const RoutesNames = {
 
   teamsNotes: '/notes',
   teamNotes: '/notes/:id',
+
+
+  settings: '/settings',
 
 }
 

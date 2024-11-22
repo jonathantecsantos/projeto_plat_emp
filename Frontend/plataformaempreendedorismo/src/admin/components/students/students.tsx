@@ -138,7 +138,6 @@ export const Students = () => {
     </div>
   </div>
 
-
   return (
     <div className="flex flex-col h-full">
       <div className="sticky top-0 z-10">
@@ -169,16 +168,16 @@ export const Students = () => {
             bodyRowBuilder={(student: StudentsResponse) => (
               <>
                 {/* <td className="px-4 py-2">{student.id}</td> */}
-                <td className="px-4 py-2">{student.cpf}</td>
-                <td className="px-4 py-2 capitalize">{student.nome.toLowerCase()}</td>
-                <td className="px-4 py-2">{student.email}</td>
-                <td className="px-4 py-2 uppercase">{student.turma}</td>
-                <td className="px-4 py-2">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
-                <td className="px-4 py-2">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
-                <td className="px-4 py-2 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
-                <td className="px-4 py-2">
+                <td className="px-4">{student.cpf}</td>
+                <td className="px-4 capitalize">{student.nome.toLowerCase()}</td>
+                <td className="px-4">{student.email}</td>
+                <td className="px-4 uppercase">{student.turma}</td>
+                <td className="px-4">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
+                <td className="px-4">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
+                <td className="px-4 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
+                <td className="px-4">
                   <IconButton
-                    className='hover:text-white'
+                    className='hover:text-white no-row-click'
                     aria-controls="long-menu"
                     aria-haspopup="true"
                     onClick={(event) => {
@@ -189,27 +188,30 @@ export const Students = () => {
                     <MoreVertIcon />
                   </IconButton>
                   <Menu
+                    className='no-row-click'
                     variant='selectedMenu'
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
-                    onClose={handleCloseMenu}
-                  >
-                    <MenuItem onClick={(event) => {
-                      event.stopPropagation()
-                      handleOpenDialog('delete', selectedStudent!)
-                    }}>Excluir
+                    onClose={handleCloseMenu}>
+                    <MenuItem className='no-row-click'
+                      onClick={() => handleOpenDialog('delete', selectedStudent!)}>
+                      Excluir
                     </MenuItem>
 
-                    <MenuItem onClick={(event) => {
-                      event.stopPropagation()
-                      handleOpenDialog('resetPassword', selectedStudent!)
-                    }}>Resetar Senha
+                    <MenuItem className='no-row-click'
+                      onClick={() => handleOpenDialog('resetPassword', selectedStudent!)}>
+                      Resetar Senha
                     </MenuItem>
                   </Menu>
                 </td>
               </>
             )}
             onClickRow={(student: TableComponentClickRowProps<StudentsResponse>) => {
+              //controle de envio de rotas no click da action
+              const target = student.target as HTMLElement
+              if (target.closest('.no-row-click')) {
+                return
+              }
               navigate(RoutesNames.student.replace(':id', student.item?.id.toString()))
             }}
           />
@@ -231,7 +233,7 @@ export const Students = () => {
           <LoadingButton
             style={{
               textTransform: 'none',
-              color: actionType === 'delete' ? '#D72638' : 'blue',
+              color: actionType === 'delete' ? 'red' : 'blue',
               backgroundColor: 'transparent',
               borderRadius: '0.375rem',
               boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',

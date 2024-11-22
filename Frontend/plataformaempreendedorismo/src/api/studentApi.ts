@@ -35,6 +35,7 @@ export const studentsApiSlice = createApi({
       }),
       invalidatesTags: (_result, _error, { id }: any) => [
         { type: 'Student', id: 'LIST' },
+        { type: 'Teacher', id: 'LIST' },
         { type: 'Team', id },
       ],
     }),

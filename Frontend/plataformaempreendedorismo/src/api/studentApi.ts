@@ -257,6 +257,22 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Evaluator', id: 'LIST' }],
     }),
 
+    getEvaluatorById: build.query<Evaluator, number>({
+      query: (id) => `/avaliadores/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Evaluator', id }],
+    }),
+
+    deleteEvaluator: build.mutation<void, any>({
+      query: (id) => ({
+        url: `/avaliadores/apagar/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Evaluator', id },
+        { type: 'Evaluator', id: 'LIST' },
+      ],
+    }),
+
     //EVALUATION
     getEvaluationById: build.query<EvaluationById, number>({
       query: (id) => `/avaliacoes/${id}`,
@@ -432,6 +448,9 @@ export const {
 
   //Evaluators
   useGetEvaluatorsQuery,
+  useGetEvaluatorByIdQuery,
+  useDeleteEvaluatorMutation,
+  
   //Evaluations
   useGetEvaluationByIdQuery,
   useGetTeamsEvaluationsQuery,

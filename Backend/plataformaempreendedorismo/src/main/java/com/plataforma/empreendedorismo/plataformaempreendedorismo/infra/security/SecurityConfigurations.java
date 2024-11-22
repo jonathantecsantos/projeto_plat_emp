@@ -79,7 +79,6 @@ public class SecurityConfigurations {
                         //Prototipo
                         .requestMatchers(HttpMethod.POST, "/prototipo/cadastrar").hasAnyRole("ADMIN", "COORDENADOR", "ALUNO")
                         .requestMatchers(HttpMethod.GET, "/prototipo/tipos-anexo").hasAnyRole("ADMIN", "COORDENADOR", "ALUNO")
-                        .requestMatchers(HttpMethod.GET, "/prototipo/{idEquipe}").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR",  "ALUNO")
                         .requestMatchers(HttpMethod.PUT, "/prototipo/editar").hasAnyRole("ADMIN", "COORDENADOR", "ALUNO")
 
                         //Relatório

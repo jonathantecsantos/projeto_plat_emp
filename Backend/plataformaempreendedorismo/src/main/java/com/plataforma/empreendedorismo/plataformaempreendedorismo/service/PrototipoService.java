@@ -116,7 +116,11 @@ public class PrototipoService {
 
     public PrototipoRecord buscarPrototipoPorIdEquipe(Long idEquipe) {
         Optional<Equipe> equipeOptional = equipeRepository.findById(idEquipe);
-        return equipeOptional.map(equipe -> new PrototipoRecord(equipe.getPrototipo())).orElse(null);
+        if(equipeOptional.isPresent() && equipeOptional.get().getPrototipo() != null){
+            return equipeOptional.map(equipe -> new PrototipoRecord(equipe.getPrototipo())).orElse(null);
+        }else {
+            return null;
+        }
     }
 
     @Transactional

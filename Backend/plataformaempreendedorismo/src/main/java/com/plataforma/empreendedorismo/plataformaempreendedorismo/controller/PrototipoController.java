@@ -1,7 +1,5 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.BannerRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.banner.CadastroBannerRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.prototipo.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.TipoAnexoPrototipoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.PrototipoService;
@@ -77,8 +75,19 @@ public class PrototipoController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
     })
     @GetMapping(value = "/{idEquipe}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PrototipoRecord buscarPrototipoPorIdEquipe(@PathVariable Long idEquipe){
-        return prototipoService.buscarPrototipoPorIdEquipe(idEquipe);
+    public ResponseEntity<?>  buscarPrototipoPorIdEquipe(@PathVariable Long idEquipe) throws Exception {
+        try {
+            PrototipoRecord prototipoRecord = prototipoService.buscarPrototipoPorIdEquipe(idEquipe);
+            if (prototipoRecord != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(prototipoRecord);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Nenhum protótipo encontrado para o ID da equipe.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao buscar os dados: " + e.getMessage());
+        }
     }
 
     @Operation(summary = "Editar Prototipo", method = "PUT")

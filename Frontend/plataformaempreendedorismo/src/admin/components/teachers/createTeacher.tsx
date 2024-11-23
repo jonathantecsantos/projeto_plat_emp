@@ -78,7 +78,7 @@ export const CreateTeacher = () => {
               id="nome"
               type="text"
               {...register('nome')}
-              onChange={(e) => handleInputChange('nome', e.target.value)}
+              onBlur={(e) => handleInputChange('nome', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
             {errors.nome && <p className="text-red-500 text-sm mt-1">{errors.nome.message}</p>}
@@ -89,7 +89,7 @@ export const CreateTeacher = () => {
               id="cpf"
               type="text"
               {...register('cpf')}
-              onChange={(e) => handleInputChange('cpf', e.target.value)}
+              onBlur={(e) => handleInputChange('cpf', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
             {errors.cpf && <p className="text-red-500 text-sm mt-1">{errors.cpf.message}</p>}
@@ -100,7 +100,7 @@ export const CreateTeacher = () => {
               id="email"
               type="email"
               {...register('email')}
-              onChange={(e) => handleInputChange('email', e.target.value)}
+              onBlur={(e) => handleInputChange('email', e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}

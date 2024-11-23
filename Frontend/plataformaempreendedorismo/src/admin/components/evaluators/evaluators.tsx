@@ -119,8 +119,8 @@ export const EvaluatorsComponent = () => {
   if (error) return <p className="text-center">Error loading evaluators.</p>
   if (evaluators!.length <= 0) return <div>
     <AdminHeader onSearch={handleSearch} onRefresh={refetch}
-      onAdd={() => navigate(RoutesNames.student)}
-      // addButtonName='Adicionar Aluno'
+      onAdd={() => navigate(RoutesNames.evaluator)}
+      // addButtonName='Adicionar Avaliador'
       placeholder='Pesquisar por nome do avaliador ou instituição' />
     <div className="my-8 flex justify-center font-semibold gap-1">
       <p>Nenhum avaliador disponível, realize a </p>
@@ -141,7 +141,7 @@ export const EvaluatorsComponent = () => {
         <AdminHeader onSearch={handleSearch} onRefresh={refetch}
           placeholder='Pesquisar por nome do avaliador ou instituição'
           // addButtonName='Adicionar Aluno'
-          onAdd={() => navigate(RoutesNames.student)} />
+          onAdd={() => navigate(RoutesNames.evaluator)} />
       </div>
       <div className="flex-1 overflow-auto">
         <div className="overflow-x-auto p-4">
@@ -211,7 +211,7 @@ export const EvaluatorsComponent = () => {
               if (target.closest('.no-row-click')) {
                 return
               }
-              navigate(RoutesNames.student.replace(':id', student.item?.id.toString()))
+              navigate(RoutesNames.evaluator.replace(':id', student.item?.id.toString()))
             }}
           />
         </div>

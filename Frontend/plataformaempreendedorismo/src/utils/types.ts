@@ -15,6 +15,12 @@ export enum Roles {
   Avaliador = 'ROLE_AVALIADOR',
 }
 
+export interface EvaluationTypes {
+  id: number
+  descricao: string
+}
+
+
 export enum EvalutionType {
   DLJ = 1,
   PITCH = 2,

@@ -10,6 +10,7 @@ import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { Evaluator } from '../model/evaluator'
+import { EvaluationTypes } from '../utils/types'
 
 
 export const studentsApiSlice = createApi({
@@ -243,6 +244,30 @@ export const studentsApiSlice = createApi({
     }),
 
     //EVALUATOR
+    getEvaluationTypes: build.query<EvaluationTypes[], void>({
+      query: () => `/avaliacoes/formatos`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Evaluation', id } as const)),
+            { type: 'Evaluation', id: 'LIST' },
+          ]
+          : [{ type: 'Evaluation', id: 'LIST' }],
+    }),
+
+
+    createEvaluator: build.mutation<Evaluator, Partial<Evaluator>>({
+      query: (data) => ({
+        url: `/avaliadores/cadastrar`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }: any) => [
+        { type: 'Evaluator', id: 'LIST' },
+        { type: 'Evaluator', id },
+      ],
+    }),
+
     getEvaluators: build.query<Evaluator[], void>({
       query: () => `/avaliadores`,
       transformResponse: (response: Evaluator[]) => {
@@ -447,6 +472,8 @@ export const {
   useUpdateBannerMutation,
 
   //Evaluators
+  useGetEvaluationTypesQuery,
+  useCreateEvaluatorMutation,
   useGetEvaluatorsQuery,
   useGetEvaluatorByIdQuery,
   useDeleteEvaluatorMutation,

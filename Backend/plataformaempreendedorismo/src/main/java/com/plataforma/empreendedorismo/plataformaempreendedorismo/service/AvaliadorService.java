@@ -52,7 +52,6 @@ public class AvaliadorService {
             Avaliador avaliador = avaliadorOptional.get();
             return new AvaliadorRecord(avaliador);
         }
-
         return null;
     }
 
@@ -68,6 +67,9 @@ public class AvaliadorService {
         }
         if(avaliadorEditarRecord.instituicao() != null){
             avaliador.setInstituicao(avaliadorEditarRecord.instituicao());
+        }
+        if(avaliadorEditarRecord.email() != null){
+            avaliador.setEmail(avaliadorEditarRecord.email());
         }
         if(!avaliadorEditarRecord.idFormatosAvaliacoes().isEmpty()){
             List<FormatoAvaliacao> listFormatos = getFormatoAvaliacaos(avaliadorEditarRecord);

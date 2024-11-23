@@ -9,6 +9,7 @@ public record AvaliadorEditarRecord (
     @NotNull
     Long id,
     String nome,
+    String email,
     String instituicao,
     List<Long> idFormatosAvaliacoes
 ){

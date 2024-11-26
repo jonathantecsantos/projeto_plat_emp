@@ -1,14 +1,10 @@
-import { useLocation, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { AdminDefaultPage } from "../admin/components/common/defaultPage"
 import { CreateEvaluator } from "../admin/components/evaluators/createEvaluator"
-import { UpdateOrCreateTeacherByTeam } from "../admin/components/teachers/updateTeacher"
+import { UpdateEvaluator } from "../admin/components/evaluators/updateEvaluator"
 
 
 export const EvaluatorPage = () => {
   const { id } = useParams()
-  const location = useLocation()
-  const { state } = location
-  return <AdminDefaultPage mainContent={id !== ':id' || state ?
-    <UpdateOrCreateTeacherByTeam id={Number(id)} teamData={state} /> :
-    <CreateEvaluator />} />
+  return <AdminDefaultPage mainContent={id !== ':id' ? <UpdateEvaluator id={Number(id)} /> : <CreateEvaluator />} />
 }

@@ -255,6 +255,17 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Evaluation', id: 'LIST' }],
     }),
 
+    updateEvaluator: build.mutation<Evaluator, { id: any; data: Partial<Evaluator> }>({
+      query: ({ id, data }) => ({
+        url: `/avaliadores/editar`,
+        method: 'PUT',
+        body: { id, ...data },
+      }),
+      invalidatesTags: (_result, _error, { id }: any) => [
+        { type: 'Evaluation', id },
+        { type: 'Evaluator', id: 'LIST' },
+      ],
+    }),
 
     createEvaluator: build.mutation<Evaluator, Partial<Evaluator>>({
       query: (data) => ({
@@ -473,11 +484,12 @@ export const {
 
   //Evaluators
   useGetEvaluationTypesQuery,
+  useUpdateEvaluatorMutation,
   useCreateEvaluatorMutation,
   useGetEvaluatorsQuery,
   useGetEvaluatorByIdQuery,
   useDeleteEvaluatorMutation,
-  
+
   //Evaluations
   useGetEvaluationByIdQuery,
   useGetTeamsEvaluationsQuery,

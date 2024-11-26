@@ -46,12 +46,8 @@ export const EditEvaluationType = ({ initialEvaluationTypes, onChange, reset }: 
             renderInput={(params) => (
               <TextField
                 {...params}
-                label=""
                 variant="outlined"
                 size="small"
-                placeholder=""
-                className="bg-white border border-gray-300 rounded-md"
-
               />
             )}
           />

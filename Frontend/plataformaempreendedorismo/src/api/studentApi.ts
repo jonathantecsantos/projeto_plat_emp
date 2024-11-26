@@ -1,6 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { Banner } from '../model/banner'
+import { Coordinator } from '../model/coordinators'
 import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
+import { Evaluator } from '../model/evaluator'
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
 import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
@@ -9,13 +11,12 @@ import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../m
 import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
-import { Evaluator } from '../model/evaluator'
 import { EvaluationTypes } from '../utils/types'
 
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator', 'Coordinator'],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -108,6 +109,61 @@ export const studentsApiSlice = createApi({
       invalidatesTags: (_result, _error, { id }) => [
         { type: 'Student', id },
         { type: 'Team', id }
+      ],
+    }),
+
+    //COORDINATORS
+    getCoordinator: build.query<Coordinator, number>({
+      query: (id) => `/coordenadores/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Coordinator', id }],
+    }),
+
+    getCoordinators: build.query<Coordinator[], void>({
+      query: () => `/coordenadores`,
+      transformResponse: (response: Coordinator[]) => {
+        return response.sort((a, b) => a.nome.localeCompare(b.nome))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Coordinator', id } as const)),
+            { type: 'Coordinator', id: 'LIST' },
+          ]
+          : [{ type: 'Coordinator', id: 'LIST' }],
+    }),
+
+    createCoordinator: build.mutation<Coordinator, Partial<Coordinator>>({
+      query: (data) => ({
+        url: `/coordenadores/cadastrar`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }: any) => [
+        { type: 'Coordinator', id: 'LIST' },
+        { type: 'Coordinator', id },
+      ],
+    }),
+
+    updateCoordinator: build.mutation<Coordinator, { id: any; data: Partial<Coordinator> }>({
+      query: ({ id, data }) => ({
+        url: `/coordenadores/editar`,
+        method: 'PUT',
+        body: { id, ...data },
+      }),
+      invalidatesTags: (_result, _error, { id, data }: any) => [
+        { type: 'Coordinator', id },
+        { type: 'Coordinator', id: data.id },
+      ],
+    }),
+
+    deleteCoordinator: build.mutation<void, any>({
+      query: (id) => ({
+        url: `/coordenadores/apagar/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Coordinator', id },
+        { type: 'Coordinator', id: 'LIST' }
       ],
     }),
 
@@ -461,6 +517,13 @@ export const {
   useCreateStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,
+
+  //Coordinators
+  useCreateCoordinatorMutation,
+  useGetCoordinatorsQuery,
+  useGetCoordinatorQuery,
+  useUpdateCoordinatorMutation,
+  useDeleteCoordinatorMutation,
 
   //Teams
   useGetTeamByIdQuery,

@@ -147,18 +147,10 @@ export const EvaluatorsComponent = () => {
         <div className="overflow-x-auto p-4">
           <TableComponent
             colums={[
-              // 'ID',
-              // 'CPF',
               'Nome',
               'Instituição',
               'Email',
               'Formatos de Avaliação',
-              // 'Turma',
-              // 'Líder',
-              // 'Vice Líder',
-              // 'ID Equipe',
-              // 'Equipe',
-              // 'ID Obs',
               'Ação'
             ]}
             wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}

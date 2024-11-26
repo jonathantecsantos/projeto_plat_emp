@@ -169,8 +169,8 @@ export const Students = () => {
               <>
                 {/* <td className="px-4 py-2">{student.id}</td> */}
                 <td className="px-4">{student.cpf}</td>
-                <td className="px-4 capitalize">{student.nome.toLowerCase()}</td>
-                <td className="px-4">{student.email}</td>
+                <td className="px-4 capitalize text-nowrap">{student.nome.toLowerCase()}</td>
+                <td className="px-4 text-nowrap">{student.email}</td>
                 <td className="px-4 uppercase">{student.turma}</td>
                 <td className="px-4">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
                 <td className="px-4">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>

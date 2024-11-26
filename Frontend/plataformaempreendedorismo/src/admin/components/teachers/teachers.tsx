@@ -158,8 +158,8 @@ export const TeachersComponent = () => {
             bodyRowBuilder={(teacher: TeachersResponse) => (
               <>
                 <td className="px-4 py-2">{teacher.cpf}</td>
-                <td className="px-4 py-2 capitalize">{teacher.nome.toLowerCase()}</td>
-                <td className="px-4 py-2">{teacher.email}</td>
+                <td className="px-4 py-2 capitalize text-nowrap">{teacher.nome.toLowerCase()}</td>
+                <td className="px-4 py-2 text-nowrap">{teacher.email}</td>
                 <td className="px-4 py-2 capitalize">{teacher.equipeRecord.nome.toLowerCase()}</td>
                 <td className="">
                   <IconButton

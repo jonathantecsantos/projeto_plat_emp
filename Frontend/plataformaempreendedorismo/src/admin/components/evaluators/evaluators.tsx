@@ -151,6 +151,8 @@ export const EvaluatorsComponent = () => {
               // 'CPF',
               'Nome',
               'Instituição',
+              'Email',
+              'Formatos de Avaliação',
               // 'Turma',
               // 'Líder',
               // 'Vice Líder',
@@ -164,16 +166,15 @@ export const EvaluatorsComponent = () => {
             bodyList={filteredEvaluators!}
             bodyRowBuilder={(evaluator: Evaluator) => (
               <>
-                {/* <td className="px-4 py-2">{student.id}</td> */}
-                {/* <td className="px-4">{evaluator.cpf}</td> */}
-                <td className="px-4 capitalize">{evaluator?.nome?.toLowerCase()}</td>
+                <td className="px-4 capitalize text-nowrap">{evaluator?.nome?.toLowerCase()}</td>
                 <td className="px-4 capitalize">{evaluator?.instituicao?.toLowerCase()}</td>
+                <td className="px-4">{evaluator?.email?.toLowerCase()}</td>
 
-                {/* <td className="px-4">{evaluator.email}</td> */}
-                {/* <td className="px-4 uppercase">{evaluator.instituição}</td> */}
-                {/* <td className="px-4">{evaluator.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td> */}
-                {/* <td className="px-4">{evaluator.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td> */}
-                {/* <td className="px-4 capitalize">{evaluator.equipeRecord.nome.toLowerCase()}</td> */}
+                <td className="px-4 capitalize text-nowrap">
+                  {evaluator?.formatosAvaliacoes.length > 0
+                    ? evaluator.formatosAvaliacoes.map((format) => format.descricao).join(', ')
+                    : ''}
+                </td>
                 <td className="px-4">
                   <IconButton
                     className='hover:text-white no-row-click'
@@ -205,13 +206,13 @@ export const EvaluatorsComponent = () => {
                 </td>
               </>
             )}
-            onClickRow={(student: TableComponentClickRowProps<Evaluator>) => {
+            onClickRow={(evaluator: TableComponentClickRowProps<Evaluator>) => {
               //controle de envio de rotas no click da action
-              const target = student.target as HTMLElement
+              const target = evaluator.target as HTMLElement
               if (target.closest('.no-row-click')) {
                 return
               }
-              navigate(RoutesNames.evaluator.replace(':id', student.item?.id.toString()))
+              navigate(RoutesNames.evaluator.replace(':id', evaluator.item?.id.toString()))
             }}
           />
         </div>

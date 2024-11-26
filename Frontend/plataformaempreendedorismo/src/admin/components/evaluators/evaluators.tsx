@@ -90,7 +90,7 @@ export const EvaluatorsComponent = () => {
       try {
         const response = await passordReset({
           idObjeto: selectedEvaluator.id,
-          emailUsuario: selectedEvaluator.instituicao,
+          emailUsuario: selectedEvaluator.email,
           role: Roles.Avaliador,
         })
         enqueueSnackbar(`Senha do avaliador(a): ${selectedEvaluator.nome} foi resetada com sucesso!`, { variant: 'success' })

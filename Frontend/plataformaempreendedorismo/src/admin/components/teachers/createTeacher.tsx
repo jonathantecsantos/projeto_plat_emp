@@ -68,7 +68,7 @@ export const CreateTeacher = () => {
 
   console.log('admin>createTeacher.tsx')
   return (
-    <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md border-t-">
+    <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md border-t-2">
       <h2 className="text-3xl font-bold text-center mb-4">Adicionar Professor</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

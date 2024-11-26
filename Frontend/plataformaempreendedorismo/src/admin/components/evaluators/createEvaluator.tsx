@@ -3,13 +3,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import { useCreateEvaluatorMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
-import { EditEvaluationType } from './editEvaluation'
+import { EditEvaluationType } from './editEvaluationType'
 
 const createEvaluatorSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -25,6 +25,7 @@ export const CreateEvaluator = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [success, setSuccess] = useState(isSuccess)
+  const [resetTypes, setResetTypes] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
@@ -62,10 +63,17 @@ export const CreateEvaluator = () => {
     })
     setSearchParams({})
     setSuccess(false)
+    setResetTypes(true)
   }
 
+  useEffect(() => {
+    if (resetTypes) {
+      setResetTypes(false)
+    }
+  }, [resetTypes])
+
   return (
-    <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md border-t-">
+    <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md border-t-2">
       <h2 className="text-3xl font-bold text-center mb-4">Adicionar Avaliador</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -109,6 +117,7 @@ export const CreateEvaluator = () => {
               render={({ field }) => (
                 <EditEvaluationType
                   initialEvaluationTypes={[]}
+                  reset={resetTypes}
                   onChange={(selectedEvaluationIds) => field.onChange(selectedEvaluationIds)}
                 />
               )}

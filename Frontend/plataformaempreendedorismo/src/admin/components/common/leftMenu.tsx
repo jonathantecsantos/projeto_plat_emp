@@ -92,6 +92,10 @@ const menuItems: MenuItemType[] = [
         insideName: 'Avaliadores',
         routeName: RoutesNames.evaluators,
       },
+      {
+        insideName: 'Coordenadores',
+        routeName: RoutesNames.coordinators,
+      },
     ],
   },
   {

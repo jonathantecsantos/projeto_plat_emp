@@ -60,6 +60,16 @@ const routes = [
     breadcrumb: 'Avaliadores'
   },
   {
+    path: RoutesNames.coordinators,
+    breadcrumb: 'Coordenadores',
+    children: [
+      {
+        path: RoutesNames.coordinator,
+        breadcrumb: 'Coordenador',
+      },
+    ],
+  },
+  {
     path: RoutesNames.teams,
     breadcrumb: 'Times',
     children: [

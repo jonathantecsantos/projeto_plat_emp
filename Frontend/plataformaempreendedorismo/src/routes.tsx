@@ -11,8 +11,12 @@ import { PitchClassificationPage } from './pages/classificationPitch'
 import { SharkTankClassificationPage } from './pages/classificationSharkTank'
 import { CompanyDetailsPage } from './pages/companyDetails'
 import { ContactPage } from './pages/contact'
+import { CoordinatorPage } from './pages/coordinator'
+import { CoordinatorsPage } from './pages/coordinators'
 import { DLJEvaluationPage } from './pages/dljTeamEvaluation'
 import { DLJPage } from './pages/dljTeams'
+import { EvaluatorPage } from './pages/evaluator'
+import { EvaluatorsPage } from './pages/evaluators'
 import { ExpoDleiEvaluationPage } from './pages/expoDleiTeamEvaluation'
 import { ExpoDleiPage } from './pages/expoDleiTeams'
 import { GeneralReportPage } from './pages/generalReport'
@@ -34,8 +38,6 @@ import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { Roles } from './utils/types'
-import { EvaluatorsPage } from './pages/evaluators'
-import { EvaluatorPage } from './pages/evaluator'
 
 export const router = createBrowserRouter([
   {
@@ -97,6 +99,14 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.evaluator,
     element: <ProtectedRoute children={<EvaluatorPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />,
+  },
+  {
+    path: RoutesNames.coordinators,
+    element: <ProtectedRoute children={<CoordinatorsPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />,
+  },
+  {
+    path: RoutesNames.coordinator,
+    element: <ProtectedRoute children={<CoordinatorPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />,
   },
   {
     path: RoutesNames.teams,

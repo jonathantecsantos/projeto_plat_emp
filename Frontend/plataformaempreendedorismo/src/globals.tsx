@@ -18,6 +18,9 @@ export const RoutesNames = {
   evaluators: '/evaluators',
   evaluator: '/evaluators/:id',
 
+  coordinators: '/coordinators',
+  coordinator: '/coordinators/:id',
+
   teams: '/teams',
   team: '/teams/:id',
 

@@ -51,7 +51,9 @@ export const Students = () => {
     if (!students) return []
     return students.filter((student) =>
       student.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.equipeRecord.nome.toLowerCase().includes(searchTerm.toLowerCase())
+      student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.cpf.toLowerCase().includes(searchTerm.toLowerCase())
+
     )
   }, [students, searchTerm])
 
@@ -142,7 +144,7 @@ export const Students = () => {
     <div className="flex flex-col h-full">
       <div className="sticky top-0 z-10">
         <AdminHeader onSearch={handleSearch} onRefresh={refetch}
-          placeholder='Pesquisar por nome do aluno ou turma'
+          placeholder='Pesquisar por nome, email ou cpf'
           // addButtonName='Adicionar Aluno'
           onAdd={() => navigate(RoutesNames.student)} />
       </div>

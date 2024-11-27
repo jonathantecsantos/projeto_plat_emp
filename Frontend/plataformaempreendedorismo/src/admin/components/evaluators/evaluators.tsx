@@ -47,7 +47,9 @@ export const EvaluatorsComponent = () => {
     if (!evaluators) return []
     return evaluators.filter((evaluator) =>
       evaluator.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      evaluator.instituicao.toLowerCase().includes(searchTerm.toLowerCase())
+      evaluator.instituicao.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      evaluator.email.toLowerCase().includes(searchTerm.toLowerCase())
+
     )
   }, [evaluators, searchTerm])
 
@@ -121,7 +123,7 @@ export const EvaluatorsComponent = () => {
     <AdminHeader onSearch={handleSearch} onRefresh={refetch}
       onAdd={() => navigate(RoutesNames.evaluator)}
       // addButtonName='Adicionar Avaliador'
-      placeholder='Pesquisar por nome do avaliador ou instituição' />
+      placeholder='Pesquisar por nome, email ou instituição' />
     <div className="my-8 flex justify-center font-semibold gap-1">
       <p>Nenhum avaliador disponível, realize a </p>
       <span onClick={() => navigate(RoutesNames.uploadFiles)}

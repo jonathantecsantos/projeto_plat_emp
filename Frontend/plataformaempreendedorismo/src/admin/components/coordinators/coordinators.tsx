@@ -47,7 +47,8 @@ export const Coordinators = () => {
     if (!coordinators) return []
     return coordinators.filter((coordinator) =>
       coordinator.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      coordinator.email.toLowerCase().includes(searchTerm.toLowerCase())
+      coordinator.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      coordinator.cpf.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }, [coordinators, searchTerm])
 
@@ -124,22 +125,22 @@ export const Coordinators = () => {
         <AdminHeader
           onSearch={handleSearch}
           onRefresh={refetch}
-          placeholder="Pesquisar por nome ou email do coordenador"
+          placeholder="Pesquisar por nome, email ou cpf"
           onAdd={() => navigate(RoutesNames.coordinator)}
         />
       </div>
       <div className="flex-1 overflow-auto">
         <div className="overflow-x-auto p-4">
           <TableComponent
-            colums={["Nome", "Email", "CPF", "Ações"]}
+            colums={["CPF", "Nome", "Email", "Ações"]}
             wrapperProps={{ style: { maxWidth: "calc(100% - 10px)" } }}
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredCoordinators!}
             bodyRowBuilder={(coordinator: Coordinator) => (
               <>
+                <td className="px-4">{coordinator.cpf}</td>
                 <td className="px-4">{coordinator.nome}</td>
                 <td className="px-4">{coordinator.email}</td>
-                <td className="px-4">{coordinator.cpf}</td>
                 <td className="px-4">
                   <IconButton
                     className="hover:text-white no-row-click"

@@ -47,7 +47,10 @@ export const TeachersComponent = () => {
   const filteredStudents = useMemo(() => {
     if (!teachers) return []
     return teachers.filter((teacher) =>
-      teacher.nome.toLowerCase().includes(searchTerm.toLowerCase()))
+      teacher.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      teacher.cpf.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      teacher.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   }, [teachers, searchTerm])
 
   const handleSearch = (query: string) => {
@@ -121,7 +124,7 @@ export const TeachersComponent = () => {
   if (teachers!.length <= 0) return <div>
     <AdminHeader onSearch={handleSearch} onRefresh={refetch}
       onAdd={() => navigate(RoutesNames.teacher)}
-      placeholder='Pesquisar por nome' />
+      placeholder='Pesquisar por nome, email ou cpf' />
     <div className="my-8 flex justify-center font-semibold gap-1">
       <p>Nenhum professor disponível, realize a</p>
       <span onClick={() => navigate(RoutesNames.uploadFiles)}

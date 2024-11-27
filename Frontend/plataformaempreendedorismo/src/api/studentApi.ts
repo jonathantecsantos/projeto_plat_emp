@@ -318,7 +318,7 @@ export const studentsApiSlice = createApi({
         body: { id, ...data },
       }),
       invalidatesTags: (_result, _error, { id }: any) => [
-        { type: 'Evaluation', id },
+        { type: 'Evaluator', id },
         { type: 'Evaluator', id: 'LIST' },
       ],
     }),

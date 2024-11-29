@@ -47,10 +47,7 @@ const routes = [
       }
     ]
   },
-  {
-    path: RoutesNames.banner,
-    breadcrumb: 'Banner'
-  },
+
   {
     path: RoutesNames.teachers,
     breadcrumb: 'Professores'

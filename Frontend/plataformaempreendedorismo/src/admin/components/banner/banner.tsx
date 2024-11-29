@@ -24,28 +24,34 @@ const fieldLabels: Record<string, string> = {
   resultadoFinanceiroQ2: "Resultado Financeiro",
 }
 
-// Schema de validação com limite de 80 caracteres por campo
-const bannerSchema = z.object({
-  atividadeChaveQ1: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  contextoProblemaQ3: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  textoDescricaoQ0: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  resultadosMedioPrazoQ3: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  recursosQ1: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  fonteReceitaQ2: z.string().max(80, "Máximo de 80 caracteres permitidos"),
+const bannerValidationSchema = z.object({
   idEquipeQ0: z.number(),
-  publicoFocoImpactoQ3: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  propostaValorQ2: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  oportunidadeNegQ2: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  equipeQ1: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  custosQ1: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  resultadoFinanceiroQ2: z.string().max(100, "Máximo de 100 caracteres permitidos"),
-  saidasQ3: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  visaoImpactoQ3: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  custoQ2: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  parceiroQ1: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  intervencoesQ3: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  resultadosCurtoPrazoQ3: z.string().max(80, "Máximo de 80 caracteres permitidos"),
+  //Team
   file: z.instanceof(File).nullable(),
+  textoDescricaoQ0: z.string().max(800, "Máximo de 800 caracteres permitidos"),
+
+  //Capacidade organizazional
+  equipeQ1: z.string().max(240, "Máximo de 240 caracteres permitidos"),
+  parceiroQ1: z.string().max(92, "Máximo de 92 caracteres permitidos"),
+  atividadeChaveQ1: z.string().max(61, "Máximo de 61 caracteres permitidos"),
+  recursosQ1: z.string().max(61, "Máximo de 61 caracteres permitidos"),
+  custosQ1: z.string().max(130, "Máximo de 130 caracteres permitidos"),
+
+  //Fluxo de negocio
+  oportunidadeNegQ2: z.string().max(80, "Máximo de 80 caracteres permitidos"),
+  custoQ2: z.string().max(118, "Máximo de 118 caracteres permitidos"),
+  propostaValorQ2: z.string().max(300, "Máximo de 300 caracteres permitidos"),
+  fonteReceitaQ2: z.string().max(130, "Máximo de 130 caracteres permitidos"),
+  resultadoFinanceiroQ2: z.string().max(800, "Máximo de 800 caracteres permitidos"),
+
+  //Teoria de mudança
+  contextoProblemaQ3: z.string().max(120, "Máximo de 120 caracteres permitidos"),
+  publicoFocoImpactoQ3: z.string().max(140, "Máximo de 140 caracteres permitidos"),
+  intervencoesQ3: z.string().max(360, "Máximo de 360 caracteres permitidos"),
+  saidasQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  resultadosCurtoPrazoQ3: z.string().max(135, "Máximo de 135 caracteres permitidos"),
+  resultadosMedioPrazoQ3: z.string().max(135, "Máximo de 135 caracteres permitidos"),
+  visaoImpactoQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
 })
 
 export interface BannerFormData {
@@ -86,7 +92,7 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
     })
 
     try {
-      bannerSchema.parse({
+      bannerValidationSchema.parse({
         ...formData,
         [e.target.name]: e.target.value,
       })
@@ -108,7 +114,7 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      bannerSchema.parse(formData)
+      bannerValidationSchema.parse(formData)
       setErrors({})
       const formDataToSend = new FormData()
       formDataToSend.append("files", formData.file as File)

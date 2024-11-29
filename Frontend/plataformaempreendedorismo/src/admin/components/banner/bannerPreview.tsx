@@ -1,16 +1,37 @@
 import { useRef } from "react"
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi"
 import { Banner } from "../../../model/banner"
+import { Avatar } from "@mui/material";
+import { avatarImage, placeholderImages } from "../../../utils/types";
+
+
+const formatTextWithDashes = (text?: string) => {
+  if (!text) return null;
+
+  const items = text.split('-').filter((item) => item.trim() !== ''); // Remove itens vazios
+
+  // if (items.length <= 1) {
+  //   return <p>{text}</p>; // Retorna o texto como está se não houver mais de um traço
+  // }
+
+  return (
+    <div className="flex flex-col">
+      {items.map((item, index) => (
+        <p key={index} className="break-words break-all">
+          - {item.trim()}
+        </p>
+      ))}
+    </div>
+  );
+};
 
 
 export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
-  //passar como props vindo da tela de team
-  console.log(id)
   const bannerRef = useRef<HTMLDivElement>(null)
   const { data: banner } = useGetBannerByIdQuery(id)
   const { data: team } = useGetTeamByIdQuery(id)
 
-  const imageURL = `http://localhost:8080/uploads/${banner?.anexos![0].nomeAnexo}`;
+  // const imageURL = `http://localhost:8080/uploads/${banner?.anexos![0].nomeAnexo}`;
 
   return (
 
@@ -22,8 +43,6 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
         print:h-[186px]" />
       </div>
       {/* ----> Primeiro componente inicial parte azul */}
-      {/* {JSON.stringify(banner, null, 2)} */}
-      {/* {JSON.stringify(banner?.anexos, null, 2)} */}
       <div className="relative px-8 print:px-4">
         <div className="border-[20px] print:border-[10px] border-[#10BBEF]">
           <div className="p-4 border-b-4 print:border-b-[2px]  border-[#10BBEF]  bg-white flex h-20
@@ -61,13 +80,30 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
             <div className="p-4 border-l-2 border-[#10BBEF] flex w-full">
               <p className="text-[#10BBEF]">Imagem</p>
-              {/* <p className="break-words break-all  px-2 print:px-1">teste</p> */}
-              {banner?.anexos![0].nomeAnexo && <img
-                src={imageURL}
-                alt="Imagem do banner"
-                // className="break-words break-all px-2 print:px-1"
-                style={{ maxWidth: '100%', height: 'auto' }}
-              />}
+
+              <div className="flex justify-center items-center">
+                <Avatar 
+                  className="mr-2"
+                  src={avatarImage}
+                  alt="Avatar"
+                  sx={{ width: 100, height: 100, backgroundColor: "#10BBEF" }}
+                />
+              </div>
+              {/* Imagens ou placeholders */}
+              <div className="grid grid-cols-2 gap-1 w-full">
+                {placeholderImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-full bg-green-500 flex items-center justify-center overflow-hidden rounded-md"
+                  >
+                    <img
+                      src={image}
+                      alt={`Placeholder ${index + 1}`}
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -83,7 +119,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
             <div id="equipeq1" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3
              w-[305px] h-52 print:w-[240px] print:h-[155px] bg-white">
-              <p className="break-words break-all  py-2">{banner?.equipeQ1}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.equipeQ1)}</p>
             </div>
           </div>
 
@@ -94,7 +130,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               </div>
               <div id="parceiros" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[130px] 
               print:w-[90px] print:h-[156px] h-52 bg-white">
-                <p className="break-words break-all py-2">{banner?.parceiroQ1}</p>
+                <p className="break-words break-all py-2">{formatTextWithDashes(banner?.parceiroQ1)}</p>
               </div>
             </div>
 
@@ -105,7 +141,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 </div>
                 <div id="atividadeChave" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[150px]
                  print:w-[128px] h-24 print:h-[75px] bg-white">
-                  <p className="break-words break-all  py-2">{banner?.atividadeChaveQ1}</p>
+                  <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.atividadeChaveQ1)}</p>
                 </div>
               </div>
 
@@ -115,7 +151,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 </div>
                 <div id="recursosArrow" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[145px] h-24 
                 print:h-[70px] print:w-[125px] bg-white">
-                  <p className="break-words break-all  py-2">{banner?.recursosQ1}</p>
+                  <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.recursosQ1)}</p>
                 </div>
               </div>
             </div>
@@ -126,7 +162,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
             <div id="custosq2Arrow" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[304px]
              print:h-[85px] bg-white print:w-[240px] h-[120px]">
-              <p className="break-words break-all  py-2">{banner?.custosQ1}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.custosQ1)}</p>
             </div>
           </div>
 
@@ -136,7 +172,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 Resultado Financeiro
               </div>
               <div className="absolute border-4 print:border-[2px]   border-pink-500 rounded-lg p-6  bg-white w-[875px] h-[334px] print:w-[490px] print:h-[212px] print:p-3">
-                <p className="break-words break-all  py-2">{banner?.resultadoFinanceiroQ2}</p>
+                <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.resultadoFinanceiroQ2)}</p>
               </div>
             </div>
           </div>
@@ -150,7 +186,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
             <div id="oportunidadeMercado" className="oportunidadeMercadoDot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500 
             p-6 print:px-1 print:pt-3  print:h-16 h-[95px] bg-white">
-              <p className="break-words break-all  py-2">{banner?.oportunidadeNegQ2}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.oportunidadeNegQ2)}</p>
             </div>
           </div>
 
@@ -159,7 +195,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Custos
             </div>
             <div id="custosq2" className="custosq2Dot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500  p-6 print:px-1 print:pt-3 h-24 bg-white print:h-[80px]">
-              <p className="break-words break-all  py-2">{banner?.custoQ2}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.custoQ2)}</p>
             </div>
           </div>
 
@@ -169,7 +205,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
             <div id="propostaValor" className="propostaValorDot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500  p-6 print:px-1 print:pt-3 
             h-52 print:h-[150px] bg-white">
-              <p className="break-words break-all  py-2">{banner?.propostaValorQ2}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.propostaValorQ2)}</p>
             </div>
           </div>
 
@@ -178,7 +214,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Fontes de Receitas
             </div>
             <div id="custosq3Arrow" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-pink-500 rounded-lg p-6 print:px-1 print:pt-3 w-11/12 bg-white print:h-[85px] h-[120px]">
-              <p className="break-words break-all  py-2">{banner?.fonteReceitaQ2}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.fonteReceitaQ2)}</p>
             </div>
           </div>
 
@@ -191,7 +227,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Contexto e problema
             </div>
             <div id="contextoProblema" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-[#6C4796] rounded-lg p-6 print:px-1 print:pt-3  bg-white print:h-16 h-[95px]">
-              <p className="break-words break-all  py-2">{banner?.contextoProblemaQ3}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.contextoProblemaQ3)}</p>
             </div>
           </div>
 
@@ -200,7 +236,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Público / Foco do Impacto
             </div>
             <div id="publicoFoco" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-[#6C4796] rounded-lg p-6 print:px-1 print:pt-3  bg-white print:h-[80px] h-[95px]">
-              <p className="break-words break-all  py-2">{banner?.publicoFocoImpactoQ3}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.publicoFocoImpactoQ3)}</p>
             </div>
           </div>
 
@@ -209,7 +245,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Intervenções (estratégias)
             </div>
             <div id="intervencoesEstrategias" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-[#6C4796] rounded-lg p-6 print:px-1 print:pt-3  h-52 bg-white print:h-[150px]">
-              <p className="break-words break-all  py-2">{banner?.intervencoesQ3}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.intervencoesQ3)}</p>
             </div>
           </div>
 
@@ -218,7 +254,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Saídas / Outputs
             </div>
             <div id="saidasOutputs" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-[#6C4796] rounded-lg p-6 print:px-1 print:pt-3 w-full  bg-white print:h-[85px] h-[120px]">
-              <p className="break-words break-all  py-2">{banner?.saidasQ3}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.saidasQ3)}</p>
             </div>
           </div>
 
@@ -227,7 +263,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               Resultados Curto Prazo
             </div>
             <div className="border-x-4 print:border-x-[2px] border-t-4 print:border-t-[2px] border-l-8 print:border-l-[6px] border-[#6C4796] rounded-t-md print:rounded-t-lg p-6 print:px-1 print:pt-3 w-full  bg-white print:h-[65px] h-24">
-              <p className="break-words break-all  py-2">{banner?.resultadosCurtoPrazoQ3}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.resultadosCurtoPrazoQ3)}</p>
             </div>
           </div>
 
@@ -241,7 +277,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 borderColor: "#6C4796",
                 borderTopWidth: 2,
               }}>
-              <p className="break-words break-all  py-2">{banner?.resultadosMedioPrazoQ3}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.resultadosMedioPrazoQ3)}</p>
             </div>
           </div>
 
@@ -251,7 +287,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             </div>
             <div className="border-4 print:border-[2px]   border-[#6C4796] rounded-lg p-6 print:px-1 print:pt-3 h-28 bg-white max-w-full 
             print:h-[75px]">
-              <p className="break-words break-all  py-2">{banner?.visaoImpactoQ3}</p>
+              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.visaoImpactoQ3)}</p>
             </div>
           </div>
         </div>

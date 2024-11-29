@@ -82,6 +82,17 @@ export interface AdaptedLoginResponse {
 export interface EvaluationProps {
   teamData: { id: number, nomeEquipe?: string, teams: TeamEvaluationResponse[], teamEvaluation: TeamEvaluation }
 }
+export const placeholderImages = [
+  "https://plus.unsplash.com/premium_photo-1731951688289-1de7eb23bdd1?q=80&w=2013&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1732572854523-f330af9a72ee?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDl8fHBob3RvfGVufDB8fHx8MTY5NzgwMjM5Mw&ixlib=rb-4.0.3&q=80&w=400",
+  "https://images.unsplash.com/photo-1731963914155-d22942204d3d?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+];
+
+export const avatarImage =
+  "https://www.zarla.com/images/zarla-floralma-1x1-2400x2400-20220923-3t4w93gk3y6mw8vhx48w.png?crop=1:1,smart&width=250&dpr=2";
+
+
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 

@@ -1,0 +1,1 @@
+ALTER TABLE anexo_banner add tipo_anexo INT;

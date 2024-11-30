@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import util.enuns.TipoAnexoEnum;
 
 @Entity(name="anexo_banner")
 @Getter
@@ -25,4 +26,6 @@ public class AnexoBanner {
 
         private String nomeAnexo;
         private String caminhoAnexo;
+        @Enumerated
+        private TipoAnexoEnum tipoAnexo;
 }

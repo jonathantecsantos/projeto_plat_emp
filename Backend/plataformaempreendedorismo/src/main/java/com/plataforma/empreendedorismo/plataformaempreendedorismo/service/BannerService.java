@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import util.enuns.TipoAnexoEnum;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,40 +45,45 @@ public class BannerService {
     private AnexoBannerRepository anexoBannerRepository;
 
     @Transactional
-    public void criarBanner(List<MultipartFile> files,CadastroBannerRecord cadastroBannerRecord) throws Exception {
-        Banner banner = new Banner();
+    public void criarBanner(List<MultipartFile> files,MultipartFile logotipo, CadastroBannerRecord cadastroBannerRecord) throws Exception {
+        Optional<Equipe> equipeEncontrada = equipeRepository.findById(cadastroBannerRecord.idEquipeQ0());
+        if(equipeEncontrada.isPresent() && equipeEncontrada.get().getBanner() == null){
+            Banner banner = new Banner();
 
-        Equipe equipe = equipeService.buscarEquipePorId(cadastroBannerRecord.idEquipeQ0());
+            Equipe equipe = equipeService.buscarEquipePorId(cadastroBannerRecord.idEquipeQ0());
 
-        banner.setTextoDescricaoQ0(cadastroBannerRecord.textoDescricaoQ0());
-        banner.setEquipeQ1(cadastroBannerRecord.equipeQ1());
-        banner.setParceiroQ1(cadastroBannerRecord.parceiroQ1());
-        banner.setAtividadeChaveQ1(cadastroBannerRecord.atividadeChaveQ1());
-        banner.setRecursosQ1(cadastroBannerRecord.recursosQ1());
-        banner.setCustosQ1(cadastroBannerRecord.custosQ1());
-        banner.setOportunidadeNegQ2(cadastroBannerRecord.oportunidadeNegQ2());
-        banner.setCustoQ2(cadastroBannerRecord.custoQ2());
-        banner.setPropostaValorQ2(cadastroBannerRecord.propostaValorQ2());
-        banner.setFonteReceitaQ2(cadastroBannerRecord.fonteReceitaQ2());
-        banner.setResultadoFinanceiroQ2(cadastroBannerRecord.resultadoFinanceiroQ2());
-        banner.setContextoProblemaQ3(cadastroBannerRecord.contextoProblemaQ3());
-        banner.setPublicoFocoImpactoQ3(cadastroBannerRecord.publicoFocoImpactoQ3());
-        banner.setIntervencoesQ3(cadastroBannerRecord.intervencoesQ3());
-        banner.setSaidasQ3(cadastroBannerRecord.saidasQ3());
-        banner.setResultadosCurtoPrazoQ3(cadastroBannerRecord.resultadosCurtoPrazoQ3());
-        banner.setResultadosMedioPrazoQ3(cadastroBannerRecord.resultadosMedioPrazoQ3());
-        banner.setVisaoImpactoQ3(cadastroBannerRecord.visaoImpactoQ3());
+            banner.setTextoDescricaoQ0(cadastroBannerRecord.textoDescricaoQ0());
+            banner.setEquipeQ1(cadastroBannerRecord.equipeQ1());
+            banner.setParceiroQ1(cadastroBannerRecord.parceiroQ1());
+            banner.setAtividadeChaveQ1(cadastroBannerRecord.atividadeChaveQ1());
+            banner.setRecursosQ1(cadastroBannerRecord.recursosQ1());
+            banner.setCustosQ1(cadastroBannerRecord.custosQ1());
+            banner.setOportunidadeNegQ2(cadastroBannerRecord.oportunidadeNegQ2());
+            banner.setCustoQ2(cadastroBannerRecord.custoQ2());
+            banner.setPropostaValorQ2(cadastroBannerRecord.propostaValorQ2());
+            banner.setFonteReceitaQ2(cadastroBannerRecord.fonteReceitaQ2());
+            banner.setResultadoFinanceiroQ2(cadastroBannerRecord.resultadoFinanceiroQ2());
+            banner.setContextoProblemaQ3(cadastroBannerRecord.contextoProblemaQ3());
+            banner.setPublicoFocoImpactoQ3(cadastroBannerRecord.publicoFocoImpactoQ3());
+            banner.setIntervencoesQ3(cadastroBannerRecord.intervencoesQ3());
+            banner.setSaidasQ3(cadastroBannerRecord.saidasQ3());
+            banner.setResultadosCurtoPrazoQ3(cadastroBannerRecord.resultadosCurtoPrazoQ3());
+            banner.setResultadosMedioPrazoQ3(cadastroBannerRecord.resultadosMedioPrazoQ3());
+            banner.setVisaoImpactoQ3(cadastroBannerRecord.visaoImpactoQ3());
 
-        bannerRepository.save(banner);
+            bannerRepository.save(banner);
 
-        List<AnexoBanner> anexos = salvarAnexos(files, banner);
+            List<AnexoBanner> anexos = salvarAnexos(files,logotipo, banner);
 
-        banner.getAnexos().clear();
-        banner.getAnexos().addAll(anexos);
+            banner.getAnexos().clear();
+            banner.getAnexos().addAll(anexos);
 
-        bannerRepository.save(banner);
-        equipe.setBanner(banner);
-        equipeRepository.save(equipe);
+            bannerRepository.save(banner);
+            equipe.setBanner(banner);
+            equipeRepository.save(equipe);
+        }else{
+            throw new Exception("A Equipe já possui banner cadastrado.");
+        }
     }
 
     private String saveFile(MultipartFile file) throws IOException {
@@ -107,18 +113,18 @@ public class BannerService {
     }
 
     @Transactional
-    public void editarBanner(List<MultipartFile> files,CadastroBannerRecord bannerRecord) throws IOException {
+    public void editarBanner(List<MultipartFile> files,MultipartFile logotipo,CadastroBannerRecord bannerRecord) throws IOException {
         Banner banner = bannerRepository.getReferenceById(bannerRecord.id());
-        atualizarBanner(files, banner, bannerRecord);
+        atualizarBanner(files, logotipo,banner, bannerRecord);
 
     }
 
-    private void atualizarBanner(List<MultipartFile> files,Banner banner, CadastroBannerRecord bannerRecord) throws IOException {
+    private void atualizarBanner(List<MultipartFile> files,MultipartFile logotipo,Banner banner, CadastroBannerRecord bannerRecord) throws IOException {
 
         tratarAndSalvarInfosBanner(banner, bannerRecord);
 
-        if (files != null && !files.isEmpty()) {
-            List<AnexoBanner> anexosExistentes = tratarAnexos(files, banner);
+        if (files != null && !files.isEmpty() || logotipo != null) {
+            List<AnexoBanner> anexosExistentes = tratarAnexos(files, logotipo, banner);
             banner.setAnexos(anexosExistentes);
         }
     }
@@ -180,37 +186,60 @@ public class BannerService {
         }
     }
 
-    private List<AnexoBanner> tratarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
+    private List<AnexoBanner> tratarAnexos(List<MultipartFile> files, MultipartFile logotipo,Banner banner) throws IOException {
         List<AnexoBanner> anexosExistentes = banner.getAnexos();
-        List<String> novosNomesAnexos = files.stream()
-                .map(MultipartFile::getOriginalFilename)
-                .toList();
+        List<String> novosNomesAnexos = new ArrayList<>();
 
-        List<AnexoBanner> anexosParaRemover = anexosExistentes.stream()
-                .filter(anexo -> !novosNomesAnexos.contains(anexo.getNomeAnexo()))
-                .collect(Collectors.toList());
+        if(files != null && !files.isEmpty()) {
+            novosNomesAnexos = files.stream()
+                    .map(MultipartFile::getOriginalFilename)
+                    .collect(Collectors.toList());
+        }
 
-        anexosExistentes.removeAll(anexosParaRemover);
-        anexoBannerRepository.deleteAll(anexosParaRemover);
+        if(logotipo != null){
+            novosNomesAnexos.add(logotipo.getOriginalFilename());
+        }
 
-        List<AnexoBanner> novosAnexos = salvarAnexos(files, banner);
+        if(!novosNomesAnexos.isEmpty()){
+            List<String> finalNovosNomesAnexos = novosNomesAnexos;
+            List<AnexoBanner> anexosParaRemover = anexosExistentes.stream()
+                    .filter(anexo -> !finalNovosNomesAnexos.contains(anexo.getNomeAnexo()))
+                    .collect(Collectors.toList());
+
+            anexosExistentes.removeAll(anexosParaRemover);
+            anexoBannerRepository.deleteAll(anexosParaRemover);
+        }
+
+        List<AnexoBanner> novosAnexos = salvarAnexos(files,logotipo, banner);
         anexosExistentes.addAll(novosAnexos);
 
         return anexosExistentes;
     }
 
-    private List<AnexoBanner> salvarAnexos(List<MultipartFile> files, Banner banner) throws IOException {
+    private List<AnexoBanner> salvarAnexos(List<MultipartFile> files, MultipartFile logotipo,Banner banner) throws IOException {
         List<AnexoBanner> anexos = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String fileName = file.getOriginalFilename();
-            if (anexoBannerRepository.findByBannerAndNomeAnexo(banner, fileName) == null) {
-                fileName = saveFile(file);
-                AnexoBanner anexo = new AnexoBanner();
-                anexo.setBanner(banner);
-                anexo.setNomeAnexo(fileName);
-                anexo.setCaminhoAnexo(caminhoBase + fileName);
-                anexos.add(anexo);
+        if(files != null && !files.isEmpty()){
+            for (MultipartFile file : files) {
+                String fileName = file.getOriginalFilename();
+                if (anexoBannerRepository.findByBannerAndNomeAnexo(banner, fileName) == null) {
+                    fileName = saveFile(file);
+                    AnexoBanner anexo = new AnexoBanner();
+                    anexo.setBanner(banner);
+                    anexo.setNomeAnexo(fileName);
+                    anexo.setCaminhoAnexo(caminhoBase + fileName);
+                    anexo.setTipoAnexo(TipoAnexoEnum.PADRAO);
+                    anexos.add(anexo);
+                }
             }
+        }
+        if(logotipo!= null){
+            AnexoBanner anexoLogotipo = new AnexoBanner();
+            String fileName = logotipo.getOriginalFilename();
+            anexoLogotipo.setBanner(banner);
+            anexoLogotipo.setNomeAnexo(fileName);
+            anexoLogotipo.setCaminhoAnexo(caminhoBase + fileName);
+            anexoLogotipo.setTipoAnexo(TipoAnexoEnum.LOGOTIPO);
+            anexos.add(anexoLogotipo);
         }
         anexoBannerRepository.saveAll(anexos);
         return anexos;

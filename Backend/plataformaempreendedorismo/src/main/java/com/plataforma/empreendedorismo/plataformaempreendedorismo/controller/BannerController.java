@@ -34,11 +34,12 @@ public class BannerController {
     })
     @PostMapping(value = "/cadastrar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<String> cadastrarBanner(@RequestPart("files") List<MultipartFile> files,
+    public ResponseEntity<String> cadastrarBanner(@RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                                  @RequestPart(value = "fileLogotipo", required = false) MultipartFile fileLogotipo,
                                                   @RequestPart("cadastroBannerRecord") CadastroBannerRecord cadastroBannerRecord) {
 
         try {
-            bannerService.criarBanner(files,cadastroBannerRecord);
+            bannerService.criarBanner(files,fileLogotipo,cadastroBannerRecord);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body("Banner cadastrado com sucesso!");
 
@@ -69,10 +70,11 @@ public class BannerController {
     })
     @PutMapping(value = "/editar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<String> editar(@RequestPart("files") List<MultipartFile> files,
+    public ResponseEntity<String> editar(@RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                         @RequestPart(value = "fileLogotipo", required = false) MultipartFile fileLogotipo,
                                          @RequestPart("cadastroBannerRecord") CadastroBannerRecord cadastroBannerRecord){
         try {
-            bannerService.editarBanner(files,cadastroBannerRecord);
+            bannerService.editarBanner(files,fileLogotipo,cadastroBannerRecord);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Banner atualizada com sucesso!");
         }catch (Exception e){

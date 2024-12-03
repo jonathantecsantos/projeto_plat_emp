@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { EventsConfig } from "./eventsConfig";
+import { useState } from "react"
+import { EventsConfig } from "./eventsConfig"
 
 export const AdminConfig = () => {
-  const [activeConfig, setActiveConfig] = useState<string | null>(null);
+  const [activeConfig, setActiveConfig] = useState<string | null>(null)
 
   const renderConfig = () => {
     //substituir por variavel global os cases
@@ -10,14 +10,14 @@ export const AdminConfig = () => {
       case "events":
         return <EventsConfig />
       default:
-        return <p className="text-gray-600">Selecione uma configuração para começar.</p>;
+        return <p className="text-gray-600">Selecione uma configuração para começar.</p>
     }
-  };
+  }
 
   return (
-    <div className="flex h-screen">
-      <aside className="w-1/4 p-6 ">
-        <ul className="space-y-4">
+    <div className="flex flex-col md:flex-row h-screen">
+      <aside className="w-full md:w-fit p-6 ">
+        <ul className="space-y-4 text-nowrap">
           <li>
             <button
               onClick={() => setActiveConfig("events")}
@@ -45,9 +45,7 @@ export const AdminConfig = () => {
           </li>
         </ul>
       </aside>
-      <main className="flex-1 bg-white p-6">{renderConfig()}</main>
+      <main className="flex h-fit bg-white p-6">{renderConfig()}</main>
     </div>
-  );
-};
-
-export default AdminConfig;
+  )
+}

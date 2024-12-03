@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { useCreateEventMutation } from "../../../api/studentApi"
 import { EventConfig, EventsTypes } from "../../../model/config"
+import { useSnackbar } from "notistack"
 
 export const EventsConfig = () => {
+  const [createEvent, { isLoading, isSuccess }] = useCreateEventMutation()
   const [events, setEvents] = useState<EventConfig[]>([
     { dataInicio: "", dataFim: "", idEvento: EventsTypes.INSCRICAO },
     { dataInicio: "", dataFim: "", idEvento: EventsTypes.PROTOTIPO },
@@ -10,7 +12,7 @@ export const EventsConfig = () => {
     { dataInicio: "", dataFim: "", idEvento: EventsTypes.PITCH },
   ])
 
-  const [createEvent, { isLoading, isSuccess }] = useCreateEventMutation()
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleChange = <K extends keyof EventConfig>(
     index: number,
@@ -28,28 +30,28 @@ export const EventsConfig = () => {
       for (const event of events) {
         if (!event.dataInicio || !event.dataFim) {
           console.warn(`Evento com ID ${event.idEvento} está com datas inválidas.`)
-          continue; // Pule para o próximo evento
+          continue // Pule para o próximo evento
         }
 
         const formattedEvent = {
           dataInicio: new Date(event.dataInicio).toISOString(),
           dataFim: new Date(event.dataFim).toISOString(),
           idEvento: event.idEvento,
-        };
+        }
 
-        await createEvent(formattedEvent).unwrap();
+        await createEvent(formattedEvent).unwrap()
       }
-      alert("Configuração feita com sucesso!")
+      enqueueSnackbar("Configuração realizada com sucesso!", { variant: "success" })
     } catch (error: any) {
       console.error("Erro ao salvar eventos:", error)
-      alert("Falha ao salvar eventos.")
+      enqueueSnackbar("Falha ao salvar eventos.", { variant: "error" })
     }
   }
 
   return (
     <div className="p-6 shadow-lg rounded-lg text-[#3C14A4] border-t-2">
       <h2 className="text-xl font-bold mb-4">Configuração de Eventos</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {events.map((event, index) => (
           <div key={event.idEvento} className="flex flex-col">
             <label className="font-bold">{EventsTypes[event.idEvento]}</label>
@@ -83,7 +85,7 @@ export const EventsConfig = () => {
           }`}
         disabled={isLoading}
       >
-        {isLoading ? "Salvando..." : "Salvar Configurações"}
+        {isLoading ? "Salvando..." : "Salvar"}
       </button>
       {isSuccess && <p className="text-green-500 mt-2">Configuração salva com sucesso!</p>}
     </div>

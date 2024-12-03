@@ -88,9 +88,9 @@ public class BannerService {
 
     private String saveFile(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        String uploadDir = "uploads/";
+        //String uploadDir = "uploads/";
 
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(caminhoBase);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }

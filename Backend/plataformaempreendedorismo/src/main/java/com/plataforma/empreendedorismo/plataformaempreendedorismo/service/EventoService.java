@@ -61,7 +61,7 @@ public class EventoService {
     }
 
     public boolean isEventoValido(Long id) {
-        Optional<Evento> eventoOptional = eventoRepository.findById(id);
+        Optional<Evento> eventoOptional = eventoRepository.findByTipoEventoId(id);
 
         if (eventoOptional.isPresent()) {
             Evento evento = eventoOptional.get();

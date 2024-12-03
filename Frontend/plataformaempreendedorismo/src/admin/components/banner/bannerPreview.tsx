@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import { useRef } from "react";
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
 import { Banner } from "../../../model/banner";
-import { placeholderImages } from "../../../utils/types";
+import { avatarImage, placeholderImages } from "../../../utils/types";
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -91,7 +91,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
                 <Avatar
                   className="mr-2 w-20 h-20 print:h-14 print:w-14"
-                  src={avatar}
+                  src={avatar ? avatar : avatarImage}
                   alt="Avatar"
                 />
               </div>

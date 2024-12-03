@@ -1,8 +1,8 @@
-import { useRef } from "react"
-import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi"
-import { Banner } from "../../../model/banner"
 import { Avatar } from "@mui/material";
-import { avatarImage, placeholderImages } from "../../../utils/types";
+import { useRef } from "react";
+import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
+import { Banner } from "../../../model/banner";
+import { placeholderImages } from "../../../utils/types";
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -31,7 +31,14 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   const { data: banner } = useGetBannerByIdQuery(id)
   const { data: team } = useGetTeamByIdQuery(id)
 
-  // const imageURL = `http://localhost:8080/uploads/${banner?.anexos![0].nomeAnexo}`;
+  const imageUrls = banner?.anexos
+    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO") // Remove o logotipo
+    ?.map((anexo) => anexo.caminhoAnexo.replace("C:\\Users\\wnn-dev\\Pictures\\uploads\\", "http://localhost:8080/uploads/"))
+
+  const avatar = banner?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo.replace(
+    "C:\\Users\\wnn-dev\\Pictures\\uploads\\",
+    "http://localhost:8080/uploads/")
+
 
   return (
 
@@ -79,26 +86,25 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               <p className="break-words break-all  px-2 print:px-1">{banner?.textoDescricaoQ0}</p>
             </div>
             <div className="p-4 border-l-2 border-[#10BBEF] flex w-full">
-              <p className="text-[#10BBEF]">Imagem</p>
+              <p className="text-[#10BBEF] absolute">Imagem</p>
+              <div className="flex-col justify-center items-center my-auto mr-2">
 
-              <div className="flex justify-center items-center">
-                <Avatar 
-                  className="mr-2"
-                  src={avatarImage}
+                <Avatar
+                  className="mr-2 w-20 h-20 print:h-14 print:w-14"
+                  src={avatar}
                   alt="Avatar"
-                  sx={{ width: 100, height: 100, backgroundColor: "#10BBEF" }}
                 />
               </div>
               {/* Imagens ou placeholders */}
               <div className="grid grid-cols-2 gap-1 w-full">
-                {placeholderImages.map((image, index) => (
+                {(imageUrls && imageUrls.length > 0 ? imageUrls : placeholderImages).map((image, index) => (
                   <div
                     key={index}
                     className="w-full h-full bg-green-500 flex items-center justify-center overflow-hidden rounded-md"
                   >
                     <img
                       src={image}
-                      alt={`Placeholder ${index + 1}`}
+                      alt={`Imagem ${index + 1}`}
                       className="w-full h-full object-cover object-center"
                     />
                   </div>

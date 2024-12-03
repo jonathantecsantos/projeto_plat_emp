@@ -235,6 +235,7 @@ public class BannerService {
         if(logotipo!= null){
             AnexoBanner anexoLogotipo = new AnexoBanner();
             String fileName = logotipo.getOriginalFilename();
+            fileName = saveFile(logotipo);
             anexoLogotipo.setBanner(banner);
             anexoLogotipo.setNomeAnexo(fileName);
             anexoLogotipo.setCaminhoAnexo(caminhoBase + fileName);

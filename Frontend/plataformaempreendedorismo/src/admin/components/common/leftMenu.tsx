@@ -136,6 +136,7 @@ const menuItems: MenuItemType[] = [
   { divider: true },
   {
     outsideName: 'Configurações',
+    routeName: RoutesNames.adminConfig,
     outsideIcon: <SettingsIcon />,
     subItens: false,
     // insideItems: [

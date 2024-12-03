@@ -38,6 +38,7 @@ import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { Roles } from './utils/types'
+import { AdminConfigPage } from './pages/adminConfig'
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +80,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.settings,
     element: <ProtectedRoute children={<StudentSettingsPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+  },
+  {
+    path: RoutesNames.adminConfig,
+    element: <ProtectedRoute children={<AdminConfigPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
   },
   {
     path: RoutesNames.adminHome,

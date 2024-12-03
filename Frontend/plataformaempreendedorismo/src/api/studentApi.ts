@@ -12,6 +12,7 @@ import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { EvaluationTypes } from '../utils/types'
+import { EventConfig } from '../model/config'
 
 
 export const studentsApiSlice = createApi({
@@ -42,7 +43,6 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id },
       ],
     }),
-
     //IMPORTS
     uploadFile: build.mutation({
       query: (body) => ({
@@ -55,6 +55,14 @@ export const studentsApiSlice = createApi({
         { type: 'Teacher', id: 'LIST' },
         { type: 'Team', id: 'teamById' },
       ],
+    }),
+    //CONFIGS
+    createEvent: build.mutation<void, EventConfig>({
+      query: (data) => ({
+        url: "/eventos",
+        method: "POST",
+        body: data,
+      }),
     }),
 
     //STUDENT
@@ -510,6 +518,9 @@ export const {
 
   //Imports
   useUploadFileMutation,
+  
+  //Events
+  useCreateEventMutation,
 
   //Students
   useGetStudentQuery,

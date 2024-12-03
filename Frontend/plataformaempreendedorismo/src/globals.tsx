@@ -50,6 +50,7 @@ export const RoutesNames = {
 
 
   settings: '/settings',
+  adminConfig: '/admin-settings',
 
 }
 

@@ -2,6 +2,7 @@ export interface Anexo {
   id: number
   nomeAnexo: string
   caminhoAnexo: string
+  tipoAnexo: string
 }
 
 export interface Banner {

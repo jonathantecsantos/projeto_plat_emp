@@ -34,6 +34,10 @@ const routes = [
     breadcrumb: 'Painel'
   },
   {
+    path: RoutesNames.adminConfig,
+    breadcrumb: 'Configurações'
+  },
+  {
     path: RoutesNames.uploadFiles,
     breadcrumb: 'Importações'
   },

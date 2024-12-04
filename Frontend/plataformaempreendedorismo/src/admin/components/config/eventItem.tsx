@@ -1,9 +1,10 @@
+import CheckIcon from '@mui/icons-material/Check'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
+import { useDispatch } from 'react-redux'
 import { useCreateEventMutation, useGetEventByIdQuery, useUpdateEventMutation } from "../../../api/studentApi"
 import { EventConfig, EventsTypes } from "../../../model/config"
-import { useDispatch } from 'react-redux'
 import { toggleLoading } from '../../../redux/reducers/loadingBar.slice'
 
 
@@ -19,8 +20,8 @@ const formatDateToInput = (isoDate: string): string => {
 
 export const EventItem = ({ idEvento, initialData }: EventItemProps) => {
   const { data, isSuccess } = useGetEventByIdQuery(idEvento)
-  const [createEvent, {isSuccess: created}] = useCreateEventMutation()
-  const [updateEvent, {isSuccess: updated}] = useUpdateEventMutation()
+  const [createEvent, { isSuccess: created }] = useCreateEventMutation()
+  const [updateEvent, { isSuccess: updated }] = useUpdateEventMutation()
   const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
 
@@ -61,7 +62,7 @@ export const EventItem = ({ idEvento, initialData }: EventItemProps) => {
     } catch (error: any) {
       console.error("Erro ao salvar evento:", error)
       enqueueSnackbar(`Erro ao salvar evento ${EventsTypes[idEvento]}.`, { variant: "error" })
-    } finally{
+    } finally {
       dispatch(toggleLoading())
     }
   }
@@ -92,9 +93,10 @@ export const EventItem = ({ idEvento, initialData }: EventItemProps) => {
       </div>
       <button
         onClick={handleSave}
-        className="mt-4 p-2 bg-[#3C14A4] text-white rounded-md first-letter:capitalize w-1/3"
+        className="mt-2 mb-4 p-2 text-nowrap bg-[#3C14A4] text-white rounded-lg flex justify-start w-1/3"
       >
-        {created || updated && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
+        {created || updated ? <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-2' /> : <CheckIcon className=' mr-2' />}
+
         {EventsTypes[idEvento].toLowerCase()}
       </button>
     </div>

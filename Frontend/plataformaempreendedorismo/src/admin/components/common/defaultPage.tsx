@@ -6,12 +6,10 @@ import { BreadcrumbComponent } from "./breadcrumb"
 import { DrawerComponent } from "./drawer"
 import { LeftMenuComponent } from "./leftMenu"
 import { Logout } from "./logout"
-// import { BannerImage } from "./adminBanner"
 import { useSelector } from "react-redux"
 import { RootState } from "../../../redux/store"
 import { Roles } from "../../../utils/types"
 import { BannerImage } from "./adminBanner"
-// import { FooterImage } from "./adminFooter"
 
 interface AdminPage {
   mainContent: ReactNode
@@ -47,7 +45,7 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
   return (
-    <div className="flex h-screen flex-col relative">
+    <div className="flex min-h-screen flex-col relative ">
       {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> : <AdminAppBar />}
       <div className="flex flex-1 overflow-hidden">
         {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> :
@@ -57,19 +55,16 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
 
         <main className="overflow-x-hidden overflow-y-auto w-full">
           <BannerImage />
-          <div className="p-4 h-[calc(100%-9rem)]">
+          <div className="p-2 h-[calc(100%-9rem)]">
             <div className="flex">
               {userGlobalState?.enumRole == Roles.Aluno ? <div className="w-full mt-10"></div> : <BreadcrumbComponent />}
               <Logout />
             </div>
             {mainContent}
-            {/* <div className="mt-20">
-              <FooterImage />
-            </div> */}
           </div>
         </main>
       </div>
-
+     
     </div>
   )
 }

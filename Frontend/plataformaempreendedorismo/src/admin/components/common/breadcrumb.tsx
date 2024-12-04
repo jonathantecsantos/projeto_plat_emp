@@ -133,7 +133,7 @@ export const BreadcrumbComponent = (props: {
         return <React.Fragment key={index}>
           {/* HOME */}
           {args.match.pathname == RoutesNames.home ?
-            <Link style={breadcrumbAlignItem} to={args.match.pathname}>
+            <Link style={breadcrumbAlignItem} to={RoutesNames.adminHome}>
               <HomeIcon style={{ ...breadcrumbAlignItem, color: '#3C14A4', marginRight: 5 }} />
             </Link> : null}
 
@@ -148,7 +148,8 @@ export const BreadcrumbComponent = (props: {
               ArrayUtils.checkEqualsFromArrays([args.match.pathname], unLink) ?
                 <div style={colorUnlink}>{args.match.route?.breadcrumb as string}</div> :
                 <Link style={breadcrumbLinkDecoration}
-                  to={isBannerRoute || isPrototypingRoute ? teamRoute : args.match.pathname}>
+                  to={isBannerRoute || isPrototypingRoute ? teamRoute : args.match.pathname === RoutesNames.home ? RoutesNames.adminHome :
+                    args.match.pathname}>
                   {args.breadcrumb}
                 </Link>}
           </span>

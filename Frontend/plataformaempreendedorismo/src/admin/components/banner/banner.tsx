@@ -1,7 +1,11 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { z } from "zod"
-import { useCreateBannerMutation } from "../../../api/studentApi"
+import { useCreateBannerMutation, useGetBannerByIdQuery, useUpdateBannerMutation } from "../../../api/studentApi"
 import { Banner } from "../../../model/banner"
+import { useSnackbar } from "notistack"
+import { useDispatch } from "react-redux"
+import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
+import { CircularProgress } from "@mui/material"
 
 const fieldLabels: Record<string, string> = {
   atividadeChaveQ1: "Atividade Chave",
@@ -29,7 +33,7 @@ const bannerValidationSchema = z.object({
   //Team
   files: z
     .array(z.instanceof(File))
-    .min(1, "É necessário enviar pelo menos um arquivo.")
+    // .min(1, "É necessário enviar pelo menos um arquivo.")
     .nullable(),
   fileLogotipo: z
     .instanceof(File)
@@ -67,7 +71,9 @@ export interface BannerFormData {
 }
 
 export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
+  const { data, isLoading: bannerInfoLoading } = useGetBannerByIdQuery(id)
   const [createBanner, { isLoading }] = useCreateBannerMutation()
+  const [updateBanner,] = useUpdateBannerMutation()
   const [formData, setFormData] = useState<BannerFormData>({
     atividadeChaveQ1: "",
     contextoProblemaQ3: "",
@@ -92,6 +98,8 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
     fileLogotipo: null,
   })
 
+  const { enqueueSnackbar } = useSnackbar()
+  const dispatch = useDispatch()
   const [errors, setErrors] = useState<Partial<Record<keyof BannerFormData, string>>>({})
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -100,17 +108,17 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
       [e.target.name]: e.target.value,
     })
 
-    try {
-      bannerValidationSchema.parse({
-        ...formData,
-        [e.target.name]: e.target.value,
-      })
-      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }))
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        setErrors((prev) => ({ ...prev, [e.target.name]: error.errors[0].message }))
-      }
-    }
+    // try {
+    //   bannerValidationSchema.parse({
+    //     ...formData,
+    //     [e.target.name]: e.target.value,
+    //   })
+    //   setErrors((prev) => ({ ...prev, [e.target.name]: undefined }))
+    // } catch (error) {
+    //   if (error instanceof z.ZodError) {
+    //     setErrors((prev) => ({ ...prev, [e.target.name]: error.errors[0].message }))
+    //   }
+    // }
   }
 
   const handleFilesChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +138,7 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
+      dispatch(toggleLoading())
       const validatedData = bannerValidationSchema.parse({
         ...formData,
         files: formData.files,
@@ -147,13 +156,19 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
       }
 
       const jsonBlob = new Blob(
-        [JSON.stringify({ ...validatedData, files: undefined, fileLogotipo: undefined })],
+        [JSON.stringify({ ...validatedData, files: undefined, fileLogotipo: undefined, ...(data ? { id: data.id } : {}) })],
         { type: "application/json" }
       )
       formDataToSend.append("cadastroBannerRecord", jsonBlob)
 
-      await createBanner(formDataToSend).unwrap()
-      alert("Banner cadastrado com sucesso!")
+      if (data) {
+        await updateBanner({ id: id, data: formDataToSend }).unwrap()
+        enqueueSnackbar("Banner editado com sucesso!", { variant: 'success' })
+      } else {
+        await createBanner(formDataToSend).unwrap()
+        enqueueSnackbar("Banner cadastrado com sucesso!", { variant: 'success' })
+      }
+
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof BannerFormData, string>> = {}
@@ -163,9 +178,41 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
           }
         })
         setErrors(newErrors)
+      } else {
+        enqueueSnackbar("Erro ao registrar banner!", { variant: 'error' })
       }
+    } finally {
+      dispatch(toggleLoading())
     }
   }
+  
+  useEffect(() => {
+    if (data) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        atividadeChaveQ1: data.atividadeChaveQ1,
+        contextoProblemaQ3: data.contextoProblemaQ3,
+        textoDescricaoQ0: data.textoDescricaoQ0,
+        resultadosMedioPrazoQ3: data.resultadosMedioPrazoQ3,
+        recursosQ1: data.recursosQ1,
+        fonteReceitaQ2: data.fonteReceitaQ2,
+        publicoFocoImpactoQ3: data.publicoFocoImpactoQ3,
+        propostaValorQ2: data.propostaValorQ2,
+        oportunidadeNegQ2: data.oportunidadeNegQ2,
+        equipeQ1: data.equipeQ1,
+        custosQ1: data.custosQ1,
+        resultadoFinanceiroQ2: data.resultadoFinanceiroQ2,
+        saidasQ3: data.saidasQ3,
+        visaoImpactoQ3: data.visaoImpactoQ3,
+        custoQ2: data.custoQ2,
+        parceiroQ1: data.parceiroQ1,
+        intervencoesQ3: data.intervencoesQ3,
+        resultadosCurtoPrazoQ3: data.resultadosCurtoPrazoQ3,
+      }));
+    }
+  }, [data]);
+
+  if (bannerInfoLoading) return <div className='text-center'><CircularProgress /></div>
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md">

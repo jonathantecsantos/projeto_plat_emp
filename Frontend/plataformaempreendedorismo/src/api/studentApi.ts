@@ -43,6 +43,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id },
       ],
     }),
+    
     //IMPORTS
     uploadFile: build.mutation({
       query: (body) => ({
@@ -56,6 +57,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: 'teamById' },
       ],
     }),
+    
     //CONFIGS
     createEvent: build.mutation<void, EventConfig>({
       query: (data) => ({

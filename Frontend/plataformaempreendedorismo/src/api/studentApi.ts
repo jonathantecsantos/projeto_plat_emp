@@ -17,7 +17,7 @@ import { EventConfig } from '../model/config'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator', 'Coordinator'],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator', 'Coordinator', 'Events',],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -63,6 +63,25 @@ export const studentsApiSlice = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: (_result, _error, { id }: any) => [
+        { type: 'Events', id },
+      ],
+    }),
+
+    getEventById: build.query<EventConfig, number>({
+      query: (id) => `eventos/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Events', id }],
+    }),
+
+    updateEvent: build.mutation<void, { id: number; data: EventConfig }>({
+      query: ({ id, data }) => ({
+        url: `eventos/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Events', id },
+      ],
     }),
 
     //STUDENT
@@ -521,6 +540,8 @@ export const {
   
   //Events
   useCreateEventMutation,
+  useGetEventByIdQuery,
+  useUpdateEventMutation,
 
   //Students
   useGetStudentQuery,

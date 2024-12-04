@@ -79,6 +79,11 @@ export interface AdaptedLoginResponse {
   token: Token
 }
 
+export const formatDateToInput = (isoDate: string): string => {
+  if (!isoDate) return ""; // Retorna vazio se a data não for válida
+  return new Date(isoDate).toISOString().split("T")[0]
+}
+
 export interface EvaluationProps {
   teamData: { id: number, nomeEquipe?: string, teams: TeamEvaluationResponse[], teamEvaluation: TeamEvaluation }
 }

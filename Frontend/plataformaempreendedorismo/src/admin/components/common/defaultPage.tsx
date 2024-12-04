@@ -45,7 +45,7 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
   return (
-    <div className="flex min-h-screen flex-col relative ">
+    <div className="flex h-screen flex-col relative">
       {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> : <AdminAppBar />}
       <div className="flex flex-1 overflow-hidden">
         {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> :
@@ -55,7 +55,7 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
 
         <main className="overflow-x-hidden overflow-y-auto w-full">
           <BannerImage />
-          <div className="p-2 h-[calc(100%-9rem)]">
+          <div className="px-2 py-4 h-[calc(100%-9rem)]">
             <div className="flex">
               {userGlobalState?.enumRole == Roles.Aluno ? <div className="w-full mt-10"></div> : <BreadcrumbComponent />}
               <Logout />

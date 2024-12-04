@@ -27,6 +27,23 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const [editTeamNameOpen, setEditTeamNameOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
+  const handlePrintBanner = () => {
+    const bannerPreviewUrl = `/banner-preview/${id}`
+    const printWindow = window.open(bannerPreviewUrl, "_blank")
+
+    if (printWindow) {
+      const handleMessage = (event: MessageEvent) => {
+        if (event.origin === window.location.origin && event.data === "ready-to-print") {
+          printWindow.print()
+          window.removeEventListener("message", handleMessage) // Remove o listener após o uso
+        }
+      }
+
+      // Escuta a mensagem da página de banner-preview
+      window.addEventListener("message", handleMessage)
+    }
+  }
+
   const handleEditTeamNameOpen = (state: boolean) => {
     setEditTeamNameOpen(!state)
   }
@@ -72,8 +89,6 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const handleCancelEditTeamName = () => {
     setEditTeamNameOpen(false)
   }
-
-
 
 
   const actions = [
@@ -168,7 +183,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               <StudentCard key={idx} student={member} />
             ))}
           </div>
-          
+
           <SpeedDial
             ariaLabel="SpeedDial"
             className={`absolute right-0 -bottom-20 xl:-right-20 xl:-bottom-1 ${!sortedStudents.length ? 'left-96' : ''}`}
@@ -215,16 +230,18 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               <span>Prototipação</span>
             </div>
           </li>
-          <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
+          <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
+            onClick={() => navigate(RoutesNames.banner.replace(':id', id.toString()))}>
             <WebIcon fontSize='large' />
             <div className="flex-1 flex justify-center">
-              <span onClick={() => navigate(RoutesNames.banner.replace(':id', id.toString()))}>Preencher banner</span>
+              <span>Preencher banner</span>
             </div>
           </li>
-          <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
+          <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
+            onClick={handlePrintBanner}>
             <PrintIcon fontSize='large' />
             <div className="flex-1 flex justify-center">
-              <span onClick={() => navigate(RoutesNames.bannerPreview.replace(':id', id.toString()))}>Imprimir banner</span>
+              <span>Imprimir banner</span>
             </div>
           </li>
           {/* {!team?.professor?.equipe.linkPitch && (

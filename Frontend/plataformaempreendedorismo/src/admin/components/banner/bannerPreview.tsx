@@ -1,5 +1,5 @@
 import { Avatar } from "@mui/material";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
 import { Banner } from "../../../model/banner";
 import { avatarImage, placeholderImages } from "../../../utils/types";
@@ -28,8 +28,8 @@ const formatTextWithDashes = (text?: string) => {
 
 export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   const bannerRef = useRef<HTMLDivElement>(null)
-  const { data: banner } = useGetBannerByIdQuery(id)
-  const { data: team } = useGetTeamByIdQuery(id)
+  const { data: banner, isFetching: isFetchingBanner } = useGetBannerByIdQuery(id)
+  const { data: team, isFetching: isFetchingTeam } = useGetTeamByIdQuery(id)
 
   const imageUrls = banner?.anexos
     ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO") // Remove o logotipo
@@ -40,10 +40,34 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
     "http://localhost:8080/uploads/")
 
 
+  useEffect(() => {
+    const handleAfterPrint = () => {
+      window.close();
+    };
+
+    window.onafterprint = handleAfterPrint;
+
+    if (!isFetchingBanner && !isFetchingTeam && banner) {
+      window.print();
+    }
+
+    return () => {
+      window.onafterprint = null;
+    };
+  }, [isFetchingBanner, isFetchingTeam, banner])
+
+  useEffect(() => {
+    if (!isFetchingBanner && !isFetchingTeam && banner && team) {
+      // Notifica a janela principal que os dados estão prontos
+      window.opener?.postMessage("ready-to-print", window.location.origin)
+    }
+  }, [isFetchingBanner, isFetchingTeam, banner, team])
+
+  console.log('Banner')
   return (
 
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative 
-    print:w-[950px] print:text-xs" ref={bannerRef}>
+    print:w-[950px] print:text-xs blur print:blur-none" ref={bannerRef}>
 
       <div className="relative h-[340px] print:h-[160px]">
         <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute

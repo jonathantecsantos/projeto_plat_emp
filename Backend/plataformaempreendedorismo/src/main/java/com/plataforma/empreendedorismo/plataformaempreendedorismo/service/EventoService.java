@@ -7,6 +7,8 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.Eve
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.TipoEventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import util.exceptions.EventoEncontradoException;
+import util.exceptions.EventoNaoEncontradoException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -31,16 +33,20 @@ public class EventoService {
     }
 
     public Evento criarEvento(EventoRecord eventoRecord) throws Exception {
-        Evento evento = new Evento();
-        evento.setDataInicio(eventoRecord.dataInicio());
-        evento.setDataFim(eventoRecord.dataFim());
-        Optional<TipoEvento> eventoOptional = tipoEventoRepository.findById(eventoRecord.idEvento());
-        if (eventoOptional.isPresent()) {
-            evento.setTipoEvento(eventoOptional.get());
-        } else {
-            throw new Exception("Evento não encontrado");
+        if(eventoRepository.findByTipoEventoId(eventoRecord.idEvento()).isEmpty()){
+            Evento evento = new Evento();
+            evento.setDataInicio(eventoRecord.dataInicio());
+            evento.setDataFim(eventoRecord.dataFim());
+            Optional<TipoEvento> eventoOptional = tipoEventoRepository.findById(eventoRecord.idEvento());
+            if (eventoOptional.isPresent()) {
+                evento.setTipoEvento(eventoOptional.get());
+            } else {
+                throw new EventoNaoEncontradoException("Evento não encontrado");
+            }
+            return eventoRepository.save(evento);
+        }else{
+            throw new EventoEncontradoException("Já existe um evento cadastrado.");
         }
-        return eventoRepository.save(evento);
     }
 
     public Evento atualizarEvento(Long id, EventoRecord eventoAtualizado) {

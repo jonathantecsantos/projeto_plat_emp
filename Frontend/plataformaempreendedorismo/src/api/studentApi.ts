@@ -73,6 +73,11 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Events', id }],
     }),
 
+    getEventValidateById: build.query<boolean, number>({
+      query: (id) => `eventos/${id}/validade`,
+      providesTags: (_result, _error, id) => [{ type: 'Events', id }],
+    }),
+
     updateEvent: build.mutation<void, { id: number; data: EventConfig }>({
       query: ({ id, data }) => ({
         url: `eventos/${id}`,
@@ -542,6 +547,7 @@ export const {
   useCreateEventMutation,
   useGetEventByIdQuery,
   useUpdateEventMutation,
+  useGetEventValidateByIdQuery,
 
   //Students
   useGetStudentQuery,

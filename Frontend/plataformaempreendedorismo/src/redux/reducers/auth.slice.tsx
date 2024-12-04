@@ -40,7 +40,6 @@ const authSlice = createSlice({
       state.isAuthenticated = true
       try {
         const decoded: DecodedToken = jwtDecode(action.payload.tokenJWT);
-        console.log('decoded', decoded)
         state.enumRole = decoded.enumRole
         state.profile = decoded.enumRole
       } catch (error) {

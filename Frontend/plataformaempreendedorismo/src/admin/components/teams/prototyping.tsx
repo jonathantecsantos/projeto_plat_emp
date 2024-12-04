@@ -123,8 +123,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         formDataToSend.append('tipoAnexoIds', tipoAnexoId.toString())
       })
 
-      //criar maneira de validar os campos de inputs esquemaFiles e anexosFile para nao deixar enviar mais de 3 itens
-
       let cadastroPrototipoRecord = {
         idEquipe: formValues.idEquipe,
         instituicaoImpactoSocial: formValues.instituicaoImpactoSocial,
@@ -154,13 +152,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         formDataToSend.append('cadastroPrototipoRecord ', jsonBlob)
       }
 
-      //debug
-      const blobText = await jsonBlob.text()
-      console.log('Conteúdo do Blob:', blobText)
-      formDataToSend.forEach((value, key) => {
-        console.log(`${key}:`, value)
-      })
-
 
       if (teamPrototyping) {
         try {
@@ -184,7 +175,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
     } catch (error: any) {
       enqueueSnackbar(`${error?.data}`, { variant: 'error' })
-      console.log(error?.data)
     }
 
 

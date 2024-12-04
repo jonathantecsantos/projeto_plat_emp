@@ -55,7 +55,6 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
           { variant: 'success' })
         setSucess(true)
       } catch (error: any) {
-        console.log(error)
         enqueueSnackbar(`${error?.data}`, { variant: 'error' })
       }
     } else {
@@ -64,7 +63,6 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
         enqueueSnackbar('Professor editado com sucesso!', { variant: 'success' })
         setSucess(true)
       } catch (error: any) {
-        console.log(error)
         enqueueSnackbar(`${error?.data}`, { variant: 'error' })
       }
     }

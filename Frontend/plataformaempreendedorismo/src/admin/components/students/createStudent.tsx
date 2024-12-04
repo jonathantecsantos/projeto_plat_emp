@@ -90,7 +90,6 @@ export const CreateStudent = () => {
     setSucess(false)
   }
 
-  console.log('admin>createStudent.tsx')
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md border-t-2">
       <h2 className="text-3xl font-bold text-center mb-4">Adicionar Aluno</h2>

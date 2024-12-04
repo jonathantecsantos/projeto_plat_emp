@@ -24,7 +24,6 @@ export const EvaluatorsUpload = () => {
       formData.append('tipo', ImportType.evaluator)
 
       try {
-        console.log('Enviando arquivo de avaliadores para o backend...')
         const response = await uploadFile(formData)
         if (!response.error) {
           enqueueSnackbar('Arquivo de avaliadores enviado com sucesso!', { variant: 'success' })

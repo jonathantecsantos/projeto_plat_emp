@@ -47,7 +47,6 @@ export const CreateTeacher = () => {
       enqueueSnackbar('Professor criado com sucesso!', { variant: 'success' })
       setSucess(true)
     } catch (error: any) {
-      console.log(error)
       enqueueSnackbar(`${error?.data}`, { variant: 'error' })
     }
   }

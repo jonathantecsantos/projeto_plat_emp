@@ -25,7 +25,6 @@ export const TeachersUpload = () => {
       formData.append('tipo', ImportType.teacher)
 
       try {
-        console.log('Enviando arquivo de professores para o backend...')
         const response = await uploadFile(formData)
         if (!response.error) {
           enqueueSnackbar('Arquivo de professores enviado com sucesso!', { variant: 'success' })

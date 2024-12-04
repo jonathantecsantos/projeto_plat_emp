@@ -79,7 +79,6 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
           { variant: 'success' })
         setSucess(true)
       } catch (error: any) {
-        console.log(error)
         enqueueSnackbar(`${error?.data}`, { variant: 'error' })
       }
     } else {
@@ -88,7 +87,6 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
         enqueueSnackbar('Aluno editado com sucesso!', { variant: 'success' })
         setSucess(true)
       } catch (error: any) {
-        console.log(error)
         enqueueSnackbar(`${error?.data}`, { variant: 'error' })
       }
     }

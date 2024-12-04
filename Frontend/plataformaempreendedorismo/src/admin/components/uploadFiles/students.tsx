@@ -27,7 +27,6 @@ export const StudentsUpload = () => {
       formData.append('tipo', ImportType.student)
 
       try {
-        console.log('Enviando arquivo de alunos para o backend...')
         const response = await uploadFile(formData)
         if (!response.error) {
           enqueueSnackbar('Arquivo de alunos enviado com sucesso!', { variant: 'success' })

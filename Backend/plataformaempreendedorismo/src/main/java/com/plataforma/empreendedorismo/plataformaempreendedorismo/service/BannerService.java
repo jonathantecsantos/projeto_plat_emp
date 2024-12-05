@@ -106,10 +106,10 @@ public class BannerService {
     }
 
     public BannerRecord buscarBannerPorIdEquipe(Long idEquipe) {
-        Optional<Equipe> equipeOptional = equipeRepository.findById(idEquipe);
-
-        return equipeOptional.map(equipe -> new BannerRecord(equipe.getBanner())).orElse(null);
-
+        return equipeRepository.findById(idEquipe)
+                .map(Equipe::getBanner)
+                .map(BannerRecord::new)
+                .orElse(null);
     }
 
     @Transactional

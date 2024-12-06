@@ -248,7 +248,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
                 const response = await getEventById(EventsTypes.PROTOTIPO)
-                if (response.data == false) {
+                if (response.data == false || !response.data) {
                   enqueueSnackbar('Evento fora da data valida')
                   return
                 }
@@ -263,7 +263,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
                 const response = await getEventById(EventsTypes.BANNER)
-                if (response.data == false) {
+                if (response.data == false || !response.data) {
                   enqueueSnackbar('Evento fora da data valida')
                   return
                 }
@@ -277,7 +277,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
                 const response = await getEventById(EventsTypes.BANNER)
-                if (response.data == false) {
+                if (response.data == false || !response.data) {
                   enqueueSnackbar('Evento fora da data valida')
                   return
                 }
@@ -291,7 +291,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
                 const response = await getEventById(EventsTypes.PITCH)
-                if (response.data == false) {
+                if (response.data == false || !response.data) {
                   enqueueSnackbar('Evento fora da data valida')
                   return
                 }

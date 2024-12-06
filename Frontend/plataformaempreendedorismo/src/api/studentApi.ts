@@ -548,7 +548,7 @@ export const {
   useCreateEventMutation,
   useGetEventByIdQuery,
   useUpdateEventMutation,
-  useGetEventValidateByIdQuery,
+  useLazyGetEventValidateByIdQuery,
 
   //Students
   useGetStudentQuery,

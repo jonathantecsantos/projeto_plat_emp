@@ -17,6 +17,7 @@ export interface TeamsResponse {
 export interface UpdateTeam {
   nome?: string
   listIdOds?: ListIdOds[]
+  linkPitch?: string
 }
 
 
@@ -27,6 +28,7 @@ export interface Team extends TeamsResponse {
 
 export interface TeamIdResponse {
   nomeEquipe: string
+  linkPitch: string | null
   alunos: Student[]
   professor: Teacher[]
   odsList: Ods[]

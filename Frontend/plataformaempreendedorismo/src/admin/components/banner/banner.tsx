@@ -1,11 +1,12 @@
+import { Avatar, CircularProgress } from "@mui/material"
+import { useSnackbar } from "notistack"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 import { useCreateBannerMutation, useGetBannerByIdQuery, useUpdateBannerMutation } from "../../../api/studentApi"
-import { Banner } from "../../../model/banner"
-import { useSnackbar } from "notistack"
-import { useDispatch } from "react-redux"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { CircularProgress } from "@mui/material"
+import { avatarImage, placeholderImages } from "../../../utils/types"
 
 const fieldLabels: Record<string, string> = {
   atividadeChaveQ1: "Atividade Chave",
@@ -14,9 +15,9 @@ const fieldLabels: Record<string, string> = {
   equipeQ1: "Equipe",
   parceiroQ1: "Parceiro",
   contextoProblemaQ3: "Contexto e Problema",
-  publicoFocoImpactoQ3: "Público Foco Impacto",
-  intervencoesQ3: "Intervenções",
-  saidasQ3: "Saídas",
+  publicoFocoImpactoQ3: "Público Foco / Impacto",
+  intervencoesQ3: "Intervenções (estratégias)",
+  saidasQ3: "Saídas / Outputs",
   resultadosCurtoPrazoQ3: "Resultados Curto Prazo",
   resultadosMedioPrazoQ3: "Resultados Médio Prazo",
   visaoImpactoQ3: "Visão de Impacto",
@@ -70,7 +71,12 @@ export interface BannerFormData {
   [key: string]: string | number | File | null | File[]
 }
 
-export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
+interface BannerComponentProps {
+  id: number
+  teamName: string
+}
+
+export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
   const { data, isLoading: bannerInfoLoading } = useGetBannerByIdQuery(id)
   const [createBanner, { isLoading }] = useCreateBannerMutation()
   const [updateBanner,] = useUpdateBannerMutation()
@@ -100,7 +106,43 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
 
   const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [errors, setErrors] = useState<Partial<Record<keyof BannerFormData, string>>>({})
+
+  const imageUrls = data?.anexos
+    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO") // Remove o logotipo
+    ?.map((anexo) => anexo.caminhoAnexo.replace("C:\\Users\\wnn-dev\\Pictures\\uploads\\", "http://localhost:8080/uploads/"))
+
+  const avatar = data?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo.replace(
+    "C:\\Users\\wnn-dev\\Pictures\\uploads\\",
+    "http://localhost:8080/uploads/")
+
+  useEffect(() => {
+    if (data) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        atividadeChaveQ1: data.atividadeChaveQ1,
+        contextoProblemaQ3: data.contextoProblemaQ3,
+        textoDescricaoQ0: data.textoDescricaoQ0,
+        resultadosMedioPrazoQ3: data.resultadosMedioPrazoQ3,
+        recursosQ1: data.recursosQ1,
+        fonteReceitaQ2: data.fonteReceitaQ2,
+        publicoFocoImpactoQ3: data.publicoFocoImpactoQ3,
+        propostaValorQ2: data.propostaValorQ2,
+        oportunidadeNegQ2: data.oportunidadeNegQ2,
+        equipeQ1: data.equipeQ1,
+        custosQ1: data.custosQ1,
+        resultadoFinanceiroQ2: data.resultadoFinanceiroQ2,
+        saidasQ3: data.saidasQ3,
+        visaoImpactoQ3: data.visaoImpactoQ3,
+        custoQ2: data.custoQ2,
+        parceiroQ1: data.parceiroQ1,
+        intervencoesQ3: data.intervencoesQ3,
+        resultadosCurtoPrazoQ3: data.resultadosCurtoPrazoQ3,
+      }))
+    }
+  }, [data])
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -108,17 +150,17 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
       [e.target.name]: e.target.value,
     })
 
-    // try {
-    //   bannerValidationSchema.parse({
-    //     ...formData,
-    //     [e.target.name]: e.target.value,
-    //   })
-    //   setErrors((prev) => ({ ...prev, [e.target.name]: undefined }))
-    // } catch (error) {
-    //   if (error instanceof z.ZodError) {
-    //     setErrors((prev) => ({ ...prev, [e.target.name]: error.errors[0].message }))
-    //   }
-    // }
+    try {
+      bannerValidationSchema.parse({
+        ...formData,
+        [e.target.name]: e.target.value,
+      })
+      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }))
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setErrors((prev) => ({ ...prev, [e.target.name]: error.errors[0].message }))
+      }
+    }
   }
 
   const handleFilesChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -142,6 +184,7 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
       const validatedData = bannerValidationSchema.parse({
         ...formData,
         files: formData.files,
+        fileLogotipo: formData.fileLogotipo
       })
       const formDataToSend = new FormData()
 
@@ -164,9 +207,11 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
       if (data) {
         await updateBanner({ id: id, data: formDataToSend }).unwrap()
         enqueueSnackbar("Banner editado com sucesso!", { variant: 'success' })
+        navigate(-1)
       } else {
         await createBanner(formDataToSend).unwrap()
         enqueueSnackbar("Banner cadastrado com sucesso!", { variant: 'success' })
+        navigate(-1)
       }
 
     } catch (error) {
@@ -185,45 +230,20 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
       dispatch(toggleLoading())
     }
   }
-  
-  useEffect(() => {
-    if (data) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        atividadeChaveQ1: data.atividadeChaveQ1,
-        contextoProblemaQ3: data.contextoProblemaQ3,
-        textoDescricaoQ0: data.textoDescricaoQ0,
-        resultadosMedioPrazoQ3: data.resultadosMedioPrazoQ3,
-        recursosQ1: data.recursosQ1,
-        fonteReceitaQ2: data.fonteReceitaQ2,
-        publicoFocoImpactoQ3: data.publicoFocoImpactoQ3,
-        propostaValorQ2: data.propostaValorQ2,
-        oportunidadeNegQ2: data.oportunidadeNegQ2,
-        equipeQ1: data.equipeQ1,
-        custosQ1: data.custosQ1,
-        resultadoFinanceiroQ2: data.resultadoFinanceiroQ2,
-        saidasQ3: data.saidasQ3,
-        visaoImpactoQ3: data.visaoImpactoQ3,
-        custoQ2: data.custoQ2,
-        parceiroQ1: data.parceiroQ1,
-        intervencoesQ3: data.intervencoesQ3,
-        resultadosCurtoPrazoQ3: data.resultadosCurtoPrazoQ3,
-      }));
-    }
-  }, [data]);
+
+
 
   if (bannerInfoLoading) return <div className='text-center'><CircularProgress /></div>
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-6">Cadastrar Banner</h2>
-
+      <h2 className="text-2xl font-bold text-center mb-20">Cadastrar Banner - Time: {teamName}</h2>
       {/* Upload de Arquivo */}
       <div className="bg-blue-100 p-4 rounded-lg mb-6">
-        <h3 className="text-lg font-semibold text-blue-600 mb-4">Seção Inicial</h3>
+        <h3 className="text-lg font-semibold text-blue-600 mb-8">Imagens e Descrição do Projeto</h3>
         <div>
           <label htmlFor="file" className="block text-sm font-medium text-gray-700">
-            Imagens
+            Imagens (Selecione até 04 imagens de até 10MB cada).
           </label>
           <input
             type="file"
@@ -234,11 +254,27 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
             className="w-full border border-blue-500 p-2 rounded-md focus:ring-2 focus:ring-blue-500"
           />
           {errors.files && <p className="text-red-500 text-sm">{errors.files}</p>}
+          <div className="p-2 flex w-full">
+            {imageUrls && imageUrls.length > 0 && <div className="grid grid-cols-2 gap-1 w-full">
+                {(imageUrls && imageUrls.length > 0 ? imageUrls : placeholderImages).map((image, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-full bg-green-500 flex items-center justify-center overflow-hidden rounded-md"
+                  >
+                    <img
+                      src={image}
+                      alt={`Imagem ${index + 1}`}
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+                ))}
+              </div>}
+          </div>
         </div>
 
-        <div className="mt-4">
+        <div className="mb-10">
           <label htmlFor="fileLogotipo" className="block  text-sm font-medium text-gray-700">
-            Logotipo
+            Logotipo (Selecione uma imagem de até 10MB).
           </label>
           <input
             type="file"
@@ -248,16 +284,24 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
             className="w-full border border-blue-500 p-2 rounded-md focus:ring-2 focus:ring-blue-500"
           />
           {errors.fileLogotipo && <p className="text-red-500 text-sm">{errors.fileLogotipo}</p>}
+          {avatar && avatar.length > 0 && <div className="flex justify-start items-center my-2">
+              <Avatar
+                className="mr-2 w-20 h-20 print:h-14 print:w-14"
+                src={avatar ? avatar : avatarImage}
+                alt="Avatar"
+              />
+            </div>}
         </div>
 
+
         <label htmlFor={formData.textoDescricaoQ0 as string} className="block text-sm font-medium text-gray-700 mt-4">
-          Texto
+          Texto (Breve descrição do time, projeto e produto).
         </label>
         <textarea
           name="textoDescricaoQ0"
           value={formData.textoDescricaoQ0 as string}
           onChange={handleChange}
-          className="border border-primary p-2 rounded-md w-full"
+          className="border border-primary p-2 rounded-md w-full h-60"
         />
         {errors.textoDescricaoQ0 && (
           <p className="text-red-500 text-sm">{errors.textoDescricaoQ0}</p>
@@ -273,13 +317,12 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
               <label htmlFor={field} className="block text-sm font-medium text-gray-700">
                 {fieldLabels[field]}
               </label>
-              <input
-                type="text"
+              <textarea
                 id={field}
                 name={field}
                 value={formData[field] as string}
                 onChange={handleChange}
-                className="w-full border border-orange-500 p-2 rounded-md focus:ring-2 focus:ring-orange-500"
+                className="w-full h-20 border border-orange-500 p-2 rounded-md focus:ring-2 focus:ring-orange-500"
               />
               {errors[field] && <p className="text-red-500 text-sm">{errors[field]}</p>}
             </div>
@@ -297,13 +340,12 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
                 <label htmlFor={field} className="block text-sm font-medium text-gray-700">
                   {fieldLabels[field]}
                 </label>
-                <input
-                  type="text"
+                <textarea
                   id={field}
                   name={field}
                   value={formData[field] as string}
                   onChange={handleChange}
-                  className="w-full border border-pink-500 p-2 rounded-md focus:ring-2 focus:ring-pink-500"
+                  className="w-full h-20 border border-pink-500 p-2 rounded-md focus:ring-2 focus:ring-pink-500"
                 />
                 {errors[field] && <p className="text-red-500 text-sm">{errors[field]}</p>}
               </div>
@@ -334,14 +376,12 @@ export const BannerComponent = ({ id }: Pick<Banner, "id">) => {
                 name={field}
                 value={formData[field] as string}
                 onChange={handleChange}
-                className="w-full border border-purple-500 p-2 rounded-md focus:ring-2 focus:ring-purple-500 resize-none"
-                style={{ height: "4rem" }}
+                className="w-full h-20 border border-purple-500 p-2 rounded-md focus:ring-2 focus:ring-purple-500"
               />
               {errors[field] && <p className="text-red-500 text-sm">{errors[field]}</p>}
             </div>
           ))}
         </div>
-
 
       </div>
 

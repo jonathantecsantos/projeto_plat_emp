@@ -13,7 +13,7 @@ export const AdminHomeComponent = () => {
 
   return (
     <div>
-      <div className="flex">
+      <div className="flex min-h-screen">
         <div className="w-3/4 p-4 bg-white">
           <h1 className="text-2xl font-bold mb-6">Bem-vindo ao seu painel {userGlobalState?.username}</h1>
           <p className="mb-8">{userGlobalState?.email}</p>

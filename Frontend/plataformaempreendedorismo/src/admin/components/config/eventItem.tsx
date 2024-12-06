@@ -68,37 +68,41 @@ export const EventItem = ({ idEvento, initialData }: EventItemProps) => {
   }
 
   return (
-    <div className="flex flex-col">
-      <label className="font-bold">{EventsTypes[idEvento]}</label>
-      <div className="flex items-center space-x-2">
-        <div>
-          <label className="text-sm">Início</label>
-          <input
-            type="date"
-            value={localEvent.dataInicio}
-            onChange={(e) => handleInputChange("dataInicio", e.target.value)}
-            className="border border-gray-300 rounded-md p-2 w-full"
-          />
-        </div>
-        <span className="mt-5">à</span>
-        <div>
-          <label className="text-sm">Fim</label>
-          <input
-            type="date"
-            value={localEvent.dataFim}
-            onChange={(e) => handleInputChange("dataFim", e.target.value)}
-            className="border border-gray-300 rounded-md p-2 w-full"
-          />
-        </div>
+    <div className="w-full border rounded-lg p-2 relative">
+      <div className='w-full bg-[#3C14A4] absolute  top-0 left-0 right-0 rounded-t-lg first-letter:uppercase'>
+        <label className="font-bold w-full px-2 text-[#fefefe]">{EventsTypes[idEvento].toLowerCase()}</label>
       </div>
-      <button
-        onClick={handleSave}
-        className="mt-2 mb-4 p-2 text-nowrap bg-[#3C14A4] text-white rounded-lg flex justify-start w-1/3"
-      >
-        {created || updated ? <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-2' /> : <CheckIcon className=' mr-2' />}
-
-        {EventsTypes[idEvento].toLowerCase()}
-      </button>
+      <div className='w-full flex justify-center'>
+        <div className="flex items-center space-x-2">
+          <div>
+            <label className="text-sm">Início</label>
+            <input
+              type="date"
+              value={localEvent.dataInicio}
+              onChange={(e) => handleInputChange("dataInicio", e.target.value)}
+              className="border border-gray-300 rounded-md p-2 w-full"
+            />
+          </div>
+          <span className="mt-5">à</span>
+          <div>
+            <label className="text-sm">Fim</label>
+            <input
+              type="date"
+              value={localEvent.dataFim}
+              onChange={(e) => handleInputChange("dataFim", e.target.value)}
+              className="border border-gray-300 rounded-md p-2 w-full"
+            />
+          </div>
+        </div>
+        <button
+          disabled={updated}
+          onClick={handleSave}
+          className="mt-10 ml-2 mb-4 p-2 text-nowrap bg-[#3C14A4] text-white rounded-lg flex justify-center w-fit px-3"
+        >
+          {created || updated ? <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-2' /> : <CheckIcon className=' mr-2' />}
+          Salvar
+        </button>
+      </div>
     </div>
   )
 }

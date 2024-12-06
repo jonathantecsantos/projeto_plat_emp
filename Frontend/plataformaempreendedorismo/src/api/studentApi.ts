@@ -320,8 +320,7 @@ export const studentsApiSlice = createApi({
         method: 'POST',
         body: data,
       }),
-      //invalidar a tag de banner por id
-      // invalidatesTags: [{ type: 'Banner', id: 'LIST' }],
+      invalidatesTags: (_result, _error, ) => [{ type: 'Banner' }],
     }),
 
     updateBanner: build.mutation<FormData, { id: number; data: FormData }>({

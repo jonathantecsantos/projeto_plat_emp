@@ -10,7 +10,6 @@ import { toggleLoading } from '../../../redux/reducers/loadingBar.slice'
 
 interface EventItemProps {
   idEvento: number
-  initialData: EventConfig
 }
 
 const formatDateToInput = (isoDate: string): string => {
@@ -18,26 +17,33 @@ const formatDateToInput = (isoDate: string): string => {
   return new Date(isoDate).toISOString().split("T")[0]
 }
 
-export const EventItem = ({ idEvento, initialData }: EventItemProps) => {
+export const EventItem = ({ idEvento, }: EventItemProps) => {
   const { data, isSuccess } = useGetEventByIdQuery(idEvento)
   const [createEvent, { isSuccess: created }] = useCreateEventMutation()
   const [updateEvent, { isSuccess: updated }] = useUpdateEventMutation()
   const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
 
-  const [localEvent, setLocalEvent] = useState<EventConfig>(initialData)
-  const [isNew, setIsNew] = useState(true) // Determina se é um novo evento ou existente
+  const [localEvent, setLocalEvent] = useState<EventConfig>({
+    idEvento,
+    dataInicio: "",
+    dataFim: "",
+    tipoEvento: undefined,
+  });
+
+  const [isNew, setIsNew] = useState(true);
 
   useEffect(() => {
-    if (isSuccess && data) {
+    if (data) {
       setLocalEvent({
         idEvento,
         dataInicio: formatDateToInput(data.dataInicio),
         dataFim: formatDateToInput(data.dataFim),
-      })
-      setIsNew(false) // Evento já existe no backend
+        tipoEvento: data.tipoEvento,
+      });
+      setIsNew(false);
     }
-  }, [data, isSuccess, idEvento])
+  }, [data]);
 
   const handleInputChange = (field: keyof EventConfig, value: string) => {
     setLocalEvent((prev) => ({ ...prev, [field]: value }))
@@ -49,7 +55,7 @@ export const EventItem = ({ idEvento, initialData }: EventItemProps) => {
       const formattedEvent = {
         dataInicio: new Date(localEvent.dataInicio).toISOString(),
         dataFim: new Date(localEvent.dataFim).toISOString(),
-        idEvento: localEvent.idEvento,
+        idEvento,
       }
       if (isNew) {
         await createEvent(formattedEvent).unwrap()

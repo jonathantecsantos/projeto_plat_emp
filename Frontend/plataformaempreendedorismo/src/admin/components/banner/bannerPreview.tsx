@@ -67,7 +67,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   return (
 
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative 
-    print:w-[950px] print:text-xs blur print:blur-none" ref={bannerRef}>
+    print:w-[950px] print:text-[10px] blur print:blur-none" ref={bannerRef}>
 
       <div className="relative h-[340px] print:h-[160px]">
         <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute

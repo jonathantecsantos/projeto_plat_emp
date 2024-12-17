@@ -44,27 +44,27 @@ const bannerValidationSchema = z.object({
   textoDescricaoQ0: z.string().max(900, "Máximo de 900 caracteres permitidos"),
 
   //Capacidade organizazional
-  equipeQ1: z.string().max(240, "Máximo de 240 caracteres permitidos"),
-  parceiroQ1: z.string().max(92, "Máximo de 92 caracteres permitidos"),
-  atividadeChaveQ1: z.string().max(61, "Máximo de 61 caracteres permitidos"),
-  recursosQ1: z.string().max(61, "Máximo de 61 caracteres permitidos"),
-  custosQ1: z.string().max(130, "Máximo de 130 caracteres permitidos"),
+  equipeQ1: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  parceiroQ1: z.string().max(300, "Máximo de 300 caracteres permitidos"),
+  atividadeChaveQ1: z.string().max(300, "Máximo de 300 caracteres permitidos"),
+  recursosQ1: z.string().max(300, "Máximo de 300 caracteres permitidos"),
+  custosQ1: z.string().max(300, "Máximo de 300  caracteres permitidos"),
 
   //Fluxo de negocio
-  oportunidadeNegQ2: z.string().max(80, "Máximo de 80 caracteres permitidos"),
-  custoQ2: z.string().max(118, "Máximo de 118 caracteres permitidos"),
-  propostaValorQ2: z.string().max(300, "Máximo de 300 caracteres permitidos"),
-  fonteReceitaQ2: z.string().max(130, "Máximo de 130 caracteres permitidos"),
-  resultadoFinanceiroQ2: z.string().max(900, "Máximo de 900 caracteres permitidos"),
+  oportunidadeNegQ2: z.string().max(300, "Máximo de 300 caracteres permitidos"),
+  custoQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  propostaValorQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  fonteReceitaQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  resultadoFinanceiroQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
 
   //Teoria de mudança
-  contextoProblemaQ3: z.string().max(120, "Máximo de 120 caracteres permitidos"),
-  publicoFocoImpactoQ3: z.string().max(140, "Máximo de 140 caracteres permitidos"),
-  intervencoesQ3: z.string().max(360, "Máximo de 360 caracteres permitidos"),
-  saidasQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
-  resultadosCurtoPrazoQ3: z.string().max(135, "Máximo de 135 caracteres permitidos"),
-  resultadosMedioPrazoQ3: z.string().max(135, "Máximo de 135 caracteres permitidos"),
-  visaoImpactoQ3: z.string().max(200, "Máximo de 200 caracteres permitidos"),
+  contextoProblemaQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  publicoFocoImpactoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  intervencoesQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  saidasQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  resultadosCurtoPrazoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  resultadosMedioPrazoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  visaoImpactoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
 })
 
 export interface BannerFormData {
@@ -256,19 +256,19 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
           {errors.files && <p className="text-red-500 text-sm">{errors.files}</p>}
           <div className="p-2 flex w-full">
             {imageUrls && imageUrls.length > 0 && <div className="grid grid-cols-2 gap-1 w-full">
-                {(imageUrls && imageUrls.length > 0 ? imageUrls : placeholderImages).map((image, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-full bg-green-500 flex items-center justify-center overflow-hidden rounded-md"
-                  >
-                    <img
-                      src={image}
-                      alt={`Imagem ${index + 1}`}
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </div>
-                ))}
-              </div>}
+              {(imageUrls && imageUrls.length > 0 ? imageUrls : placeholderImages).map((image, index) => (
+                <div
+                  key={index}
+                  className="w-full h-full bg-green-500 flex items-center justify-center overflow-hidden rounded-md"
+                >
+                  <img
+                    src={image}
+                    alt={`Imagem ${index + 1}`}
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              ))}
+            </div>}
           </div>
         </div>
 
@@ -285,12 +285,12 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
           />
           {errors.fileLogotipo && <p className="text-red-500 text-sm">{errors.fileLogotipo}</p>}
           {avatar && avatar.length > 0 && <div className="flex justify-start items-center my-2">
-              <Avatar
-                className="mr-2 w-20 h-20 print:h-14 print:w-14"
-                src={avatar ? avatar : avatarImage}
-                alt="Avatar"
-              />
-            </div>}
+            <Avatar
+              className="mr-2 w-20 h-20 print:h-14 print:w-14"
+              src={avatar ? avatar : avatarImage}
+              alt="Avatar"
+            />
+          </div>}
         </div>
 
 

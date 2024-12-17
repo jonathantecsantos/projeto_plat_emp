@@ -249,7 +249,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               onClick={async () => {
                 const response = await getEventById(EventsTypes.PROTOTIPO)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data valida')
+                  enqueueSnackbar('Evento fora da data de validade')
                   return
                 }
                 navigate(RoutesNames.prototyping.replace(':id', id.toString()))
@@ -264,7 +264,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               onClick={async () => {
                 const response = await getEventById(EventsTypes.BANNER)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data valida')
+                  enqueueSnackbar('Evento fora da data de validade')
                   return
                 }
                 navigate(RoutesNames.banner.replace(':id', id.toString()), { state: team?.nomeEquipe })
@@ -278,7 +278,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               onClick={async () => {
                 const response = await getEventById(EventsTypes.BANNER)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data valida')
+                  enqueueSnackbar('Evento fora da data de validade')
                   return
                 }
                 handlePrintBanner()
@@ -292,7 +292,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               onClick={async () => {
                 const response = await getEventById(EventsTypes.PITCH)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data valida')
+                  enqueueSnackbar('Evento fora da data de validade')
                   return
                 }
 

@@ -1,7 +1,11 @@
 export interface EventConfig {
+  idEvento: number
   dataInicio: string
   dataFim: string
-  idEvento: number
+  tipoEvento?: {
+    id: number,
+    descricao: string
+  }
 }
 
 export enum EventsTypes {

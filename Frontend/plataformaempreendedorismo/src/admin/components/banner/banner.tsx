@@ -138,7 +138,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
         custoQ2: data.custoQ2,
         parceiroQ1: data.parceiroQ1,
         intervencoesQ3: data.intervencoesQ3,
-        resultadosCurtoPrazoQ3: data.resultadosCurtoPrazoQ3,
+        resultadosCurtoPrazoQ3: data.resultadosCurtoPrazoQ3, 
       }))
     }
   }, [data])

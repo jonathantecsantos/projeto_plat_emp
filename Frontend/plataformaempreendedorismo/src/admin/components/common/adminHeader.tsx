@@ -3,7 +3,7 @@ import { Button, IconButton } from '@mui/material'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { InputComponent } from './input'
-
+    
 export interface AdminHeaderProps {
   onSearch: (query: string) => void
   onRefresh?: () => void
@@ -13,6 +13,10 @@ export interface AdminHeaderProps {
 }
 
 export const AdminHeader = ({ onSearch, onRefresh, addButtonName, onAdd, placeholder }: AdminHeaderProps) => {
+
+
+  const qqcoisa = ''
+
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTermFromUrl = searchParams.get('search') || ''
   const [searchTerm, setSearchTerm] = useState(searchTermFromUrl)

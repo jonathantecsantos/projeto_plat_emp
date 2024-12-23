@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
 import { Banner } from "../../../model/banner";
-import { avatarImage, placeholderImages } from "../../../utils/types";
+import { avatarImage, normalizePath, placeholderImages, replacePath } from "../../../utils/types";
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -31,13 +31,18 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   const { data: banner, isFetching: isFetchingBanner } = useGetBannerByIdQuery(id)
   const { data: team, isFetching: isFetchingTeam } = useGetTeamByIdQuery(id)
 
-  const imageUrls = banner?.anexos
-    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO") // Remove o logotipo
-    ?.map((anexo) => anexo.caminhoAnexo.replace("C:\\Users\\wnn-dev\\Pictures\\uploads\\", "http://localhost:8080/uploads/"))
+  const UPLOAD_FOLDER = import.meta.env.VITE_UPLOAD_FOLDER
+  const API_URL = import.meta.env.VITE_API_URL
 
-  const avatar = banner?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo.replace(
-    "C:\\Users\\wnn-dev\\Pictures\\uploads\\",
-    "http://localhost:8080/uploads/")
+  const imageUrls = banner?.anexos
+    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO")
+    ?.map((anexo) => replacePath(normalizePath(anexo.caminhoAnexo), UPLOAD_FOLDER, API_URL));
+
+  const avatar = replacePath(
+    normalizePath(banner?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo || ''),
+    UPLOAD_FOLDER,
+    API_URL
+  );
 
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 import { useCreateBannerMutation, useGetBannerByIdQuery, useUpdateBannerMutation } from "../../../api/studentApi"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { avatarImage, placeholderImages } from "../../../utils/types"
+import { avatarImage, normalizePath, placeholderImages, replacePath } from "../../../utils/types"
 
 const fieldLabels: Record<string, string> = {
   atividadeChaveQ1: "Atividade Chave",
@@ -109,13 +109,18 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
   const navigate = useNavigate()
   const [errors, setErrors] = useState<Partial<Record<keyof BannerFormData, string>>>({})
 
-  const imageUrls = data?.anexos
-    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO") // Remove o logotipo
-    ?.map((anexo) => anexo.caminhoAnexo.replace("C:\\Users\\wnn-dev\\Pictures\\uploads\\", "http://localhost:8080/uploads/"))
+  const UPLOAD_FOLDER = import.meta.env.VITE_UPLOAD_FOLDER
+  const API_URL = import.meta.env.VITE_API_URL
 
-  const avatar = data?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo.replace(
-    "C:\\Users\\wnn-dev\\Pictures\\uploads\\",
-    "http://localhost:8080/uploads/")
+  const imageUrls = data?.anexos
+    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO")
+    ?.map((anexo) => replacePath(normalizePath(anexo.caminhoAnexo), UPLOAD_FOLDER, API_URL));
+
+  const avatar = replacePath(
+    normalizePath(data?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo || ''),
+    UPLOAD_FOLDER,
+    API_URL
+  );
 
   useEffect(() => {
     if (data) {
@@ -239,6 +244,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-center mb-20">Cadastrar Banner - Time: {teamName}</h2>
       {/* Upload de Arquivo */}
+      {avatar}
       <div className="bg-blue-100 p-4 rounded-lg mb-6">
         <h3 className="text-lg font-semibold text-blue-600 mb-8">Imagens e Descrição do Projeto</h3>
         <div>

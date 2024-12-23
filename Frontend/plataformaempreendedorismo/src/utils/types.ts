@@ -97,7 +97,12 @@ export const placeholderImages = [
 export const avatarImage =
   "https://www.zarla.com/images/zarla-floralma-1x1-2400x2400-20220923-3t4w93gk3y6mw8vhx48w.png?crop=1:1,smart&width=250&dpr=2";
 
+export const normalizePath = (path: string): string => path.replace(/\\/g, '\\\\');
 
+export const replacePath = (path: string, folder: string, apiUrl: string): string => {
+  const normalizedFolder = folder.endsWith('\\\\') ? folder : `${folder}\\\\`;
+  return path.replace(new RegExp(`^${normalizedFolder}`), `${apiUrl}/uploads/`);
+};
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 

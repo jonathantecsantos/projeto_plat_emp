@@ -28,8 +28,8 @@ public class EventoService {
         return eventoRepository.findAll();
     }
 
-    public Optional<Evento> buscarPorId(Long id) {
-        return eventoRepository.findById(id);
+    public Optional<Evento> buscarPorTipoEventoId(Long id) {
+        return eventoRepository.findByTipoEventoId(id);
     }
 
     public Evento criarEvento(EventoRecord eventoRecord) throws Exception {

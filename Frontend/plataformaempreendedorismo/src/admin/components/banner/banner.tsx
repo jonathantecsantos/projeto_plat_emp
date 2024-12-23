@@ -244,7 +244,6 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-center mb-20">Cadastrar Banner - Time: {teamName}</h2>
       {/* Upload de Arquivo */}
-      {avatar}
       <div className="bg-blue-100 p-4 rounded-lg mb-6">
         <h3 className="text-lg font-semibold text-blue-600 mb-8">Imagens e Descrição do Projeto</h3>
         <div>

@@ -18,7 +18,7 @@ const formatDateToInput = (isoDate: string): string => {
 }
 
 export const EventItem = ({ idEvento, }: EventItemProps) => {
-  const { data, isSuccess } = useGetEventByIdQuery(idEvento)
+  const { data } = useGetEventByIdQuery(idEvento)
   const [createEvent, { isSuccess: created }] = useCreateEventMutation()
   const [updateEvent, { isSuccess: updated }] = useUpdateEventMutation()
   const { enqueueSnackbar } = useSnackbar()
@@ -76,7 +76,11 @@ export const EventItem = ({ idEvento, }: EventItemProps) => {
   return (
     <div className="w-full border rounded-lg p-2 relative">
       <div className='w-full bg-[#3C14A4] absolute  top-0 left-0 right-0 rounded-t-lg first-letter:uppercase'>
-        <label className="font-bold w-full px-2 text-[#fefefe]">{EventsTypes[idEvento].toLowerCase()}</label>
+        <label className="font-bold w-full px-2 text-[#fefefe]">
+          {data ? data?.tipoEvento?.descricao : EventsTypes[idEvento]}
+        </label>
+        {/* <label className="font-bold w-full px-2 text-[#fefefe]">Fixo: {EventsTypes[idEvento]}</label> */}
+        {/* <label className="font-bold w-full px-2 text-[#fefefe]">Atual:{localEvent?.tipoEvento?.descricao}</label> */}
       </div>
       <div className='w-full flex justify-center'>
         <div className="flex items-center space-x-2">

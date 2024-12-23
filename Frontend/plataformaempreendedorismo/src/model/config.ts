@@ -8,6 +8,16 @@ export interface EventConfig {
   }
 }
 
+export interface Events {
+  id: number
+  dataInicio: string
+  dataFim: string
+  tipoEvento: {
+    id: number,
+    descricao: string
+  }
+}
+
 export enum EventsTypes {
   INSCRICAO = 1,
   PROTOTIPO = 2,

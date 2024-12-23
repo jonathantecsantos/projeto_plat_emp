@@ -12,7 +12,7 @@ import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { EvaluationTypes } from '../utils/types'
-import { EventConfig } from '../model/config'
+import { EventConfig, Events } from '../model/config'
 
 
 export const studentsApiSlice = createApi({
@@ -73,6 +73,17 @@ export const studentsApiSlice = createApi({
     getEventById: build.query<EventConfig, number>({
       query: (id) => `eventos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Events', id }],
+    }),
+
+    getEvents: build.query<Events[], void>({
+      query: () => `/eventos`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Events', id } as const)),
+            { type: 'Events', id: 'LIST' },
+          ]
+          : [{ type: 'Events', id: 'LIST' }],
     }),
 
     getEventValidateById: build.query<boolean, number>({
@@ -547,6 +558,7 @@ export const {
   //Events
   useCreateEventMutation,
   useGetEventByIdQuery,
+  useGetEventsQuery,
   useUpdateEventMutation,
   useLazyGetEventValidateByIdQuery,
 

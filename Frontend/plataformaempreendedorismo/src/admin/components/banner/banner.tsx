@@ -209,7 +209,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
         enqueueSnackbar("Banner editado com sucesso!", { variant: 'success' })
         navigate(-1)
       } else {
-        await createBanner(formDataToSend).unwrap()
+        await createBanner({ id: id, data: formDataToSend }).unwrap()
         enqueueSnackbar("Banner cadastrado com sucesso!", { variant: 'success' })
         navigate(-1)
       }

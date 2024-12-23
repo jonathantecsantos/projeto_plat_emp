@@ -43,7 +43,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id },
       ],
     }),
-    
+
     //IMPORTS
     uploadFile: build.mutation({
       query: (body) => ({
@@ -57,7 +57,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: 'teamById' },
       ],
     }),
-    
+
     //CONFIGS
     createEvent: build.mutation<void, EventConfig>({
       query: (data) => ({
@@ -325,13 +325,13 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Banner', id }],
     }),
 
-    createBanner: build.mutation<void, FormData>({
+    createBanner: build.mutation<void, { id: number; data: FormData }>({
       query: (data) => ({
         url: `/banner/cadastrar`,
         method: 'POST',
-        body: data,
+        body: data.data,
       }),
-      invalidatesTags: (_result, _error, ) => [{ type: 'Banner' }],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Banner', id }],
     }),
 
     updateBanner: build.mutation<FormData, { id: number; data: FormData }>({
@@ -554,7 +554,7 @@ export const {
 
   //Imports
   useUploadFileMutation,
-  
+
   //Events
   useCreateEventMutation,
   useGetEventByIdQuery,

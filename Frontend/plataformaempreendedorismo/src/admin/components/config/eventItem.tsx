@@ -36,7 +36,7 @@ export const EventItem = ({ idEvento, }: EventItemProps) => {
   useEffect(() => {
     if (data) {
       setLocalEvent({
-        idEvento,
+        idEvento: data.idEvento,
         dataInicio: formatDateToInput(data.dataInicio),
         dataFim: formatDateToInput(data.dataFim),
         tipoEvento: data.tipoEvento,
@@ -55,7 +55,7 @@ export const EventItem = ({ idEvento, }: EventItemProps) => {
       const formattedEvent = {
         dataInicio: new Date(localEvent.dataInicio).toISOString(),
         dataFim: new Date(localEvent.dataFim).toISOString(),
-        idEvento,
+        idEvento: localEvent.idEvento,
       }
       if (isNew) {
         await createEvent(formattedEvent).unwrap()
@@ -63,11 +63,11 @@ export const EventItem = ({ idEvento, }: EventItemProps) => {
         setIsNew(false)
       } else {
         await updateEvent({ id: idEvento, data: formattedEvent }).unwrap()
-        enqueueSnackbar(`Evento ${EventsTypes[idEvento]} atualizado com sucesso!`, { variant: "success" })
+        enqueueSnackbar(`Evento ${data ? data?.tipoEvento?.descricao : EventsTypes[idEvento]} atualizado com sucesso!`, { variant: "success" })
       }
     } catch (error: any) {
       console.error("Erro ao salvar evento:", error)
-      enqueueSnackbar(`Erro ao salvar evento ${EventsTypes[idEvento]}.`, { variant: "error" })
+      enqueueSnackbar(`Erro ao salvar evento ${data ? data?.tipoEvento?.descricao : EventsTypes[idEvento]}.`, { variant: "error" })
     } finally {
       dispatch(toggleLoading())
     }

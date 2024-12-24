@@ -50,7 +50,7 @@ public class EventoService {
     }
 
     public Evento atualizarEvento(Long id, EventoRecord eventoAtualizado) {
-        Optional<Evento> eventoExistente = eventoRepository.findById(id);
+        Optional<Evento> eventoExistente = eventoRepository.findByTipoEventoId(id);
 
         if (eventoExistente.isPresent()) {
             Evento evento = eventoExistente.get();

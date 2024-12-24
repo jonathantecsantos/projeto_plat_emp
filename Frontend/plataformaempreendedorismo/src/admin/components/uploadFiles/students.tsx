@@ -1,12 +1,11 @@
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useUploadFileMutation } from '../../../api/studentApi'
-import { ImportType } from '../../../utils/types'
+import { ImportType, UploadProps } from '../../../utils/types'
 import { UploadComponent } from './uploadCard'
 
 
-
-export const StudentsUpload = () => {
+export const StudentsUpload = ({ userID }: UploadProps) => {
   const [file, setFile] = useState<File | null>(null)
   const [uploadFile, { isLoading }] = useUploadFileMutation()
   const { enqueueSnackbar } = useSnackbar()
@@ -25,6 +24,7 @@ export const StudentsUpload = () => {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('tipo', ImportType.student)
+      formData.append('idUsuario ', userID.toString())
 
       try {
         const response = await uploadFile(formData)

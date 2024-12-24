@@ -3,7 +3,8 @@ import { TeamEvaluation, TeamEvaluationResponse } from "../model/evaluationForma
 export enum ImportType {
   student = 'ALUNO',
   evaluator = 'AVALIADOR',
-  teacher = 'PROFESSOR'
+  teacher = 'PROFESSOR',
+  coordinator = 'COORDENADOR'
 }
 
 
@@ -55,6 +56,10 @@ export interface LoginTokenJWT {
   username: string
   enumRole?: Roles
   exp: string
+}
+
+export interface UploadProps {
+  userID: number,
 }
 
 export interface LoginResponse extends LoginTokenJWT {

@@ -4,11 +4,12 @@ import { useUploadFileMutation } from '../../../api/studentApi'
 import { ImportType, UploadProps } from '../../../utils/types'
 import { UploadComponent } from './uploadCard'
 
-export const EvaluatorsUpload = ({ userID }: UploadProps) => {
+export const CoordinatorsUpload = ({ userID }: UploadProps) => {
   const [file, setFile] = useState<File | null>(null)
   const [uploadFile, { isLoading }] = useUploadFileMutation()
   const { enqueueSnackbar } = useSnackbar()
   const [uploaded, setUploaded] = useState(false)
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files?.[0]
@@ -21,28 +22,27 @@ export const EvaluatorsUpload = ({ userID }: UploadProps) => {
     if (file) {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('tipo', ImportType.evaluator)
+      formData.append('tipo', ImportType.coordinator)
       formData.append('idUsuario ', userID.toString())
 
       try {
         const response = await uploadFile(formData)
         if (!response.error) {
-          enqueueSnackbar('Arquivo de avaliadores enviado com sucesso!', { variant: 'success' })
+          enqueueSnackbar('Arquivo de coordenadores enviado com sucesso!', { variant: 'success' })
           setUploaded(true)
         }
       } catch (error) {
-        console.error('Erro ao enviar o arquivo de avaliadores:', error)
-        enqueueSnackbar('Erro ao enviar o arquivo de avaliadores. Por favor, tente novamente.', { variant: 'error' })
+        console.error('Erro ao enviar o arquivo de coordenadores:', error)
+        enqueueSnackbar('Erro ao enviar o arquivo de coordenadores. Por favor, tente novamente.', { variant: 'error' })
         setUploaded(false)
       }
     } else {
       enqueueSnackbar('Por favor, selecione um arquivo antes de enviar.', { variant: 'warning' })
     }
   }
-
   return (
     <UploadComponent
-      title='Upload Avaliadores'
+      title='Upload Coordenadores'
       onFileChange={handleFileChange}
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -50,4 +50,3 @@ export const EvaluatorsUpload = ({ userID }: UploadProps) => {
     />
   )
 }
-

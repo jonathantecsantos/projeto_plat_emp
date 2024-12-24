@@ -42,7 +42,7 @@ public class EquipeService {
         List<Aluno> alunos = alunoRepository.findByEquipeId(equipeId);
         List<Professor> professor = professorRepository.findByEquipeId(equipeId);
 
-        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor.stream().toList(), equipe.getOdsList());
+        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor.stream().toList(), equipe.getOdsList(), equipe.getLinkPitch());
     }
 
     public Equipe buscarEquipePorId(Long id) throws Exception {

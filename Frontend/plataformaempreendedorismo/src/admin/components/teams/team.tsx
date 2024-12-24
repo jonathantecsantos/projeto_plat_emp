@@ -1,32 +1,37 @@
 import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import DescriptionIcon from '@mui/icons-material/Description'
+import LinkIcon from '@mui/icons-material/Link'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import PrintIcon from '@mui/icons-material/Print'
 import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
+import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetTeamByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
+import { useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
+import { EventsTypes } from '../../../model/config'
 import { Ods } from '../../../model/ods'
 import { TeamsResponse, UpdateTeam } from "../../../model/team"
+import { FooterImage } from "../common/adminFooter"
 import { EditOds } from './editOds'
+import { EditTeamName } from './editTeamName'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
-import { useSnackbar } from 'notistack'
-import { EditTeamName } from './editTeamName'
-import { FooterImage } from "../common/adminFooter"
 
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
   const [updateTeam, status] = useUpdateTeamMutation()
+
   const navigate = useNavigate()
   const [editOdsOpen, setEditOdsOpen] = useState(false)
   const [editTeamNameOpen, setEditTeamNameOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
+  const [getEventById] = useLazyGetEventValidateByIdQuery()
+  const [pitchValidated, setPitchValidated] = useState(false)
 
   const handlePrintBanner = () => {
     const bannerPreviewUrl = `/banner-preview/${id}`
@@ -82,6 +87,14 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     setEditTeamNameOpen(false)
   }
 
+  const handlePitchSave = async (linkPitch: string) => {
+    const payload: UpdateTeam = {
+      nome: team?.nomeEquipe,
+      listIdOds: team?.odsList.map((ods) => ({ id: ods.id })) || [], // Manter ODS existentes
+      linkPitch,
+    }
+    await handleUpdateTeam(payload, 'Pitch enviado com sucesso!')
+  }
 
   const handleCancelEditOds = () => {
     setEditOdsOpen(false)
@@ -126,8 +139,8 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   if (members) sortedStudents?.push(...members)
 
   return (
-   <div>
-      <div className="flex flex-col lg:flex-row relative border-t-2">
+    <div>
+      <div className="flex flex-col lg:flex-row relative border-t-2 min-h-screen">
         <div className="p-4 text-[#3C14A4] flex-1">
           <div className='flex gap-2'>
             {editTeamNameOpen ? (
@@ -188,7 +201,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
 
             <SpeedDial
               ariaLabel="SpeedDial"
-              className={`absolute right-0 -bottom-20 xl:-right-20 xl:-bottom-1 ${!sortedStudents.length ? 'left-96' : ''}`}
+              className={`absolute right-0 -bottom-40 xl:-right-20 xl:-bottom-30 ${!sortedStudents.length ? 'left-96' : ''}`}
               sx={{
                 '& .MuiFab-primary': {
                   backgroundColor: '#5741A6',
@@ -208,12 +221,20 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               ))}
             </SpeedDial>
 
-            {/* {team?.professor?.equipe.linkPitch && <div className='bg-gray-100 p-4 border rounded-lg shadow-md lg:w-4/5 w-full'>
-            <h3 className="text-lg font-bold">Pitch:</h3>
-            <a href={team?.professor?.equipe.linkPitch} target="_blank" rel="noopener noreferrer">
-              {team?.professor?.equipe.linkPitch}
-            </a>
-          </div>} */}
+            {pitchValidated && <div className='bg-gray-100 p-2 border rounded-lg shadow-md lg:w-2/4 w-full'>
+              <h3 className="text-lg font-bold">Pitch:</h3>
+              <input type="text" placeholder=' Inserir link pitch'
+                className='w-full rounded-lg py-2 mb-2'
+                onBlur={(e) => {
+                  if (e.target.value.length > 1) {
+                    handlePitchSave(e.target.value)
+                  }
+                }}
+              />
+              <a href={team?.linkPitch || ''} target="_blank" rel="noopener noreferrer">
+                {team?.linkPitch}
+              </a>
+            </div>}
           </div>
         </div>
         <div className={`w-full lg:w-72 rounded-md p-4 lg:h-fit text-nowrap ${!sortedStudents.length ? 'hidden' : ''}`}>
@@ -225,7 +246,14 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={() => navigate(RoutesNames.prototyping.replace(':id', id.toString()))}
+              onClick={async () => {
+                const response = await getEventById(EventsTypes.PROTOTIPO)
+                if (response.data == false || !response.data) {
+                  enqueueSnackbar('Evento fora da data de validade')
+                  return
+                }
+                navigate(RoutesNames.prototyping.replace(':id', id.toString()))
+              }}
             >
               <DescriptionIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
@@ -233,33 +261,53 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={() => navigate(RoutesNames.banner.replace(':id', id.toString()))}>
+              onClick={async () => {
+                const response = await getEventById(EventsTypes.BANNER)
+                if (response.data == false || !response.data) {
+                  enqueueSnackbar('Evento fora da data de validade')
+                  return
+                }
+                navigate(RoutesNames.banner.replace(':id', id.toString()), { state: team?.nomeEquipe })
+              }}>
               <WebIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
                 <span>Preencher banner</span>
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={handlePrintBanner}>
+              onClick={async () => {
+                const response = await getEventById(EventsTypes.BANNER)
+                if (response.data == false || !response.data) {
+                  enqueueSnackbar('Evento fora da data de validade')
+                  return
+                }
+                handlePrintBanner()
+              }}>
               <PrintIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
                 <span>Imprimir banner</span>
               </div>
             </li>
-            {/* {!team?.professor?.equipe.linkPitch && (
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
+            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
+              onClick={async () => {
+                const response = await getEventById(EventsTypes.PITCH)
+                if (response.data == false || !response.data) {
+                  enqueueSnackbar('Evento fora da data de validade')
+                  return
+                }
+
+                setPitchValidated(true)
+              }}>
               <LinkIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
-                <span>Enviar link do pitch</span>
+                <span>Link Pitch</span>
               </div>
             </li>
-          )} */}
+
           </ul>
         </div>
       </div>
-      {/* <footer className="h-fit mx-auto w-full mt-20"> */}
-        <FooterImage />
-      {/* </footer> */}
-   </div>
+      <FooterImage />
+    </div>
   )
 }

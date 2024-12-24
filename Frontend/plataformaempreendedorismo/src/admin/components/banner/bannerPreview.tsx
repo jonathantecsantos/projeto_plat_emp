@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
 import { Banner } from "../../../model/banner";
-import { avatarImage, placeholderImages } from "../../../utils/types";
+import { avatarImage, normalizePath, placeholderImages, replacePath } from "../../../utils/types";
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -31,13 +31,18 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   const { data: banner, isFetching: isFetchingBanner } = useGetBannerByIdQuery(id)
   const { data: team, isFetching: isFetchingTeam } = useGetTeamByIdQuery(id)
 
-  const imageUrls = banner?.anexos
-    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO") // Remove o logotipo
-    ?.map((anexo) => anexo.caminhoAnexo.replace("C:\\Users\\wnn-dev\\Pictures\\uploads\\", "http://localhost:8080/uploads/"))
+  const UPLOAD_FOLDER = import.meta.env.VITE_UPLOAD_FOLDER
+  const API_URL = import.meta.env.VITE_API_URL
 
-  const avatar = banner?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo.replace(
-    "C:\\Users\\wnn-dev\\Pictures\\uploads\\",
-    "http://localhost:8080/uploads/")
+  const imageUrls = banner?.anexos
+    ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO")
+    ?.map((anexo) => replacePath(normalizePath(anexo.caminhoAnexo), UPLOAD_FOLDER, API_URL));
+
+  const avatar = replacePath(
+    normalizePath(banner?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo || ''),
+    UPLOAD_FOLDER,
+    API_URL
+  );
 
 
   useEffect(() => {
@@ -67,7 +72,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   return (
 
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative 
-    print:w-[950px] print:text-xs blur print:blur-none" ref={bannerRef}>
+    print:w-[950px] print:text-[12px] blur print:blur-none" ref={bannerRef}>
 
       <div className="relative h-[340px] print:h-[160px]">
         <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute
@@ -158,7 +163,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
               <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[72px] print:pr-[40px] pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-orange-500">
                 Parceiros
               </div>
-              <div id="parceiros" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[130px] 
+              <div id="parceiros" className="border-4 print:border-[2px] print:text-[10px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[130px] 
               print:w-[90px] print:h-[156px] h-52 bg-white">
                 <p className="break-words break-all py-2">{formatTextWithDashes(banner?.parceiroQ1)}</p>
               </div>
@@ -169,7 +174,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-10 pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-orange-500 text-nowrap print:w-[147px]">
                   Atividade Chave
                 </div>
-                <div id="atividadeChave" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[150px]
+                <div id="atividadeChave" className="border-4 print:border-[2px]  print:text-[10px] border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[150px]
                  print:w-[128px] h-24 print:h-[75px] bg-white">
                   <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.atividadeChaveQ1)}</p>
                 </div>
@@ -179,7 +184,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 <div className="absolute -top-2 -left-4 bg-white text-orange-500 pr-[88px] pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-orange-500 print:w-[145px]">
                   Recursos
                 </div>
-                <div id="recursosArrow" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[145px] h-24 
+                <div id="recursosArrow" className="border-4 print:border-[2px]  print:text-[10px] border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[145px] h-24 
                 print:h-[70px] print:w-[125px] bg-white">
                   <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.recursosQ1)}</p>
                 </div>
@@ -190,7 +195,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-orange-500 w-[190px] pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-orange-500 print:w-[150px]">
               Custos
             </div>
-            <div id="custosq2Arrow" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[304px]
+            <div id="custosq2Arrow" className="border-4 print:border-[2px]  print:text-[10px] border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3 w-[304px]
              print:h-[85px] bg-white print:w-[240px] h-[120px]">
               <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.custosQ1)}</p>
             </div>
@@ -202,7 +207,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
                 Resultado Financeiro
               </div>
               <div className="absolute border-4 print:border-[2px]   border-pink-500 rounded-lg p-6  bg-white w-[875px] h-[334px] print:w-[490px] print:h-[212px] print:p-3">
-                <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.resultadoFinanceiroQ2)}</p>
+                <p className="break-words break-all py-2">{formatTextWithDashes(banner?.resultadoFinanceiroQ2)}</p>
               </div>
             </div>
           </div>
@@ -214,8 +219,8 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-pink-500 text-white w-[290px]  pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-pink-500 uppercase font-semibold text-nowrap print:w-[220px]">
               Oportunidade de mercado
             </div>
-            <div id="oportunidadeMercado" className="oportunidadeMercadoDot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500 
-            p-6 print:px-1 print:pt-3  print:h-16 h-[95px] bg-white">
+            <div id="oportunidadeMercado" className="oportunidadeMercadoDot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500  print:text-[10px]
+            p-6 print:px-2 print:pt-2  print:h-16 h-[95px] bg-white">
               <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.oportunidadeNegQ2)}</p>
             </div>
           </div>
@@ -224,7 +229,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-pink-500 print:w-[220px]">
               Custos
             </div>
-            <div id="custosq2" className="custosq2Dot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500  p-6 print:px-1 print:pt-3 h-24 bg-white print:h-[80px]">
+            <div id="custosq2" className="custosq2Dot border-y-4 print:border-y-[2px] print:text-[10px] border-l-8 print:border-l-[6px] border-pink-500  p-6 print:px-2 print:pt-2 h-24 bg-white print:h-[80px]">
               <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.custoQ2)}</p>
             </div>
           </div>
@@ -233,7 +238,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="absolute -top-2 -left-4 bg-white text-pink-500 w-[290px]  pl-2 py-1 rounded-lg border-4 print:border-[2px]  border-pink-500 print:w-[220px]">
               Proposta de valor
             </div>
-            <div id="propostaValor" className="propostaValorDot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500  p-6 print:px-1 print:pt-3 
+            <div id="propostaValor" className="propostaValorDot border-y-4 print:border-y-[2px] border-l-8 print:border-l-[6px] border-pink-500  p-6 print:px-2 print:pt-2 
             h-52 print:h-[150px] bg-white">
               <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.propostaValorQ2)}</p>
             </div>

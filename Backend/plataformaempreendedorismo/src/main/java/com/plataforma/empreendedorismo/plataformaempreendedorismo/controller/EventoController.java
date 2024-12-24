@@ -35,7 +35,7 @@ public class EventoController {
         return eventoService.listarTodos();
     }
 
-    @Operation(summary = "Busca dados do Evento por ID", method = "GET")
+    @Operation(summary = "Busca dados do Evento por Tipo Evento", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Evento não encontrada"),
@@ -43,7 +43,7 @@ public class EventoController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<Evento> buscarPorId(@PathVariable Long id) {
-        Optional<Evento> evento = eventoService.buscarPorId(id);
+        Optional<Evento> evento = eventoService.buscarPorTipoEventoId(id);
 
         if (evento.isPresent()) {
             return ResponseEntity.ok(evento.get());

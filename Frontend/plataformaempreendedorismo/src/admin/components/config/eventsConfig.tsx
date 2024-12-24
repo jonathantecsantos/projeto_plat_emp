@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { EventConfig, EventsTypes } from "../../../model/config";
 import { EventItem } from "./eventItem";
+// import { useGetEventsQuery } from "../../../api/studentApi";
 
 export const EventsConfig = () => {
+  // const { data } = useGetEventsQuery()
   const [events] = useState<EventConfig[]>([
     { idEvento: EventsTypes.INSCRICAO, dataInicio: "", dataFim: "" },
     { idEvento: EventsTypes.PROTOTIPO, dataInicio: "", dataFim: "" },
@@ -10,12 +12,13 @@ export const EventsConfig = () => {
     { idEvento: EventsTypes.PITCH, dataInicio: "", dataFim: "" },
   ]);
 
+  // console.table(data)
   return (
     <div className="p-6 shadow-lg rounded-lg text-[#3C14A4] border-t-2">
-      <h2 className="text-xl font-bold mb-4">Configuração de Eventos</h2>
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        {events.map((event) => (
-          <EventItem key={event.idEvento} idEvento={event.idEvento} initialData={event} />
+      <h2 className="text-xl font-bold mb-4 text-center">Configuração de Eventos</h2>
+      <div className="grid grid-cols-1 gap-4">
+        {events.map((event, index) => (
+          <EventItem key={`${event.idEvento}-${index}`} idEvento={event.idEvento} />
         ))}
       </div>
     </div>

@@ -12,7 +12,7 @@ import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { EvaluationTypes } from '../utils/types'
-import { EventConfig } from '../model/config'
+import { EventConfig, Events } from '../model/config'
 
 
 export const studentsApiSlice = createApi({
@@ -43,7 +43,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id },
       ],
     }),
-    
+
     //IMPORTS
     uploadFile: build.mutation({
       query: (body) => ({
@@ -57,7 +57,7 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: 'teamById' },
       ],
     }),
-    
+
     //CONFIGS
     createEvent: build.mutation<void, EventConfig>({
       query: (data) => ({
@@ -73,6 +73,17 @@ export const studentsApiSlice = createApi({
     getEventById: build.query<EventConfig, number>({
       query: (id) => `eventos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Events', id }],
+    }),
+
+    getEvents: build.query<Events[], void>({
+      query: () => `/eventos`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Events', id } as const)),
+            { type: 'Events', id: 'LIST' },
+          ]
+          : [{ type: 'Events', id: 'LIST' }],
     }),
 
     getEventValidateById: build.query<boolean, number>({
@@ -314,14 +325,13 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Banner', id }],
     }),
 
-    createBanner: build.mutation<void, FormData>({
+    createBanner: build.mutation<void, { id: number; data: FormData }>({
       query: (data) => ({
         url: `/banner/cadastrar`,
         method: 'POST',
-        body: data,
+        body: data.data,
       }),
-      //invalidar a tag de banner por id
-      // invalidatesTags: [{ type: 'Banner', id: 'LIST' }],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Banner', id }],
     }),
 
     updateBanner: build.mutation<FormData, { id: number; data: FormData }>({
@@ -544,12 +554,13 @@ export const {
 
   //Imports
   useUploadFileMutation,
-  
+
   //Events
   useCreateEventMutation,
   useGetEventByIdQuery,
+  useGetEventsQuery,
   useUpdateEventMutation,
-  useGetEventValidateByIdQuery,
+  useLazyGetEventValidateByIdQuery,
 
   //Students
   useGetStudentQuery,

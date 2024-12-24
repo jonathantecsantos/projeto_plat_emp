@@ -15,13 +15,13 @@ export const AdminConfig = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row">
       <aside className="w-full md:w-fit p-6 ">
         <ul className="space-y-4 text-nowrap">
           <li>
             <button
               onClick={() => setActiveConfig("events")}
-              className={`w-full text-left p-3 rounded-md ${activeConfig === "events" ? "bg-[#3C14A4] text-[#fefefe]" : "bg-[#9F8FD9] text-[#fefefe]"
+              className={`w-full text-center p-3 rounded-md ${activeConfig === "events" ? "bg-[#3C14A4] text-[#fefefe]" : "bg-[#9F8FD9] text-[#fefefe]"
                 }`}
             >
               Configurar Eventos
@@ -29,7 +29,7 @@ export const AdminConfig = () => {
           </li>
           <li>
             <button
-              className="w-full text-left p-3 rounded-md bg-[#9F8FD9] text-[#fefefe]"
+              className="w-full text-center p-3 rounded-md bg-[#9F8FD9] text-[#fefefe]"
               disabled
             >
               Configurar Visual
@@ -37,7 +37,7 @@ export const AdminConfig = () => {
           </li>
           <li>
             <button
-              className="w-full text-left p-3 rounded-md bg-[#9F8FD9] text-[#fefefe]"
+              className="w-full text-center p-3 rounded-md bg-[#9F8FD9] text-[#fefefe]"
               disabled
             >
               Configurar Acessos

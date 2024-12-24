@@ -28,8 +28,8 @@ public class EventoService {
         return eventoRepository.findAll();
     }
 
-    public Optional<Evento> buscarPorId(Long id) {
-        return eventoRepository.findById(id);
+    public Optional<Evento> buscarPorTipoEventoId(Long id) {
+        return eventoRepository.findByTipoEventoId(id);
     }
 
     public Evento criarEvento(EventoRecord eventoRecord) throws Exception {
@@ -50,7 +50,7 @@ public class EventoService {
     }
 
     public Evento atualizarEvento(Long id, EventoRecord eventoAtualizado) {
-        Optional<Evento> eventoExistente = eventoRepository.findById(id);
+        Optional<Evento> eventoExistente = eventoRepository.findByTipoEventoId(id);
 
         if (eventoExistente.isPresent()) {
             Evento evento = eventoExistente.get();

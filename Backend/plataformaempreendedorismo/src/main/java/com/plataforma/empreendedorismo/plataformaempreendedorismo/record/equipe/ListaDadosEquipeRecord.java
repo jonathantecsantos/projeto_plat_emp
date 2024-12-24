@@ -11,6 +11,7 @@ public record ListaDadosEquipeRecord(
         String nomeEquipe,
         List<Aluno> alunos,
         List<Professor> professor,
-        List<Ods> odsList
+        List<Ods> odsList,
+        String linkPitch
 ) {
 }

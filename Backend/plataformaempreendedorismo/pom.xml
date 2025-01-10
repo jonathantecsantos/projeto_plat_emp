@@ -101,7 +101,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+
 				<configuration>
+
+					<profiles>
+						<profile>
+							<id>build</id>
+							<properties>
+								<spring.profiles.active>build</spring.profiles.active>
+							</properties>
+						</profile>
+					</profiles>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -110,8 +120,8 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
+
 
 </project>

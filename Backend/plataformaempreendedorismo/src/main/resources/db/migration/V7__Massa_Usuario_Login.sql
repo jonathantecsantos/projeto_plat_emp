@@ -1,18 +1,19 @@
-insert into ADMINISTRADOR (nome,email) values ('admin','admin@gmail.com');
+insert into db_empreendedorismo.administrador (nome,email) values ('admin','admin@gmail.com');
 
 INSERT INTO db_empreendedorismo.usuario
 (login, senha, `role`,administrador_id)
 VALUES('admin@gmail.com', '$2a$10$VxJ5GZlpqdbanDzgWHdnr.OTiZFomFbK2JjhF2HMzPTFjgSkKd8HW', 'ROLE_ADMIN',
        (select id from administrador where email = 'admin@gmail.com'));
 
-insert into AVALIADOR (nome,email) values ('avaliador','avaliador@gmail.com');
+insert into db_empreendedorismo.avaliador (nome,email) values ('avaliador','avaliador@gmail.com');
 
 INSERT INTO db_empreendedorismo.usuario
 (login, senha, `role`, avaliador_id)
 VALUES('avaliador@gmail.com', '$2a$10$VxJ5GZlpqdbanDzgWHdnr.OTiZFomFbK2JjhF2HMzPTFjgSkKd8HW', 'ROLE_AVALIADOR',
        (select id from avaliador where email = 'avaliador@gmail.com'));
 
-insert into COORDENADOR (nome,email) values ('coordenador','coordenador@gmail.com');
+insert into db_empreendedorismo.coordenador (nome,email) values ('coordenador','coordenador@gmail.com');
+
 INSERT INTO db_empreendedorismo.usuario
 (login, senha, `role`, coordenador_id)
 VALUES('coordenador@gmail.com', '$2a$10$VxJ5GZlpqdbanDzgWHdnr.OTiZFomFbK2JjhF2HMzPTFjgSkKd8HW', 'ROLE_COORDENADOR',

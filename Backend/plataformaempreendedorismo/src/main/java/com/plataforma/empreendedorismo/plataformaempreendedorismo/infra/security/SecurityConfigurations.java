@@ -93,6 +93,9 @@ public class SecurityConfigurations {
                         .requestMatchers("/eventos/{id}/validade").permitAll()
                         .requestMatchers("/eventos/**").hasRole("ADMIN")
 
+                        //Downloads
+                        .requestMatchers("/download/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling

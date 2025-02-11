@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.FormatoAvaliacao;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -25,11 +29,16 @@ public class TokenService {
             String email = null;
             String username = null;
             Long idEquipe = null;
+            List<String> tipoAvaliacaoList = new ArrayList<>();
 
             if (usuario.getAvaliador() != null) {
                 id = usuario.getAvaliador().getId();
                 email = usuario.getAvaliador().getEmail();
                 username = usuario.getAvaliador().getNome();
+                tipoAvaliacaoList = usuario.getAvaliador().getFormatosAvaliacoes()
+                        .stream()
+                        .map(FormatoAvaliacao::getDescricao)
+                        .collect(Collectors.toList());
             } else if (usuario.getProfessor() != null) {
                 id = usuario.getProfessor().getId();
                 email = usuario.getProfessor().getEmail();
@@ -58,6 +67,7 @@ public class TokenService {
                     .withClaim("username",username)
                     .withClaim("enumRole", usuario.getEnumRole().name())
                     .withClaim("idEquipe", idEquipe)
+                    .withClaim("tipoAvaliacaoList", tipoAvaliacaoList)
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritimo);
         } catch (JWTCreationException exception){

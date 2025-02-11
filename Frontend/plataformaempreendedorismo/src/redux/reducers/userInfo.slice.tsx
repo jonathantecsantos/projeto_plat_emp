@@ -9,6 +9,7 @@ const initialState: LoginResponse = {
   id: 0,
   username: '',
   enumRole: undefined,
+  tipoAvaliacaoList: [],
   idEquipe: 0,
 }
 

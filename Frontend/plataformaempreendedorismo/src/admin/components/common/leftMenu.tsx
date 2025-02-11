@@ -15,6 +15,9 @@ import ListItemText from '@mui/material/ListItemText'
 import { ReactNode, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { RoutesNames } from '../../../globals'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
+import { Roles } from '../../../utils/types'
 
 interface MenuItemProps {
   outsideName: string
@@ -213,6 +216,16 @@ const Item = (props: ItemProps) => {
 
 export const LeftMenuComponent = () => {
   const navigate = useNavigate()
+  const userGlobalState = useSelector((state: RootState) => state.userInfo)
+
+  const coordinator = [Roles.Coordenador].includes(userGlobalState.enumRole!)
+
+  const filteredMenuItems = coordinator
+    ? menuItems.filter((item) =>
+      "outsideName" in item &&
+      ["Times", "Participantes"].includes(item.outsideName)
+    )
+    : menuItems;
 
   const handleMenuItemClick = (routeName: string) => {
     navigate(routeName)
@@ -221,7 +234,7 @@ export const LeftMenuComponent = () => {
   return (
     <div>
       <List sx={{ width: '100%', maxWidth: 360, }} component="nav">
-        {menuItems.map((menuItem, index) => {
+        {filteredMenuItems.map((menuItem, index) => {
           if ('divider' in menuItem && menuItem.divider) {
             return <Divider key={index} color="white" variant='middle' />
           }

@@ -55,6 +55,7 @@ export interface LoginTokenJWT {
   email: string
   username: string
   enumRole?: Roles
+  tipoAvaliacaoList?: string[]
   exp: string
 }
 

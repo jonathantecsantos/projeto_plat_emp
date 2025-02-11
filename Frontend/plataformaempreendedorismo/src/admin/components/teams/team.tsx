@@ -26,6 +26,7 @@ import { Roles } from '../../../utils/types'
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
+  //TODO WINNICIUS: tratar quando nao houver professor nao tiver equipe exibir mensagem
   const [updateTeam, status] = useUpdateTeamMutation()
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
 

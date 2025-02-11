@@ -231,9 +231,14 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   }
                 }}
               />
-              <a href={team?.linkPitch || ''} target="_blank" rel="noopener noreferrer">
+              <a
+                href={team?.linkPitch?.startsWith("http") ? team.linkPitch : `https://${team?.linkPitch}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {team?.linkPitch}
               </a>
+
             </div>}
           </div>
         </div>

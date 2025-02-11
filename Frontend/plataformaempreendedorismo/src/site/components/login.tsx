@@ -23,9 +23,12 @@ export const LoginComponent = () => {
       if (response) {
         const { tokenJWT } = response
         const decodedToken: LoginTokenJWT = jwtDecode(tokenJWT)
-        if (decodedToken.enumRole == Roles.Aluno) {
+        if ([Roles.Aluno, Roles.Professor].includes(decodedToken?.enumRole!)) {
+          console.log('decodedRole', decodedToken.enumRole)
+
           navigate(RoutesNames.team.replace(':id', decodedToken?.idEquipe?.toString()!))
-        } else {
+        } else  {
+          console.log('decodedRole', decodedToken.enumRole)
           navigate(RoutesNames.adminHome)
         }
       }

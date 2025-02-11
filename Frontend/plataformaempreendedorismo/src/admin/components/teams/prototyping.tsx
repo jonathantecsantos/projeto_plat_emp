@@ -1,14 +1,16 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from "@mui/lab"
 import { CircularProgress } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useCreateTeamPrototypingMutation, useGetTeamPrototypingByIdQuery, useUpdateTeamPrototypingMutation } from "../../../api/studentApi"
 import { inputClasses } from "../../../globals"
 import { AnexoTypes, Prototype } from "../../../model/prototyping"
 import { Institutions } from "../../../utils/types"
-import { InputComponent } from "../common/input"
+import { TextAreaComponent } from "../common/textarea"
 import { FileDownload } from "./fileDownload"
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 
 export const TeamPrototyping = ({ id }: { id: number }) => {
@@ -16,6 +18,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   const { data: teamPrototyping, isLoading } = useGetTeamPrototypingByIdQuery(id)
   const [updateTeamPrototype, { isLoading: updating, isSuccess: updated }] = useUpdateTeamPrototypingMutation()
   const [institution, setInstitution] = useState<string | null>(null)
+  const navigate = useNavigate()
   const [success, setSucess] = useState(created || updated)
   const { enqueueSnackbar } = useSnackbar()
   const [visibleItems, setVisibleItems] = useState(5) // Inicia com 5 itens visíveis
@@ -96,7 +99,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Esquemas!', { variant: 'error' })
       return
     }
-    
+
     try {
       const formDataToSend = new FormData()
 
@@ -234,10 +237,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <p className="text-[#3C14A4] font-semibold text-lg mb-4">
           DEPOIS DA VISITA ÀS INSTITUIÇÕES DE IMPACTO SOCIAL (IIS) E DO QUE VIVENCIAMOS NO HACKATHON DAY, QUAL O PROBLEMA PRINCIPAL E DEFINITIVO DA IIS QUE VOCÊS ESCOLHERAM, QUE ESTÁ ASSOCIADO AOS ODS's, PARA O QUAL FOI CONCEBIDA UM PROTÓTIPO / SOLUÇÃO INICIAL?
         </p>
-        <InputComponent
+        <TextAreaComponent
           placeholder="Digite sua resposta para o problema principal"
-          id="problemaPrincipal"
-          type="text"
           value={formValues.problemaPrincipal}
           onChange={(e) => handleValueChange(e.target.value, "problemaPrincipal")}
           label="Problema Principal"
@@ -248,12 +249,12 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <p className="text-[#3C14A4] font-semibold text-lg mb-4">
           QUAL A PROPOSTA DE VALOR DO PROTÓTIPO DA SOLUÇÃO, ISTO É, COMO O PRODUTO OU SERVIÇO IDEALIZADO RESOLVE O PROBLEMA DA IIS ESCOLHIDA PELO SEU TIME?
         </p>
-        <InputComponent
+        <TextAreaComponent
           placeholder="Digite sua resposta para a proposta de valor"
-          id="propostaValor"
-          type="text"
           value={formValues.propostaValor}
           onChange={(e) => handleValueChange(e.target.value, "propostaValor")}
+          showLabel
+          label="Proposta de Valor"
         />
       </div>
 
@@ -262,10 +263,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <p className="text-[#3C14A4] font-semibold text-lg mb-4">
           QUANDO COMPARADA COM OUTRAS SOLUÇÕES JÁ EXISTENTES NO MERCADO,  QUAIS AS VANTAGENS COMPETITIVAS DO PROTÓTIPO DA SOLUÇÃO IDEALIZADA PELO TIME P/ RESOLVER O PROBLEMA DA IIS?
         </p>
-        <InputComponent
+        <TextAreaComponent
           placeholder="Digite sua resposta para as vantagens competitivas"
-          id="vantagemCompetitiva"
-          type="text"
           value={formValues.vantagemCompetitiva}
           onChange={(e) => handleValueChange(e.target.value, "vantagemCompetitiva")}
 
@@ -276,9 +275,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <p className="text-[#3C14A4] font-semibold text-lg mb-4">
           QUAIS AS PRINCIPAIS NECESSIDADES DO SEU TIME P/ DESENVOLVIMENTO COMPLETO DO PROTÓTIPO DA SOLUÇÃO?
         </p>
-        <InputComponent
+        <TextAreaComponent
           placeholder="Digite sua resposta para as principais necessidades"
-          id="principaisNecessidades"
           value={formValues.principaisNecessidades}
           onChange={(e) => handleValueChange(e.target.value, "principaisNecessidades")}
         />
@@ -288,9 +286,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <p className="text-[#3C14A4] font-semibold text-lg mb-4">
           QUAIS PARCERIAS SERIAM BEM-VINDAS PARA O APRIMORAMENTO DO PROTÓTIPO DA SOLUÇÃO, TAIS COMO: EMPRESAS ESTABELECIDAS, LABORATÓRIOS DE UNIVERSIDADES, ENTIDADES DO SISTEMA S, PARQUE TECNOLÓGICO, INCUBADORA DE EMPRESA?
         </p>
-        <InputComponent
+        <TextAreaComponent
           placeholder="Digite sua resposta para as parcerias"
-          id="parcerias"
           value={formValues.parcerias}
           onChange={(e) => handleValueChange(e.target.value, "parcerias")}
         />
@@ -300,9 +297,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         <p className="text-[#3C14A4] font-semibold text-lg mb-4">
           QUE TIPO DE APOIO SERIA NECESSÁRIO DESSAS ENTIDADES / EMPRESAS / ICTs PARCEIRAS?
         </p>
-        <InputComponent
+        <TextAreaComponent
           placeholder="Digite sua resposta para o tipo de apoio"
-          id="tipoApoio"
           value={formValues.tipoApoio}
           onChange={(e) => handleValueChange(e.target.value, "tipoApoio")}
         />
@@ -375,21 +371,30 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         )}
       </div>
 
+      <div className='text-center flex justify-between max-w-2xl mx-auto'>
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="px-2 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-600 mt-8 text-sm">
+          <ArrowBackIcon />
+        </button>
 
-      <LoadingButton
-        loading={creating || updating}
-        disabled={creating || updating}
-        variant="contained"
-        type="submit"
-        className="mt-6 p-3 normal-case bg-[#5741A6]
+        <LoadingButton
+          loading={creating || updating}
+          disabled={creating || updating}
+          variant="contained"
+          type="submit"
+          className="mt-6 px-2 py-1 normal-case bg-[#5741A6]
         hover:bg-white hover:text-green-600 transition-all text-white rounded-lg shadow-lg">
-        {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
+          {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
 
-        <span>
-          {teamPrototyping ? updating ? 'Editando...' : updated ? 'Editado' : 'Editar' :
-            creating ? 'Cadastrando...' : created ? 'Cadastrado' : 'Cadastrar'}
-        </span>
-      </LoadingButton>
+          <span>
+            {teamPrototyping ? updating ? 'Editando...' : updated ? 'Editado' : 'Editar' :
+              creating ? 'Cadastrando...' : created ? 'Cadastrado' : 'Cadastrar'}
+          </span>
+        </LoadingButton>
+      </div>
+
     </form>
   )
 }

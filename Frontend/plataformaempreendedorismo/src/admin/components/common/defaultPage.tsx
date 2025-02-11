@@ -46,9 +46,9 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
 
   return (
     <div className="flex h-screen flex-col relative">
-      {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> : <AdminAppBar />}
+      {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className=""></div> : <AdminAppBar />}
       <div className="flex flex-1 overflow-hidden">
-        {userGlobalState?.enumRole == Roles.Aluno ? <div className=""></div> :
+        {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className=""></div> :
           <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto">
             <LeftMenu />
           </div>}
@@ -57,7 +57,7 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
           <BannerImage />
           <div className="px-2 py-4 h-[calc(100%-9rem)]">
             <div className="flex">
-              {userGlobalState?.enumRole == Roles.Aluno ? <div className="w-full mt-10"></div> : <BreadcrumbComponent />}
+              {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className="w-full mt-10"></div> : <BreadcrumbComponent />}
               <Logout />
             </div>
             {mainContent}

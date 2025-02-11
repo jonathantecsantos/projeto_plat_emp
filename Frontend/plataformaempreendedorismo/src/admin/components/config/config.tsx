@@ -35,14 +35,6 @@ export const AdminConfig = () => {
               Configurar Visual
             </button>
           </li>
-          <li>
-            <button
-              className="w-full text-center p-3 rounded-md bg-[#9F8FD9] text-[#fefefe]"
-              disabled
-            >
-              Configurar Acessos
-            </button>
-          </li>
         </ul>
       </aside>
       <main className="flex h-fit bg-white p-6">{renderConfig()}</main>

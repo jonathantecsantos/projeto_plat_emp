@@ -1,4 +1,3 @@
-import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import DescriptionIcon from '@mui/icons-material/Description'
 import LinkIcon from '@mui/icons-material/Link'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
@@ -20,11 +19,15 @@ import { EditOds } from './editOds'
 import { EditTeamName } from './editTeamName'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
+import { Roles } from '../../../utils/types'
 
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
   const [updateTeam, status] = useUpdateTeamMutation()
+  const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
   const navigate = useNavigate()
   const [editOdsOpen, setEditOdsOpen] = useState(false)
@@ -198,28 +201,28 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                 <StudentCard key={idx} student={member} />
               ))}
             </div>
-
-            <SpeedDial
-              ariaLabel="SpeedDial"
-              className={`absolute right-0 -bottom-40 xl:-right-20 xl:-bottom-30 ${!sortedStudents.length ? 'left-96' : ''}`}
-              sx={{
-                '& .MuiFab-primary': {
-                  backgroundColor: '#5741A6',
-                  '&:hover': {
-                    backgroundColor: '#5222A2',
+            {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? null
+              : <SpeedDial
+                ariaLabel="SpeedDial"
+                className={`absolute right-0 -bottom-40 xl:-right-20 xl:-bottom-30 ${!sortedStudents.length ? 'left-96' : ''}`}
+                sx={{
+                  '& .MuiFab-primary': {
+                    backgroundColor: '#5741A6',
+                    '&:hover': {
+                      backgroundColor: '#5222A2',
+                    },
                   },
-                },
-              }}
-              icon={<SpeedDialIcon />}>
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={action.onClick}
-                />
-              ))}
-            </SpeedDial>
+                }}
+                icon={<SpeedDialIcon />}>
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    onClick={action.onClick}
+                  />
+                ))}
+              </SpeedDial>}
 
             {pitchValidated && <div className='bg-gray-100 p-2 border rounded-lg shadow-md lg:w-2/4 w-full'>
               <h3 className="text-lg font-bold">Pitch:</h3>
@@ -244,12 +247,6 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         </div>
         <div className={`w-full lg:w-72 rounded-md p-4 lg:h-fit text-nowrap ${!sortedStudents.length ? 'hidden' : ''}`}>
           <ul className="space-y-4 mt-36">
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center">
-              <ContentPasteIcon fontSize='large' />
-              <div className="flex-1 flex justify-center">
-                <span>Relatório de inscrição</span>
-              </div>
-            </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
                 const response = await getEventById(EventsTypes.PROTOTIPO)

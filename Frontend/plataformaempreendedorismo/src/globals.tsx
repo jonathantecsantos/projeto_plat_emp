@@ -54,6 +54,15 @@ export const RoutesNames = {
 
 }
 
+//utilizado no controle de rotas do menu
+export const evaluatorsRoutes: Record<string, { insideName: string; routeName: string }> = {
+  PITCH: { insideName: "Pitch", routeName: RoutesNames.pitchTeams },
+  DLJ: { insideName: "DLJ", routeName: RoutesNames.dljTeams },
+  "SHARK TANK": { insideName: "Shark Tank", routeName: RoutesNames.sharkTankTeams },
+  "EXPO DLEI": { insideName: "Expo Dlei", routeName: RoutesNames.expoDleiTeams },
+}
+
+
 export const inputClasses = `rounded-md border-0 py-1.5 shadow-md ring-1 ring-inset placeholder:text-gray-600 
 text-sm sm:leading-6 text-black p-2 w-full text-black`
 

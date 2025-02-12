@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 import { useCreateBannerMutation, useGetBannerByIdQuery, useUpdateBannerMutation } from "../../../api/studentApi"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { avatarImage, normalizePath, placeholderImages, replacePath } from "../../../utils/types"
+import { normalizePath,replacePath } from "../../../utils/types"
 
 const fieldLabels: Record<string, string> = {
   atividadeChaveQ1: "Atividade Chave",
@@ -261,7 +261,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
           {errors.files && <p className="text-red-500 text-sm">{errors.files}</p>}
           <div className="p-2 flex w-full">
             {imageUrls && imageUrls.length > 0 && <div className="grid grid-cols-2 gap-1 w-full">
-              {(imageUrls && imageUrls.length > 0 ? imageUrls : placeholderImages).map((image, index) => (
+              {(imageUrls)?.map((image, index) => (
                 <div
                   key={index}
                   className="w-full h-full bg-green-500 flex items-center justify-center overflow-hidden rounded-md"
@@ -292,7 +292,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
           {avatar && avatar.length > 0 && <div className="flex justify-start items-center my-2">
             <Avatar
               className="mr-2 w-20 h-20 print:h-14 print:w-14"
-              src={avatar ? avatar : avatarImage}
+              src={avatar}
               alt="Avatar"
             />
           </div>}

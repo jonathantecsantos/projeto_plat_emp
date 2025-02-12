@@ -1,8 +1,8 @@
 import { Avatar } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
 import { Banner } from "../../../model/banner";
-import { avatarImage, normalizePath, placeholderImages, replacePath } from "../../../utils/types";
+import { normalizePath, replacePath } from "../../../utils/types";
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -31,6 +31,8 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
   const { data: banner, isFetching: isFetchingBanner } = useGetBannerByIdQuery(id)
   const { data: team, isFetching: isFetchingTeam } = useGetTeamByIdQuery(id)
 
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+
   const UPLOAD_FOLDER = import.meta.env.VITE_UPLOAD_FOLDER
   const API_URL = import.meta.env.VITE_API_URL
 
@@ -44,6 +46,28 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
     API_URL
   );
 
+  useEffect(() => {
+    if (imageUrls && imageUrls.length > 0) {
+      let loadedImages = 0;
+
+      imageUrls.forEach((url) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+          loadedImages++;
+          if (loadedImages === imageUrls.length) {
+            setImagesLoaded(true);
+          }
+        };
+        img.onerror = () => {
+          loadedImages++;
+          if (loadedImages === imageUrls.length) {
+            setImagesLoaded(true);
+          }
+        };
+      });
+    }
+  }, [imageUrls])
 
   useEffect(() => {
     const handleAfterPrint = () => {
@@ -52,28 +76,26 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
     window.onafterprint = handleAfterPrint;
 
-    if (!isFetchingBanner && !isFetchingTeam && banner) {
+    if (!isFetchingBanner && !isFetchingTeam && banner && imagesLoaded) {
       window.print();
     }
 
     return () => {
       window.onafterprint = null;
     };
-  }, [isFetchingBanner, isFetchingTeam, banner])
+  }, [isFetchingBanner, isFetchingTeam, banner, team, imagesLoaded])
 
   useEffect(() => {
-    if (!isFetchingBanner && !isFetchingTeam && banner && team) {
+    if (!isFetchingBanner && !isFetchingTeam && banner && imagesLoaded) {
       // Notifica a janela principal que os dados estão prontos
       window.opener?.postMessage("ready-to-print", window.location.origin)
     }
-  }, [isFetchingBanner, isFetchingTeam, banner, team])
+  }, [isFetchingBanner, isFetchingTeam, banner, imagesLoaded])
 
   console.log('Banner')
   return (
-
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative 
     print:w-[950px] print:text-[12px] blur print:blur-none" ref={bannerRef}>
-
       <div className="relative h-[340px] print:h-[160px]">
         <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute
         print:h-[186px]" />
@@ -117,16 +139,17 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="p-4 border-l-2 border-[#10BBEF] flex w-full">
               <p className="text-[#10BBEF] absolute">Imagem</p>
               <div className="flex-col justify-center items-center my-auto mr-2">
+                {avatar && avatar.length > 0 &&
+                  <Avatar
+                    className="mr-2 w-20 h-20 print:h-14 print:w-14"
+                    src={avatar}
+                    alt="Avatar"
+                  />}
 
-                <Avatar
-                  className="mr-2 w-20 h-20 print:h-14 print:w-14"
-                  src={avatar ? avatar : avatarImage}
-                  alt="Avatar"
-                />
               </div>
               {/* Imagens ou placeholders */}
               <div className="grid grid-cols-2 gap-1 w-full">
-                {(imageUrls && imageUrls.length > 0 ? imageUrls : placeholderImages).map((image, index) => (
+                {imageUrls && imageUrls.length > 0 && (imageUrls!)?.map((image, index) => (
                   <div
                     key={index}
                     className="w-full h-full bg-green-500 flex items-center justify-center overflow-hidden rounded-md"

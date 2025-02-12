@@ -14,7 +14,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { ReactNode, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { RoutesNames } from '../../../globals'
+import { evaluatorsRoutes, RoutesNames } from '../../../globals'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'
 import { Roles } from '../../../utils/types'
@@ -217,8 +217,21 @@ const Item = (props: ItemProps) => {
 export const LeftMenuComponent = () => {
   const navigate = useNavigate()
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
-
   const coordinator = [Roles.Coordenador].includes(userGlobalState.enumRole!)
+  const evaluator = [Roles.Avaliador].includes(userGlobalState.enumRole!)
+
+  const avaliacaoItems = userGlobalState?.tipoAvaliacaoList!
+    .map((tipo: string) => evaluatorsRoutes[tipo])
+    .filter(Boolean)
+
+  let menuEvaluator = [
+    {
+      outsideName: "Avaliações",
+      outsideIcon: <AssignmentTurnedInIcon />,
+      subItens: true,
+      insideItems: avaliacaoItems, // Adiciona os itens gerados dinamicamente
+    },
+  ];
 
   const filteredMenuItems = coordinator
     ? menuItems.filter((item) =>
@@ -234,9 +247,15 @@ export const LeftMenuComponent = () => {
   return (
     <div>
       <List sx={{ width: '100%', maxWidth: 360, }} component="nav">
-        {filteredMenuItems.map((menuItem, index) => {
+        {evaluator ? menuEvaluator.map((menuItem, index) => {
           if ('divider' in menuItem && menuItem.divider) {
-            return <Divider key={index} color="white" variant='middle' />
+            return <Divider key={index+1} color="white" variant='middle' />
+          }
+          const itemProps = menuItem as MenuItemProps
+          return <Item key={index} {...itemProps} onClick={handleMenuItemClick} />
+        }) : filteredMenuItems.map((menuItem, index) => {
+          if ('divider' in menuItem && menuItem.divider) {
+            return <Divider key={index+2} color="white" variant='middle' />
           }
           const itemProps = menuItem as MenuItemProps
           return <Item key={index} {...itemProps} onClick={handleMenuItemClick} />

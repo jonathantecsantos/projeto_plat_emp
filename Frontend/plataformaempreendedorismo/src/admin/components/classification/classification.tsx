@@ -21,7 +21,7 @@ export const ClassificationComponent = () => {
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading classification.</p>
-
+  if (!classification?.length) return <p className="text-center mt-10">Nenhuma classificação disponível até o momento.</p>
 
   return <div>
     <div className="flex flex-col h-full">

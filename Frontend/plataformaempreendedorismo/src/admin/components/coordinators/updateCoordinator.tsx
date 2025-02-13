@@ -105,7 +105,7 @@ export const UpdateCoordinator = ({ id }: UpdateCoordinatorProps) => {
             className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-600 flex items-center gap-2"
           >
             <ArrowBackIcon />
-            Voltar
+            
           </button>
           <LoadingButton
             className="bg-ring-custom normal-case shadow-md hover:bg-[#8668FFCC]"

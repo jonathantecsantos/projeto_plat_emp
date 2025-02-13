@@ -389,8 +389,8 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
           {success && <CheckCircleIcon style={{ color: 'lightgreen' }} className=' mr-1' />}
 
           <span>
-            {teamPrototyping ? updating ? 'Editando...' : updated ? 'Editado' : 'Editar' :
-              creating ? 'Cadastrando...' : created ? 'Cadastrado' : 'Cadastrar'}
+            {teamPrototyping ? updating ? '' : updated ? 'Editado' : 'Editar' :
+              creating ? '' : created ? 'Cadastrado' : 'Cadastrar'}
           </span>
         </LoadingButton>
       </div>

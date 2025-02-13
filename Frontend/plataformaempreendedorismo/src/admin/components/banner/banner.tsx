@@ -3,10 +3,11 @@ import { useSnackbar } from "notistack"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { z } from "zod"
 import { useCreateBannerMutation, useGetBannerByIdQuery, useUpdateBannerMutation } from "../../../api/studentApi"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { normalizePath,replacePath } from "../../../utils/types"
+import { normalizePath, replacePath } from "../../../utils/types"
 
 const fieldLabels: Record<string, string> = {
   atividadeChaveQ1: "Atividade Chave",
@@ -79,7 +80,7 @@ interface BannerComponentProps {
 export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
   const { data, isLoading: bannerInfoLoading } = useGetBannerByIdQuery(id)
   const [createBanner, { isLoading }] = useCreateBannerMutation()
-  const [updateBanner,] = useUpdateBannerMutation()
+  const [updateBanner, { isLoading: updatingBanner}] = useUpdateBannerMutation()
   const [formData, setFormData] = useState<BannerFormData>({
     atividadeChaveQ1: "",
     contextoProblemaQ3: "",
@@ -143,7 +144,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
         custoQ2: data.custoQ2,
         parceiroQ1: data.parceiroQ1,
         intervencoesQ3: data.intervencoesQ3,
-        resultadosCurtoPrazoQ3: data.resultadosCurtoPrazoQ3, 
+        resultadosCurtoPrazoQ3: data.resultadosCurtoPrazoQ3,
       }))
     }
   }, [data])
@@ -229,7 +230,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
         })
         setErrors(newErrors)
       } else {
-        enqueueSnackbar("Erro ao registrar banner!", { variant: 'error' })
+        enqueueSnackbar("Erro ao cadastrar banner!", { variant: 'error' })
       }
     } finally {
       dispatch(toggleLoading())
@@ -242,7 +243,16 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-20">Cadastrar Banner - Time: {teamName}</h2>
+      <div className="text-center flex justify-between max-w-2xl mb-20">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="px-2 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-600 text-sm">
+          <ArrowBackIcon />
+        </button>
+        <h2 className="text-2xl font-bold text-center">Cadastrar Banner - Time: {teamName}</h2>
+
+      </div>
       {/* Upload de Arquivo */}
       <div className="bg-blue-100 p-4 rounded-lg mb-6">
         <h3 className="text-lg font-semibold text-blue-600 mb-8">Imagens e Descrição do Projeto</h3>
@@ -390,14 +400,20 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
 
       </div>
 
-      <div className="text-center">
+      <div className="text-center flex justify-between">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="px-2 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-600 text-sm">
+          <ArrowBackIcon />
+        </button>
         <button
           type="submit"
-          className={`px-6 py-2 font-semibold rounded-md text-white ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          className={`px-2 py-1 font-semibold rounded-md text-white ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
             }`}
           disabled={isLoading}
         >
-          {isLoading ? "Enviando..." : "Cadastrar Banner"}
+          {isLoading ? "Cadastrando..." : updatingBanner ? "Editando..." : data ? "Editar" : "Cadastrar"}
         </button>
       </div>
     </form>

@@ -1,12 +1,14 @@
+import { CircularProgress } from "@mui/material"
+import { useMemo } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useGetTeamsReportItemsQuery, useGetTeamsReportsQuery } from "../../../api/studentApi"
-import { GeneralTableComponent } from "./generalTable"
-import { useMemo } from "react"
 import { AdminHeader } from "../common/adminHeader"
+import { GeneralTableComponent } from "./generalTable"
+
 
 export const GeneralReportComponent = () => {
-  const { data: generalReport } = useGetTeamsReportsQuery()
-  const { data: generalReportItems } = useGetTeamsReportItemsQuery()
+  const { data: generalReport, isLoading: generalLoading } = useGetTeamsReportsQuery()
+  const { data: generalReportItems, isLoading: generalItensLoading } = useGetTeamsReportItemsQuery()
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
 
@@ -52,6 +54,8 @@ export const GeneralReportComponent = () => {
   const handleSearch = (query: string) => {
     setSearchParams({ search: query })
   }
+
+  if (generalItensLoading || generalLoading) return <div className='text-center'><CircularProgress /></div>
 
   return <div className="flex flex-col h-full">
     <div className="sticky top-0 z-10">

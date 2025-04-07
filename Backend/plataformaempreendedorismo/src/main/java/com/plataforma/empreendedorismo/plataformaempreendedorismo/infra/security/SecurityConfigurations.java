@@ -43,7 +43,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST,"/auth/resetar-senha").hasRole("ADMIN")
 
                         //Alunos
-                        .requestMatchers(HttpMethod.GET,"/alunos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/alunos").hasAnyRole("ADMIN", "COORDENADOR")
                         .requestMatchers(HttpMethod.POST,"/alunos/cadastrar").hasAnyRole("ADMIN","COORDENADOR")
                         .requestMatchers(HttpMethod.DELETE,"/alunos/apagar/**").hasAnyRole("ADMIN","COORDENADOR")
                         //.requestMatchers(HttpMethod.GET,"/alunos/{id}").hasRole("ADMIN")

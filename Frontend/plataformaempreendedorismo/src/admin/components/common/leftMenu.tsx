@@ -119,6 +119,10 @@ const menuItems: MenuItemType[] = [
         routeName: RoutesNames.classification,
       },
       {
+        insideName: 'TOP 5',
+        routeName: RoutesNames.classificationTop5,
+      },
+      {
         insideName: 'DLJ',
         routeName: RoutesNames.classificationDljTeams,
       },

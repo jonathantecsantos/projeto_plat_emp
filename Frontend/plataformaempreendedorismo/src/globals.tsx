@@ -40,6 +40,7 @@ export const RoutesNames = {
 
   classification: '/classification',
   generalReport: '/general-report',
+  classificationTop5: '/top5-classification',
   classificationDljTeams: '/dlj-classification',
   classificationPitch: '/pitch-classification',
   classificationSharkTank: '/sharTank-classification',

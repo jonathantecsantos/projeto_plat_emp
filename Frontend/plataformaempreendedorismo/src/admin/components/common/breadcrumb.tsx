@@ -97,6 +97,10 @@ const routes = [
     breadcrumb: 'Classificação',
   },
   {
+    path: RoutesNames.classificationTop5,
+    breadcrumb: 'TOP 5',
+  },
+  {
     path: RoutesNames.classificationDljTeams,
     breadcrumb: 'Classificação - DLJ',
   },

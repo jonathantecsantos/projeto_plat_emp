@@ -175,9 +175,9 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             border-4 print:border-[2px]  border-orange-500">
               Equipe
             </div>
-            <div id="equipeq1" className="border-4 print:border-[2px]  border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3
+            <div id="equipeq1" className="border-4 print:border-[2px] border-l-8 print:border-l-[6px] border-orange-500 rounded-lg p-6 print:px-1 print:pt-3
              w-[305px] h-52 print:w-[240px] print:h-[155px] bg-white">
-              <p className="break-words break-all  py-2">{formatTextWithDashes(banner?.equipeQ1)}</p>
+              <p className="break-words break-all py-2">{formatTextWithDashes(banner?.equipeQ1)}</p>
             </div>
           </div>
 

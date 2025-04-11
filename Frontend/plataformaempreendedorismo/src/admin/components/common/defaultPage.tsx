@@ -1,28 +1,18 @@
 import { Avatar, Divider } from "@mui/material"
 import { ReactNode } from "react"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { RoutesNames } from "../../../globals"
-import { BreadcrumbComponent } from "./breadcrumb"
-import { DrawerComponent } from "./drawer"
-import { LeftMenuComponent } from "./leftMenu"
-import { Logout } from "./logout"
-import { useSelector } from "react-redux"
 import { RootState } from "../../../redux/store"
 import { Roles } from "../../../utils/types"
 import { BannerImage } from "./adminBanner"
+import { BreadcrumbComponent } from "./breadcrumb"
+import { LeftMenuComponent } from "./leftMenu"
+import { Logout } from "./logout"
+import { ToggleMenuButton } from "./toggleMenuButton"
 
 interface AdminPage {
   mainContent: ReactNode
-}
-
-const AdminAppBar = () => {
-  return (
-    <div className="flex  text-[#3C14A4] justify-between lg:p-4 p-1 px-4 fixed top-0 left-0 right-0 z-10">
-      <div className="block lg:hidden">
-        <DrawerComponent />
-      </div>
-    </div>
-  )
 }
 
 const LeftMenu = () => {
@@ -43,17 +33,18 @@ const LeftMenu = () => {
 
 export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
+  const isMenuOpen = useSelector((state: RootState) => state.menuState.isOpen)
 
   return (
     <div className="flex h-screen flex-col relative">
-      {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className=""></div> : <AdminAppBar />}
       <div className="flex flex-1 overflow-hidden">
         {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className=""></div> :
-          <div className="lg:block hidden w-64 h-full shadow-lg z-10 overflow-y-auto">
+          <div className={`${isMenuOpen ? 'lg:block min-w-fit ' : 'hidden'} w-64 h-full shadow-lg z-10 overflow-y-auto`}>
             <LeftMenu />
           </div>}
 
         <main className="overflow-x-hidden overflow-y-auto w-full">
+          {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className=""></div> : <ToggleMenuButton />}
           <BannerImage />
           <div className="px-2 py-4 h-[calc(100%-9rem)]">
             <div className="flex">
@@ -64,7 +55,6 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
           </div>
         </main>
       </div>
-     
     </div>
   )
 }

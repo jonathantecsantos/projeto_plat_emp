@@ -1,12 +1,12 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useMemo, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { useGetAllTeamsQuery } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { TeamsResponse } from "../../../model/team"
 import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from "../table"
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
-import { useGetAllTeamsQuery } from '../../../api/studentApi'
 
 export const TeamsNotesComponent = () => {
   const { data: teams, refetch, isLoading, error } = useGetAllTeamsQuery()
@@ -52,14 +52,14 @@ export const TeamsNotesComponent = () => {
         />
       </div>
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={[
               // 'ID',
               'Nome',
               // 'Link Pitch'
             ]}
-            wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
+
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredTeams!}
             bodyRowBuilder={(team: TeamsResponse) => (

@@ -1,6 +1,6 @@
-import { useGetTeamReportClassificationByFormatQuery } from "../../../api/studentApi"
 import { CircularProgress } from '@mui/material'
 import { useEffect, useRef } from "react"
+import { useGetTeamReportClassificationByFormatQuery } from "../../../api/studentApi"
 
 import { ReportClassificationByFormat } from '../../../model/reports'
 import { TableComponent } from "../table"
@@ -27,14 +27,14 @@ export const ExpoDleiClassificationComponent = () => {
   return <div>
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={[
               'Classificação',
               'Time',
               'ExpoDlei'
             ]}
-            wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
+
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={expoDleiClassification || []}
             bodyRowBuilder={(expoDleiClassification: ReportClassificationByFormat, idx) => (

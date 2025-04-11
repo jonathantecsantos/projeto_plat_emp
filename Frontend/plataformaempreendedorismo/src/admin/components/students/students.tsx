@@ -1,6 +1,8 @@
 import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { LoadingButton } from '@mui/lab'
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, Menu, MenuItem } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -12,8 +14,6 @@ import { Roles } from '../../../utils/types'
 import { AdminHeader } from '../common/adminHeader'
 import { TableComponent } from '../table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
-import CloseIcon from '@mui/icons-material/Close';
-import { LoadingButton } from '@mui/lab'
 
 
 export const Students = () => {
@@ -149,7 +149,7 @@ export const Students = () => {
           onAdd={() => navigate(RoutesNames.student)} />
       </div>
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={[
               // 'ID',
@@ -164,7 +164,7 @@ export const Students = () => {
               // 'ID Obs',
               'Ação'
             ]}
-            wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
+
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredStudents!}
             bodyRowBuilder={(student: StudentsResponse) => (

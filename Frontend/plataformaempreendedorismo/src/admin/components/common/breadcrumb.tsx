@@ -17,9 +17,8 @@ const BreadcrumbWrapperStyled = styled('div')(({ theme }) => ({
   display: 'flex',
   width: '100%',
   paddingBlock: 10,
-  paddingInline: 10,
   boxSizing: 'border-box',
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up('lg')]: {
     paddingInline: 10,
   }
 }))
@@ -27,7 +26,7 @@ const BreadcrumbWrapperStyled = styled('div')(({ theme }) => ({
 const routes = [
   {
     path: RoutesNames.home,
-    breadcrumb: 'Página inicial'
+    breadcrumb: ''
   },
   {
     path: RoutesNames.adminHome,

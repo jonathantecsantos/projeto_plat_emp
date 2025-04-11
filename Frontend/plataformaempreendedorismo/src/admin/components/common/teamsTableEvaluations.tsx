@@ -59,42 +59,37 @@ export const TeamsTable = ({ routeName, teamEvaluation }: TeamsTableProps) => {
         <AdminHeader onSearch={handleSearch} onRefresh={refetch} placeholder='Pesquisar por nome' />
       </div>
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={['Nome', '', 'Ação']}
-            wrapperProps={{
-              style: {
-                width: '100%'
-              }
-            }}
-            setCurrPageRef={tableComponentSetCurrPageRef}
-            bodyList={filteredTeams!}
-            bodyRowBuilder={(team: TeamEvaluationResponse) => {
-              return (
-                <>
-                  <td className="px-4 py-2 capitalize whitespace-nowrap w-full">
-                    {team.nome.toLowerCase()}
-                  </td>
-                  <td className="text-center">
-                    {team.equipeAvaliada && <CheckIcon className='text-green-500 hover:text-white' />}
-                  </td>
-                  <td className="py-2 px-2 underline capitalize text-left whitespace-nowrap">
-                    {team.equipeAvaliada ? 'Av. concluída' : 'Avaliar'}
-                  </td>
-                </>
-              );
-            }}
+          setCurrPageRef={tableComponentSetCurrPageRef}
+          bodyList={filteredTeams!}
+          bodyRowBuilder={(team: TeamEvaluationResponse) => {
+            return (
+              <>
+                <td className="px-4 py-2 capitalize whitespace-nowrap w-full">
+                  {team.nome.toLowerCase()}
+                </td>
+                <td className="text-center">
+                  {team.equipeAvaliada && <CheckIcon className='text-green-500 hover:text-white' />}
+                </td>
+                <td className="py-2 px-2 underline capitalize text-left whitespace-nowrap">
+                  {team.equipeAvaliada ? 'Av. concluída' : 'Avaliar'}
+                </td>
+              </>
+            );
+          }}
 
-            onClickRow={(team: TableComponentClickRowProps<TeamEvaluationResponse>) => {
-              navigate(routeName.replace(':id', team.item?.id.toString()), {
-                state: {
-                  id: team.item.id,
-                  nomeEquipe: team.item.nome,
-                  teams: teams,
-                  teamEvaluation: teamEvaluation
-                },
-              })
-            }}
+          onClickRow={(team: TableComponentClickRowProps<TeamEvaluationResponse>) => {
+            navigate(routeName.replace(':id', team.item?.id.toString()), {
+              state: {
+                id: team.item.id,
+                nomeEquipe: team.item.nome,
+                teams: teams,
+                teamEvaluation: teamEvaluation
+              },
+            })
+          }}
           />
         </div>
       </div>

@@ -7,7 +7,7 @@ import { TableComponentSetCurrPageProps } from "../table/common"
 
 export const ClassificationComponent = () => {
   const { data: classification, refetch, isLoading, error } = useGetTeamClassificationQuery()
-  
+
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {
@@ -26,14 +26,14 @@ export const ClassificationComponent = () => {
   return <div>
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={[
               'Classificação',
               'Time',
               'Somátorio'
             ]}
-            wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
+
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={classification || []}
             bodyRowBuilder={(classification: ReportClassification, idx) => (

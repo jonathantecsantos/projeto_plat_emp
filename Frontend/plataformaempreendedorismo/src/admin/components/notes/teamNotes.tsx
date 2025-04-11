@@ -2,9 +2,9 @@ import { CircularProgress } from '@mui/material'
 import { useEffect, useRef } from "react"
 import { useGetTeamReportQuery } from "../../../api/studentApi"
 import { ReportTeamId } from '../../../model/reports'
+import { EvaluationHeader } from '../common/evaluationHeader'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
-import { EvaluationHeader } from '../common/evaluationHeader'
 interface TeamNotesProps {
   id: number
 }
@@ -31,7 +31,7 @@ export const TeamNotesComponent = ({ id }: TeamNotesProps) => {
   return <div>
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           {teamNotes?.length ? <EvaluationHeader teamName={teamNotes?.[0]?.equipe || ''} /> : null}
           <TableComponent
             colums={[
@@ -40,7 +40,7 @@ export const TeamNotesComponent = ({ id }: TeamNotesProps) => {
               'Subcritério',
               'Nota'
             ]}
-            wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
+
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={teamNotes || []}
             bodyRowBuilder={(teamNotes: ReportTeamId) => (

@@ -130,10 +130,9 @@ export const Coordinators = () => {
         />
       </div>
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={["Nome", "Email", "Ações"]}
-            wrapperProps={{ style: { maxWidth: "calc(100% - 10px)" } }}
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredCoordinators!}
             bodyRowBuilder={(coordinator: Coordinator) => (

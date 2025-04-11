@@ -20,7 +20,7 @@ export const AdminHomeComponent = () => {
   return (
     <div>
       <div className="flex min-h-screen">
-        <div className="w-3/4 p-4 bg-white">
+        <div className="lg:w-3/4 w-full lg:p-4 p-1 bg-white">
           <h1 className="text-2xl font-bold mb-6">Bem-vindo(a) ao seu painel, <span className='capitalize'>{userGlobalState?.username.toLowerCase()}!</span>
           </h1>
           <p className="mb-8">{userGlobalState?.email}</p>
@@ -35,8 +35,10 @@ export const AdminHomeComponent = () => {
               <div className="space-y-6">
                 {coordinator ? <div className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm bg-blue-50">
                   <SchoolIcon className="text-blue-600" />
-                  <h2 className="text-xl font-semibold">Gerenciamento de Participantes</h2>
-                  <p className="text-gray-600">Acesse o menu lateral para criar e editar informações de alunos, professores e avaliadores para o sistema.</p>
+                  <div>
+                    <h2 className="text-xl font-semibold">Gerenciamento de Participantes</h2>
+                    <p className="text-gray-600">Acesse o menu lateral para criar e editar informações de alunos, professores e avaliadores para o sistema.</p>
+                  </div>
                 </div> :
                   <div className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm bg-blue-50">
                     <CloudUploadIcon className="text-blue-600 hover:cursor-pointer" onClick={() => navigate(RoutesNames.uploadFiles)} />

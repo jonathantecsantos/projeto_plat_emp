@@ -25,14 +25,14 @@ export const DljClassificationComponent = () => {
   return <div>
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={[
               'Classificação',
               'Time',
               'DLJ'
             ]}
-            wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
+
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={dljClassification || []}
             bodyRowBuilder={(dljClassification: ReportClassificationByFormat, idx) => (

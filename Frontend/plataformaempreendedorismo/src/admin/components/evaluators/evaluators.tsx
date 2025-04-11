@@ -1,18 +1,18 @@
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, Menu, MenuItem } from '@mui/material'
-import { useSnackbar } from "notistack"
-import { useState, useRef, useEffect, useMemo } from "react"
-import { useSearchParams, useNavigate } from "react-router-dom"
-import { RoutesNames } from "../../../globals"
-import { Roles } from "../../../utils/types"
-import { AdminHeader } from "../common/adminHeader"
-import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
-import { useDeleteEvaluatorMutation, useGetEvaluatorsQuery, usePasswordResetMutation } from "../../../api/studentApi"
-import { TableComponent } from '../table';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { LoadingButton } from '@mui/lab';
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, Menu, MenuItem } from '@mui/material';
+import { useSnackbar } from "notistack";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDeleteEvaluatorMutation, useGetEvaluatorsQuery, usePasswordResetMutation } from "../../../api/studentApi";
+import { RoutesNames } from "../../../globals";
 import { Evaluator } from '../../../model/evaluator';
+import { Roles } from "../../../utils/types";
+import { AdminHeader } from "../common/adminHeader";
+import { TableComponent } from '../table';
+import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common";
 
 export const EvaluatorsComponent = () => {
   const { data: evaluators, isLoading, error, refetch } = useGetEvaluatorsQuery()
@@ -146,7 +146,7 @@ export const EvaluatorsComponent = () => {
           onAdd={() => navigate(RoutesNames.evaluator)} />
       </div>
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto lg:p-4 p-1">
           <TableComponent
             colums={[
               'Nome',
@@ -155,7 +155,7 @@ export const EvaluatorsComponent = () => {
               'Formatos de Avaliação',
               'Ação'
             ]}
-            wrapperProps={{ style: { maxWidth: 'calc(100% - 10px)' } }}
+
             setCurrPageRef={tableComponentSetCurrPageRef}
             bodyList={filteredEvaluators!}
             bodyRowBuilder={(evaluator: Evaluator) => (

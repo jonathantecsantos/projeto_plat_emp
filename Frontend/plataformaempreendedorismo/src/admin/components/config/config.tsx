@@ -15,8 +15,8 @@ export const AdminConfig = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row">
-      <aside className="w-full md:w-fit p-6 ">
+    <div className="flex flex-col lg:flex-row">
+      <aside className="w-full md:w-fit sm:p-6 p-2">
         <ul className="space-y-4 text-nowrap">
           <li>
             <button

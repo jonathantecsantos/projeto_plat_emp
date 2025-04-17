@@ -64,7 +64,7 @@ export const GeneralReportComponent = () => {
         placeholder='Pesquisar por critério'
       />
     </div>
-    <div className="flex-1 overflow-auto p-4">
+    <div className="flex-1 overflow-auto p-1">
       <GeneralTableComponent
         columns={columns}
         bodyList={filteredRows}

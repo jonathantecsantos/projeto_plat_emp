@@ -47,7 +47,6 @@ export const GeneralTableComponent = ({ columns, bodyList, teams }: TableCompone
     `${from}-${to} de ${count}`
 
   const paginatedItems = bodyList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-
   return (
     <div style={{ boxShadow: 'rgb(0 0 0 / 16%) 1px 1px 3px', width: '100%', overflowX: 'auto', borderRadius: 5 }}>
       <Table>

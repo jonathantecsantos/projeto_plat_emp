@@ -16,7 +16,6 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.Pro
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.exceptions.ValidaAlunoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +39,9 @@ public class EquipeService {
     public ListaDadosEquipeRecord getEquipeDTO(Long equipeId) {
         Equipe equipe = equipeRepository.findById(equipeId).orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
         List<Aluno> alunos = alunoRepository.findByEquipeId(equipeId);
-        List<Professor> professor = professorRepository.findByEquipeId(equipeId);
+        List<Professor> professores = professorRepository.findProfessoresByEquipeId(equipeId);
 
-        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professor.stream().toList(), equipe.getOdsList(), equipe.getLinkPitch());
+        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professores, equipe.getOdsList(), equipe.getLinkPitch());
     }
 
     public Equipe buscarEquipePorId(Long id) throws Exception {

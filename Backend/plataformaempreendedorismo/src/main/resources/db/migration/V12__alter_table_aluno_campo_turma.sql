@@ -1,0 +1,2 @@
+ALTER TABLE aluno
+    MODIFY COLUMN turma VARCHAR(20);

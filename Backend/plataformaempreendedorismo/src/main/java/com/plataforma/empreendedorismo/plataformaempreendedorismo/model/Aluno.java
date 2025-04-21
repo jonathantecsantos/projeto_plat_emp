@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity(name="aluno")
 @Getter
 @Setter
@@ -33,6 +35,11 @@ public class Aluno {
 
     private Boolean isViceLider;
 
+    private Date dataNascimento;
+
+    private String tamanhoCamisa;
+
+    @JsonIgnore
     @OneToOne(mappedBy = "aluno")
     private Usuario usuario;
 
@@ -48,6 +55,8 @@ public class Aluno {
         this.turma = alunoCadastroRecord.turma().toUpperCase();
         this.isLider = alunoCadastroRecord.isLider();
         this.isViceLider = alunoCadastroRecord.isViceLider();
+        this.dataNascimento = alunoCadastroRecord.dataNascimento();
+        this.tamanhoCamisa = alunoCadastroRecord.tamanhoCamisa();
         this.equipe = equipe;
     }
 

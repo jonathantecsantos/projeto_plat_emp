@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name="professor")
 @Getter
 @Setter
@@ -28,16 +31,22 @@ public class Professor {
     private String email;
 
     @JsonIgnore
-    @OneToOne
-    private Equipe equipe;
+    @ManyToMany
+    @JoinTable(
+            name = "professor_equipe",
+            joinColumns = @JoinColumn(name = "id_professor"),
+            inverseJoinColumns = @JoinColumn(name = "id_equipe")
+    )
+    private List<Equipe> equipes = new ArrayList<>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "professor")
     private Usuario usuario;
 
-    public Professor(ProfessorCadastroRecord professorCadastroRecord, Equipe equipe) {
+    public Professor(ProfessorCadastroRecord professorCadastroRecord, List<Equipe> equipes) {
         this.nome = professorCadastroRecord.nome().toUpperCase();
         this.cpf = professorCadastroRecord.cpf();
         this.email = professorCadastroRecord.email();
-        this.equipe = equipe;
+        this.equipes = equipes;
     }
 }

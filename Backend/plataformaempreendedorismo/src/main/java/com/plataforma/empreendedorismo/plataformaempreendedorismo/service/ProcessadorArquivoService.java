@@ -5,8 +5,10 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.A
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.avaliador.AvaliadorCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.coordenador.CoordenadorCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor.ProfessorCadastroRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
-import jakarta.transaction.Transactional;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AdministradorRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.FormatoAvaliacaoRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import util.enuns.TipoImportacaoEnum;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -151,6 +154,7 @@ public class ProcessadorArquivoService {
         String cpf = "";
         String email = "";
         Long idEquipe = 0L;
+        List<Long> equipeList = new ArrayList<>();
 
         if(row.getCell(0) != null) {
             nome = String.valueOf(row.getCell(0));
@@ -169,12 +173,14 @@ public class ProcessadorArquivoService {
 
             Equipe equipeEncontrada = equipeRepository.findByNome(equipe.toUpperCase());
 
+
             if(equipeEncontrada != null){
                idEquipe = equipeEncontrada.getId();
+               equipeList.add(idEquipe);
             }
         }
 
-        ProfessorCadastroRecord professorCadastroRecord = new ProfessorCadastroRecord(nome, cpf,email,idEquipe);
+        ProfessorCadastroRecord professorCadastroRecord = new ProfessorCadastroRecord(nome, cpf,email,equipeList);
         professorService.persistirProfessorAndCriarAcesso(professorCadastroRecord);
 
     }
@@ -238,6 +244,8 @@ public class ProcessadorArquivoService {
         String turma = "";
         boolean isLider = false;
         boolean isViceLider = false;
+        Date dataNascimento = null;
+        String tamanhoCamisa = "";
 
         Equipe equipe = new Equipe();
 
@@ -301,8 +309,18 @@ public class ProcessadorArquivoService {
             }
         }
 
+        if(row.getCell(10) != null){
+            String data = String.valueOf(row.getCell(10));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            dataNascimento = formatter.parse(data);
+        }
+
+        if(row.getCell(11) != null){
+            tamanhoCamisa = String.valueOf(row.getCell(11));
+        }
+
         AlunoCadastroRecord alunoCadastroRecord = new AlunoCadastroRecord(cpf,email,nome,turma,
-                isLider,isViceLider,equipe.getId());
+                isLider,isViceLider,equipe.getId(), dataNascimento,tamanhoCamisa);
 
         alunoService.persistirAlunoAndCriarAcesso(alunoCadastroRecord,equipe);
     }
@@ -366,7 +384,7 @@ public class ProcessadorArquivoService {
                 break;
             case ALUNO:
                 expectedHeader = new String[]{
-                        "CPF","NOME_ALUNO", "EMAIL", "TURMA","LIDER", "VICE-LIDER", "ODS_1","ODS_2","ODS_3","EQUIPE"
+                        "CPF","NOME_ALUNO", "EMAIL", "TURMA","LIDER", "VICE-LIDER", "ODS_1","ODS_2","ODS_3","EQUIPE","DATA_NASCIMENTO","TAMANHO_CAMISA"
                 };
                 break;
             case AVALIADOR:

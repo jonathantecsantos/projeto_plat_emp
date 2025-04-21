@@ -2,7 +2,7 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
+import java.util.Date;
 
 public record AlunoCadastroRecord(
         String cpf,
@@ -13,7 +13,9 @@ public record AlunoCadastroRecord(
         Boolean isLider,
         @NotNull
         Boolean isViceLider,
-        Long idEquipe
+        Long idEquipe,
+        Date dataNascimento,
+        String tamanhoCamisa
 
 ) {
 }

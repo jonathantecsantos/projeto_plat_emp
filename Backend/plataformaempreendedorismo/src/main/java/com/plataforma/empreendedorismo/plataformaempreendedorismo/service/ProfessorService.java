@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.exceptions.ValidarProfessorException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,9 +36,13 @@ public class ProfessorService {
     @Transactional
     public void criaProfessor(ProfessorCadastroRecord professorCadastroRecord) throws Exception {
 
-        Equipe equipe = equipeService.buscarEquipePorId(professorCadastroRecord.idEquipe());
-        //validaProfessor(TipoOperacaoEnum.CADASTRAR, null, professorCadastroRecord );
-        professorRepository.save(new Professor(professorCadastroRecord,equipe));
+        List<Equipe> equipeList = new ArrayList<>();
+
+        for(Long idEquipe : professorCadastroRecord.idEquipe()){
+            Equipe equipe = equipeService.buscarEquipePorId(idEquipe);
+            equipeList.add(equipe);
+        }
+        professorRepository.save(new Professor(professorCadastroRecord,equipeList));
     }
 
     public ProfessorRecord buscaProfessorPorId(Long id) {
@@ -53,32 +59,8 @@ public class ProfessorService {
     public void editaProfessor(ProfessorEditarRecord professorEditarRecord) throws ValidarProfessorException {
         Professor professor = professorRepository.getReferenceById(professorEditarRecord.id());
 
-        //validaProfessor(TipoOperacaoEnum.EDITAR,professorEditarRecord, null);
         atualizaProfessor(professor,professorEditarRecord);
     }
-
-//    private void validaProfessor(TipoOperacaoEnum tipoOperacao, ProfessorEditarRecord professorEditarRecord,
-//                                 ProfessorCadastroRecord professorCadastroRecord) throws ValidarProfessorException {
-//        if(tipoOperacao.equals(TipoOperacaoEnum.CADASTRAR)){
-//            validaProfessorCadastro(professorCadastroRecord);
-//        }else{
-//            validaProfessorEdicao(professorEditarRecord);
-//        }
-//    }
-
-//    private void validaProfessorCadastro(ProfessorCadastroRecord professorCadastroRecord) throws ValidarProfessorException {
-//        Professor professor = professorRepository.findByEquipeId(professorCadastroRecord.idEquipe());
-////        if(professor != null){
-////            throw new ValidarProfessorException("A equipe já possui um Professor");
-////        }
-//    }
-
-//    private void validaProfessorEdicao(ProfessorEditarRecord professorEditarRecord) throws ValidarProfessorException {
-//        Professor professor = professorRepository.findByEquipeId(professorEditarRecord.idEquipe());
-//        if(professor != null && professor.getId() != professorEditarRecord.id()){
-//            throw new ValidarProfessorException("A equipe já possui um Professor");
-//        }
-//    }
 
     private void atualizaProfessor(Professor professor, ProfessorEditarRecord professorEditarRecord) {
         if(professorEditarRecord.cpf() != null){
@@ -92,17 +74,24 @@ public class ProfessorService {
         }
         if(professorEditarRecord.idEquipe() != null){
             Equipe equipe;
-            Optional<Equipe> equipeOptional = equipeRepository.findById(professorEditarRecord.idEquipe());
-            if (equipeOptional.isPresent()) {
-                equipe = equipeOptional.get();
-                professor.setEquipe(equipe);
+            for(Long id : professorEditarRecord.idEquipe()){
+                Optional<Equipe> equipeOptional = equipeRepository.findById(id);
+                if (equipeOptional.isPresent()) {
+                    equipe = equipeOptional.get();
+                    professor.getEquipes().add(equipe);
+                }
             }
         }
     }
 
     public UsuarioRecord persistirProfessorAndCriarAcesso(ProfessorCadastroRecord professorCadastroRecord) throws Exception {
-        Equipe equipe = equipeService.buscarEquipePorId(professorCadastroRecord.idEquipe());
-        Professor professor = professorRepository.save(new Professor(professorCadastroRecord,equipe));
+        List<Equipe> equipeList = new ArrayList<>();
+
+        for(Long id : professorCadastroRecord.idEquipe()){
+            Equipe equipe = equipeService.buscarEquipePorId(id);
+            equipeList.add(equipe);
+        }
+        Professor professor = professorRepository.save(new Professor(professorCadastroRecord,equipeList));
         return usuarioService.criarUsuario(professor, professor.getEmail(), EnumRole.ROLE_PROFESSOR);
     }
 }

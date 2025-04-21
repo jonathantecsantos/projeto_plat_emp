@@ -1,9 +1,12 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor;
 
+import java.util.List;
+
 public record ProfessorCadastroRecord(
         String nome,
         String cpf,
         String email,
-        Long idEquipe
+        List<Long> idEquipe
 ) {
 }
+

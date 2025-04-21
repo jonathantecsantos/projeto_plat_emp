@@ -42,6 +42,9 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/resetar-senha").hasRole("ADMIN")
 
+                        //Incrições
+                        .requestMatchers(HttpMethod.POST,"inscricoes/").permitAll()
+
                         //Alunos
                         .requestMatchers(HttpMethod.GET,"/alunos").hasAnyRole("ADMIN", "COORDENADOR")
                         .requestMatchers(HttpMethod.POST,"/alunos/cadastrar").hasAnyRole("ADMIN","COORDENADOR")

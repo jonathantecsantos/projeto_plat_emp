@@ -48,4 +48,9 @@ public class Equipe {
     @Transient
     private Boolean equipeAvaliada;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "equipes")
+    private List<Professor> professores = new ArrayList<>();
+
+
 }

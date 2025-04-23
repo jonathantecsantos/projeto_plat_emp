@@ -12,12 +12,12 @@ export interface TeacherIdResponse {
   nome: string
   cpf: string
   email: string
-  equipe: Team
+  equipe: Team[]
 }
 
 
 export interface TeachersResponse extends Teacher {
-  equipeRecord: TeamsResponse
+  equipeRecord: TeamsResponse[]
 }
 
 export interface CreateOrUpdateTeacher {
@@ -25,5 +25,5 @@ export interface CreateOrUpdateTeacher {
   nome: string
   cpf: string
   email: string
-  idEquipe: number | null
+  idEquipe: number[] | null
 }

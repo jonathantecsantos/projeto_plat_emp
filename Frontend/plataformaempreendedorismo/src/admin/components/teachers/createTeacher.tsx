@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
@@ -6,21 +7,19 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { RoutesNames } from '../../../globals'
 import { useCreateTeacherMutation } from '../../../api/studentApi'
+import { RoutesNames } from '../../../globals'
 import { formatCPF } from '../../../utils/types'
-import { TeamSelect } from '../common/teamSelect'
+import { TeamMultipleSelect } from './teamMultipleSelect'
 
 const createTeacherSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
   cpf: z.string().min(11, "CPF deve ter pelo menos 11 caracteres"),
   email: z.string().email("Email inválido"),
-  idEquipe: z.preprocess((val) => Number(val), z.number().int().nullable()),
+  idEquipe: z.array(z.number()).optional().nullable(), // Permitir múltiplas equipes regra professor
 })
 
 type CreateTeacherForm = z.infer<typeof createTeacherSchema>
-
 
 export const CreateTeacher = () => {
   const [createTeacher, { isLoading, isSuccess }] = useCreateTeacherMutation()
@@ -30,13 +29,15 @@ export const CreateTeacher = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
-  const { control,register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeacherForm>({
+  const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeacherForm>({
     resolver: zodResolver(createTeacherSchema),
     defaultValues: {
       nome: searchParams.get('nome') || '',
       cpf: searchParams.get('cpf') || '',
       email: searchParams.get('email') || '',
-      idEquipe: searchParams.get('idEquipe') ? Number(searchParams.get('idEquipe')) : null,
+      idEquipe: searchParams.get('idEquipe')
+        ? searchParams.get('idEquipe')!.split(',').map(Number)
+        : [], 
     },
   })
 
@@ -51,11 +52,14 @@ export const CreateTeacher = () => {
     }
   }
 
-  const handleInputChange = (key: keyof CreateTeacherForm, value: string) => {
+  const handleInputChange = (key: keyof CreateTeacherForm, value: string | number[]) => {
     if (key === 'idEquipe') {
-      setSearchParams({ ...Object.fromEntries(searchParams), [key]: value ? parseInt(value).toString() : '' })
+      setSearchParams({
+        ...Object.fromEntries(searchParams),
+        [key]: (value as number[]).join(',') // Serializar array para string
+      })
     } else {
-      setSearchParams({ ...Object.fromEntries(searchParams), [key]: value })
+      setSearchParams({ ...Object.fromEntries(searchParams), [key]: value as string })
     }
   }
 
@@ -109,13 +113,12 @@ export const CreateTeacher = () => {
               name="idEquipe"
               control={control}
               render={({ field }) => (
-                <TeamSelect
+                <TeamMultipleSelect
                   className='w-56 py-1 rounded-md mt-2'
-                  value={field.value}  // Valor atual
-                  onChange={(teamId) => {
-                    field.onChange(teamId)
-                    handleInputChange('idEquipe', teamId.toString())
-                    // Sincronizando com o searchParams
+                  value={field.value ?? []}
+                  onChange={(teamIds) => {
+                    field.onChange(teamIds)
+                    handleInputChange('idEquipe', teamIds) 
                   }}
                 />
               )}

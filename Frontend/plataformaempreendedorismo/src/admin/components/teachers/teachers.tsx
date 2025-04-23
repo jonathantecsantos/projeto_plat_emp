@@ -13,6 +13,7 @@ import { Roles } from '../../../utils/types'
 import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from '../table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
+import { TeamsResponse } from '../../../model/team'
 
 export const TeachersComponent = () => {
   const { data: teachers, isLoading, error, refetch } = useGetTeachersQuery()
@@ -118,6 +119,10 @@ export const TeachersComponent = () => {
     handleCloseDialog()
   }
 
+  const generateTeamsName = (team: TeamsResponse[]) => {
+    return team.map((t) => t.nome).join(', ')
+  }
+
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading teachers.</p>
@@ -161,9 +166,9 @@ export const TeachersComponent = () => {
             bodyRowBuilder={(teacher: TeachersResponse) => (
               <>
                 <td className="px-4 py-2">{teacher.cpf}</td>
-                <td className="px-4 py-2 capitalize text-nowrap">{teacher.nome.toLowerCase()}</td>
+                <td className="px-4 py-2 capitalize text-nowrap">{teacher.nome}</td>
                 <td className="px-4 py-2 text-nowrap">{teacher.email}</td>
-                <td className="px-4 py-2 capitalize">{teacher.equipeRecord.nome.toLowerCase()}</td>
+                <td className="px-4 py-2 capitalize">{generateTeamsName(teacher.equipeRecord)}</td>
                 <td className="">
                   <IconButton
                     className='hover:text-white no-row-click'

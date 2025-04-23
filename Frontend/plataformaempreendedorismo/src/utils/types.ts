@@ -51,7 +51,7 @@ export interface Login {
 // }
 export interface LoginTokenJWT {
   id: number
-  idEquipe: number | null
+  idEquipe: number[] //Teacher pode ter mais de um id de equipe
   email: string
   username: string
   enumRole?: Roles

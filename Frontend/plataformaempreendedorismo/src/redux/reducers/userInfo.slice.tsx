@@ -10,7 +10,7 @@ const initialState: LoginResponse = {
   username: '',
   enumRole: undefined,
   tipoAvaliacaoList: [],
-  idEquipe: 0,
+  idEquipe: [],
 }
 
 const userInfoSlice = createSlice({

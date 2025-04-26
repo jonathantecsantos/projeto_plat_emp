@@ -1,6 +1,19 @@
 import { Ods } from "./ods"
 import { Team, TeamsResponse } from "./team"
 
+
+export namespace Student {
+  export enum ShirtSize {
+    PP = "PP",
+    P = "P",
+    M = "M",
+    G = "G",
+    GG = "GG",
+    XG = "XG",
+    XGG = "XGG",
+  }
+
+}
 export interface Student {
   id: number
   cpf: string
@@ -9,6 +22,8 @@ export interface Student {
   turma: string
   isLider: boolean
   isViceLider: boolean
+  dataNascimento: Date
+  tamanhoCamisa: Student.ShirtSize
 }
 
 export interface StudentIdResponse extends Student {
@@ -28,5 +43,7 @@ export interface CreateOrUpdateStudent {
   isLider: boolean
   isViceLider: boolean
   idEquipe: number | null
+  dataNascimento: Date
+  tamanhoCamisa: Student.ShirtSize
 }
 

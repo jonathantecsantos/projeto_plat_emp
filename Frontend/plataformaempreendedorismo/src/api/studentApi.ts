@@ -8,7 +8,7 @@ import { TeamPrototypeById } from '../model/prototyping'
 import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse, } from '../model/student'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
-import { TeamIdResponse, TeamsResponse, UpdateTeam } from '../model/team'
+import { TeamIdResponse, TeamRegister, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { EvaluationTypes } from '../utils/types'
@@ -244,6 +244,19 @@ export const studentsApiSlice = createApi({
       }),
       invalidatesTags: (_result, _error, { id, }: any) => [
         { type: 'Team', id },
+      ],
+    }),
+
+    createTeam: build.mutation<void, { data: Partial<TeamRegister>, teacherId?: number }>({
+      query: ({ data }) => ({
+        url: `/inscricoes`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { teacherId }) => [
+        { type: 'Teacher', id: teacherId }, // Invalida apenas o Id correspondente
+        { type: 'Student', id: `LIST` },
+        { type: 'Team', id: 'LIST' },
       ],
     }),
 
@@ -542,7 +555,7 @@ export const studentsApiSlice = createApi({
             { type: 'Report', id: `LIST` },
           ]
           : [{ type: 'Report', id: `LIST` }],
-    })
+    }),
 
   }),
 })
@@ -580,6 +593,7 @@ export const {
   useGetTeamByIdQuery,
   useGetAllTeamsQuery,
   useUpdateTeamMutation,
+  useCreateTeamMutation,
 
   //Ods
   useGetOdsQuery,

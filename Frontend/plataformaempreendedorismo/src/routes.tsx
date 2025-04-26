@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './admin/components/common/protectedRoute'
 import { RoutesNames } from './globals'
+import { AdminConfigPage } from './pages/adminConfig'
 import { AdminHomePage } from './pages/adminHome'
 import { BannerPage } from './pages/banner'
 import { BannerPreviewPage } from './pages/bannerPreview'
@@ -9,6 +10,7 @@ import { DljClassificationPage } from './pages/classificationDlj'
 import { ExpoDleiClassificationPage } from './pages/classificationExpoDlei'
 import { PitchClassificationPage } from './pages/classificationPitch'
 import { SharkTankClassificationPage } from './pages/classificationSharkTank'
+import { Top5ClassificationPage } from './pages/classificationTop5'
 import { CompanyDetailsPage } from './pages/companyDetails'
 import { ContactPage } from './pages/contact'
 import { CoordinatorPage } from './pages/coordinator'
@@ -38,8 +40,7 @@ import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { Roles } from './utils/types'
-import { AdminConfigPage } from './pages/adminConfig'
-import { Top5ClassificationPage } from './pages/classificationTop5'
+import { TeamRegisterPage } from './pages/teamRegister'
 
 export const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.contact,
     element: <ContactPage />
+  },
+  {
+    path: RoutesNames.register,
+    element: <TeamRegisterPage />
   },
   {
     path: RoutesNames.bannerPreview,

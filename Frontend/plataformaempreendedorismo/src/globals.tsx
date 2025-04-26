@@ -6,6 +6,7 @@ export const RoutesNames = {
   companyDetails: '/company-details',
   repository: 'repository',
   contact: 'contact',
+  register: 'register',
   uploadFiles: '/upload-files',
   adminHome: '/admin-home',
 

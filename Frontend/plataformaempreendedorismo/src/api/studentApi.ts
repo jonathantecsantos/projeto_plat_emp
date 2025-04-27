@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { Banner } from '../model/banner'
+import { EventConfig, Events } from '../model/config'
 import { Coordinator } from '../model/coordinators'
 import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
 import { Evaluator } from '../model/evaluator'
@@ -8,11 +9,10 @@ import { TeamPrototypeById } from '../model/prototyping'
 import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
 import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse, } from '../model/student'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
-import { TeamIdResponse, TeamRegister, TeamsResponse, UpdateTeam } from '../model/team'
+import { TeamIdResponse, TeamRegisterPayload, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
 import { authFetchBaseQuery } from '../redux/auth.middleware'
 import { EvaluationTypes } from '../utils/types'
-import { EventConfig, Events } from '../model/config'
 
 
 export const studentsApiSlice = createApi({
@@ -247,15 +247,19 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    createTeam: build.mutation<void, { data: Partial<TeamRegister>, teacherId?: number }>({
-      query: ({ data }) => ({
-        url: `/inscricoes`,
+    createTeam: build.mutation<{ message: string }, TeamRegisterPayload>({
+      query: (body) => ({
+        url: '/inscricoes/',
         method: 'POST',
-        body: data,
+        body,
       }),
-      invalidatesTags: (_result, _error, { teacherId }) => [
-        { type: 'Teacher', id: teacherId }, // Invalida apenas o Id correspondente
-        { type: 'Student', id: `LIST` },
+      transformResponse: (response: { nomeTime: string }) => ({
+        message: `Time: ${response.nomeTime} criado com sucesso!`
+      }),
+      invalidatesTags: (_result, _error, { idProfessor }) => [
+        { type: 'Teacher', id: idProfessor },
+        { type: 'Teacher', id: 'LIST' },
+        { type: 'Student', id: 'LIST' },
         { type: 'Team', id: 'LIST' },
       ],
     }),

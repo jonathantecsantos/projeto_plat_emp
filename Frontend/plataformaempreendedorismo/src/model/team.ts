@@ -1,6 +1,6 @@
 import { Banner } from "./banner"
 import { Ods } from "./ods"
-import { CreateOrUpdateStudent, Student } from "./student"
+import { Student } from "./student"
 import { Teacher } from "./teacher"
 
 export interface ListIdOds {
@@ -34,11 +34,21 @@ export interface TeamIdResponse {
   odsList: Ods[]
 }
 
-export interface TeamRegister {
+export interface TeamRegisterPayload {
   nomeTime: string
-  alunos: CreateOrUpdateStudent[]
+  alunos: Array<{
+    cpf: string
+    email: string
+    nome: string
+    turma: string
+    isLider: boolean
+    isViceLider: boolean
+    idEquipe?: number
+    dataNascimento: Date | string
+    tamanhoCamisa: string
+  }>
   idProfessor: number
-  listIdOds: [{ id: number }]
+  listIdOds: Array<{ id: number }>
   tipoAtividades: string[]
   instituicaoImpactoSocial: string
 }

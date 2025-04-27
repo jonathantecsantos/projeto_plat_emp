@@ -1,0 +1,540 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import CancelIcon from '@mui/icons-material/Cancel'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
+import GroupAddIcon from '@mui/icons-material/GroupAdd'
+import { LoadingButton } from '@mui/lab'
+import { ValidateUtils } from 'essencials'
+import { useSnackbar } from "notistack"
+import { useEffect, useState } from "react"
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { useDispatch } from "react-redux"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { z } from "zod"
+import { useCreateTeamMutation } from "../../../api/studentApi"
+import { RoutesNames } from '../../../globals'
+import { Student } from "../../../model/student"
+import { TeamRegisterPayload } from '../../../model/team'
+import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
+import { ActivityTypeValue, formatCPF, Institutions } from "../../../utils/types"
+import { ActivityTypesSelect } from './activityTypesSelect'
+import { OdsSelect } from './odsSelect'
+import { TeacherSelect } from './teacherSelect'
+
+
+//Nome do Time
+//Nome Completo do Aluno / Série-Turma / E-mail lourdinas / CPF / Data Nascimento / Tamanho Camisa (PP, P, M, G, GG, XG, XGG) / Líder? Vice Líder?
+//Mínimo 5, máximo 8 alunos.
+// Instituição de Impacto Social parceira do Time (LISTA)
+// Provável Tipo de Atividade a ser realizada pelo Time(checkbox) string?
+// Professor Orientador(LISTA)
+// Objetivo de Desenvolvimento Sustentável do Time (até 3 ODSs)
+// Regras importantes, validação de inputs @evl.com.br, criar enum Tamanho Camisa e importante CAPTCHA obrigatorio
+// Invalidar after post => Team, Student, Teacher
+
+
+const createTeamSchema = z.object({
+  nomeTime: z.string().min(1, "Nome do time é obrigatório"),
+  alunos: z.array(
+    z.object({
+      cpf: z.string().refine((cpf) => ValidateUtils.isValidCPF(cpf), { message: "CPF inválido", }),
+      email: z.string().email("Email inválido").refine((email) => email.endsWith('@evl.com.br'), {
+        message: "Email deve ser institucional (@evl.com.br)",
+      }),
+      nome: z.string().min(1, "Nome é obrigatório"),
+      turma: z.string().min(1, "Turma é obrigatória"),
+      isLider: z.boolean(),
+      isViceLider: z.boolean(),
+      idEquipe: z.number().optional(),
+      dataNascimento: z.preprocess(
+        (val) => {
+          if (typeof val === 'string' && val.trim() !== "") return new Date(val)
+          return val
+        },
+        z.date().refine((date) => !isNaN(date.getTime()), { message: "Data inválida - utilize uma data real" })),
+      tamanhoCamisa: z.nativeEnum(Student.ShirtSize, { errorMap: () => ({ message: "Tamanho inválido" }) }),
+    })
+  ).min(5, "Mínimo de 5 alunos").max(8, "Máximo de 8 alunos").refine(
+    (alunos) => alunos.filter((a) => a.isLider).length <= 1,
+    "Só pode haver um líder no time"
+  )
+    .refine(
+      (alunos) => alunos.filter((a) => a.isViceLider).length <= 1,
+      "Só pode haver um vice-líder no time"
+    )
+    .refine(
+      (alunos) => !alunos.some((a) => a.isLider && a.isViceLider),
+      "Um aluno não pode ser líder e vice-líder ao mesmo tempo"
+    ),
+  idProfessor: z.number().min(1, "Selecione pelo menos 1 rofessor"),
+  listIdOds: z.array(
+    z.object({
+      id: z.number(),
+    })
+  ).min(1, "Selecione pelo menos 1 ODS").max(3, "Selecione no máximo 3 ODS"),
+
+  tipoAtividades: z.array(z.string()).min(1, "Selecione pelo menos 1 tipo de atividade"),
+  instituicaoImpactoSocial: z.string().min(1, "Instituição é obrigatória"),
+  // captchaToken: z.string().min(1, "CAPTCHA obrigatório"),
+})
+
+type CreateTeamForm = z.infer<typeof createTeamSchema>
+
+
+export const TeamRegister = () => {
+  const [createTeam, { isSuccess, isLoading }] = useCreateTeamMutation()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const dispatch = useDispatch()
+  // TODO-WINNICIUS: falta capturar tipo de atividade e o captcha
+
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+  const [success, setSuccess] = useState(isSuccess)
+
+  const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeamForm>({
+    resolver: zodResolver(createTeamSchema),
+    defaultValues: {
+      nomeTime: searchParams.get('nomeTime') || '',
+      alunos: JSON.parse(searchParams.get('alunos') || '[]'),
+      idProfessor: Number(searchParams.get('idProfessor')) || 0,
+      listIdOds: searchParams.get('listIdOds') ? JSON.parse(searchParams.get('listIdOds') as string) : [],
+      tipoAtividades: searchParams.get('tipoAtividades') ? JSON.parse(searchParams.get('tipoAtividades') as string) : [],
+      instituicaoImpactoSocial: searchParams.get('instituicaoImpactoSocial') || '',
+    },
+  })
+
+  const { fields: studentsFields, append, remove } = useFieldArray({
+    control,
+    name: 'alunos',
+  })
+
+  const handleInputChange = (key: keyof CreateTeamForm, value: string | ActivityTypeValue) => {
+    const params = new URLSearchParams(searchParams)
+    if (Array.isArray(value)) {
+      params.set(key, JSON.stringify(value))
+    } else {
+      params.set(key, value)
+    }
+    setSearchParams(params)
+  }
+
+
+  const handleArrayChange = (key: 'alunos' | 'listIdOds' | 'tipoAtividades', value: any[]) => {
+    const params = new URLSearchParams(searchParams)
+    params.set(key, JSON.stringify(value))
+    setSearchParams(params)
+  }
+
+  const handleStudentChange = (index: number, field: string, value: any) => {
+    const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')
+    currentStudents[index] = currentStudents[index] || {}
+    currentStudents[index][field] = value
+
+    const params = new URLSearchParams(searchParams)
+    params.set('alunos', JSON.stringify(currentStudents))
+    setSearchParams(params)
+  }
+
+  const handleTeacherSelectChange = (value: number | null) => {
+    const params = new URLSearchParams(searchParams)
+    if (value !== null) {
+      params.set('idProfessor', value.toString())
+    } else {
+      params.delete('idProfessor') // Se o valor for nulo, remove o parâmetro da URL
+    }
+    setSearchParams(params) // Atualiza a URL com o novo valor de idProfessor
+  }
+
+
+  const handleCheckboxChange = (key: 'isLider' | 'isViceLider', index: number, checked: boolean) => {
+    const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')
+    currentStudents[index] = currentStudents[index] || {}
+
+    // Se estiver marcando um checkbox
+    if (checked) {
+      // Se estiver marcando como líder
+      if (key === 'isLider') {
+        // Verifica se já existe outro líder
+        const hasOtherLeader = currentStudents.some((student: any, i: number) =>
+          i !== index && student.isLider === true
+        )
+
+        // Se já existir um líder, não permite marcar
+        if (hasOtherLeader) {
+          enqueueSnackbar('Já existe um líder no time', { variant: 'warning' })
+          return
+        }
+
+        // Desmarca vice-líder se estiver marcado
+        currentStudents[index].isViceLider = false
+      }
+      // Se estiver marcando como vice-líder
+      else if (key === 'isViceLider') {
+        // Verifica se já existe outro vice-líder
+        const hasOtherViceLeader = currentStudents.some((student: any, i: number) =>
+          i !== index && student.isViceLider === true
+        )
+
+        // Se já existir um vice-líder, não permite marcar
+        if (hasOtherViceLeader) {
+          enqueueSnackbar('Já existe um vice-líder no time', { variant: 'warning' })
+          return
+        }
+
+        // Desmarca líder se estiver marcado
+        currentStudents[index].isLider = false
+      }
+    }
+
+    // Atualiza o valor do checkbox
+    currentStudents[index][key] = checked
+
+    const params = new URLSearchParams(searchParams)
+    params.set('alunos', JSON.stringify(currentStudents))
+    setSearchParams(params)
+  }
+
+  const handleReset = () => {
+    reset({
+      nomeTime: '',
+      alunos: [],
+      idProfessor: 0,
+      listIdOds: [],
+      tipoAtividades: [],
+      instituicaoImpactoSocial: '',
+    })
+
+    setSearchParams({
+      nomeTime: '',
+      alunos: '[]',
+      idProfessor: '0',
+      listIdOds: '[]',
+      tipoAtividades: '[]',
+      instituicaoImpactoSocial: '',
+    })
+    setSuccess(false)
+  }
+
+  const showMinStudentsError = studentsFields.length < 5 && studentsFields.length > 0
+
+  const onSubmit = async (data: CreateTeamForm) => {
+    dispatch(toggleLoading())
+    try {
+      const alunosFormatados = data.alunos.map((student) => ({
+        ...student,
+        cpf: formatCPF(student.cpf),
+      }))
+
+      const payload: TeamRegisterPayload = {
+        nomeTime: data.nomeTime,
+        alunos: alunosFormatados,
+        idProfessor: data.idProfessor,
+        listIdOds: data.listIdOds,
+        tipoAtividades: data.tipoAtividades,
+        instituicaoImpactoSocial: data.instituicaoImpactoSocial
+      }
+
+      await createTeam(payload).unwrap()
+      enqueueSnackbar(`Time: ${data.nomeTime} criado com sucesso!`, { variant: 'success' })
+      setSuccess(true)
+    } catch (error) {
+      console.error(error)
+      enqueueSnackbar('Erro ao criar time', { variant: 'error' })
+    } finally {
+      dispatch(toggleLoading())
+    }
+  }
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      console.error("Erros de validação:", errors)
+    }
+  }, [errors])
+
+  return (
+    <div className="flex flex-col max-w-2xl mx-auto my-8 sm:p-4 p-2 sm:border-t-2 sm:rounded sm:shadow-md">
+      <h2 className="text-3xl font-bold text-center mb-4">Cadastro de Time</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <div>
+          <label htmlFor="nomeTime" className="block text-lg font-medium text-gray-700">Nome do Time</label>
+          <input
+            {...register("nomeTime")}
+            onChange={(e) => handleInputChange('nomeTime', e.target.value)}
+            className="border rounded p-2 w-full"
+          />
+          {errors.nomeTime && <p className="text-red-500 text-sm">{errors.nomeTime.message}</p>}
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <h2 className="font-semibold text-lg text-gray-700">Alunos</h2>
+          {studentsFields.map((field, index) => (
+            <div key={field.id} className="border p-4 rounded-md flex flex-col gap-2">
+              <label htmlFor="nome" className="block  text-sm font-medium text-gray-700">Nome completo</label>
+              <input
+                {...register(`alunos.${index}.nome`)}
+                onChange={(e) => handleStudentChange(index, 'nome', e.target.value)}
+                placeholder="Nome completo"
+                className="block w-full p-2 border border-gray-300 rounded-md"
+              />
+              {errors.alunos?.[index]?.nome && <p className="text-red-500 text-sm">{errors.alunos[index]?.nome?.message}</p>}
+
+              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700">CPF</label>
+              <input
+                {...register(`alunos.${index}.cpf`)}
+                onChange={(e) => handleStudentChange(index, 'cpf', e.target.value)}
+                placeholder="CPF"
+                className="block w-full p-2 border border-gray-300 rounded-md"
+              />
+              {errors.alunos?.[index]?.cpf && <p className="text-red-500 text-sm">{errors.alunos[index]?.cpf?.message}</p>}
+
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                {...register(`alunos.${index}.email`)}
+                onChange={(e) => handleStudentChange(index, 'email', e.target.value)}
+                placeholder="@evl.com.br"
+                className="block w-full p-2 border border-gray-300 rounded-md"
+              />
+              {errors.alunos?.[index]?.email && <p className="text-red-500 text-sm">{errors.alunos[index]?.email?.message}</p>}
+
+              <div className='flex flex-col gap-4 sm:flex-row justify-start sm:items-center'>
+                <div className="">
+                  <label className="block text-sm font-medium mb-1">
+                    Data de Nascimento
+                  </label>
+                  <input
+                    type="date"
+                    {...register(`alunos.${index}.dataNascimento`, {
+                      valueAsDate: true // Converte automaticamente para Date
+                    })}
+                    className="border rounded p-2 w-full"
+                  />
+                  {errors.alunos?.[index]?.dataNascimento && (
+                    <p className="text-red-500 text-sm ">
+                      {errors.alunos[index]?.dataNascimento?.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className='flex gap-4 sm:flex-row sm:justify-between'>
+                  <div>
+                    <label htmlFor="tamanhoCamisa" className="block text-nowrap text-sm font-medium text-gray-700 mb-1">Tam. da Camisa</label>
+                    <select
+                      {...register(`alunos.${index}.tamanhoCamisa`)}
+                      onChange={(e) => handleStudentChange(index, 'tamanhoCamisa', e.target.value)}
+                      className="border rounded-md p-2 sm:w-28 w-full"
+                    >
+                      {Object.values(Student.ShirtSize).map((size) => (
+                        <option key={size} value={size}>{size}</option>
+                      ))}
+                    </select>
+                  </div>
+                  {errors.alunos?.[index]?.tamanhoCamisa && <p className="text-red-500 text-sm">{errors.alunos[index]?.tamanhoCamisa?.message}</p>}
+
+                  <div>
+                    <label htmlFor="turma" className="block text-sm font-medium text-gray-700 mb-1">Turma/Série</label>
+                    <input
+                      {...register(`alunos.${index}.turma`)}
+                      onChange={(e) => handleStudentChange(index, 'turma', e.target.value)}
+                      placeholder="Turma/Série"
+                      className="block sm:w-28 w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                  {errors.alunos?.[index]?.turma && <p className="text-red-500 text-sm">{errors.alunos[index]?.turma?.message}</p>}
+                </div>
+
+
+              </div>
+
+              <div className="flex gap-4 items-center">
+                <label>
+                  <input
+                    className='mr-1'
+                    type="checkbox"
+                    {...register(`alunos.${index}.isLider`)}
+                    onChange={(e) => handleCheckboxChange('isLider', index, e.target.checked)}
+                    checked={JSON.parse(searchParams.get('alunos') || '[]')[index]?.isLider || false}
+                    disabled={
+                      JSON.parse(searchParams.get('alunos') || '[]').some((s: any, i: number) =>
+                        i !== index && s.isLider
+                      ) && !JSON.parse(searchParams.get('alunos') || '[]')[index]?.isLider
+                    }
+                  />
+                  Líder
+                  {JSON.parse(searchParams.get('alunos') || '[]')[index]?.isLider && (
+                    <span className="ml-1 text-green-500">(Atual)</span>
+                  )}
+                </label>
+                <label>
+                  <input
+                    className='mr-1'
+                    type="checkbox"
+                    {...register(`alunos.${index}.isViceLider`)}
+                    onChange={(e) => handleCheckboxChange('isViceLider', index, e.target.checked)}
+                    checked={JSON.parse(searchParams.get('alunos') || '[]')[index]?.isViceLider || false}
+                    disabled={
+                      JSON.parse(searchParams.get('alunos') || '[]').some((s: any, i: number) =>
+                        i !== index && s.isViceLider
+                      ) && !JSON.parse(searchParams.get('alunos') || '[]')[index]?.isViceLider
+                    }
+                  />
+                  Vice-Líder
+                  {JSON.parse(searchParams.get('alunos') || '[]')[index]?.isViceLider && (
+                    <span className="ml-1 text-green-500">(Atual)</span>
+                  )}
+                </label>
+              </div>
+
+              <button
+                type="button"
+                className="text-red-500 text-sm self-end"
+                onClick={() => {
+                  const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')
+                  currentStudents.splice(index, 1)
+                  handleArrayChange('alunos', currentStudents)
+                  remove(index)
+                }}
+              >
+                <CancelIcon />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              const newStudent = {
+                cpf: '',
+                email: '',
+                nome: '',
+                turma: '',
+                isLider: false,
+                isViceLider: false,
+                dataNascimento: new Date(),
+                tamanhoCamisa: Student.ShirtSize.M,
+              }
+              append(newStudent)
+              const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')
+              handleArrayChange('alunos', [...currentStudents, newStudent])
+            }}
+            className="border rounded-full p-2 text-blue-600 w-1/6  bg-gradient-to-r from-indigo-500 to-indigo-900  shadow-lg transform hover:scale-105 transition-transform duration-300"
+            disabled={studentsFields.length >= 8}
+          >
+            <PersonAddAlt1Icon style={{ color: 'white' }} />
+          </button>
+          {studentsFields.length >= 8 && (
+            <p className="text-red-500 text-sm">Máximo de 8 alunos atingido</p>
+          )}
+        </div>
+
+        <div className='flex gap-2'>
+          <select
+            {...register("instituicaoImpactoSocial")}
+            onChange={(e) => handleInputChange('instituicaoImpactoSocial', e.target.value)}
+            className="border w-full rounded-md p-2"
+          >
+            <option value="">Instituição</option>
+            {Institutions.map((institution) => (
+              <option key={institution} value={institution}>{institution}</option>
+            ))}
+          </select>
+          {errors.instituicaoImpactoSocial && <p className="text-red-500 text-sm">{errors.instituicaoImpactoSocial.message}</p>}
+
+          <Controller
+            name="tipoAtividades"
+            control={control}
+            render={({ field }) => (
+              <ActivityTypesSelect
+                className='p-2 rounded-md'
+                value={field.value}
+                onChange={(e) => {
+                  field.onChange(e.target.value)
+                  handleInputChange('tipoAtividades', e.target.value as ActivityTypeValue)
+                }}
+              />
+            )}
+          />
+
+          {errors.tipoAtividades && <p className="text-red-500 text-sm">{errors.tipoAtividades.message}</p>}
+        </div>
+
+        <div className='flex gap-2'>
+          <Controller
+            name="idProfessor"
+            control={control}
+            render={({ field }) => (
+              <TeacherSelect
+                className='p-2 rounded-md'
+                value={field.value}
+                onChange={(e) => {
+                  field.onChange(e.target.value)
+                  handleTeacherSelectChange(e.target.value)
+                }}
+              />
+            )}
+          />
+          {errors.idProfessor && <p className="text-red-500 text-sm">{errors.idProfessor.message}</p>}
+
+
+          <Controller
+            name="listIdOds"
+            control={control}
+            render={({ field }) => (
+              <OdsSelect
+                className='p-2 rounded-md'
+                value={field.value.map((ods: { id: number }) => ods.id) || []}  // Passando os IDs dos ODS selecionados
+                onChange={(e) => {
+                  const selectedOds = e.target.value  // Captura os IDs dos ODS selecionados
+                  if (selectedOds.length <= 3) {
+                    const odsObjects = selectedOds.map((id: number) => ({ id }))  // Converte IDs para objetos { id: number }
+                    field.onChange(odsObjects)  // Atualiza o estado do formulário
+                    handleArrayChange('listIdOds', odsObjects)  // Atualiza a URL
+                  } else {
+                    enqueueSnackbar("Você pode selecionar no máximo 3 ODS.", { variant: 'warning' })
+                  }
+                }}
+              />
+            )}
+          />
+          {errors.listIdOds && <p className="text-red-500 text-sm">{errors.listIdOds.message}</p>}
+        </div>
+
+
+        {showMinStudentsError && (
+          <p className="text-red-500 text-sm">
+            Mínimo de 5 alunos necessários (atualmente: {studentsFields.length})
+          </p>
+        )}
+        <div className="flex justify-between">
+          <button
+            className="px-2 bg-gray-400 text-white rounded-lg hover:bg-gray-600 text-sm w-fit"
+            onClick={() => navigate(RoutesNames.login)}
+          >
+            <ArrowBackIcon />
+          </button>
+
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+            disabled={isLoading || showMinStudentsError}
+            onClick={handleSubmit(onSubmit)}
+            className='bg-ring-custom normal-case shadow-md hover:bg-[#8668FFCC]'
+            startIcon={success ? <CheckCircleIcon style={{ color: 'lightgreen' }} className='mr-1' /> : null}
+          >
+            {success ? 'Sucesso' : 'Cadastrar Time'}
+          </LoadingButton>
+        </div>
+        {success && <button
+          type="button"
+          onClick={handleReset}
+          className="px-2 w-fit py-1  bg-gray-500 text-white rounded-md hover:bg-gray-600"
+        >
+          <GroupAddIcon /> Novo Time
+        </button>}
+        <div>
+        </div>
+      </form>
+    </div>
+  )
+}
+

@@ -14,7 +14,7 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
     <FormControl className="w-full" variant="outlined">
       <InputLabel id="activity-types-select-label" sx={{ textAlign: 'center', }} >Tipos de Atividade</InputLabel>
       <Select
-        className={`${className ? className : 'py-1 mt-2 rounded-md'}`}
+        className={`${className ? className : 'py-1 mt-2 rounded-md '}`}
         labelId="activity-types-select-label"
         id="activityTypes"
         multiple

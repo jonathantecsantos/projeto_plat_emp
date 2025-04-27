@@ -123,6 +123,22 @@ export const ActivityTypes = [
 
 export type ActivityTypeValue = typeof ActivityTypes[number]['value']
 
+export const ClassesSelectTypes = [
+  "1ª Série A",
+  "1ª Série B",
+  "1ª Série C",
+  "2ª Série A",
+  "2ª Série B",
+  "2ª Série C",
+  "3ª Série A",
+  "3ª Série B",
+  "3ª Série C",
+  "TECINFO"
+] as const
+
+export type ClassesTypes = typeof ClassesSelectTypes[number]
+
+
 export const Institutions = [
   'Abrigo de Animais Arca do Tota',
   'APAE',

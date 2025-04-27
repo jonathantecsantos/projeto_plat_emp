@@ -37,11 +37,13 @@ export const OdsSelect = ({ onChange, value, className, disable }: OdsSelectProp
             borderRadius: '4px',
             border: '1px solid #D1D5DB',
             padding: '5px 10px',
+            boxSizing: 'border-box',
           },
           '& .MuiSelect-select': {
             paddingTop: '5px',
             paddingBottom: '5px',
             fontSize: '15px',
+            boxSizing: 'border-box',
           }
         }}
       >

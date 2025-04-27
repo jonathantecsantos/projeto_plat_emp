@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CancelIcon from '@mui/icons-material/Cancel'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import { LoadingButton } from '@mui/lab'
 import { ValidateUtils } from 'essencials'
 import { useSnackbar } from "notistack"
@@ -17,8 +17,9 @@ import { RoutesNames } from '../../../globals'
 import { Student } from "../../../model/student"
 import { TeamRegisterPayload } from '../../../model/team'
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { ActivityTypeValue, formatCPF, Institutions } from "../../../utils/types"
+import { ActivityTypeValue, ClassesSelectTypes, formatCPF } from "../../../utils/types"
 import { ActivityTypesSelect } from './activityTypesSelect'
+import { InstitutionsSelect } from './institutionSelect'
 import { OdsSelect } from './odsSelect'
 import { TeacherSelect } from './teacherSelect'
 
@@ -86,7 +87,7 @@ export const TeamRegister = () => {
   const [createTeam, { isSuccess, isLoading }] = useCreateTeamMutation()
   const [searchParams, setSearchParams] = useSearchParams()
   const dispatch = useDispatch()
-  // TODO-WINNICIUS: falta capturar tipo de atividade e o captcha
+  // TODO-WINNICIUS: falta capturar o captcha
 
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
@@ -221,14 +222,14 @@ export const TeamRegister = () => {
   const onSubmit = async (data: CreateTeamForm) => {
     dispatch(toggleLoading())
     try {
-      const alunosFormatados = data.alunos.map((student) => ({
+      const formatedStudents = data.alunos.map((student) => ({
         ...student,
         cpf: formatCPF(student.cpf),
       }))
 
       const payload: TeamRegisterPayload = {
         nomeTime: data.nomeTime,
-        alunos: alunosFormatados,
+        alunos: formatedStudents,
         idProfessor: data.idProfessor,
         listIdOds: data.listIdOds,
         tipoAtividades: data.tipoAtividades,
@@ -253,11 +254,11 @@ export const TeamRegister = () => {
   }, [errors])
 
   return (
-    <div className="flex flex-col max-w-2xl mx-auto my-8 sm:p-4 p-2 sm:border-t-2 sm:rounded sm:shadow-md">
-      <h2 className="text-3xl font-bold text-center mb-4">Cadastro de Time</h2>
+    <div className="flex flex-col max-w-4xl mx-auto my-8 sm:p-4 p-2 sm:border-t-2 sm:rounded sm:shadow-md ">
+      <h2 className="text-3xl font-bold text-center mb-4 text-[#383691]">Formulário de Inscrição</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div>
-          <label htmlFor="nomeTime" className="block text-lg font-medium text-gray-700">Nome do Time</label>
+          <label htmlFor="nomeTime" className="block text-lg font-medium text-[#383691]">Nome do Time</label>
           <input
             {...register("nomeTime")}
             onChange={(e) => handleInputChange('nomeTime', e.target.value)}
@@ -267,10 +268,10 @@ export const TeamRegister = () => {
         </div>
 
         <div className="flex flex-col gap-4">
-          <h2 className="font-semibold text-lg text-gray-700">Alunos</h2>
+          <h2 className="font-semibold text-lg text-[#383691]">Alunos</h2>
           {studentsFields.map((field, index) => (
             <div key={field.id} className="border p-4 rounded-md flex flex-col gap-2">
-              <label htmlFor="nome" className="block  text-sm font-medium text-gray-700">Nome completo</label>
+              <label htmlFor="nome" className="block  text-sm font-medium text-[#383691]">Nome completo</label>
               <input
                 {...register(`alunos.${index}.nome`)}
                 onChange={(e) => handleStudentChange(index, 'nome', e.target.value)}
@@ -279,7 +280,7 @@ export const TeamRegister = () => {
               />
               {errors.alunos?.[index]?.nome && <p className="text-red-500 text-sm">{errors.alunos[index]?.nome?.message}</p>}
 
-              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700">CPF</label>
+              <label htmlFor="cpf" className="block text-sm font-medium text-[#383691]">CPF</label>
               <input
                 {...register(`alunos.${index}.cpf`)}
                 onChange={(e) => handleStudentChange(index, 'cpf', e.target.value)}
@@ -288,7 +289,7 @@ export const TeamRegister = () => {
               />
               {errors.alunos?.[index]?.cpf && <p className="text-red-500 text-sm">{errors.alunos[index]?.cpf?.message}</p>}
 
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-[#383691]">Email</label>
               <input
                 {...register(`alunos.${index}.email`)}
                 onChange={(e) => handleStudentChange(index, 'email', e.target.value)}
@@ -299,7 +300,7 @@ export const TeamRegister = () => {
 
               <div className='flex flex-col gap-4 sm:flex-row justify-start sm:items-center'>
                 <div className="">
-                  <label className="block text-sm font-medium mb-1">
+                  <label className="block text-sm font-medium mb-1 text-[#383691]">
                     Data de Nascimento
                   </label>
                   <input
@@ -318,7 +319,7 @@ export const TeamRegister = () => {
 
                 <div className='flex gap-4 sm:flex-row sm:justify-between'>
                   <div>
-                    <label htmlFor="tamanhoCamisa" className="block text-nowrap text-sm font-medium text-gray-700 mb-1">Tam. da Camisa</label>
+                    <label htmlFor="tamanhoCamisa" className="block text-nowrap text-sm font-medium text-[#383691] mb-1">Tam. da Camisa</label>
                     <select
                       {...register(`alunos.${index}.tamanhoCamisa`)}
                       onChange={(e) => handleStudentChange(index, 'tamanhoCamisa', e.target.value)}
@@ -332,13 +333,16 @@ export const TeamRegister = () => {
                   {errors.alunos?.[index]?.tamanhoCamisa && <p className="text-red-500 text-sm">{errors.alunos[index]?.tamanhoCamisa?.message}</p>}
 
                   <div>
-                    <label htmlFor="turma" className="block text-sm font-medium text-gray-700 mb-1">Turma/Série</label>
-                    <input
+                    <label htmlFor="turma" className="block text-nowrap text-sm font-medium text-[#383691] mb-1">Turma/Série</label>
+                    <select
                       {...register(`alunos.${index}.turma`)}
                       onChange={(e) => handleStudentChange(index, 'turma', e.target.value)}
-                      placeholder="Turma/Série"
-                      className="block sm:w-28 w-full p-2 border border-gray-300 rounded-md"
-                    />
+                      className="border rounded-md p-2 sm:w-28 w-full"
+                    >
+                      {Object.values(ClassesSelectTypes).map((size) => (
+                        <option key={size} value={size}>{size}</option>
+                      ))}
+                    </select>
                   </div>
                   {errors.alunos?.[index]?.turma && <p className="text-red-500 text-sm">{errors.alunos[index]?.turma?.message}</p>}
                 </div>
@@ -361,9 +365,6 @@ export const TeamRegister = () => {
                     }
                   />
                   Líder
-                  {JSON.parse(searchParams.get('alunos') || '[]')[index]?.isLider && (
-                    <span className="ml-1 text-green-500">(Atual)</span>
-                  )}
                 </label>
                 <label>
                   <input
@@ -379,9 +380,7 @@ export const TeamRegister = () => {
                     }
                   />
                   Vice-Líder
-                  {JSON.parse(searchParams.get('alunos') || '[]')[index]?.isViceLider && (
-                    <span className="ml-1 text-green-500">(Atual)</span>
-                  )}
+                
                 </label>
               </div>
 
@@ -425,86 +424,103 @@ export const TeamRegister = () => {
             <p className="text-red-500 text-sm">Máximo de 8 alunos atingido</p>
           )}
         </div>
-
-        <div className='flex gap-2'>
-          <select
-            {...register("instituicaoImpactoSocial")}
-            onChange={(e) => handleInputChange('instituicaoImpactoSocial', e.target.value)}
-            className="border w-full rounded-md p-2"
-          >
-            <option value="">Instituição</option>
-            {Institutions.map((institution) => (
-              <option key={institution} value={institution}>{institution}</option>
-            ))}
-          </select>
-          {errors.instituicaoImpactoSocial && <p className="text-red-500 text-sm">{errors.instituicaoImpactoSocial.message}</p>}
-
-          <Controller
-            name="tipoAtividades"
-            control={control}
-            render={({ field }) => (
-              <ActivityTypesSelect
-                className='p-2 rounded-md'
-                value={field.value}
-                onChange={(e) => {
-                  field.onChange(e.target.value)
-                  handleInputChange('tipoAtividades', e.target.value as ActivityTypeValue)
-                }}
+        <div className="flex flex-col gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <div>
+              <Controller
+                name="instituicaoImpactoSocial"
+                control={control}
+                render={({ field }) => (
+                  <InstitutionsSelect
+                    className="border rounded-md p-2 w-full"
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      handleInputChange('instituicaoImpactoSocial', e.target.value);
+                    }}
+                  />
+                )}
               />
-            )}
-          />
+              {errors.instituicaoImpactoSocial && (
+                <p className="text-red-500 text-sm">{errors.instituicaoImpactoSocial.message}</p>
+              )}
+            </div>
 
-          {errors.tipoAtividades && <p className="text-red-500 text-sm">{errors.tipoAtividades.message}</p>}
-        </div>
-
-        <div className='flex gap-2'>
-          <Controller
-            name="idProfessor"
-            control={control}
-            render={({ field }) => (
-              <TeacherSelect
-                className='p-2 rounded-md'
-                value={field.value}
-                onChange={(e) => {
-                  field.onChange(e.target.value)
-                  handleTeacherSelectChange(e.target.value)
-                }}
+            <div>
+              <Controller
+                name="tipoAtividades"
+                control={control}
+                render={({ field }) => (
+                  <ActivityTypesSelect
+                    className="border rounded-md p-2 w-full"
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      handleInputChange('tipoAtividades', e.target.value as ActivityTypeValue);
+                    }}
+                  />
+                )}
               />
-            )}
-          />
-          {errors.idProfessor && <p className="text-red-500 text-sm">{errors.idProfessor.message}</p>}
+              {errors.tipoAtividades && (
+                <p className="text-red-500 text-sm">{errors.tipoAtividades.message}</p>
+              )}
+            </div>
 
-
-          <Controller
-            name="listIdOds"
-            control={control}
-            render={({ field }) => (
-              <OdsSelect
-                className='p-2 rounded-md'
-                value={field.value.map((ods: { id: number }) => ods.id) || []}  // Passando os IDs dos ODS selecionados
-                onChange={(e) => {
-                  const selectedOds = e.target.value  // Captura os IDs dos ODS selecionados
-                  if (selectedOds.length <= 3) {
-                    const odsObjects = selectedOds.map((id: number) => ({ id }))  // Converte IDs para objetos { id: number }
-                    field.onChange(odsObjects)  // Atualiza o estado do formulário
-                    handleArrayChange('listIdOds', odsObjects)  // Atualiza a URL
-                  } else {
-                    enqueueSnackbar("Você pode selecionar no máximo 3 ODS.", { variant: 'warning' })
-                  }
-                }}
+            <div>
+              <Controller
+                name="idProfessor"
+                control={control}
+                render={({ field }) => (
+                  <TeacherSelect
+                    className="border rounded-md p-2 w-full"
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      handleTeacherSelectChange(e.target.value);
+                    }}
+                  />
+                )}
               />
-            )}
-          />
-          {errors.listIdOds && <p className="text-red-500 text-sm">{errors.listIdOds.message}</p>}
+              {errors.idProfessor && (
+                <p className="text-red-500 text-sm">{errors.idProfessor.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Controller
+                name="listIdOds"
+                control={control}
+                render={({ field }) => (
+                  <OdsSelect
+                    className="border rounded-md p-2 w-full"
+                    value={field.value.map((ods: { id: number }) => ods.id) || []}
+                    onChange={(e) => {
+                      const selectedOds = e.target.value;
+                      if (selectedOds.length <= 3) {
+                        const odsObjects = selectedOds.map((id: number) => ({ id }));
+                        field.onChange(odsObjects);
+                        handleArrayChange('listIdOds', odsObjects);
+                      } else {
+                        enqueueSnackbar("Você pode selecionar no máximo 3 ODS.", { variant: 'warning' });
+                      }
+                    }}
+                  />
+                )}
+              />
+              {errors.listIdOds && (
+                <p className="text-red-500 text-sm">{errors.listIdOds.message}</p>
+              )}
+            </div>
+          </div>
         </div>
 
 
         {showMinStudentsError && (
-          <p className="text-red-500 text-sm">
+          <p className="text-red-500 text-sm text-end">
             Mínimo de 5 alunos necessários (atualmente: {studentsFields.length})
           </p>
         )}
-        <div className="flex justify-between">
+        <div className="flex justify-between relative">
           <button
             className="px-2 bg-gray-400 text-white rounded-lg hover:bg-gray-600 text-sm w-fit"
             onClick={() => navigate(RoutesNames.login)}

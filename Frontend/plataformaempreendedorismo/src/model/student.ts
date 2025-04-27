@@ -42,7 +42,7 @@ export interface CreateOrUpdateStudent {
   turma: string
   isLider: boolean
   isViceLider: boolean
-  idEquipe: number | null
+  idEquipe?: number
   dataNascimento: Date
   tamanhoCamisa: Student.ShirtSize
 }

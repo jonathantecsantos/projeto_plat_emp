@@ -13,6 +13,7 @@ export const TeamMultipleSelect = ({ onChange, value, disable, className }: Team
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
   //TODO change Select component to autoComplet
+  //TODO winnicius fix edit teacher component
 
   return (
     <FormControl className='sm:w-1/2 sm:pr-2' variant="outlined">

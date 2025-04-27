@@ -86,7 +86,7 @@ export interface AdaptedLoginResponse {
 }
 
 export const formatDateToInput = (isoDate: string): string => {
-  if (!isoDate) return ""; // Retorna vazio se a data não for válida
+  if (!isoDate) return "" // Retorna vazio se a data não for válida
   return new Date(isoDate).toISOString().split("T")[0]
 }
 
@@ -94,19 +94,34 @@ export interface EvaluationProps {
   teamData: { id: number, nomeEquipe?: string, teams: TeamEvaluationResponse[], teamEvaluation: TeamEvaluation }
 }
 
-export const normalizePath = (path: string): string => path.replace(/\\/g, '\\\\');
+export const normalizePath = (path: string): string => path.replace(/\\/g, '\\\\')
 
 export const replacePath = (path: string, folder: string, apiUrl: string): string => {
-  const normalizedFolder = folder.endsWith('\\\\') ? folder : `${folder}\\\\`;
-  return path.replace(new RegExp(`^${normalizedFolder}`), `${apiUrl}/uploads/`);
-};
+  const normalizedFolder = folder.endsWith('\\\\') ? folder : `${folder}\\\\`
+  return path.replace(new RegExp(`^${normalizedFolder}`), `${apiUrl}/uploads/`)
+}
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 
 export const capitalizeTeamName = (name: string) => {
-  return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : '';
-};
+  return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : ''
+}
 
+export const ActivityTypes = [
+  { value: 'produtos_inovadores', label: 'Produtos inovadores em qualquer área do conhecimento' },
+  { value: 'servicos_inovadores', label: 'Serviços inovadores em qualquer área do conhecimento' },
+  { value: 'automacao_robotica_drones', label: 'Automação, robótica, aplicação de drones' },
+  { value: 'jogos_educacionais', label: 'Jogos educacionais analógicos e / ou digitais' },
+  { value: 'desenvolvimento_sustentavel', label: 'Atividades para o desenvolvimento sustentável com tecnologias sociais' },
+  { value: 'atividades_culturais', label: 'Atividades culturais inovadoras (peça teatral, stand-up, espetáculo de dança, banda ou grupo musical)' },
+  { value: 'plataformas_blogs_podcasts', label: 'Plataformas Blogs Podcasts' },
+  { value: 'aplicativos', label: 'Aplicativos para Smartphones, Tablets, TVs' },
+  { value: 'internet_das_coisas', label: 'Internet das Coisas (aplicações para Alexa / Google Home)' },
+  { value: 'inovacoes_ia', label: 'Inovações assistidas por Inteligência Artificial' },
+  { value: 'outras_atividades', label: 'Entre outras atividades (propostas / soluções) inovadoras' }
+] as const
+
+export type ActivityTypeValue = typeof ActivityTypes[number]['value']
 
 export const Institutions = [
   'Abrigo de Animais Arca do Tota',

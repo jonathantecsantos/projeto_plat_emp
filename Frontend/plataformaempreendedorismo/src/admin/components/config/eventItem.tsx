@@ -6,15 +6,11 @@ import { useDispatch } from 'react-redux'
 import { useCreateEventMutation, useGetEventByIdQuery, useUpdateEventMutation } from "../../../api/studentApi"
 import { EventConfig, EventsTypes } from "../../../model/config"
 import { toggleLoading } from '../../../redux/reducers/loadingBar.slice'
+import { formatDateToInput } from '../../../utils/types'
 
 
 interface EventItemProps {
   idEvento: number
-}
-
-const formatDateToInput = (isoDate: string): string => {
-  if (!isoDate) return ""
-  return new Date(isoDate).toISOString().split("T")[0]
 }
 
 export const EventItem = ({ idEvento, }: EventItemProps) => {

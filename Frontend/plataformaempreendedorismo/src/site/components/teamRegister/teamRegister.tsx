@@ -23,7 +23,6 @@ import { InstitutionsSelect } from './institutionSelect'
 import { OdsSelect } from './odsSelect'
 import { TeacherSelect } from './teacherSelect'
 
-
 //Nome do Time
 //Nome Completo do Aluno / Série-Turma / E-mail lourdinas / CPF / Data Nascimento / Tamanho Camisa (PP, P, M, G, GG, XG, XGG) / Líder? Vice Líder?
 //Mínimo 5, máximo 8 alunos.
@@ -31,9 +30,8 @@ import { TeacherSelect } from './teacherSelect'
 // Provável Tipo de Atividade a ser realizada pelo Time(checkbox) string?
 // Professor Orientador(LISTA)
 // Objetivo de Desenvolvimento Sustentável do Time (até 3 ODSs)
-// Regras importantes, validação de inputs @evl.com.br, criar enum Tamanho Camisa e importante CAPTCHA obrigatorio
-// Invalidar after post => Team, Student, Teacher
-
+// Regras importantes, validação de inputs @evl.com.br, criar enum Tamanho Camisa e importante CAPTCHA obrigatorio falta captcha
+// Invalidar after post => Team, Student, Teacher falta testar
 
 const createTeamSchema = z.object({
   nomeTime: z.string().min(1, "Nome do time é obrigatório"),
@@ -53,8 +51,13 @@ const createTeamSchema = z.object({
           if (typeof val === 'string' && val.trim() !== "") return new Date(val)
           return val
         },
-        z.date().refine((date) => !isNaN(date.getTime()), { message: "Data inválida - utilize uma data real" })),
-      tamanhoCamisa: z.nativeEnum(Student.ShirtSize, { errorMap: () => ({ message: "Tamanho inválido" }) }),
+        z.date()
+          .refine((date) => !isNaN(date.getTime()), { message: "Data inválida - utilize uma data real" })
+          .refine((date) => !!date, { message: "Data de nascimento é obrigatória" })
+      ),
+      tamanhoCamisa: z.nativeEnum(Student.ShirtSize, {
+        errorMap: () => ({ message: "Tamanho inválido" })
+      }),
     })
   ).min(5, "Mínimo de 5 alunos").max(8, "Máximo de 8 alunos").refine(
     (alunos) => alunos.filter((a) => a.isLider).length <= 1,
@@ -67,6 +70,9 @@ const createTeamSchema = z.object({
     .refine(
       (alunos) => !alunos.some((a) => a.isLider && a.isViceLider),
       "Um aluno não pode ser líder e vice-líder ao mesmo tempo"
+    ).refine(
+      (alunos) => alunos.some((a) => a.isLider || a.isViceLider),
+      "O time deve ter pelo menos um líder ou vice-líder"
     ),
   idProfessor: z.number().min(1, "Selecione pelo menos 1 rofessor"),
   listIdOds: z.array(
@@ -88,7 +94,6 @@ export const TeamRegister = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const dispatch = useDispatch()
   // TODO-WINNICIUS: falta capturar o captcha
-
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(isSuccess)
@@ -120,7 +125,6 @@ export const TeamRegister = () => {
     setSearchParams(params)
   }
 
-
   const handleArrayChange = (key: 'alunos' | 'listIdOds' | 'tipoAtividades', value: any[]) => {
     const params = new URLSearchParams(searchParams)
     params.set(key, JSON.stringify(value))
@@ -146,7 +150,6 @@ export const TeamRegister = () => {
     }
     setSearchParams(params) // Atualiza a URL com o novo valor de idProfessor
   }
-
 
   const handleCheckboxChange = (key: 'isLider' | 'isViceLider', index: number, checked: boolean) => {
     const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')
@@ -217,8 +220,6 @@ export const TeamRegister = () => {
     setSuccess(false)
   }
 
-  const showMinStudentsError = studentsFields.length < 5 && studentsFields.length > 0
-
   const onSubmit = async (data: CreateTeamForm) => {
     dispatch(toggleLoading())
     try {
@@ -246,6 +247,8 @@ export const TeamRegister = () => {
       dispatch(toggleLoading())
     }
   }
+
+  const showMinStudentsError = studentsFields.length < 5 && studentsFields.length > 0
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -380,7 +383,7 @@ export const TeamRegister = () => {
                     }
                   />
                   Vice-Líder
-                
+
                 </label>
               </div>
 
@@ -520,6 +523,10 @@ export const TeamRegister = () => {
             Mínimo de 5 alunos necessários (atualmente: {studentsFields.length})
           </p>
         )}
+        {errors.alunos?.root?.message && (
+          <p className="text-red-500 text-sm text-end">{errors.alunos.root.message}</p>
+        )}
+
         <div className="flex justify-between relative">
           <button
             className="px-2 bg-gray-400 text-white rounded-lg hover:bg-gray-600 text-sm w-fit"
@@ -553,4 +560,3 @@ export const TeamRegister = () => {
     </div>
   )
 }
-

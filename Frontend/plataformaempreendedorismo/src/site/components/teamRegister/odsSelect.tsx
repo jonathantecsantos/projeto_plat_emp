@@ -13,10 +13,9 @@ export const OdsSelect = ({ onChange, value, className, disable }: OdsSelectProp
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 
-
   return (
     <FormControl className='w-full' variant="outlined">
-      <InputLabel id="ODS-select-label" sx={{ textAlign: 'center' }} >ODS</InputLabel>
+      <InputLabel id="ODS-select-label" sx={{ textAlign: 'center' }}>ODS</InputLabel>
       <Select
         className={`${className ? className : 'py-1 mt-2 rounded-md'}`}
         labelId="ODS-select-label"
@@ -27,11 +26,23 @@ export const OdsSelect = ({ onChange, value, className, disable }: OdsSelectProp
         onChange={onChange}
         renderValue={(selected) => {
           return selected.map((id: number) => {
-            const odsItem = ods?.find(item => item.id === id); // Encontrando o item ODS com o ID correspondente
-            return odsItem ? odsItem.descricao : '';
-          }).join(', ');
+            const odsItem = ods?.find(item => item.id === id)
+            return odsItem ? odsItem.descricao : ''
+          }).join(', ')
         }}
         label="ODS"
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              '& .MuiMenuItem-root.Mui-selected': {
+                backgroundColor: '#D1E8FF', // Cor de fundo para itens selecionados
+                '&:hover': {
+                  backgroundColor: '#A8D1FF', // Cor ao passar o mouse sobre itens selecionados
+                },
+              },
+            },
+          },
+        }}
         sx={{
           '& .MuiOutlinedInput-root': {
             borderRadius: '4px',
@@ -44,14 +55,15 @@ export const OdsSelect = ({ onChange, value, className, disable }: OdsSelectProp
             paddingBottom: '5px',
             fontSize: '15px',
             boxSizing: 'border-box',
-          }
+          },
         }}
       >
         {ods?.map((item) => (
-          <MenuItem key={item.id} value={item.id}>
+          <MenuItem
+            key={item.id}
+            value={item.id}>
             {item.descricao}
           </MenuItem>
-
         ))}
       </Select>
     </FormControl>

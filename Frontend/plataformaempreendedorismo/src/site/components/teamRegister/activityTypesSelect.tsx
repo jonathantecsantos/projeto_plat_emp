@@ -20,6 +20,7 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
         multiple
         value={value || []}
         disabled={disable}
+        
         onChange={onChange}
         renderValue={(selected) => {
           return selected.map((type: string) => {
@@ -28,6 +29,18 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
           }).join(', ');
         }}
         label="Tipos de Atividade"
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              '& .MuiMenuItem-root.Mui-selected': {
+                backgroundColor: '#D1E8FF', // Cor de fundo para itens selecionados
+                '&:hover': {
+                  backgroundColor: '#A8D1FF', // Cor ao passar o mouse sobre itens selecionados
+                },
+              },
+            },
+          },
+        }}
         sx={{
           '& .MuiOutlinedInput-root': {
             borderRadius: '4px',

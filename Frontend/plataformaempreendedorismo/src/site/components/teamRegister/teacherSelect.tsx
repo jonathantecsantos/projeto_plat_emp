@@ -21,6 +21,18 @@ export const TeacherSelect = ({ onChange, value, className }: TeacherSelectProps
         id="Professor"
         value={value || ''}
         onChange={onChange}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              '& .MuiMenuItem-root.Mui-selected': {
+                backgroundColor: '#D1E8FF', // Cor de fundo para itens selecionados
+                '&:hover': {
+                  backgroundColor: '#A8D1FF', // Cor ao passar o mouse sobre itens selecionados
+                },
+              },
+            },
+          },
+        }}
         label="Professor"
         sx={{
           '& .MuiOutlinedInput-root': {

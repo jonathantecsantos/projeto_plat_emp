@@ -21,6 +21,18 @@ export const InstitutionsSelect = ({ onChange, value, className, disable }: Inst
         disabled={disable}
         onChange={onChange}
         label="Instituição"
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              '& .MuiMenuItem-root.Mui-selected': {
+                backgroundColor: '#D1E8FF', // Cor de fundo para itens selecionados
+                '&:hover': {
+                  backgroundColor: '#A8D1FF', // Cor ao passar o mouse sobre itens selecionados
+                },
+              },
+            },
+          },
+        }}
         sx={{
           '& .MuiOutlinedInput-root': {
             borderRadius: '4px',

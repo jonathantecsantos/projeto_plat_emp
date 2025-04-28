@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity(name="aluno")
@@ -15,7 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Aluno {
+public class Aluno implements Serializable {
 
     private static final long serialVersionUID = -5627515392010755843L;
 
@@ -59,5 +60,6 @@ public class Aluno {
         this.tamanhoCamisa = alunoCadastroRecord.tamanhoCamisa();
         this.equipe = equipe;
     }
+
 
 }

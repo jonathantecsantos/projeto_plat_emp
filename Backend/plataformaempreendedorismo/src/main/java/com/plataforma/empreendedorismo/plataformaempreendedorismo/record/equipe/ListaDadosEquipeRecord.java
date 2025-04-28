@@ -1,8 +1,10 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Instituicao;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Ods;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.instituicao.InstituicaoRecord;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ public record ListaDadosEquipeRecord(
         List<Aluno> alunos,
         List<Professor> professores,
         List<Ods> odsList,
-        String linkPitch
+        String linkPitch,
+        List<Instituicao> instituicoes
 ) {
 }

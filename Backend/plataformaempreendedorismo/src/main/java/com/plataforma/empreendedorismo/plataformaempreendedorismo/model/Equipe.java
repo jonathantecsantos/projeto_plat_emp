@@ -52,5 +52,21 @@ public class Equipe {
     @ManyToMany(mappedBy = "equipes")
     private List<Professor> professores = new ArrayList<>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "equipe_instituicao",
+            joinColumns = @JoinColumn(name = "equipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "instituicao_id")
+    )
+    private List<Instituicao> instituicoes;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "equipe_tipo_atividade",
+            joinColumns = @JoinColumn(name = "equipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "tipo_atividade_id")
+    )
+    private List<TipoAtividade> tipoAtividades;
+
 
 }

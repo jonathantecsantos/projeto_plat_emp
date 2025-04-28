@@ -1,18 +1,14 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Ods;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.*;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.Ods.OdsRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaDadosEquipeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesAvaliadasRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.ListaEquipesRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.ProfessorRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.instituicao.InstituicaoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.tipoAtividade.TipoAtividadeRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,12 +32,18 @@ public class EquipeService {
     @Autowired
     private OdsRepository odsRepository;
 
+    @Autowired
+    private InstituicaoRepository instituicaoRepository;
+
+    @Autowired
+    private TipoAtividadeRepository tipoAtividadeRepository;
+
     public ListaDadosEquipeRecord getEquipeDTO(Long equipeId) {
         Equipe equipe = equipeRepository.findById(equipeId).orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
         List<Aluno> alunos = alunoRepository.findByEquipeId(equipeId);
         List<Professor> professores = professorRepository.findProfessoresByEquipeId(equipeId);
 
-        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professores, equipe.getOdsList(), equipe.getLinkPitch());
+        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professores, equipe.getOdsList(), equipe.getLinkPitch(), equipe.getInstituicoes());
     }
 
     public Equipe buscarEquipePorId(Long id) throws Exception {
@@ -72,41 +74,44 @@ public class EquipeService {
     }
 
     private void atualizarEquipe(Equipe equipe, EquipeRecord equipeRecord) {
-        if(equipeRecord.nome() != null){
+        if (equipeRecord.nome() != null) {
             equipe.setNome(equipeRecord.nome());
         }
-        if(equipeRecord.linkPitch() != null){
+        if (equipeRecord.linkPitch() != null) {
             equipe.setLinkPitch(equipeRecord.linkPitch());
         }
 
-        if(!equipeRecord.listIdOds().isEmpty()){
-
-            Equipe equipeTemp = null;
-            Ods odstemp = null;
+        if (equipeRecord.listIdOds() != null && !equipeRecord.listIdOds().isEmpty()) {
             List<Ods> odsList = new ArrayList<>();
-            Optional<Equipe> equipeOptional = equipeRepository.findById(equipeRecord.id());
-
-            if(equipeOptional.isPresent()) {
-                equipeTemp = equipeOptional.get();
-
-                for (OdsRecord ods : equipeRecord.listIdOds()) {
-
-                    Optional<Ods> odsOptional = odsRepository.findById(ods.id());
-                    if (odsOptional.isPresent()) {
-                        odstemp = odsOptional.get();
-                        odsList.add(odstemp);
-                    }
-                }
+            for (OdsRecord odsRecord : equipeRecord.listIdOds()) {
+                odsRepository.findById(odsRecord.id())
+                        .ifPresent(odsList::add);
             }
-
-            equipeTemp.setOdsList(odsList);
-
-            equipeRepository.save(equipeTemp);
+            equipe.setOdsList(odsList);
         }
+
+        if(equipeRecord.tipoAtividadeList() != null && !equipeRecord.tipoAtividadeList().isEmpty()){
+            List<TipoAtividade> tipoAtividadeList = new ArrayList<>();
+            for(TipoAtividadeRecord tipoAtividadeRecord : equipeRecord.tipoAtividadeList()){
+                tipoAtividadeRepository.findById(tipoAtividadeRecord.id())
+                        .ifPresent(tipoAtividadeList::add);
+            }
+            equipe.setTipoAtividades(tipoAtividadeList);
+        }
+
+        if (equipeRecord.instituicoes() != null && !equipeRecord.instituicoes().isEmpty()) {
+            List<Instituicao> instituicoes = new ArrayList<>();
+            for (InstituicaoRecord instituicaoRecord : equipeRecord.instituicoes()) {
+                instituicaoRepository.findById(instituicaoRecord.id())
+                        .ifPresent(instituicoes::add);
+            }
+            equipe.setInstituicoes(instituicoes);
+        }
+
+        equipeRepository.save(equipe);
     }
 
     public List<ListaEquipesAvaliadasRecord> buscarEquipesTipoAvaliacao() {
-
         return equipeRepository.findAll().stream().map(ListaEquipesAvaliadasRecord::new).toList();
     }
 }

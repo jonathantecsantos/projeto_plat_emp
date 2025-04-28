@@ -60,17 +60,6 @@ public class AvaliacaoService {
 
     @Transactional
     public void avaliarEquipe(List<AvaliacaoEquipeRecord> avaliacaoEquipeRecord) throws Exception {
-
-//        for (AvaliacaoEquipeRecord record : avaliacaoEquipeRecord) {
-//            Avaliacao avaliacaoExistente = getAvaliacaoByIdEquipeAndIdCriterioAvaliacaoAndIdSubcriterioAvaliacao(record);
-//
-//            if (avaliacaoExistente != null) {
-//                throw new Exception("Avaliação já realizada para o time " + record.idEquipe()
-//                        + " com o critério " + record.idCriterioAvaliacao()
-//                        + " e subcritério " + record.idSubcriterioAvaliacao());
-//            }
-//        }
-
         List<Avaliacao> avaliacaos = avaliacaoEquipeRecord.stream()
                 .map(Avaliacao::new)
                 .collect(Collectors.toList());

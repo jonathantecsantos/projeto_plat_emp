@@ -1,5 +1,5 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { Institutions } from "../../../utils/types";
+import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/material";
+import { useGetInstitutionsQuery } from "../../../api/studentApi";
 
 interface InstitutionsSelectProps {
   value: string;
@@ -9,10 +9,13 @@ interface InstitutionsSelectProps {
 }
 
 export const InstitutionsSelect = ({ onChange, value, className, disable }: InstitutionsSelectProps) => {
+  const { data: institutions, isLoading } = useGetInstitutionsQuery()
+
+  if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 
   return (
     <FormControl className="w-full" variant="outlined">
-      <InputLabel id="institutionsSelect-types-select-label" sx={{ textAlign: 'center', }} >Instituição</InputLabel>
+      <InputLabel id="institutionsSelect-types-select-label" sx={{ textAlign: 'center', }}>Instituição</InputLabel>
       <Select
         className={`${className ? className : 'py-1 mt-2 rounded-md'}`}
         labelId="institutionsSelect-types-select-label"
@@ -46,9 +49,9 @@ export const InstitutionsSelect = ({ onChange, value, className, disable }: Inst
           }
         }}
       >
-        {Institutions.map((item, idx) => (
-          <MenuItem key={idx} value={item}>
-            {item}
+        {institutions?.map((item) => (
+          <MenuItem key={item.id} value={item.descricao}>
+            {item.descricao}
           </MenuItem>
         ))}
       </Select>

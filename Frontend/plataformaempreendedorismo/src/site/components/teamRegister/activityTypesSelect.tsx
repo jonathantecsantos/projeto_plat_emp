@@ -1,14 +1,17 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { ActivityTypes } from "../../../utils/types";
+import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/material"
+import { useGetActivityTypesQuery } from "../../../api/studentApi"
 
 interface ActivityTypesSelectProps {
-  value: string[];
-  onChange: (event: any) => void;
-  className?: string;
-  disable?: boolean;
+  value: string[]
+  onChange: (event: any) => void
+  className?: string
+  disable?: boolean
 }
 
 export const ActivityTypesSelect = ({ onChange, value, className, disable }: ActivityTypesSelectProps) => {
+  const { data: activityTypes, isLoading } = useGetActivityTypesQuery()
+
+  if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 
   return (
     <FormControl className="w-full" variant="outlined">
@@ -20,13 +23,13 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
         multiple
         value={value || []}
         disabled={disable}
-        
+
         onChange={onChange}
         renderValue={(selected) => {
           return selected.map((type: string) => {
-            const activity = ActivityTypes.find(item => item.value === type);
-            return activity ? activity.label : '';
-          }).join(', ');
+            const activity = activityTypes?.find(item => item.descricao === type)
+            return activity ? activity.descricao : ''
+          }).join(', ')
         }}
         label="Tipos de Atividade"
         MenuProps={{
@@ -54,12 +57,12 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
           }
         }}
       >
-        {ActivityTypes.map((item) => (
-          <MenuItem key={item.value} value={item.value}>
-            {item.label}
+        {activityTypes?.map((item) => (
+          <MenuItem key={item.id} value={item.descricao}>
+            {item.descricao}
           </MenuItem>
         ))}
       </Select>
     </FormControl>
-  );
+  )
 }

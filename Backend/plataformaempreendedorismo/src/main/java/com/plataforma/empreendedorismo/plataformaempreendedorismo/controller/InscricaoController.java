@@ -33,7 +33,7 @@ public class InscricaoController {
             @ApiResponse(responseCode = "409", description = "CPF ou E-mail já cadastrado na base de dados")
     })
     @SecurityRequirement(name = "bearerToken")
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<String> realizarInscricao(@RequestBody InscricaoRecord inscricaoRecord) {
         try {
             inscricaoService.processarInscricao(inscricaoRecord);

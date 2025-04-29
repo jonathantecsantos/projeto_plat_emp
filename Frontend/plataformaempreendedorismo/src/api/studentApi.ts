@@ -254,7 +254,7 @@ export const studentsApiSlice = createApi({
 
     createTeam: build.mutation<{ message: string }, TeamRegisterPayload>({
       query: (body) => ({
-        url: '/inscricoes/',
+        url: '/inscricoes',
         method: 'POST',
         body,
       }),

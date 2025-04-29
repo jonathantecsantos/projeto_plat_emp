@@ -18,34 +18,25 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
     @Autowired
     private AlunoRepository alunoRepository;
-
     @Autowired
     private AdministradorRepository administradorRepository;
-
     @Autowired
     private CoordenadorRepository coordenadorRepository;
-
     @Autowired
     private AvaliadorRepository avaliadorRepository;
-
     @Autowired
     private ProfessorRepository professorRepository;
 
     @Value("${senha.padrao.novo.usuario.aluno}")
     private String senhaPadraoAluno;
-
     @Value("${senha.padrao.novo.usuario.professor}")
     private String senhaPadraoProfessor;
-
     @Value("${senha.padrao.novo.usuario.avaliador}")
     private String senhaPadraoAvaliador;
-
     @Value("${senha.padrao.novo.usuario.coordenador}")
     private String senhaPadraoCoordenador;
-
     @Value("${senha.padrao.novo.usuario.coordenador}")
     private String senhaPadraoAdministrador;
 

@@ -12,7 +12,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.Pro
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.exceptions.ValidarProfessorException;
+import util.exceptions.LimiteProfessorEquipeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +23,10 @@ public class ProfessorService {
 
     @Autowired
     private EquipeService equipeService;
-
     @Autowired
     private ProfessorRepository professorRepository;
-
     @Autowired
     private EquipeRepository equipeRepository;
-
     @Autowired
     private UsuarioService usuarioService;
 
@@ -56,9 +53,8 @@ public class ProfessorService {
     }
 
     @Transactional
-    public void editaProfessor(ProfessorEditarRecord professorEditarRecord) throws ValidarProfessorException {
+    public void editaProfessor(ProfessorEditarRecord professorEditarRecord){
         Professor professor = professorRepository.getReferenceById(professorEditarRecord.id());
-
         atualizaProfessor(professor,professorEditarRecord);
     }
 
@@ -73,13 +69,8 @@ public class ProfessorService {
             professor.setEmail(professorEditarRecord.email());
         }
         if(professorEditarRecord.idEquipe() != null){
-            Equipe equipe;
             for(Long id : professorEditarRecord.idEquipe()){
-                Optional<Equipe> equipeOptional = equipeRepository.findById(id);
-                if (equipeOptional.isPresent()) {
-                    equipe = equipeOptional.get();
-                    professor.getEquipes().add(equipe);
-                }
+                equipeRepository.findById(id).ifPresent(professor.getEquipes()::add);
             }
         }
     }
@@ -93,5 +84,13 @@ public class ProfessorService {
         }
         Professor professor = professorRepository.save(new Professor(professorCadastroRecord,equipeList));
         return usuarioService.criarUsuario(professor, professor.getEmail(), EnumRole.ROLE_PROFESSOR);
+    }
+
+    public void validaLimiteDeProfessorEmEquipes(Long idProfessor){
+        professorRepository.findById(idProfessor).ifPresent(professor -> {
+            if (professor.getEquipes().size() >= 3) {
+                throw new LimiteProfessorEquipeException("O professor já está associado a 3 ou mais equipes. Selecione outro Professor!");
+            }
+        });
     }
 }

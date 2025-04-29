@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.enuns.TipoOperacaoEnum;
 import util.exceptions.ValidaAlunoException;
+import util.exceptions.CpfDuplicadoException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -23,26 +24,23 @@ public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
-
     @Autowired
     private EquipeRepository equipeRepository;
-
     @Autowired
     private EquipeService equipeService;
-
     @Autowired
     private UsuarioService usuarioService;
 
     @Transactional
     public UsuarioRecord criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
         Equipe equipe = equipeService.buscarEquipePorId(alunoCadastroRecord.idEquipe());
-        validaLiderAndViceLider(TipoOperacaoEnum.CADASTRAR ,null , alunoCadastroRecord, null,equipe);
+        validaLiderAndViceLider(TipoOperacaoEnum.CADASTRAR, null, alunoCadastroRecord, null, equipe);
         return persistirAlunoAndCriarAcesso(alunoCadastroRecord, equipe);
     }
 
     @Transactional
-    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe){
-        Aluno aluno = alunoRepository.save(new Aluno(alunoCadastroRecord,equipe));
+    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe) {
+        Aluno aluno = alunoRepository.save(new Aluno(alunoCadastroRecord, equipe));
         return usuarioService.criarUsuario(aluno, aluno.getEmail(), EnumRole.ROLE_ALUNO);
     }
 
@@ -51,7 +49,7 @@ public class AlunoService {
         Aluno aluno = alunoRepository.getReferenceById(alunoEditarRecord.id());
         Equipe equipe = equipeRepository.getReferenceById(alunoEditarRecord.idEquipe());
 
-        validaLiderAndViceLider(TipoOperacaoEnum.EDITAR ,aluno , null, alunoEditarRecord,equipe);
+        validaLiderAndViceLider(TipoOperacaoEnum.EDITAR, aluno, null, alunoEditarRecord, equipe);
         atualizarAluno(aluno, alunoEditarRecord);
 
     }
@@ -61,20 +59,20 @@ public class AlunoService {
                                          AlunoCadastroRecord alunoCadastroRecord,
                                          AlunoEditarRecord alunoEditarRecord,
                                          Equipe equipe) throws ValidaAlunoException {
-        if (tipo.equals(TipoOperacaoEnum.CADASTRAR)){
+        if (tipo.equals(TipoOperacaoEnum.CADASTRAR)) {
             validarLiderAndViceLiderCadastro(equipe, alunoCadastroRecord);
-        } else{
+        } else {
             validaLiderAndViceLiderEdicao(aluno, alunoEditarRecord, equipe);
         }
     }
 
     private void validarLiderAndViceLiderCadastro(Equipe equipe, AlunoCadastroRecord alunoCadastroRecord) throws ValidaAlunoException {
-        if(Boolean.TRUE.equals(alunoCadastroRecord.isLider()) || Boolean.TRUE.equals(alunoCadastroRecord.isViceLider())){
-            for(Aluno alunoList : equipe.getAlunos()){
-                if(alunoCadastroRecord.isLider() && alunoList.getIsLider()){
+        if (Boolean.TRUE.equals(alunoCadastroRecord.isLider()) || Boolean.TRUE.equals(alunoCadastroRecord.isViceLider())) {
+            for (Aluno alunoList : equipe.getAlunos()) {
+                if (alunoCadastroRecord.isLider() && alunoList.getIsLider()) {
                     throw new ValidaAlunoException("Já existe um Líder no time!");
                 }
-                if(alunoCadastroRecord.isViceLider() && alunoList.getIsViceLider()){
+                if (alunoCadastroRecord.isViceLider() && alunoList.getIsViceLider()) {
                     throw new ValidaAlunoException("Já existe um Vice-líder no time!");
                 }
             }
@@ -89,13 +87,13 @@ public class AlunoService {
     }
 
     private void validarLiderancaDupla(AlunoEditarRecord alunoEditarRecord) throws ValidaAlunoException {
-        if(alunoEditarRecord.isLider() && alunoEditarRecord.isViceLider()){
+        if (alunoEditarRecord.isLider() && alunoEditarRecord.isViceLider()) {
             throw new ValidaAlunoException("O aluno não pode ser Lider e Vice-lider");
         }
     }
 
     private void validarSeExisteViceLider(AlunoEditarRecord aluno, Equipe equipe) throws ValidaAlunoException {
-        if(Boolean.TRUE.equals(aluno.isViceLider())) {
+        if (Boolean.TRUE.equals(aluno.isViceLider())) {
             for (Aluno alunoList : equipe.getAlunos()) {
                 if (alunoList.getIsViceLider() && !Objects.equals(alunoList.getId(), aluno.id())) {
                     throw new ValidaAlunoException("Já existe um Vice-Líder no time!");
@@ -106,9 +104,9 @@ public class AlunoService {
 
     private void validarSeExisteLider(AlunoEditarRecord aluno, Equipe equipe) throws ValidaAlunoException {
 
-        if(Boolean.TRUE.equals(aluno.isLider())){
-            for(Aluno alunoList : equipe.getAlunos()) {
-                if(alunoList.getIsLider() && !Objects.equals(alunoList.getId(), aluno.id())){
+        if (Boolean.TRUE.equals(aluno.isLider())) {
+            for (Aluno alunoList : equipe.getAlunos()) {
+                if (alunoList.getIsLider() && !Objects.equals(alunoList.getId(), aluno.id())) {
                     throw new ValidaAlunoException("Já existe um Líder no time!");
                 }
             }
@@ -116,26 +114,26 @@ public class AlunoService {
     }
 
     public void atualizarAluno(Aluno aluno, AlunoEditarRecord alunoEditarRecord) {
-        if(alunoEditarRecord.cpf() != null){
+        if (alunoEditarRecord.cpf() != null) {
             aluno.setCpf(alunoEditarRecord.cpf());
         }
-        if(alunoEditarRecord.nome() != null){
+        if (alunoEditarRecord.nome() != null) {
             aluno.setNome(alunoEditarRecord.nome());
         }
-        if(alunoEditarRecord.email() != null){
+        if (alunoEditarRecord.email() != null) {
             aluno.setEmail(alunoEditarRecord.email());
         }
-        if(alunoEditarRecord.turma() != null){
+        if (alunoEditarRecord.turma() != null) {
             aluno.setTurma(alunoEditarRecord.turma());
         }
-        if(alunoEditarRecord.isLider() != null){
+        if (alunoEditarRecord.isLider() != null) {
             aluno.setIsLider(alunoEditarRecord.isLider());
         }
-        if(alunoEditarRecord.isViceLider() != null){
+        if (alunoEditarRecord.isViceLider() != null) {
             aluno.setIsViceLider(alunoEditarRecord.isViceLider());
         }
 
-        if(alunoEditarRecord.idEquipe() != null){
+        if (alunoEditarRecord.idEquipe() != null) {
             Equipe equipe;
             Optional<Equipe> equipeOptional = equipeRepository.findById(alunoEditarRecord.idEquipe());
             if (equipeOptional.isPresent()) {
@@ -149,11 +147,18 @@ public class AlunoService {
 
         Optional<Aluno> alunoOptional = alunoRepository.findById(id);
 
-        if(alunoOptional.isPresent()){
+        if (alunoOptional.isPresent()) {
             Aluno aluno = alunoOptional.get();
             return new AlunoRecord(aluno);
         }
 
         return null;
+    }
+
+    public void validarCpfDuplicado(String cpf) throws CpfDuplicadoException {
+        Aluno aluno = alunoRepository.findByCpf(cpf);
+        if (aluno != null) {
+            throw new CpfDuplicadoException("Erro. O CPF: " + cpf + " já se encontra cadastrado na base de dados!");
+        }
     }
 }

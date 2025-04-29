@@ -10,6 +10,9 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import util.exceptions.CpfDuplicadoException;
+import util.exceptions.EmailDuplicadoException;
+import util.exceptions.LimiteProfessorEquipeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +23,30 @@ public class InscricaoService {
 
     @Autowired
     private EquipeRepository equipeRepository;
-
     @Autowired
     private OdsRepository odsRepository;
-
     @Autowired
     private AlunoService alunoService;
-
     @Autowired
     private ProfessorRepository professorRepository;
-
     @Autowired
     private InstituicaoRepository instituicaoRepository;
-
     @Autowired
     private TipoAtividadeRepository tipoAtividadeRepository;
+    @Autowired
+    private UsuarioService usuarioService;
+    @Autowired
+    private ProfessorService professorService;
 
     @Transactional
-    public void processarInscricao(InscricaoRecord inscricaoRecord) {
+    public void processarInscricao(InscricaoRecord inscricaoRecord) throws CpfDuplicadoException, EmailDuplicadoException, LimiteProfessorEquipeException {
+
+        for(AlunoCadastroRecord alunoDto : inscricaoRecord.alunos()){
+            validaEmailDuiplicado(alunoDto);
+        }
+
+        professorService.validaLimiteDeProfessorEmEquipes(inscricaoRecord.idProfessor());
+
         Equipe equipe = equipeRepository.findByNome(inscricaoRecord.nomeTime().toUpperCase());
         if (equipe == null) {
             equipe = new Equipe();
@@ -81,6 +90,14 @@ public class InscricaoService {
 
         for (AlunoCadastroRecord alunoCadastroRecordRecord : inscricaoRecord.alunos()) {
             alunoService.persistirAlunoAndCriarAcesso(alunoCadastroRecordRecord, equipe);
+        }
+    }
+
+    private void validaEmailDuiplicado(AlunoCadastroRecord alunoDto) throws CpfDuplicadoException, EmailDuplicadoException {
+        alunoService.validarCpfDuplicado(alunoDto.cpf());
+        Usuario usuario = usuarioService.buscarUsuarioPorLogin(alunoDto.email());
+        if(usuario != null){
+            throw new EmailDuplicadoException("Erro. E-mail " + alunoDto.email() + " já se encontra cadastrado na base de dados!");
         }
     }
 }

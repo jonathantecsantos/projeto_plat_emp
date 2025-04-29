@@ -51,6 +51,9 @@ public class SecurityConfigurations {
                         //Tipos de Atividade
                         .requestMatchers(HttpMethod.GET, "atividades").permitAll()
 
+                        //ODS
+                        .requestMatchers(HttpMethod.GET,"/ods").permitAll()
+
                         //Alunos
                         .requestMatchers(HttpMethod.GET,"/alunos").hasAnyRole("ADMIN", "COORDENADOR")
                         .requestMatchers(HttpMethod.POST,"/alunos/cadastrar").hasAnyRole("ADMIN","COORDENADOR")

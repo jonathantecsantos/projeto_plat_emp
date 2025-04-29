@@ -1,7 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.InscricaoRecord;
-import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.InscricaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import util.exceptions.CpfDuplicadoException;
+import util.exceptions.EmailDuplicadoException;
+import util.exceptions.LimiteProfessorEquipeException;
 
 @RestController
 @RequestMapping("inscricoes")
@@ -22,26 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class InscricaoController {
 
     @Autowired
-    private AlunoRepository alunoRepository;
-
-    @Autowired
     private InscricaoService inscricaoService;
 
     @Operation(summary = "Realizar Incrição", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Inscrição realizada com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Erro ao realizar inscrição")
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar inscrição"),
+            @ApiResponse(responseCode = "409", description = "CPF ou E-mail já cadastrado na base de dados")
     })
     @SecurityRequirement(name = "bearerToken")
     @PostMapping(value = "/")
-    public ResponseEntity<String> realizarInscricao(@RequestBody InscricaoRecord inscricaoRecord) throws Exception {
+    public ResponseEntity<String> realizarInscricao(@RequestBody InscricaoRecord inscricaoRecord) {
         try {
             inscricaoService.processarInscricao(inscricaoRecord);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Inscrição realizada com sucesso!");
-        }catch (Exception e){
+        }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
     }
-
 }

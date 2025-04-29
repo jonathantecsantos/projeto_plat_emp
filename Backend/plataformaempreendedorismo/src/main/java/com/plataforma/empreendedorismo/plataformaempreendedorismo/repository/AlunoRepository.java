@@ -8,4 +8,5 @@ import java.util.List;
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     List<Aluno> findByEquipeId(Long equipeId);
+    Aluno findByCpf(String cpf);
 }

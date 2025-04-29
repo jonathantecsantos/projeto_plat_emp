@@ -1,9 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
+import { ActivityType } from '../model/activityTypes'
 import { Banner } from '../model/banner'
 import { EventConfig, Events } from '../model/config'
 import { Coordinator } from '../model/coordinators'
 import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
 import { Evaluator } from '../model/evaluator'
+import { Institution } from '../model/institution'
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
 import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
@@ -17,7 +19,10 @@ import { EvaluationTypes } from '../utils/types'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator', 'Coordinator', 'Events',],
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 
+    'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator', 'Coordinator', 'Events',
+    'Register', 'ActivityType', 'Institution'
+  ],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -263,23 +268,6 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: 'LIST' },
       ],
     }),
-
-
-    //ODS
-    getOds: build.query<Ods[], void>({
-      query: () => '/ods',
-      transformResponse: (response: Ods[]) => {
-        return response.sort((a, b) => a.codigo.localeCompare(b.codigo))
-      },
-      providesTags: (result) =>
-        result
-          ? [
-            ...result.map(({ id }: any) => ({ type: 'Ods', id } as const)),
-            { type: 'Ods', id: 'LIST' },
-          ]
-          : [{ type: 'Ods', id: 'LIST' }],
-    }),
-
 
     //TEACHER 
     getTeacher: build.query<TeacherIdResponse, number>({
@@ -561,6 +549,51 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Report', id: `LIST` }],
     }),
 
+    //ODS
+    getOds: build.query<Ods[], void>({
+      query: () => '/ods',
+      transformResponse: (response: Ods[]) => {
+        return response.sort((a, b) => a.codigo.localeCompare(b.codigo))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Ods', id } as const)),
+            { type: 'Ods', id: 'LIST' },
+          ]
+          : [{ type: 'Ods', id: 'LIST' }],
+    }),
+
+    //INSTITUTIONS
+    getInstitutions: build.query<Institution[], void>({
+      query: () => `/instituicoes`,
+      transformResponse: (response: Institution[]) => {
+        return response.sort((a, b) => a.descricao.localeCompare(b.descricao))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'Institution', id } as const)),
+            { type: 'Institution', id: 'LIST' },
+          ]
+          : [{ type: 'Institution', id: 'LIST' }],
+    }),
+
+    //ACTIVITY TYPE
+    getActivityTypes: build.query<ActivityType[], void>({
+      query: () => `/atividades`,
+      transformResponse: (response: ActivityType[]) => {
+        return response.sort((a, b) => a.descricao.localeCompare(b.descricao))
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }: any) => ({ type: 'ActivityType', id } as const)),
+            { type: 'ActivityType', id: 'LIST' },
+          ]
+          : [{ type: 'ActivityType', id: 'LIST' }],
+    }),
+
   }),
 })
 
@@ -598,9 +631,6 @@ export const {
   useGetAllTeamsQuery,
   useUpdateTeamMutation,
   useCreateTeamMutation,
-
-  //Ods
-  useGetOdsQuery,
 
   //Teachers
   useGetTeacherQuery,
@@ -640,6 +670,13 @@ export const {
   useGetTeamReportQuery,
   useGetTeamClassificationQuery,
   useGetTeamReportClassificationByFormatQuery,
+
+  //Ods
+  useGetOdsQuery,
+  //Institutions
+  useGetInstitutionsQuery,
+  //Activity Type
+  useGetActivityTypesQuery,
 
 } = studentsApiSlice
 

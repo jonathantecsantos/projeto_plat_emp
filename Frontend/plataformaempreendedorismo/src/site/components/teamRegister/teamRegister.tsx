@@ -110,7 +110,7 @@ export const TeamRegister = () => {
   const navigate = useNavigate()
   const [success, setSuccess] = useState(isSuccess)
 
-  const { control, watch, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeamForm>({
+  const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeamForm>({
     resolver: zodResolver(createTeamSchema),
     defaultValues: {
       nomeTime: searchParams.get('nomeTime') || '',
@@ -263,7 +263,7 @@ export const TeamRegister = () => {
       console.error("Erros de validação:", errors)
     }
   }, [errors])
-  console.log("Formulário de inscrição DLEI", watch())
+  console.log("Formulário de inscrição DLEI")
 
   return (
     <div className="flex flex-col max-w-4xl mx-auto my-8 sm:p-4 p-2 sm:border-t-2 sm:rounded sm:shadow-md ">

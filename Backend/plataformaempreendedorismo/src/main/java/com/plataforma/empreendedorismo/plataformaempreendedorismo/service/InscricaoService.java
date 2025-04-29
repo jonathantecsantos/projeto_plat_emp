@@ -69,9 +69,9 @@ public class InscricaoService {
                 equipe.setTipoAtividades(tipoAtividadeList);
             }
 
-            if(inscricaoRecord.instituicaos() != null && !inscricaoRecord.instituicaos().isEmpty()){
+            if(inscricaoRecord.instituicoes() != null && !inscricaoRecord.instituicoes().isEmpty()){
                 List<Instituicao> instituicaoList = new ArrayList<>();
-                for(InstituicaoRecord instituicaoRecord : inscricaoRecord.instituicaos()){
+                for(InstituicaoRecord instituicaoRecord : inscricaoRecord.instituicoes()){
                     instituicaoRepository.findById(instituicaoRecord.id())
                             .ifPresent(instituicaoList::add);
                 }

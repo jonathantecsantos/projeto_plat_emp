@@ -13,6 +13,6 @@ public record InscricaoRecord(
         Long idProfessor,
         List<OdsRecord> listIdOds,
         List<TipoAtividadeRecord> tipoAtividades,
-        List<InstituicaoRecord> instituicaos
+        List<InstituicaoRecord> instituicoes
 ) {
 }

@@ -2,7 +2,7 @@ import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/
 import { useGetActivityTypesQuery } from "../../../api/studentApi"
 
 interface ActivityTypesSelectProps {
-  value: string[]
+  value: number[]
   onChange: (event: any) => void
   className?: string
   disable?: boolean
@@ -23,14 +23,13 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
         multiple
         value={value || []}
         disabled={disable}
-
         onChange={onChange}
-        renderValue={(selected) => {
-          return selected.map((type: string) => {
-            const activity = activityTypes?.find(item => item.descricao === type)
-            return activity ? activity.descricao : ''
-          }).join(', ')
-        }}
+        // renderValue={(selected) => {
+        //   return selected.map((id: number) => {
+        //     const activity = activityTypes?.find(item => item.id === id)
+        //     return activity ? activity.descricao : ''
+        //   }).join(', ')
+        // }}
         label="Tipos de Atividade"
         MenuProps={{
           PaperProps: {
@@ -58,7 +57,7 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
         }}
       >
         {activityTypes?.map((item) => (
-          <MenuItem key={item.id} value={item.descricao}>
+          <MenuItem key={item.id} value={item.id}>
             {item.descricao}
           </MenuItem>
         ))}

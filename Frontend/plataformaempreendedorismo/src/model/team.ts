@@ -49,6 +49,6 @@ export interface TeamRegisterPayload {
   }>
   idProfessor: number
   listIdOds: Array<{ id: number }>
-  tipoAtividades: string[]
-  instituicaoImpactoSocial: string
+  tipoAtividades: Array<{ id: number }>
+  instituicoes: Array<{ id: number }>
 }

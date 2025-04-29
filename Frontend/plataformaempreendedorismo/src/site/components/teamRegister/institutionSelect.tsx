@@ -2,7 +2,7 @@ import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/
 import { useGetInstitutionsQuery } from "../../../api/studentApi";
 
 interface InstitutionsSelectProps {
-  value: string;
+  value: number[]
   onChange: (event: any) => void;
   className?: string;
   disable?: boolean;
@@ -20,10 +20,17 @@ export const InstitutionsSelect = ({ onChange, value, className, disable }: Inst
         className={`${className ? className : 'py-1 mt-2 rounded-md'}`}
         labelId="institutionsSelect-types-select-label"
         id="institutionsSelect"
+        multiple
         value={value || ''}
         disabled={disable}
         onChange={onChange}
         label="Instituição"
+        // renderValue={(selected) => {
+        //   return selected.map((id: number) => {
+        //     const activity = institutions?.find(item => item.id === id)
+        //     return activity ? activity.descricao : ''
+        //   }).join(', ')
+        // }}
         MenuProps={{
           PaperProps: {
             sx: {
@@ -50,7 +57,7 @@ export const InstitutionsSelect = ({ onChange, value, className, disable }: Inst
         }}
       >
         {institutions?.map((item) => (
-          <MenuItem key={item.id} value={item.descricao}>
+          <MenuItem key={item.id} value={item.id}>
             {item.descricao}
           </MenuItem>
         ))}

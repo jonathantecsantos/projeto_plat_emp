@@ -23,16 +23,6 @@ import { InstitutionsSelect } from './institutionSelect'
 import { OdsSelect } from './odsSelect'
 import { TeacherSelect } from './teacherSelect'
 
-//Nome do Time
-//Nome Completo do Aluno / Série-Turma / E-mail lourdinas / CPF / Data Nascimento / Tamanho Camisa (PP, P, M, G, GG, XG, XGG) / Líder? Vice Líder?
-//Mínimo 5, máximo 8 alunos.
-// Instituição de Impacto Social parceira do Time (LISTA)
-// Provável Tipo de Atividade a ser realizada pelo Time(checkbox) string?
-// Professor Orientador(LISTA)
-// Objetivo de Desenvolvimento Sustentável do Time (até 3 ODSs)
-// Regras importantes, validação de inputs @evl.com.br, criar enum Tamanho Camisa e importante CAPTCHA obrigatorio falta captcha
-// Invalidar after post => Team, Student, Teacher falta testar
-
 const createTeamSchema = z.object({
   nomeTime: z.string().min(1, "Nome do time é obrigatório"),
   alunos: z.array(
@@ -48,12 +38,25 @@ const createTeamSchema = z.object({
       idEquipe: z.number().optional(),
       dataNascimento: z.preprocess(
         (val) => {
-          if (typeof val === 'string' && val.trim() !== "") return new Date(val)
-          return val
+          if (!val) return undefined;
+          // Remove a parte do tempo se existir
+          if (val instanceof Date) {
+            return new Date(val.toISOString().split('T')[0]);
+          }
+          if (typeof val === 'string') {
+            return new Date(val.split('T')[0]);
+          }
+          return undefined;
         },
-        z.date()
-          .refine((date) => !isNaN(date.getTime()), { message: "Data inválida - utilize uma data real" })
-          .refine((date) => !!date, { message: "Data de nascimento é obrigatória" })
+        z.date({
+          required_error: 'Data de nascimento é obrigatória',
+          invalid_type_error: 'Data inválida',
+        })
+          .refine(date => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return date <= today;
+          }, { message: "Data não pode ser no futuro" })
       ),
       tamanhoCamisa: z.nativeEnum(Student.ShirtSize, {
         errorMap: () => ({ message: "Tamanho inválido" })
@@ -81,32 +84,44 @@ const createTeamSchema = z.object({
     })
   ).min(1, "Selecione pelo menos 1 ODS").max(3, "Selecione no máximo 3 ODS"),
 
-  tipoAtividades: z.array(z.string()).min(1, "Selecione pelo menos 1 tipo de atividade"),
-  instituicaoImpactoSocial: z.string().min(1, "Instituição é obrigatória"),
-  // captchaToken: z.string().min(1, "CAPTCHA obrigatório"),
+  tipoAtividades: z.array(
+    z.object({
+      id: z.number(),
+      descricao: z.string().optional(), // Adiciona o campo descricao como opcional
+    })
+  ).min(1, "Selecione pelo menos 1 tipo de atividade"),
+  instituicoes: z.array(
+    z.object({
+      id: z.number(),
+      descricao: z.string().optional(), // Adiciona o campo descricao como opcional
+    })
+  ).min(1, "Instituição é obrigatória"),
 })
 
 type CreateTeamForm = z.infer<typeof createTeamSchema>
+
 
 
 export const TeamRegister = () => {
   const [createTeam, { isSuccess, isLoading }] = useCreateTeamMutation()
   const [searchParams, setSearchParams] = useSearchParams()
   const dispatch = useDispatch()
-  // TODO-WINNICIUS: falta capturar o captcha
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(isSuccess)
 
-  const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeamForm>({
+  const { control, watch, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeamForm>({
     resolver: zodResolver(createTeamSchema),
     defaultValues: {
       nomeTime: searchParams.get('nomeTime') || '',
-      alunos: JSON.parse(searchParams.get('alunos') || '[]'),
+      alunos: JSON.parse(searchParams.get('alunos') || '[]').map((aluno: any) => ({
+        ...aluno,
+        dataNascimento: aluno.dataNascimento ? new Date(aluno.dataNascimento) : undefined
+      })),
       idProfessor: Number(searchParams.get('idProfessor')) || 0,
       listIdOds: searchParams.get('listIdOds') ? JSON.parse(searchParams.get('listIdOds') as string) : [],
       tipoAtividades: searchParams.get('tipoAtividades') ? JSON.parse(searchParams.get('tipoAtividades') as string) : [],
-      instituicaoImpactoSocial: searchParams.get('instituicaoImpactoSocial') || '',
+      instituicoes: searchParams.get('instituicoes') ? JSON.parse(searchParams.get('instituicoes') as string) : [],
     },
   })
 
@@ -125,7 +140,7 @@ export const TeamRegister = () => {
     setSearchParams(params)
   }
 
-  const handleArrayChange = (key: 'alunos' | 'listIdOds' | 'tipoAtividades', value: any[]) => {
+  const handleArrayChange = (key: 'alunos' | 'listIdOds' | 'tipoAtividades' | 'instituicoes', value: any[]) => {
     const params = new URLSearchParams(searchParams)
     params.set(key, JSON.stringify(value))
     setSearchParams(params)
@@ -155,43 +170,33 @@ export const TeamRegister = () => {
     const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')
     currentStudents[index] = currentStudents[index] || {}
 
-    // Se estiver marcando um checkbox
     if (checked) {
-      // Se estiver marcando como líder
       if (key === 'isLider') {
-        // Verifica se já existe outro líder
         const hasOtherLeader = currentStudents.some((student: any, i: number) =>
           i !== index && student.isLider === true
         )
 
-        // Se já existir um líder, não permite marcar
         if (hasOtherLeader) {
           enqueueSnackbar('Já existe um líder no time', { variant: 'warning' })
           return
         }
 
-        // Desmarca vice-líder se estiver marcado
         currentStudents[index].isViceLider = false
       }
-      // Se estiver marcando como vice-líder
       else if (key === 'isViceLider') {
-        // Verifica se já existe outro vice-líder
         const hasOtherViceLeader = currentStudents.some((student: any, i: number) =>
           i !== index && student.isViceLider === true
         )
 
-        // Se já existir um vice-líder, não permite marcar
         if (hasOtherViceLeader) {
           enqueueSnackbar('Já existe um vice-líder no time', { variant: 'warning' })
           return
         }
 
-        // Desmarca líder se estiver marcado
         currentStudents[index].isLider = false
       }
     }
 
-    // Atualiza o valor do checkbox
     currentStudents[index][key] = checked
 
     const params = new URLSearchParams(searchParams)
@@ -206,7 +211,7 @@ export const TeamRegister = () => {
       idProfessor: 0,
       listIdOds: [],
       tipoAtividades: [],
-      instituicaoImpactoSocial: '',
+      instituicoes: [],
     })
 
     setSearchParams({
@@ -215,7 +220,7 @@ export const TeamRegister = () => {
       idProfessor: '0',
       listIdOds: '[]',
       tipoAtividades: '[]',
-      instituicaoImpactoSocial: '',
+      instituicoes: '[]',
     })
     setSuccess(false)
   }
@@ -226,6 +231,7 @@ export const TeamRegister = () => {
       const formatedStudents = data.alunos.map((student) => ({
         ...student,
         cpf: formatCPF(student.cpf),
+        dataNascimento: student.dataNascimento.toISOString().split('T')[0]
       }))
 
       const payload: TeamRegisterPayload = {
@@ -233,16 +239,18 @@ export const TeamRegister = () => {
         alunos: formatedStudents,
         idProfessor: data.idProfessor,
         listIdOds: data.listIdOds,
+        instituicoes: data.instituicoes,
         tipoAtividades: data.tipoAtividades,
-        instituicaoImpactoSocial: data.instituicaoImpactoSocial
       }
+
+      console.log(payload)
 
       await createTeam(payload).unwrap()
       enqueueSnackbar(`Time: ${data.nomeTime} criado com sucesso!`, { variant: 'success' })
       setSuccess(true)
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      enqueueSnackbar('Erro ao criar time', { variant: 'error' })
+      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
     } finally {
       dispatch(toggleLoading())
     }
@@ -255,10 +263,11 @@ export const TeamRegister = () => {
       console.error("Erros de validação:", errors)
     }
   }, [errors])
+  console.log("Formulário de inscrição DLEI", watch())
 
   return (
     <div className="flex flex-col max-w-4xl mx-auto my-8 sm:p-4 p-2 sm:border-t-2 sm:rounded sm:shadow-md ">
-      <h2 className="text-3xl font-bold text-center mb-4 text-[#383691]">Formulário de Inscrição</h2>
+      <h2 className="text-3xl font-bold text-center mb-4 text-[#383691]">Formulário de Inscrição DLEI</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div>
           <label htmlFor="nomeTime" className="block text-lg font-medium text-[#383691]">Nome do Time</label>
@@ -270,10 +279,10 @@ export const TeamRegister = () => {
           {errors.nomeTime && <p className="text-red-500 text-sm">{errors.nomeTime.message}</p>}
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <h2 className="font-semibold text-lg text-[#383691]">Alunos</h2>
           {studentsFields.map((field, index) => (
-            <div key={field.id} className="border p-4 rounded-md flex flex-col gap-2">
+            <div key={field.id} className="border p-2 rounded-md flex flex-col gap-2">
               <label htmlFor="nome" className="block  text-sm font-medium text-[#383691]">Nome completo</label>
               <input
                 {...register(`alunos.${index}.nome`)}
@@ -282,39 +291,67 @@ export const TeamRegister = () => {
                 className="block w-full p-2 border border-gray-300 rounded-md"
               />
               {errors.alunos?.[index]?.nome && <p className="text-red-500 text-sm">{errors.alunos[index]?.nome?.message}</p>}
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-2 w-full'>
+                <div className=''>
+                  <label htmlFor="cpf" className="block text-sm font-medium text-[#383691]">CPF</label>
+                  <input
+                    {...register(`alunos.${index}.cpf`)}
+                    onChange={(e) => handleStudentChange(index, 'cpf', e.target.value)}
+                    placeholder="CPF"
+                    className="block w-full p-2 border border-gray-300 rounded-md"
+                  />
+                  {errors.alunos?.[index]?.cpf && <p className="text-red-500 text-sm">{errors.alunos[index]?.cpf?.message}</p>}
 
-              <label htmlFor="cpf" className="block text-sm font-medium text-[#383691]">CPF</label>
-              <input
-                {...register(`alunos.${index}.cpf`)}
-                onChange={(e) => handleStudentChange(index, 'cpf', e.target.value)}
-                placeholder="CPF"
-                className="block w-full p-2 border border-gray-300 rounded-md"
-              />
-              {errors.alunos?.[index]?.cpf && <p className="text-red-500 text-sm">{errors.alunos[index]?.cpf?.message}</p>}
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-[#383691]">Email</label>
+                  <input
+                    {...register(`alunos.${index}.email`)}
+                    onChange={(e) => handleStudentChange(index, 'email', e.target.value)}
+                    placeholder="@evl.com.br"
+                    className="block w-full p-2 border border-gray-300 rounded-md"
+                  />
+                  {errors.alunos?.[index]?.email && <p className="text-red-500 text-sm">{errors.alunos[index]?.email?.message}</p>}
+                </div>
 
-              <label htmlFor="email" className="block text-sm font-medium text-[#383691]">Email</label>
-              <input
-                {...register(`alunos.${index}.email`)}
-                onChange={(e) => handleStudentChange(index, 'email', e.target.value)}
-                placeholder="@evl.com.br"
-                className="block w-full p-2 border border-gray-300 rounded-md"
-              />
-              {errors.alunos?.[index]?.email && <p className="text-red-500 text-sm">{errors.alunos[index]?.email?.message}</p>}
+              </div>
+
+
 
               <div className='flex flex-col gap-4 sm:flex-row justify-start sm:items-center'>
                 <div className="">
                   <label className="block text-sm font-medium mb-1 text-[#383691]">
                     Data de Nascimento
                   </label>
-                  <input
-                    type="date"
-                    {...register(`alunos.${index}.dataNascimento`, {
-                      valueAsDate: true // Converte automaticamente para Date
-                    })}
-                    className="border rounded p-2 w-full"
+                  <Controller
+                    name={`alunos.${index}.dataNascimento`}
+                    control={control}
+                    render={({ field }) => {
+                      // Converter o valor para string de data segura
+                      const dateValue = field.value instanceof Date
+                        ? field.value.toISOString().split('T')[0]
+                        : '';
+
+                      return (
+                        <input
+                          type="date"
+                          value={dateValue}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const dateValue = value ? new Date(value) : null;
+
+                            // Atualiza o formulário e os searchParams
+                            field.onChange(dateValue);
+                            handleStudentChange(index, 'dataNascimento', dateValue);
+                          }}
+                          className="border rounded p-2 w-full"
+                          max={new Date().toISOString().split('T')[0]} // Impede datas futuras
+                        />
+                      );
+                    }}
                   />
                   {errors.alunos?.[index]?.dataNascimento && (
-                    <p className="text-red-500 text-sm ">
+                    <p className="text-red-500 text-sm">
                       {errors.alunos[index]?.dataNascimento?.message}
                     </p>
                   )}
@@ -332,8 +369,8 @@ export const TeamRegister = () => {
                         <option key={size} value={size}>{size}</option>
                       ))}
                     </select>
+                    {errors.alunos?.[index]?.tamanhoCamisa && <p className="text-red-500 text-sm">{errors.alunos[index]?.tamanhoCamisa?.message}</p>}
                   </div>
-                  {errors.alunos?.[index]?.tamanhoCamisa && <p className="text-red-500 text-sm">{errors.alunos[index]?.tamanhoCamisa?.message}</p>}
 
                   <div>
                     <label htmlFor="turma" className="block text-nowrap text-sm font-medium text-[#383691] mb-1">Turma/Série</label>
@@ -346,8 +383,8 @@ export const TeamRegister = () => {
                         <option key={size} value={size}>{size}</option>
                       ))}
                     </select>
+                    {errors.alunos?.[index]?.turma && <p className="text-red-500 text-sm">{errors.alunos[index]?.turma?.message}</p>}
                   </div>
-                  {errors.alunos?.[index]?.turma && <p className="text-red-500 text-sm">{errors.alunos[index]?.turma?.message}</p>}
                 </div>
 
 
@@ -411,8 +448,8 @@ export const TeamRegister = () => {
                 turma: '',
                 isLider: false,
                 isViceLider: false,
-                dataNascimento: new Date(),
-                tamanhoCamisa: Student.ShirtSize.M,
+                dataNascimento: undefined as unknown as Date,
+                tamanhoCamisa: '' as Student.ShirtSize,
               }
               append(newStudent)
               const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')
@@ -431,21 +468,26 @@ export const TeamRegister = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             <div>
               <Controller
-                name="instituicaoImpactoSocial"
+                name="instituicoes"
                 control={control}
                 render={({ field }) => (
                   <InstitutionsSelect
                     className="border rounded-md p-2 w-full"
-                    value={field.value}
+                    value={field.value.map((institution: { id: number }) => institution.id) || []}
                     onChange={(e) => {
-                      field.onChange(e.target.value);
-                      handleInputChange('instituicaoImpactoSocial', e.target.value);
+                      const institutionSelected = e.target.value.map((id: string) => ({ id: Number(id) })); // Converte para número
+                      if (institutionSelected.length > 1) {
+                        enqueueSnackbar("Você pode selecionar no máximo 1 instituição.", { variant: 'warning' });
+                        return;
+                      }
+                      field.onChange(institutionSelected);
+                      handleArrayChange('instituicoes', institutionSelected);
                     }}
                   />
                 )}
               />
-              {errors.instituicaoImpactoSocial && (
-                <p className="text-red-500 text-sm">{errors.instituicaoImpactoSocial.message}</p>
+              {errors.instituicoes && (
+                <p className="text-red-500 text-sm">{errors.instituicoes.message}</p>
               )}
             </div>
 
@@ -456,10 +498,15 @@ export const TeamRegister = () => {
                 render={({ field }) => (
                   <ActivityTypesSelect
                     className="border rounded-md p-2 w-full"
-                    value={field.value}
+                    value={field.value.map((activity: { id: number }) => activity.id) || []}
                     onChange={(e) => {
-                      field.onChange(e.target.value);
-                      handleInputChange('tipoAtividades', e.target.value as ActivityTypeValue);
+                      const activitySelected = e.target.value.map((id: string) => ({ id: Number(id) })); // Converte para número
+                      if (activitySelected.length > 3) {
+                        enqueueSnackbar("Você pode selecionar no máximo 3 tipos de atividade.", { variant: 'warning' });
+                        return;
+                      }
+                      field.onChange(activitySelected);
+                      handleArrayChange('tipoAtividades', activitySelected);
                     }}
                   />
                 )}

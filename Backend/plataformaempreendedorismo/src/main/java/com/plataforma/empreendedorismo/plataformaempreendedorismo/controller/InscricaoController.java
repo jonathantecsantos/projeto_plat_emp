@@ -1,6 +1,7 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.controller;
 
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.InscricaoRecord;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.CaptchaValidatorService;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.service.InscricaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import util.exceptions.CpfDuplicadoException;
@@ -22,6 +24,8 @@ import util.exceptions.LimiteProfessorEquipeException;
 @RequestMapping("inscricoes")
 @Tag(name="Inscricao")
 public class InscricaoController {
+    @Autowired
+    private CaptchaValidatorService captchaValidatorService;
 
     @Autowired
     private InscricaoService inscricaoService;
@@ -34,8 +38,14 @@ public class InscricaoController {
     })
     @SecurityRequirement(name = "bearerToken")
     @PostMapping
-    public ResponseEntity<String> realizarInscricao(@RequestBody InscricaoRecord inscricaoRecord) {
+    public ResponseEntity<String> realizarInscricao(@RequestBody InscricaoRecord inscricaoRecord,
+     @RequestHeader("X-Captcha-Token") String recaptchaToken) {
         try {
+            boolean isCaptchaValid = captchaValidatorService.validateCaptcha(recaptchaToken);
+            if (!isCaptchaValid) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Captcha inválido!");
+            }
+            
             inscricaoService.processarInscricao(inscricaoRecord);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Inscrição realizada com sucesso!");

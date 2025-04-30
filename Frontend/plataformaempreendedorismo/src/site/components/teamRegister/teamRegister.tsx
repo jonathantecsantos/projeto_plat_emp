@@ -12,7 +12,7 @@ import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { z } from "zod"
-import { useCreateTeamMutation } from "../../../api/studentApi"
+import { useCreateTeamMutation, useGetEventValidateByIdQuery } from "../../../api/studentApi"
 import { RoutesNames } from '../../../globals'
 import { Student } from "../../../model/student"
 import { TeamRegisterPayload } from '../../../model/team'
@@ -21,6 +21,8 @@ import { ActivityTypesSelect } from './activityTypesSelect'
 import { InstitutionsSelect } from './institutionSelect'
 import { OdsSelect } from './odsSelect'
 import { TeacherSelect } from './teacherSelect'
+import { EventsTypes } from '../../../model/config'
+import { CircularProgress } from '@mui/material'
 
 const createTeamSchema = z.object({
   nomeTime: z.string().min(1, "Nome do time é obrigatório"),
@@ -97,6 +99,9 @@ export const TeamRegister = () => {
   const [success, setSuccess] = useState(isSuccess)
   const { executeRecaptcha } = useGoogleReCaptcha()
 
+  const id = EventsTypes.INSCRICAO
+  const { data: isValid, isLoading: registerLoading, } = useGetEventValidateByIdQuery(id)
+
   const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeamForm>({
     resolver: zodResolver(createTeamSchema),
     defaultValues: {
@@ -116,6 +121,20 @@ export const TeamRegister = () => {
     control,
     name: 'alunos',
   })
+
+  if (registerLoading) return <div className="flex justify-center items-center h-dvh"><CircularProgress /></div>
+
+  if (!isValid) {
+    return <div className="flex flex-col justify-center items-center h-dvh">
+      <h1 className="text-2xl font-bold text-red-500">Evento não disponível</h1>
+      <span
+        className="bg-gray-500 rounded-lg px-3 text-white hover:cursor-pointer text-lg mt-12"
+        onClick={() => navigate(RoutesNames.login)}
+      >
+        Sair
+      </span>
+    </div>
+  }
 
   const handleInputChange = (key: keyof CreateTeamForm, value: string) => {
     const params = new URLSearchParams(searchParams)

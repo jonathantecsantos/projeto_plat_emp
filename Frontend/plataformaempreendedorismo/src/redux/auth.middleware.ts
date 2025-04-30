@@ -1,7 +1,14 @@
 import { BaseQueryFn, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { store } from './store'
 
-const PUBLIC_ENDPOINTS = ['/ods', '/professores', '/instituicoes', '/atividades', '/inscricoes']
+const PUBLIC_ENDPOINTS = [
+  /^\/ods/,
+  /^\/professores/,
+  /^\/instituicoes/,
+  /^\/atividades/,
+  /^\/inscricoes/,
+  /^\/eventos\/\d+\/validade$/
+]
 
 export const authFetchBaseQuery = (
   baseUrl: string,
@@ -9,7 +16,9 @@ export const authFetchBaseQuery = (
 ): BaseQueryFn<string | FetchArgs> => {
   return async (args, api, extraOptions) => {
     const url = typeof args === 'string' ? args : args.url
-    const isPublic = PUBLIC_ENDPOINTS.some(endpoint => url.includes(endpoint))
+    const isPublic = PUBLIC_ENDPOINTS.some(endpoint => {
+      return endpoint instanceof RegExp ? endpoint.test(url) : url.includes(endpoint)
+    })
 
     const baseQuery = fetchBaseQuery({
       baseUrl,

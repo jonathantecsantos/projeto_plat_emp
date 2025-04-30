@@ -3,15 +3,20 @@ import { jwtDecode } from "jwt-decode"
 import { useSnackbar } from "notistack"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useGetEventValidateByIdQuery } from "../../api/studentApi"
 import { RoutesNames } from "../../globals"
+import { EventsTypes } from "../../model/config"
 import { UserApiService } from "../../services/login"
 import { Login, LoginTokenJWT, Roles } from "../../utils/types"
+import { CircularProgress } from "@mui/material"
+
 
 export const LoginComponent = () => {
   const [user, setUser] = useState<Login>()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-
+  const id = EventsTypes.INSCRICAO
+  const { data: isValid, isLoading: registerLoading, } = useGetEventValidateByIdQuery(id)
   const { isLoading, login } = UserApiService()
 
   const handleLogin = async () => {
@@ -63,6 +68,7 @@ export const LoginComponent = () => {
         <div className="p-10 rounded-md h-fit lg:mt-40 mt-20 sm:w-96 shadow-xl w-full lg:m-28 lg:ml-12 border-t-2">
           <h1 className="font-bold text-xl w-full mb-20 cursor-pointer"
             onClick={() => navigate(RoutesNames.home)}>Plataforma Empreendedorismo</h1>
+
           <h2 className="font-medium mb-10 w-fit">Acesse sua conta</h2>
           <div className="flex flex-col gap-8 text-start">
             <div className="flex flex-col text-sm text-[#888]">
@@ -83,6 +89,16 @@ export const LoginComponent = () => {
               <span>Entrar</span>
             </LoadingButton>
           </div>
+          {registerLoading ? <div className='text-center'><CircularProgress /></div> :
+            isValid && isValid ? <div className="flex flex-col gap-2 mt-8 text-start">
+              <div className="text-sm text-[#888]">Inscrições abertas!</div>
+              <div className="text-sm text-[#888]">Acesse o formulário e faça sua inscrição!</div>
+              <LoadingButton
+                className="border-l-indigo-950 normal-case max-w-max shadow-md hover:scale-105"
+                variant="text" onClick={() => navigate(RoutesNames.register)} >
+                <span>Inscrição DLEI</span>
+              </LoadingButton>
+            </div> : null}
         </div>
       </form>
     </div>

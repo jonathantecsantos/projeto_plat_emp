@@ -76,7 +76,7 @@ export const studentsApiSlice = createApi({
     }),
 
     getEventById: build.query<EventConfig, number>({
-      query: (id) => `eventos/${id}`,
+      query: (id) => `/eventos/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Events', id }],
     }),
 
@@ -92,13 +92,13 @@ export const studentsApiSlice = createApi({
     }),
 
     getEventValidateById: build.query<boolean, number>({
-      query: (id) => `eventos/${id}/validade`,
+      query: (id) => `/eventos/${id}/validade`,
       providesTags: (_result, _error, id) => [{ type: 'Events', id }],
     }),
 
     updateEvent: build.mutation<void, { id: number; data: EventConfig }>({
       query: ({ id, data }) => ({
-        url: `eventos/${id}`,
+        url: `/eventos/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -614,7 +614,8 @@ export const {
   useGetEventByIdQuery,
   useGetEventsQuery,
   useUpdateEventMutation,
-  useLazyGetEventValidateByIdQuery,
+  useLazyGetEventValidateByIdQuery, //wait for the event to be validated
+  useGetEventValidateByIdQuery,
 
   //Students
   useGetStudentQuery,

@@ -19,7 +19,7 @@ import { EvaluationTypes } from '../utils/types'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
-  tagTypes: ['Student', 'Team', 'Teacher', 'Banner', 
+  tagTypes: ['Student', 'Team', 'Teacher', 'Banner',
     'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator', 'Coordinator', 'Events',
     'Register', 'ActivityType', 'Institution'
   ],
@@ -252,10 +252,14 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    createTeam: build.mutation<{ message: string }, TeamRegisterPayload>({
+    createTeam: build.mutation<{ message: string }, TeamRegisterPayload & { token: string }>({
       query: (body) => ({
         url: '/inscricoes',
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Captcha-Token': body.token,
+        },
         body,
       }),
       transformResponse: (response: { nomeTime: string }) => ({

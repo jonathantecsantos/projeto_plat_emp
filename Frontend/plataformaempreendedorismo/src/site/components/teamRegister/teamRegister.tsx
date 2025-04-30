@@ -8,16 +8,15 @@ import { LoadingButton } from '@mui/lab'
 import { ValidateUtils } from 'essencials'
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
-import { useDispatch } from "react-redux"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { z } from "zod"
 import { useCreateTeamMutation } from "../../../api/studentApi"
 import { RoutesNames } from '../../../globals'
 import { Student } from "../../../model/student"
 import { TeamRegisterPayload } from '../../../model/team'
-import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { ActivityTypeValue, ClassesSelectTypes, formatCPF } from "../../../utils/types"
+import { ClassesSelectTypes, formatCPF } from "../../../utils/types"
 import { ActivityTypesSelect } from './activityTypesSelect'
 import { InstitutionsSelect } from './institutionSelect'
 import { OdsSelect } from './odsSelect'
@@ -62,38 +61,27 @@ const createTeamSchema = z.object({
         errorMap: () => ({ message: "Tamanho inválido" })
       }),
     })
-  ).min(5, "Mínimo de 5 alunos").max(8, "Máximo de 8 alunos").refine(
-    (alunos) => alunos.filter((a) => a.isLider).length <= 1,
-    "Só pode haver um líder no time"
-  )
-    .refine(
-      (alunos) => alunos.filter((a) => a.isViceLider).length <= 1,
-      "Só pode haver um vice-líder no time"
-    )
-    .refine(
-      (alunos) => !alunos.some((a) => a.isLider && a.isViceLider),
-      "Um aluno não pode ser líder e vice-líder ao mesmo tempo"
-    ).refine(
-      (alunos) => alunos.some((a) => a.isLider || a.isViceLider),
-      "O time deve ter pelo menos um líder ou vice-líder"
-    ),
-  idProfessor: z.number().min(1, "Selecione pelo menos 1 rofessor"),
+  ).min(5, "Mínimo de 5 alunos").max(8, "Máximo de 8 alunos")
+    .refine((alunos) => alunos.filter((a) => a.isLider).length <= 1, "Só pode haver um líder no time")
+    .refine((alunos) => alunos.filter((a) => a.isViceLider).length <= 1, "Só pode haver um vice-líder no time")
+    .refine((alunos) => !alunos.some((a) => a.isLider && a.isViceLider), "Um aluno não pode ser líder e vice-líder ao mesmo tempo")
+    .refine((alunos) => alunos.some((a) => a.isLider || a.isViceLider), "O time deve ter pelo menos um líder ou vice-líder"),
+  idProfessor: z.number().min(1, "Selecione pelo menos 1 professor"),
   listIdOds: z.array(
     z.object({
       id: z.number(),
     })
   ).min(1, "Selecione pelo menos 1 ODS").max(3, "Selecione no máximo 3 ODS"),
-
   tipoAtividades: z.array(
     z.object({
       id: z.number(),
-      descricao: z.string().optional(), // Adiciona o campo descricao como opcional
+      descricao: z.string().optional(),
     })
   ).min(1, "Selecione pelo menos 1 tipo de atividade"),
   instituicoes: z.array(
     z.object({
       id: z.number(),
-      descricao: z.string().optional(), // Adiciona o campo descricao como opcional
+      descricao: z.string().optional(),
     })
   ).min(1, "Instituição é obrigatória"),
 })
@@ -101,14 +89,13 @@ const createTeamSchema = z.object({
 type CreateTeamForm = z.infer<typeof createTeamSchema>
 
 
-
 export const TeamRegister = () => {
   const [createTeam, { isSuccess, isLoading }] = useCreateTeamMutation()
   const [searchParams, setSearchParams] = useSearchParams()
-  const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(isSuccess)
+  const { executeRecaptcha } = useGoogleReCaptcha()
 
   const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTeamForm>({
     resolver: zodResolver(createTeamSchema),
@@ -130,7 +117,7 @@ export const TeamRegister = () => {
     name: 'alunos',
   })
 
-  const handleInputChange = (key: keyof CreateTeamForm, value: string | ActivityTypeValue) => {
+  const handleInputChange = (key: keyof CreateTeamForm, value: string) => {
     const params = new URLSearchParams(searchParams)
     if (Array.isArray(value)) {
       params.set(key, JSON.stringify(value))
@@ -226,8 +213,12 @@ export const TeamRegister = () => {
   }
 
   const onSubmit = async (data: CreateTeamForm) => {
-    dispatch(toggleLoading())
+    if (!executeRecaptcha) {
+      enqueueSnackbar("Erro ao executar o reCAPTCHA", { variant: 'error' })
+      return
+    }
     try {
+      const token = await executeRecaptcha('SCORE')
       const formatedStudents = data.alunos.map((student) => ({
         ...student,
         cpf: formatCPF(student.cpf),
@@ -243,16 +234,12 @@ export const TeamRegister = () => {
         tipoAtividades: data.tipoAtividades,
       }
 
-      console.log(payload)
-
-      await createTeam(payload).unwrap()
+      await createTeam({ ...payload, token }).unwrap()
       enqueueSnackbar(`Time: ${data.nomeTime} criado com sucesso!`, { variant: 'success' })
       setSuccess(true)
     } catch (error: any) {
       console.error(error)
       enqueueSnackbar(`${error?.data}`, { variant: 'error' })
-    } finally {
-      dispatch(toggleLoading())
     }
   }
 
@@ -263,7 +250,6 @@ export const TeamRegister = () => {
       console.error("Erros de validação:", errors)
     }
   }, [errors])
-  console.log("Formulário de inscrição DLEI")
 
   return (
     <div className="flex flex-col max-w-4xl mx-auto my-8 sm:p-4 p-2 sm:border-t-2 sm:rounded sm:shadow-md ">
@@ -292,7 +278,7 @@ export const TeamRegister = () => {
               />
               {errors.alunos?.[index]?.nome && <p className="text-red-500 text-sm">{errors.alunos[index]?.nome?.message}</p>}
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-2 w-full'>
-                <div className=''>
+                <div>
                   <label htmlFor="cpf" className="block text-sm font-medium text-[#383691]">CPF</label>
                   <input
                     {...register(`alunos.${index}.cpf`)}
@@ -313,13 +299,10 @@ export const TeamRegister = () => {
                   />
                   {errors.alunos?.[index]?.email && <p className="text-red-500 text-sm">{errors.alunos[index]?.email?.message}</p>}
                 </div>
-
               </div>
 
-
-
               <div className='flex flex-col gap-4 sm:flex-row justify-start sm:items-center'>
-                <div className="">
+                <div>
                   <label className="block text-sm font-medium mb-1 text-[#383691]">
                     Data de Nascimento
                   </label>
@@ -327,11 +310,9 @@ export const TeamRegister = () => {
                     name={`alunos.${index}.dataNascimento`}
                     control={control}
                     render={({ field }) => {
-                      // Converter o valor para string de data segura
                       const dateValue = field.value instanceof Date
                         ? field.value.toISOString().split('T')[0]
                         : '';
-
                       return (
                         <input
                           type="date"
@@ -341,13 +322,13 @@ export const TeamRegister = () => {
                             const dateValue = value ? new Date(value) : null;
 
                             // Atualiza o formulário e os searchParams
-                            field.onChange(dateValue);
+                            field.onChange(dateValue)
                             handleStudentChange(index, 'dataNascimento', dateValue);
                           }}
                           className="border rounded p-2 w-full"
                           max={new Date().toISOString().split('T')[0]} // Impede datas futuras
                         />
-                      );
+                      )
                     }}
                   />
                   {errors.alunos?.[index]?.dataNascimento && (
@@ -386,8 +367,6 @@ export const TeamRegister = () => {
                     {errors.alunos?.[index]?.turma && <p className="text-red-500 text-sm">{errors.alunos[index]?.turma?.message}</p>}
                   </div>
                 </div>
-
-
               </div>
 
               <div className="flex gap-4 items-center">
@@ -420,7 +399,6 @@ export const TeamRegister = () => {
                     }
                   />
                   Vice-Líder
-
                 </label>
               </div>
 
@@ -564,7 +542,6 @@ export const TeamRegister = () => {
           </div>
         </div>
 
-
         {showMinStudentsError && (
           <p className="text-red-500 text-sm text-end">
             Mínimo de 5 alunos necessários (atualmente: {studentsFields.length})
@@ -594,6 +571,7 @@ export const TeamRegister = () => {
             {success ? 'Sucesso' : 'Cadastrar Time'}
           </LoadingButton>
         </div>
+
         {success && <button
           type="button"
           onClick={handleReset}
@@ -601,8 +579,6 @@ export const TeamRegister = () => {
         >
           <GroupAddIcon /> Novo Time
         </button>}
-        <div>
-        </div>
       </form>
     </div>
   )

@@ -250,7 +250,7 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
           className="px-2 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-600 text-sm">
           <ArrowBackIcon />
         </button>
-        <h2 className="text-2xl font-bold text-center">Cadastrar Banner - Time: {teamName}</h2>
+        <h2 className="text-2xl font-bold text-center">Cadastrar Canvas - Time: {teamName}</h2>
 
       </div>
       {/* Upload de Arquivo */}

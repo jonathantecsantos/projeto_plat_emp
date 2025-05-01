@@ -1,0 +1,1 @@
+ALTER TABLE professor add tamanho_camisa VARCHAR(3);

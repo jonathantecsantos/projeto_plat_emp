@@ -68,6 +68,13 @@ public class ProfessorService {
         if(professorEditarRecord.email() != null){
             professor.setEmail(professorEditarRecord.email());
         }
+        if(professorEditarRecord.dataNascimento() != null){
+            professor.setDataNascimento(professorEditarRecord.dataNascimento());
+        }
+
+        if(professorEditarRecord.tamanhoCamisa() != null){
+            professor.setTamanhoCamisa(professorEditarRecord.tamanhoCamisa());
+        }
         if(professorEditarRecord.idEquipe() != null){
             for(Long id : professorEditarRecord.idEquipe()){
                 equipeRepository.findById(id).ifPresent(professor.getEquipes()::add);

@@ -1,0 +1,1 @@
+ALTER TABLE professor add data_nascimento DATETIME;

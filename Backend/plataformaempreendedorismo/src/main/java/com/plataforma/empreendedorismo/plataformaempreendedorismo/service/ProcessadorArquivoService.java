@@ -26,30 +26,25 @@ public class ProcessadorArquivoService {
 
     @Autowired
     private ImportacaoService importacaoService;
-
     @Autowired
     private AlunoService alunoService;
-
     @Autowired
     private OdsRepository odsRepository;
-
     @Autowired
     private EquipeRepository equipeRepository;
-
     @Autowired
     private FormatoAvaliacaoRepository formatoAvaliacaoRepository;
-
     @Autowired
     private ProfessorService professorService;
-
     @Autowired
     private CoordenadorService coordenadorService;
-
     @Autowired
     private AvaliadorService avaliadorService;
-
     @Autowired
     private AdministradorRepository administradorRepository;
+    @Autowired
+    private UsuarioService usuarioService;
+
     public void processarPlanilha(Workbook workbook, String tipo, Long idUsuario) throws Exception {
 
         String nomeProcesso = "";
@@ -141,6 +136,10 @@ public class ProcessadorArquivoService {
 
         if(row.getCell(2) != null) {
             email = String.valueOf(row.getCell(2));
+            if(usuarioService.buscarUsuarioPorLogin(email) != null){
+                log.warn("Email duplicado encontrado na planilha: " + email + ". Pulando linha.");
+                return;
+            }
         }
 
         CoordenadorCadastroRecord coordenadorCadastroRecord = new CoordenadorCadastroRecord(nome,cpf,email);
@@ -153,6 +152,9 @@ public class ProcessadorArquivoService {
         String nome = "";
         String cpf = "";
         String email = "";
+        Date dataNascimento = null;
+        String tamanhoCamisa = "";
+
         Long idEquipe = 0L;
         List<Long> equipeList = new ArrayList<>();
 
@@ -166,13 +168,31 @@ public class ProcessadorArquivoService {
 
         if(row.getCell(2) != null) {
             email = String.valueOf(row.getCell(2));
+            if(usuarioService.buscarUsuarioPorLogin(email) != null){
+                log.warn("Email duplicado encontrado na planilha: " + email + ". Pulando linha.");
+                return;
+            }
         }
 
         if(row.getCell(3) != null) {
-            String equipe = String.valueOf(row.getCell(3));
+            if (row.getCell(3).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(row.getCell(3))) {
+                dataNascimento = row.getCell(3).getDateCellValue();
+            } else if (row.getCell(3).getCellType() == CellType.STRING) {
+                String valor = row.getCell(3).getStringCellValue().trim();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                formatter.setLenient(false);
+                dataNascimento = formatter.parse(valor);
+            }
+        }
+
+        if(row.getCell(4) != null) {
+            tamanhoCamisa = String.valueOf(row.getCell(4));
+        }
+
+        if(row.getCell(5) != null) {
+            String equipe = String.valueOf(row.getCell(5));
 
             Equipe equipeEncontrada = equipeRepository.findByNome(equipe.toUpperCase());
-
 
             if(equipeEncontrada != null){
                idEquipe = equipeEncontrada.getId();
@@ -180,7 +200,7 @@ public class ProcessadorArquivoService {
             }
         }
 
-        ProfessorCadastroRecord professorCadastroRecord = new ProfessorCadastroRecord(nome, cpf,email,equipeList);
+        ProfessorCadastroRecord professorCadastroRecord = new ProfessorCadastroRecord(nome,cpf,email,equipeList,dataNascimento,tamanhoCamisa);
         professorService.persistirProfessorAndCriarAcesso(professorCadastroRecord);
 
     }
@@ -205,6 +225,10 @@ public class ProcessadorArquivoService {
 
         if(row.getCell(2) != null){
             email = String.valueOf(row.getCell(2));
+            if(usuarioService.buscarUsuarioPorLogin(email) != null){
+                log.warn("Email duplicado encontrado na planilha: " + email + ". Pulando linha.");
+                return;
+            }
         }
 
         if(row.getCell(3) != null){
@@ -253,11 +277,14 @@ public class ProcessadorArquivoService {
             String valueCpf = String.valueOf(row.getCell(0));
             if(validarCPF(valueCpf)){
                 cpf = valueCpf;
+                if(alunoService.validarCpfDuplicado(cpf)){
+                    log.warn("CPF duplicado encontrado na planilha: " + cpf + ". Pulando linha.");
+                    return;
+                }
             }else{
-                System.out.printf("Erro CPF");
+                log.warn("CPF inválido encontrado na planilha: " + valueCpf + ". Pulando linha.");
+                return;
             }
-        } else {
-            System.out.println("Cpf vazio");
         }
 
         if(row.getCell(1) != null){
@@ -266,6 +293,10 @@ public class ProcessadorArquivoService {
 
         if(row.getCell(2) != null){
             email = String.valueOf(row.getCell(2));
+            if(usuarioService.buscarUsuarioPorLogin(email) != null){
+                log.warn("Email duplicado encontrado na planilha: " + email + ". Pulando linha.");
+                return;
+            }
         }
 
         if(row.getCell(3) != null){
@@ -310,19 +341,24 @@ public class ProcessadorArquivoService {
         }
 
         if(row.getCell(10) != null){
-            String data = String.valueOf(row.getCell(10));
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            dataNascimento = formatter.parse(data);
+            if (row.getCell(10).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(row.getCell(10))) {
+                dataNascimento = row.getCell(10).getDateCellValue();
+            } else if (row.getCell(10).getCellType() == CellType.STRING) {
+                String valor = row.getCell(10).getStringCellValue().trim();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                formatter.setLenient(false);
+                dataNascimento = formatter.parse(valor);
+            }
         }
 
         if(row.getCell(11) != null){
             tamanhoCamisa = String.valueOf(row.getCell(11));
         }
 
-        AlunoCadastroRecord alunoCadastroRecord = new AlunoCadastroRecord(cpf,email,nome,turma,
-                isLider,isViceLider,equipe.getId(), dataNascimento,tamanhoCamisa);
+        AlunoCadastroRecord alunoCadastroRecord = new AlunoCadastroRecord(cpf, email, nome, turma,
+                isLider, isViceLider, equipe.getId(), dataNascimento, tamanhoCamisa);
 
-        alunoService.persistirAlunoAndCriarAcesso(alunoCadastroRecord,equipe);
+        alunoService.persistirAlunoAndCriarAcesso(alunoCadastroRecord, equipe);
     }
 
     private void processarOds(Row row, List<Ods> odsList) throws Exception {
@@ -394,7 +430,7 @@ public class ProcessadorArquivoService {
                 break;
             case PROFESSOR:
                 expectedHeader = new String[]{
-                        "NOME_PROFESSOR", "CPF","EMAIL", "EQUIPE"
+                        "NOME_PROFESSOR", "CPF","EMAIL", "DATA_NASCIMENTO", "TAMANHO_CAMISA", "EQUIPE"
                 };
                 break;
             case COORDENADOR:

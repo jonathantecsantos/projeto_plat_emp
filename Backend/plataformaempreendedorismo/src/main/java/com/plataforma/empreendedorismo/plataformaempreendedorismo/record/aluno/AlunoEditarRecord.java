@@ -2,6 +2,8 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Date;
+
 public record AlunoEditarRecord(
         @NotNull
         Long id,
@@ -11,6 +13,8 @@ public record AlunoEditarRecord(
         String turma,
         Boolean isLider,
         Boolean isViceLider,
-        Long idEquipe
+        Long idEquipe,
+        Date dataNascimento,
+        String tamanhoCamisa
 ) {
 }

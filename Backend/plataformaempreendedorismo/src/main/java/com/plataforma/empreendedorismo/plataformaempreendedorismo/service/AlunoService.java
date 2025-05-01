@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.enuns.TipoOperacaoEnum;
 import util.exceptions.ValidaAlunoException;
-import util.exceptions.CpfDuplicadoException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -133,6 +132,14 @@ public class AlunoService {
             aluno.setIsViceLider(alunoEditarRecord.isViceLider());
         }
 
+        if(alunoEditarRecord.dataNascimento() != null){
+            aluno.setDataNascimento(alunoEditarRecord.dataNascimento());
+        }
+
+        if(alunoEditarRecord.tamanhoCamisa() != null){
+            aluno.setTamanhoCamisa(alunoEditarRecord.tamanhoCamisa());
+        }
+
         if (alunoEditarRecord.idEquipe() != null) {
             Equipe equipe;
             Optional<Equipe> equipeOptional = equipeRepository.findById(alunoEditarRecord.idEquipe());
@@ -155,10 +162,8 @@ public class AlunoService {
         return null;
     }
 
-    public void validarCpfDuplicado(String cpf) throws CpfDuplicadoException {
+    public boolean validarCpfDuplicado(String cpf){
         Aluno aluno = alunoRepository.findByCpf(cpf);
-        if (aluno != null) {
-            throw new CpfDuplicadoException("Erro. O CPF: " + cpf + " já se encontra cadastrado na base de dados!");
-        }
+        return aluno != null;
     }
 }

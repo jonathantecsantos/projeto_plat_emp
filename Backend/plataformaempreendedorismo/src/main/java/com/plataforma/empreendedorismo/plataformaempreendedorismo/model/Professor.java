@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name="professor")
@@ -43,10 +44,17 @@ public class Professor {
     @OneToOne(mappedBy = "professor")
     private Usuario usuario;
 
+    private Date dataNascimento;
+
+    private String tamanhoCamisa;
+
+
     public Professor(ProfessorCadastroRecord professorCadastroRecord, List<Equipe> equipes) {
         this.nome = professorCadastroRecord.nome().toUpperCase();
         this.cpf = professorCadastroRecord.cpf();
         this.email = professorCadastroRecord.email();
+        this.dataNascimento = professorCadastroRecord.dataNascimento();
+        this.tamanhoCamisa = professorCadastroRecord.tamanhoCamisa();
         this.equipes = equipes;
     }
 }

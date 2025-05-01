@@ -42,7 +42,7 @@ public class InscricaoService {
     public void processarInscricao(InscricaoRecord inscricaoRecord) throws CpfDuplicadoException, EmailDuplicadoException, LimiteProfessorEquipeException {
 
         for(AlunoCadastroRecord alunoDto : inscricaoRecord.alunos()){
-            validaEmailDuiplicado(alunoDto);
+            validaCpfOuEmailDuplicado(alunoDto);
         }
 
         professorService.validaLimiteDeProfessorEmEquipes(inscricaoRecord.idProfessor());
@@ -93,8 +93,10 @@ public class InscricaoService {
         }
     }
 
-    private void validaEmailDuiplicado(AlunoCadastroRecord alunoDto) throws CpfDuplicadoException, EmailDuplicadoException {
-        alunoService.validarCpfDuplicado(alunoDto.cpf());
+    private void validaCpfOuEmailDuplicado(AlunoCadastroRecord alunoDto) throws CpfDuplicadoException, EmailDuplicadoException {
+        if(alunoService.validarCpfDuplicado(alunoDto.cpf())){
+            throw new CpfDuplicadoException("Erro. O CPF: " + alunoDto.cpf() + " já se encontra cadastrado na base de dados!");
+        }
         Usuario usuario = usuarioService.buscarUsuarioPorLogin(alunoDto.email());
         if(usuario != null){
             throw new EmailDuplicadoException("Erro. E-mail " + alunoDto.email() + " já se encontra cadastrado na base de dados!");

@@ -4,10 +4,10 @@ import { persistStore } from "redux-persist"
 import { studentsApiSlice } from "../api/studentApi"
 import { userApiSlice } from "../api/userApi.slice"
 import { persistedAuthReducer } from './persistors/auth.slice'
+import { persistedMenuReducer } from "./persistors/menu.slice"
+import { persistedTableReducer } from "./persistors/table.slice"
 import { persistedUserLoginReducer } from "./persistors/userInfo.slice"
 import loadingBarReducer from './reducers/loadingBar.slice'
-import { persistedMenuReducer } from "./persistors/menu.slice"
-import tableReducer from "./reducers/table.slice"
 
 
 export const store = configureStore({
@@ -16,7 +16,7 @@ export const store = configureStore({
     loadingBarState: loadingBarReducer,
     userInfo: persistedUserLoginReducer,
     menuState: persistedMenuReducer,
-    tableState: tableReducer,
+    tableState: persistedTableReducer,
     [studentsApiSlice.reducerPath]: studentsApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
   },

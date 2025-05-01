@@ -6,7 +6,7 @@ export const EventsConfig = () => {
   const [events] = useState<EventConfig[]>([
     { idEvento: EventsTypes.INSCRICAO, dataInicio: "", dataFim: "" },
     { idEvento: EventsTypes.PROTOTIPO, dataInicio: "", dataFim: "" },
-    { idEvento: EventsTypes.BANNER, dataInicio: "", dataFim: "" },
+    { idEvento: EventsTypes.CANVAS, dataInicio: "", dataFim: "" },
     { idEvento: EventsTypes.PITCH, dataInicio: "", dataFim: "" },
   ])
 

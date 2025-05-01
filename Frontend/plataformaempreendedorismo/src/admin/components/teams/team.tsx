@@ -8,20 +8,20 @@ import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { EventsTypes } from '../../../model/config'
 import { Ods } from '../../../model/ods'
 import { TeamsResponse, UpdateTeam } from "../../../model/team"
+import { RootState } from '../../../redux/store'
+import { Roles } from '../../../utils/types'
 import { FooterImage } from "../common/adminFooter"
 import { EditOds } from './editOds'
 import { EditTeamName } from './editTeamName'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../../redux/store'
-import { Roles } from '../../../utils/types'
 
 //Duvidas sobre regra de negocio:
 // - O que acontece se o professor não estiver na equipe?
@@ -266,7 +266,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
-                const response = await getEventById(EventsTypes.BANNER)
+                const response = await getEventById(EventsTypes.CANVAS)
                 if (response.data == false || !response.data) {
                   enqueueSnackbar('Evento fora da data de validade')
                   return
@@ -280,7 +280,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
-                const response = await getEventById(EventsTypes.BANNER)
+                const response = await getEventById(EventsTypes.CANVAS)
                 if (response.data == false || !response.data) {
                   enqueueSnackbar('Evento fora da data de validade')
                   return

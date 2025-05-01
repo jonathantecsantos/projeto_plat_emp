@@ -12,7 +12,6 @@ export const TeamMultipleSelect = ({ onChange, value, disable, className }: Team
   const { data: teams, isLoading } = useGetAllTeamsQuery()
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
-  //TODO change Select component to autoComplet
   //TODO winnicius fix edit teacher component
 
   return (

@@ -23,10 +23,11 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'
 import { Roles } from '../../../utils/types'
 
+//Duvidas sobre regra de negocio:
+// - O que acontece se o professor não estiver na equipe?
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
-  //TODO WINNICIUS: tratar quando nao houver professor nao tiver equipe exibir mensagem
   const [updateTeam, status] = useUpdateTeamMutation()
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
@@ -274,7 +275,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               }}>
               <WebIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
-                <span>Preencher banner</span>
+                <span>Preencher Canvas</span>
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
@@ -288,7 +289,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               }}>
               <PrintIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
-                <span>Imprimir banner</span>
+                <span>Imprimir canvas</span>
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"

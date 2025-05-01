@@ -11,5 +11,5 @@ const App = () => {
     </div>
   );
 };
-
+//TODO-WINNICIUS: add text-nowrap all tables and persistors table info
 export default App;

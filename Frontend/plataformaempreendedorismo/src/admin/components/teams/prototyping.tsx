@@ -195,7 +195,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     <form onSubmit={handleSubmit}
       className="text-center p-8 bg-gradient-to-b from-[#3B1E86] to-[#4319AF] text-white rounded-lg">
       <h1 className="font-bold text-2xl max-w-4xl mx-auto mb-6">
-        DLEI 2024 - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
+        DLEI - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
       </h1>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">

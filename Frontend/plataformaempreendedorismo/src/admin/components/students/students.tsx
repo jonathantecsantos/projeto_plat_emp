@@ -120,6 +120,16 @@ export const Students = () => {
     handleCloseDialog()
   }
 
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }).format(date);
+  };
+
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p className="text-center">Error loading students.</p>
@@ -149,7 +159,7 @@ export const Students = () => {
           onAdd={() => navigate(RoutesNames.student)} />
       </div>
       <div className="flex-1 overflow-auto">
-        <div className="overflow-x-auto lg:p-4 p-1">
+        <div className="overflow-x-auto lg:p-4 p-1 text-nowrap">
           <TableComponent
             colums={[
               // 'ID',
@@ -159,9 +169,9 @@ export const Students = () => {
               'Turma',
               'Líder',
               'Vice Líder',
-              // 'ID Equipe',
               'Equipe',
-              // 'ID Obs',
+              'Nascimento',
+              'Tam. Camisa',
               'Ação'
             ]}
 
@@ -171,12 +181,14 @@ export const Students = () => {
               <>
                 {/* <td className="px-4 py-2">{student.id}</td> */}
                 <td className="px-4">{student.cpf}</td>
-                <td className="px-4 capitalize text-nowrap">{student.nome.toLowerCase()}</td>
+                <td className="px-4 capitalize">{student.nome.toLowerCase()}</td>
                 <td className="px-4 text-nowrap">{student.email}</td>
                 <td className="px-4 uppercase">{student.turma}</td>
                 <td className="px-4">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
-                <td className="px-4">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
+                <td className="px-4">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : null}</td>
                 <td className="px-4 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
+                <td className="px-4">{student.dataNascimento && formatDate(student.dataNascimento.toString())}</td>
+                <td className="px-4 capitalize">{student.tamanhoCamisa}</td>
                 <td className="px-4">
                   <IconButton
                     className='hover:text-white no-row-click'

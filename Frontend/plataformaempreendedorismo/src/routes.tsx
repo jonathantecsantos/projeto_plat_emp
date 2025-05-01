@@ -36,17 +36,22 @@ import { TeachersPage } from './pages/teachers'
 import { TeamPage } from './pages/team'
 import { TeamNotesPage } from './pages/teamNotes'
 import { TeamPrototypingPage } from './pages/teamPrototyping'
+import { TeamRegisterPage } from './pages/teamRegister'
 import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { Roles } from './utils/types'
-import { TeamRegisterPage } from './pages/teamRegister'
 
 export const router = createBrowserRouter([
   {
     path: RoutesNames.home,
     element: <LoginPage />,
   },
+  // TODO Implementar a página de preview da ficha de inscrição
+  // {
+  //   path: RoutesNames.home,
+  //   element: <FichaInscricaoPreviewComponent id='1' />,
+  // },
   {
     path: RoutesNames.login,
     element: <LoginPage />,

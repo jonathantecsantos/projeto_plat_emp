@@ -1,3 +1,4 @@
+import { TeamConfig } from "./student"
 import { Team, TeamsResponse } from "./team"
 
 export interface Teacher {
@@ -5,6 +6,8 @@ export interface Teacher {
   nome: string
   cpf: string
   email: string
+  dataNascimento: Date
+  tamanhoCamisa: TeamConfig.ShirtSize
 }
 
 export interface TeacherIdResponse {

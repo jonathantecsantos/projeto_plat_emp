@@ -10,7 +10,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useDeleteStudentMutation, useGetAllStudentsQuery, usePasswordResetMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { StudentsResponse } from '../../../model/student'
-import { Roles } from '../../../utils/types'
+import { formatDate, Roles } from '../../../utils/types'
 import { AdminHeader } from '../common/adminHeader'
 import { TableComponent } from '../table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
@@ -120,15 +120,7 @@ export const Students = () => {
     handleCloseDialog()
   }
 
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
 
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    }).format(date);
-  };
 
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>

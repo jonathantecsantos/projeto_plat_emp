@@ -123,7 +123,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="w-full pt-2 border-l-2 border-[#10BBEF] flex items-start">
               <p className="text-[#10BBEF] pl-4 print:pl-2">Orientadores:</p>
               <div className="flex flex-wrap gap-2 print:gap-1">
-                {team?.professor?.map((professor, index) => (
+                {team?.professores?.map((professor, index) => (
                   <p key={index} className="ml-2">{professor?.nome},</p>
                 ))}
               </div>

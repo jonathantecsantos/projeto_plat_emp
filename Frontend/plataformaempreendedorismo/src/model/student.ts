@@ -2,7 +2,7 @@ import { Ods } from "./ods"
 import { Team, TeamsResponse } from "./team"
 
 
-export namespace Student {
+export namespace TeamConfig {
   export enum ShirtSize {
     PP = "PP",
     P = "P",
@@ -23,7 +23,7 @@ export interface Student {
   isLider: boolean
   isViceLider: boolean
   dataNascimento: Date
-  tamanhoCamisa: Student.ShirtSize
+  tamanhoCamisa: TeamConfig.ShirtSize
 }
 
 export interface StudentIdResponse extends Student {
@@ -44,6 +44,6 @@ export interface CreateOrUpdateStudent {
   isViceLider: boolean
   idEquipe?: number
   dataNascimento: Date
-  tamanhoCamisa: Student.ShirtSize
+  tamanhoCamisa: TeamConfig.ShirtSize
 }
 

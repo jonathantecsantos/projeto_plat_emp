@@ -38,13 +38,13 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
   return (
     <div className="flex h-screen flex-col relative">
       <div className="flex flex-1 overflow-hidden">
-        {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className=""></div> :
+        {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? null :
           <div className={`${isMenuOpen ? 'lg:block min-w-fit ' : 'hidden'} w-64 h-full shadow-lg z-10 overflow-y-auto`}>
             <LeftMenu />
           </div>}
 
         <main className="overflow-x-hidden overflow-y-auto w-full">
-          {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className=""></div> : <ToggleMenuButton />}
+          {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? null : <ToggleMenuButton />}
           <BannerImage />
           <div className="px-2 py-4 h-[calc(100%-9rem)]">
             <div className="flex">

@@ -106,7 +106,15 @@ export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 export const capitalizeTeamName = (name: string) => {
   return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : ''
 }
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
 
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).format(date);
+};
 
 export const ClassesSelectTypes = [
   "1ª Série A",

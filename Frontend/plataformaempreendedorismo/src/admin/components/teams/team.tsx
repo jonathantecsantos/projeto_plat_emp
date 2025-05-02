@@ -7,24 +7,28 @@ import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
+import { ActivityType } from '../../../model/activityTypes'
 import { EventsTypes } from '../../../model/config'
+import { Institution } from '../../../model/institution'
 import { Ods } from '../../../model/ods'
 import { TeamsResponse, UpdateTeam } from "../../../model/team"
 import { RootState } from '../../../redux/store'
 import { Roles } from '../../../utils/types'
 import { FooterImage } from "../common/adminFooter"
+import { EditActivityTypes } from './editActivityTypes'
+import { EditInstitution } from './editInstitutions'
 import { EditOds } from './editOds'
 import { EditTeamName } from './editTeamName'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
+import { createPortal } from 'react-dom'
+import { FichaInscricaoPreviewComponent } from './teamRegister'
 
-//Duvidas sobre regra de negocio:
-// - O que acontece se o professor não estiver na equipe?
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
@@ -34,9 +38,30 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const navigate = useNavigate()
   const [editOdsOpen, setEditOdsOpen] = useState(false)
   const [editTeamNameOpen, setEditTeamNameOpen] = useState(false)
+  const [editActivityTypesOpen, setEditActivityTypesOpen] = useState(false)
+  const [editInstitutionsOpen, setEditInstitutionsOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const [getEventById] = useLazyGetEventValidateByIdQuery()
   const [pitchValidated, setPitchValidated] = useState(false)
+  const [showPrint, setShowPrint] = useState(false)
+  const printRef = useRef<HTMLDivElement>(null);
+
+  const handlePrintRegister = () => {
+    //temporario substituir por rota
+    setShowPrint(true); 
+
+    setTimeout(() => {
+      if (printRef.current) {
+        const originalContent = document.body.innerHTML;
+        const printContent = printRef.current.innerHTML;
+
+        document.body.innerHTML = printContent;
+        window.print();
+        document.body.innerHTML = originalContent;
+        window.location.reload(); 
+      }
+    }, 300); 
+  };
 
   const handlePrintBanner = () => {
     const bannerPreviewUrl = `/banner-preview/${id}`
@@ -63,12 +88,22 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     setEditOdsOpen(!state)
   }
 
+  const handleActivityTypesOpen = (state: boolean) => {
+    setEditActivityTypesOpen(!state)
+  }
+
+  const handleInstitutionsOpen = (state: boolean) => {
+    setEditInstitutionsOpen(!state)
+  }
+
+
   const handleUpdateTeam = async (payload: UpdateTeam, successMessage: string) => {
     try {
       await updateTeam({ id: id, data: payload }).unwrap()
       enqueueSnackbar(successMessage, { variant: 'success' })
     } catch (error: any) {
-      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+      const errorMessage = `${error?.data?.error}` || 'Erro ao atualizar a equipe.'
+      enqueueSnackbar(errorMessage, { variant: 'error' })
     }
   }
 
@@ -81,6 +116,29 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     }
     await handleUpdateTeam(payload, 'ODS editada com sucesso!')
     handleEditOdsOpen(editOdsOpen)
+  }
+
+  const handleEditActivitySave = async (selectedActivities: { id: number }[]) => {
+    const payload: UpdateTeam = {
+      nome: team?.nomeEquipe || '',
+      tipoAtividadeList: selectedActivities as ActivityType[],
+    }
+    await handleUpdateTeam(payload, 'Atividade atualizada com sucesso!')
+    handleActivityTypesOpen(editActivityTypesOpen)
+  }
+
+  const handleEditInstitutionsSave = async (selectedInstitutions: { id: number }[]) => {
+    if (selectedInstitutions.length > 1) {
+      enqueueSnackbar('Só é permitido 1 instituição.', { variant: 'warning' });
+      return
+    }
+
+    const payload: UpdateTeam = {
+      nome: team?.nomeEquipe || '',
+      instituicoes: selectedInstitutions as Institution[],
+    };
+    await handleUpdateTeam(payload, 'Instituição atualizada com sucesso!');
+    handleInstitutionsOpen(editInstitutionsOpen);
   }
 
   const handleEditTeamNameSave = async (newTeamName: string) => {
@@ -105,8 +163,21 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     setEditOdsOpen(false)
   }
 
+  const handleCancelEditActivityTypes = () => {
+    setEditActivityTypesOpen(false)
+  }
+
   const handleCancelEditTeamName = () => {
     setEditTeamNameOpen(false)
+  }
+
+  const handleCancelEditInstitutions = () => {
+    setEditInstitutionsOpen(false)
+  }
+
+
+  const snackBarEventsTypes = (event: EventsTypes) => {
+    return enqueueSnackbar(`${EventsTypes[event]} fora da data de validade`)
   }
 
 
@@ -182,11 +253,49 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               <p>ODS</p>
               <ModeEditIcon onClick={() => handleEditOdsOpen(editOdsOpen)} className='cursor-pointer size-5' />
             </div> : null}
+          </div>
 
+          <div className="mt-4 mb-6 capitalize">
+            {editActivityTypesOpen ? <EditActivityTypes
+              loading={status.isLoading}
+              value={team?.tipoAtividades || []}
+              onSave={handleEditActivitySave}
+              onCancel={handleCancelEditActivityTypes}
+            /> :
+              <div className='flex-col'>
+                {team?.tipoAtividades?.map((activity, index) => (
+                  <p key={index} className="font-semibold">
+                    {activity.descricao}
+                  </p>
+                ))}
+              </div>}
+            {!editActivityTypesOpen ? <div className='flex gap-2 text-center'>
+              <p>ATIVIDADES</p>
+              <ModeEditIcon onClick={() => handleActivityTypesOpen(editActivityTypesOpen)} className='cursor-pointer size-5' />
+            </div> : null}
+          </div>
+          <div className="mt-4 mb-6 capitalize">
+            {editInstitutionsOpen ? <EditInstitution
+              loading={status.isLoading}
+              value={team?.instituicoes || []}
+              onSave={handleEditInstitutionsSave}
+              onCancel={handleCancelEditInstitutions}
+            /> :
+              <div className='flex-col'>
+                {team?.instituicoes?.map((institution, index) => (
+                  <p key={index} className="font-semibold">
+                    {institution.descricao}
+                  </p>
+                ))}
+              </div>}
+            {!editInstitutionsOpen ? <div className='flex gap-2 text-center'>
+              <p>INSTITUIÇÃO</p>
+              <ModeEditIcon onClick={() => handleInstitutionsOpen(editInstitutionsOpen)} className='cursor-pointer size-5' />
+            </div> : null}
           </div>
           <div className='flex flex-col xl:gap-2 gap-2 w-full relative'>
             <div className="flex gap-2 flex-wrap">
-              {team?.professor && team.professor.map((teacher, idx) => (
+              {team?.professores && team.professores.map((teacher, idx) => (
                 <TeacherCard key={idx} teacher={teacher} />
               ))}
             </div>
@@ -251,9 +360,23 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           <ul className="space-y-4 mt-36">
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
+                const response = await getEventById(EventsTypes.INSCRICAO)
+                if (response.data == false || !response.data) {
+                  snackBarEventsTypes(EventsTypes.INSCRICAO)
+                  return
+                }
+                handlePrintRegister()
+              }}>
+              <PrintIcon fontSize='large' />
+              <div className="flex-1 flex justify-center">
+                <span>Imprimir Incrição</span>
+              </div>
+            </li>
+            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
+              onClick={async () => {
                 const response = await getEventById(EventsTypes.PROTOTIPO)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data de validade')
+                  snackBarEventsTypes(EventsTypes.PROTOTIPO)
                   return
                 }
                 navigate(RoutesNames.prototyping.replace(':id', id.toString()))
@@ -268,7 +391,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               onClick={async () => {
                 const response = await getEventById(EventsTypes.CANVAS)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data de validade')
+                  snackBarEventsTypes(EventsTypes.CANVAS)
                   return
                 }
                 navigate(RoutesNames.banner.replace(':id', id.toString()), { state: team?.nomeEquipe })
@@ -282,21 +405,21 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               onClick={async () => {
                 const response = await getEventById(EventsTypes.CANVAS)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data de validade')
+                  snackBarEventsTypes(EventsTypes.CANVAS)
                   return
                 }
                 handlePrintBanner()
               }}>
               <PrintIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
-                <span>Imprimir canvas</span>
+                <span>Imprimir Canvas</span>
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
                 const response = await getEventById(EventsTypes.PITCH)
                 if (response.data == false || !response.data) {
-                  enqueueSnackbar('Evento fora da data de validade')
+                  snackBarEventsTypes(EventsTypes.PITCH)
                   return
                 }
 
@@ -311,6 +434,13 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </ul>
         </div>
       </div>
+      {showPrint &&
+        createPortal(
+          <div ref={printRef} style={{ position: "absolute", top: "-10000px", left: "-10000px" }}>
+            <FichaInscricaoPreviewComponent id='1' />
+          </div>,
+          document.body
+        )}
       <FooterImage />
     </div>
   )

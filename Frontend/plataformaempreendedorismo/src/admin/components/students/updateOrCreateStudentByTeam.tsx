@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
 import { formatCPF } from '../../../utils/types'
+import { ClassesSelect } from '../common/classesSelect'
 import { TeamSelect } from '../common/teamSelect'
 
 interface UpdateOrCreateStudentProps {
@@ -63,13 +64,14 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
     e.preventDefault()
     const updatedStudent: CreateOrUpdateStudent = {
       nome: student?.nome || '',
-      cpf: formatCPF(student!.cpf) || '',
+      cpf: formatCPF(student?.cpf || '') || '',
       email: student?.email || '',
       turma: student?.turma || '',
       idEquipe: student?.equipe?.id || teamData?.id || 0,
-      // idOds: student?.equipe?.odsList?.id || 0,
       isLider: student?.isLider || false,
-      isViceLider: student?.isViceLider || false
+      isViceLider: student?.isViceLider || false,
+      dataNascimento: student?.dataNascimento || new Date(),
+      tamanhoCamisa: student?.tamanhoCamisa!,
     }
 
     if (teamData?.id) {
@@ -131,16 +133,12 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
-          <div>
-            <label htmlFor="turma" className="block text-sm font-medium text-gray-700">Turma</label>
-            <input
-              id="turma"
-              type="text"
-              value={student?.turma || ''}
-              onChange={(e) => handleInputChange('turma', e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
+
+          <ClassesSelect
+            value={student?.turma || ''}
+            onChange={(e) => handleInputChange('turma', e.target.value)}
+          />
+
         </div>
         <TeamSelect
           onChange={handleSelectChange}

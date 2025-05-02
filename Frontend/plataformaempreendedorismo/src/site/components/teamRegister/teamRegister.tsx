@@ -5,6 +5,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import { LoadingButton } from '@mui/lab'
+import { CircularProgress } from '@mui/material'
 import { ValidateUtils } from 'essencials'
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
@@ -14,15 +15,14 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { z } from "zod"
 import { useCreateTeamMutation, useGetEventValidateByIdQuery } from "../../../api/studentApi"
 import { RoutesNames } from '../../../globals'
-import { Student } from "../../../model/student"
+import { EventsTypes } from '../../../model/config'
+import { TeamConfig } from "../../../model/student"
 import { TeamRegisterPayload } from '../../../model/team'
 import { ClassesSelectTypes, formatCPF } from "../../../utils/types"
 import { ActivityTypesSelect } from './activityTypesSelect'
 import { InstitutionsSelect } from './institutionSelect'
 import { OdsSelect } from './odsSelect'
 import { TeacherSelect } from './teacherSelect'
-import { EventsTypes } from '../../../model/config'
-import { CircularProgress } from '@mui/material'
 
 const createTeamSchema = z.object({
   nomeTime: z.string().min(1, "Nome do time é obrigatório"),
@@ -59,7 +59,7 @@ const createTeamSchema = z.object({
             return date <= today;
           }, { message: "Data não pode ser no futuro" })
       ),
-      tamanhoCamisa: z.nativeEnum(Student.ShirtSize, {
+      tamanhoCamisa: z.nativeEnum(TeamConfig.ShirtSize, {
         errorMap: () => ({ message: "Tamanho inválido" })
       }),
     })
@@ -365,7 +365,7 @@ export const TeamRegister = () => {
                       onChange={(e) => handleStudentChange(index, 'tamanhoCamisa', e.target.value)}
                       className="border rounded-md p-2 sm:w-28 w-full"
                     >
-                      {Object.values(Student.ShirtSize).map((size) => (
+                      {Object.values(TeamConfig.ShirtSize).map((size) => (
                         <option key={size} value={size}>{size}</option>
                       ))}
                     </select>
@@ -446,7 +446,7 @@ export const TeamRegister = () => {
                 isLider: false,
                 isViceLider: false,
                 dataNascimento: undefined as unknown as Date,
-                tamanhoCamisa: '' as Student.ShirtSize,
+                tamanhoCamisa: '' as TeamConfig.ShirtSize,
               }
               append(newStudent)
               const currentStudents = JSON.parse(searchParams.get('alunos') || '[]')

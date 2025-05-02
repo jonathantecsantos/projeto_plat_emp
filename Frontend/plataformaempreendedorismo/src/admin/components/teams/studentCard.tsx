@@ -5,8 +5,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDeleteStudentMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
-import { Student } from '../../../model/student'
 import { ActionMenu } from '../common/actionMenuIcon'
+import { Student } from '../../../model/student'
 
 export const getRoleLabel = (student: Student) => {
   if (student?.isLider) return 'Líder'

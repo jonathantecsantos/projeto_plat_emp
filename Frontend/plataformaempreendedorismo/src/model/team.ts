@@ -1,4 +1,6 @@
+import { ActivityType } from "./activityTypes"
 import { Banner } from "./banner"
+import { Institution } from "./institution"
 import { Ods } from "./ods"
 import { Student } from "./student"
 import { Teacher } from "./teacher"
@@ -12,12 +14,16 @@ export interface TeamsResponse {
   nome: string
   linkPitch?: string
   listIdOds: ListIdOds[]
+  tipoAtividades: ActivityType[],
+  instituicoes: Institution[]
 }
 
 export interface UpdateTeam {
   nome?: string
   listIdOds?: ListIdOds[]
   linkPitch?: string
+  tipoAtividadeList?: ActivityType[],
+  instituicoes?: Institution[]
 }
 
 
@@ -30,8 +36,10 @@ export interface TeamIdResponse {
   nomeEquipe: string
   linkPitch: string | null
   alunos: Student[]
-  professor: Teacher[]
+  professores: Teacher[]
   odsList: Ods[]
+  tipoAtividades: ActivityType[],
+  instituicoes: Institution[]
 }
 
 export interface TeamRegisterPayload {

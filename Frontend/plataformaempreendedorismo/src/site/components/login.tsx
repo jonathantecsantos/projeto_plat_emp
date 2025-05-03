@@ -65,7 +65,7 @@ export const LoginComponent = () => {
         />
       </div>
       <form action="">
-        <div className="p-10 rounded-md h-fit mt-20 sm:w-96 shadow-xl w-full lg:m-28 lg:ml-12 border-t-2">
+        <div className={`p-10 rounded-md h-fit ${isValid && isValid ? 'xl:mt-4' : 'mt-20'} sm:w-96 shadow-xl w-full lg:m-28 lg:ml-12 border-t-2 `}>
           <h1 className="font-bold text-xl w-full mb-10 cursor-pointer"
             onClick={() => navigate(RoutesNames.home)}>Plataforma Empreendedorismo</h1>
 
@@ -90,11 +90,11 @@ export const LoginComponent = () => {
             </LoadingButton>
           </div>
           {registerLoading ? <div className='text-center'><CircularProgress /></div> :
-            isValid && isValid ? <div className="flex flex-col gap-2 mt-8 text-start">
+            isValid && isValid ? <div className="flex flex-col gap-2 mt-8 text-center">
               <div className="text-sm text-[#888]">Inscrições abertas!</div>
               <div className="text-sm text-[#888]">Acesse o formulário e faça sua inscrição!</div>
               <LoadingButton
-                className="border-l-indigo-950 normal-case max-w-max shadow-md hover:scale-105"
+                className="border-l-indigo-950 mx-auto normal-case w-full shadow-md hover:scale-105"
                 variant="text" onClick={() => navigate(RoutesNames.register)} >
                 <span>Inscrição DLEI</span>
               </LoadingButton>

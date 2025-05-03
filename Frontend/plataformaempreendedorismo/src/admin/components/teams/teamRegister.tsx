@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useGetTeamByIdQuery } from "../../../api/studentApi";
-import { formatDate } from "../../../utils/types";
+import { formatDate, maskCPF } from "../../../utils/types";
+import extenso from "extenso";
 
 interface TeamRegisterPrintComponentProps {
   id: number
@@ -8,8 +9,11 @@ interface TeamRegisterPrintComponentProps {
 
 export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentProps) => {
   const { data: teamRegister, isFetching } = useGetTeamByIdQuery(id)
-
   const printRef = useRef<HTMLDivElement>(null)
+
+  const leader = teamRegister?.alunos?.find(aluno => aluno?.isLider)
+  const viceLeader = teamRegister?.alunos?.find(aluno => aluno?.isViceLider)
+  const members = teamRegister?.alunos?.filter(aluno => !aluno?.isLider && !aluno?.isViceLider)
 
   useEffect(() => {
     const handleAfterPrint = () => {
@@ -35,19 +39,26 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
   }, [isFetching, teamRegister])
 
 
-  console.log(`TeamRegisterPrintComponent - id: ${id}`)
-  console.log(`TeamRegisterPrintComponent - teamRegister: ${JSON.stringify(teamRegister)}`)
   return (
     <div ref={printRef} className="w-full max-w-6xl mx-auto bg-white p-8 print:p-4 print:text-[12px]">
       <h1 className="text-center text-lg font-bold mb-8">DLEI 2025 - 9º Desafio Lourdinas de Empreendedorismo e Inovação</h1>
       <h2 className="text-center text-md font-semibold mb-4">FICHA DE INSCRIÇÃO / RECIBO</h2>
 
-      <div className="mb-6">
-        <p><span className="font-semibold">Nome do Time:</span> {teamRegister?.nomeEquipe}</p>
-      </div>
 
-      {/* Tabela de Alunos */}
-      <table className="w-full border border-gray-700 print:border-collapse text-sm">
+      <table className="w-full text-sm bg-[#fc56f4] border border-b-0 border-gray-700">
+        <tbody>
+          <tr>
+            <td className="font-semibold border border-b-0 border-gray-700 align-top w-[130px] p-1">
+              Nome do Time
+            </td>
+            <td className="p-1 font-bold border border-b-0 border-gray-700">
+              {teamRegister?.nomeEquipe}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table className="w-full border border-b-0 border-gray-700 print:border-collapse text-sm">
         <thead className="bg-gray-200">
           <tr>
             <th className="border border-gray-700 p-1">Nº Aluno</th>
@@ -59,39 +70,108 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
           </tr>
         </thead>
         <tbody>
-          {teamRegister?.alunos.map((student, index) => (
-            <tr key={index}>
-              <td className="border border-gray-700 p-1 text-center">{student.isViceLider}</td>
+          {leader && (
+            <tr>
+              <td className="border border-gray-700 p-1 text-center font-semibold max-w-36">01 - LÍDER</td>
+              <td className="border border-gray-700 p-1">{leader.nome}</td>
+              <td className="border border-gray-700 p-1 text-wrap">{leader.email}</td>
+              <td className="border border-gray-700 p-1 text-nowrap">{maskCPF(leader.cpf)}</td>
+              <td className="border border-gray-700 p-1 text-center">{leader.dataNascimento && formatDate(leader.dataNascimento.toString())}</td>
+              <td className="border border-gray-700 p-1 text-center">{leader.tamanhoCamisa}</td>
+            </tr>
+          )}
+
+          {viceLeader && (
+            <tr>
+              <td className="border border-gray-700 p-1 text-center font-semibold">02 - VICE-LÍDER</td>
+              <td className="border border-gray-700 p-1">{viceLeader.nome}</td>
+              <td className="border border-gray-700 p-1">{viceLeader.email}</td>
+              <td className="border border-gray-700 p-1">{maskCPF(viceLeader.cpf)}</td>
+              <td className="border border-gray-700 p-1 text-center">{viceLeader.dataNascimento && formatDate(viceLeader.dataNascimento.toString())}</td>
+              <td className="border border-gray-700 p-1 text-center">{viceLeader.tamanhoCamisa}</td>
+            </tr>
+          )}
+
+          {members?.map((student, index) => (
+            <tr key={student.id || index}>
+              <td className="border border-gray-700 p-1 text-center font-semibold">{String(index + 3).padStart(2, "0")} - INTEGRANTE</td>
               <td className="border border-gray-700 p-1">{student.nome}</td>
               <td className="border border-gray-700 p-1">{student.email}</td>
-              <td className="border border-gray-700 p-1">{student.cpf}</td>
+              <td className="border border-gray-700 p-1">{maskCPF(student.cpf)}</td>
               <td className="border border-gray-700 p-1 text-center">{student.dataNascimento && formatDate(student.dataNascimento.toString())}</td>
               <td className="border border-gray-700 p-1 text-center">{student.tamanhoCamisa}</td>
             </tr>
           ))}
+
           {teamRegister?.professores.map((professor, index) => (
-            <tr key={index}>
-              <td className="border border-gray-700 p-1 text-center">Orientador(a)</td>
+            <tr key={professor.id || `prof-${index}`}>
+              <td className="border border-gray-700 p-1 text-center font-semibold w-[130px]">PROFESSOR ORIENTADOR</td>
               <td className="border border-gray-700 p-1">{professor.nome}</td>
               <td className="border border-gray-700 p-1">{professor.email}</td>
-              <td className="border border-gray-700 p-1">{professor.cpf}</td>
+              <td className="border border-gray-700 p-1">{maskCPF(professor.cpf)}</td>
               <td className="border border-gray-700 p-1 text-center">{professor.dataNascimento && formatDate(professor.dataNascimento.toString())}</td>
               <td className="border border-gray-700 p-1 text-center">{professor.tamanhoCamisa}</td>
             </tr>
           ))}
         </tbody>
+
+      </table>
+
+      <table className="w-full border border-t-0 border-gray-700 text-sm">
+        <tbody>
+          <tr>
+            <td className="border border-gray-700 font-semibold border-t-0 align-top w-[130px] p-1">
+              Provável(eis) Objetivo(s) de Desenvolvimento Sustentável(eis)
+            </td>
+            <td className="border border-t-0 border-gray-700 p-1">
+              {teamRegister?.odsList?.map((ods) => ods.descricao).join(", ")}
+            </td>
+          </tr>
+
+          <tr>
+            <td className="border border-gray-700 font-semibold align-top w-[130px] p-1">
+              Provável(eis) Atividade(s) Empreendedora(s)
+            </td>
+            <td className="border border-gray-700 p-1">
+              {teamRegister?.tipoAtividades?.map((atv) => atv.descricao).join(", ")}
+            </td>
+          </tr>
+
+          <tr>
+            <td className="border border-gray-700 font-semibold align-top w-[130px] p-1">
+              Instituição de Impacto Social parceira do Time
+            </td>
+            <td className="border border-gray-700 p-1">
+              {teamRegister?.instituicoes?.map((inst) => inst.descricao).join(", ")}
+            </td>
+          </tr>
+        </tbody>
       </table>
 
 
 
-      <div className="mt-8">
-
-        {/* Área do Recibo */}
-        <div className="mt-12 border-t border-gray-700 pt-6 text-sm">
-          <p><span className="font-semibold">RECIBO: R$ 800,00</span> Recebemos do time <span className="font-bold">{teamRegister?.nomeEquipe}</span> o valor de <span className="font-bold">R$ 800,00</span> referente à inscrição de {teamRegister?.alunos.length} student(s) no DLEI 2025.</p>
+      <div className="border border-gray-700 border-t-0 p-1">
+        <div className="border-gray-700 text-sm">
+          <div className="flex justify-between mb-8">
+            <p>Para Uso da Tesouraria</p>
+            <p className="font-bold">Inscrição Nº __ / DLEI 2025</p>
+          </div>
+          <p className="font-semibold text-center mb-8">RECIBO: R$ 800,00</p>
+          <div>
+            <p> Recebemos do time <strong>{teamRegister?.nomeEquipe}</strong> a quantia supra de <strong>R$ 800,00 (oitocentos reais)</strong> referente à inscrição de  <strong>{teamRegister?.alunos.length} {extenso(Number(teamRegister?.alunos.length!), { locale: 'br' })} Alunos </strong>
+              no <span className="font-bold"> 9º Desafio Lourdinas de Empreendedorismo e Inovação - DLEI 2025.</span>
+            </p>
+          </div>
+          <p className="my-8">Pelo que damos plena e total quitação ao presente Recibo.</p>
           <p className="mt-4">Campina Grande, ____ de junho de 2025.</p>
-          <p className="mt-8">________________________________________</p>
-          <p className="text-center">Tesouraria do Colégio Nossa Senhora de Lourdes</p>
+          <div className="w-full flex justify-end mt-8">
+            <div className="text-center">
+              <p className="mb-2 border-gray-900 border-b-[1px]"></p>
+              <p className="font-bold">Tesouraria do Colégio Nossa Senhora de Lourdes</p>
+              <p className="font-bold text-sm">(Carimbo / Assinatura)</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

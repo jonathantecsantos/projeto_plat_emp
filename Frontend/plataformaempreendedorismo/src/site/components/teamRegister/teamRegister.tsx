@@ -122,19 +122,6 @@ export const TeamRegister = () => {
     name: 'alunos',
   })
 
-  if (registerLoading) return <div className="flex justify-center items-center h-dvh"><CircularProgress /></div>
-
-  if (!isValid) {
-    return <div className="flex flex-col justify-center items-center h-dvh">
-      <h1 className="text-2xl font-bold text-red-500">Evento não disponível</h1>
-      <span
-        className="bg-gray-500 rounded-lg px-3 text-white hover:cursor-pointer text-lg mt-12"
-        onClick={() => navigate(RoutesNames.login)}
-      >
-        Sair
-      </span>
-    </div>
-  }
 
   const handleInputChange = (key: keyof CreateTeamForm, value: string) => {
     const params = new URLSearchParams(searchParams)
@@ -231,6 +218,13 @@ export const TeamRegister = () => {
     setSuccess(false)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); //fix: Form submission canceled because the form is not connected
+      handleSubmit(onSubmit)();
+    }
+  }
+
   const onSubmit = async (data: CreateTeamForm) => {
     if (!executeRecaptcha) {
       enqueueSnackbar("Erro ao executar o reCAPTCHA", { variant: 'error' })
@@ -270,6 +264,21 @@ export const TeamRegister = () => {
     }
   }, [errors])
 
+  if (registerLoading) return <div className="flex justify-center items-center h-dvh"><CircularProgress /></div>
+
+  if (!isValid) {
+    return <div className="flex flex-col justify-center items-center h-dvh">
+      <h1 className="text-2xl font-bold text-red-500">Evento não disponível</h1>
+      <span
+        className="bg-gray-500 rounded-lg px-3 text-white hover:cursor-pointer text-lg mt-12"
+        onClick={() => navigate(RoutesNames.login)}
+      >
+        Sair
+      </span>
+    </div>
+  }
+
+
   return (
     <div className="flex flex-col max-w-4xl mx-auto my-8 sm:p-4 p-2 sm:border-t-2 sm:rounded sm:shadow-md ">
       <h2 className="text-3xl font-bold text-center mb-4 text-[#383691]">Formulário de Inscrição DLEI</h2>
@@ -277,6 +286,7 @@ export const TeamRegister = () => {
         <div>
           <label htmlFor="nomeTime" className="block text-lg font-medium text-[#383691]">Nome do Time</label>
           <input
+            onKeyDown={handleKeyDown}
             {...register("nomeTime")}
             onChange={(e) => handleInputChange('nomeTime', e.target.value)}
             className="border rounded p-2 w-full"
@@ -291,6 +301,7 @@ export const TeamRegister = () => {
               <label htmlFor="nome" className="block  text-sm font-medium text-[#383691]">Nome completo</label>
               <input
                 {...register(`alunos.${index}.nome`)}
+                onKeyDown={handleKeyDown}
                 onChange={(e) => handleStudentChange(index, 'nome', e.target.value)}
                 placeholder="Nome completo"
                 className="block w-full p-2 border border-gray-300 rounded-md"
@@ -301,6 +312,7 @@ export const TeamRegister = () => {
                   <label htmlFor="cpf" className="block text-sm font-medium text-[#383691]">CPF</label>
                   <input
                     {...register(`alunos.${index}.cpf`)}
+                    onKeyDown={handleKeyDown}
                     onChange={(e) => handleStudentChange(index, 'cpf', e.target.value)}
                     placeholder="CPF"
                     className="block w-full p-2 border border-gray-300 rounded-md"
@@ -312,6 +324,8 @@ export const TeamRegister = () => {
                   <label htmlFor="email" className="block text-sm font-medium text-[#383691]">Email</label>
                   <input
                     {...register(`alunos.${index}.email`)}
+                    onKeyDown={handleKeyDown}
+
                     onChange={(e) => handleStudentChange(index, 'email', e.target.value)}
                     placeholder="@evl.com.br"
                     className="block w-full p-2 border border-gray-300 rounded-md"
@@ -336,6 +350,7 @@ export const TeamRegister = () => {
                         <input
                           type="date"
                           value={dateValue}
+                          onKeyDown={handleKeyDown}
                           onChange={(e) => {
                             const value = e.target.value;
                             const dateValue = value ? new Date(value) : null;
@@ -362,6 +377,8 @@ export const TeamRegister = () => {
                     <label htmlFor="tamanhoCamisa" className="block text-nowrap text-sm font-medium text-[#383691] mb-1">Tam. da Camisa</label>
                     <select
                       {...register(`alunos.${index}.tamanhoCamisa`)}
+                      onKeyDown={handleKeyDown}
+
                       onChange={(e) => handleStudentChange(index, 'tamanhoCamisa', e.target.value)}
                       className="border rounded-md p-2 sm:w-28 w-full"
                     >
@@ -376,6 +393,8 @@ export const TeamRegister = () => {
                     <label htmlFor="turma" className="block text-nowrap text-sm font-medium text-[#383691] mb-1">Turma/Série</label>
                     <select
                       {...register(`alunos.${index}.turma`)}
+                      onKeyDown={handleKeyDown}
+
                       onChange={(e) => handleStudentChange(index, 'turma', e.target.value)}
                       className="border rounded-md p-2 sm:w-28 w-full"
                     >
@@ -394,6 +413,8 @@ export const TeamRegister = () => {
                     className='mr-1'
                     type="checkbox"
                     {...register(`alunos.${index}.isLider`)}
+                    onKeyDown={handleKeyDown}
+
                     onChange={(e) => handleCheckboxChange('isLider', index, e.target.checked)}
                     checked={JSON.parse(searchParams.get('alunos') || '[]')[index]?.isLider || false}
                     disabled={
@@ -409,6 +430,8 @@ export const TeamRegister = () => {
                     className='mr-1'
                     type="checkbox"
                     {...register(`alunos.${index}.isViceLider`)}
+                    onKeyDown={handleKeyDown}
+
                     onChange={(e) => handleCheckboxChange('isViceLider', index, e.target.checked)}
                     checked={JSON.parse(searchParams.get('alunos') || '[]')[index]?.isViceLider || false}
                     disabled={
@@ -583,7 +606,6 @@ export const TeamRegister = () => {
             variant="contained"
             loading={isLoading}
             disabled={isLoading || showMinStudentsError}
-            onClick={handleSubmit(onSubmit)}
             className='bg-ring-custom normal-case shadow-md hover:bg-[#8668FFCC]'
             startIcon={success ? <CheckCircleIcon style={{ color: 'lightgreen' }} className='mr-1' /> : null}
           >

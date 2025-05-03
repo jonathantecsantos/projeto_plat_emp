@@ -18,7 +18,7 @@ import { Institution } from '../../../model/institution'
 import { Ods } from '../../../model/ods'
 import { TeamsResponse, UpdateTeam } from "../../../model/team"
 import { RootState } from '../../../redux/store'
-import { Roles } from '../../../utils/types'
+import { Roles, TeamValidation } from '../../../utils/types'
 import { FooterImage } from "../common/adminFooter"
 import { EditActivityTypes } from './editActivityTypes'
 import { EditInstitution } from './editInstitutions'
@@ -41,7 +41,6 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { enqueueSnackbar } = useSnackbar()
   const [getEventById] = useLazyGetEventValidateByIdQuery()
   const [pitchValidated, setPitchValidated] = useState(false)
-
 
 
   const handlePrintRegister = () => {
@@ -94,6 +93,21 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     setEditInstitutionsOpen(!state)
   }
 
+  const validateTeamEdit = ({ ods, activitties, institution }: Partial<TeamValidation>) => {
+    if (ods && ods.length > 3) {
+      enqueueSnackbar('Só é permitido até 3 ODS.', { variant: 'warning' })
+      return false
+    }
+    if (activitties && activitties.length > 3) {
+      enqueueSnackbar('Só é permitido até 3 atividades.', { variant: 'warning' })
+      return false
+    }
+    if (institution && institution.length > 1) {
+      enqueueSnackbar('Só é permitido 1 instituição.', { variant: 'warning' })
+      return false
+    }
+    return true
+  }
 
   const handleUpdateTeam = async (payload: UpdateTeam, successMessage: string) => {
     try {
@@ -106,6 +120,9 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   }
 
   const handleEditOdsSave = async (selectedOds: Ods[]) => {
+    if (!validateTeamEdit({ ods: selectedOds })) {
+      return
+    }
     const payload: UpdateTeam = {
       nome: team?.nomeEquipe || '',
       listIdOds: selectedOds?.map((ods) => ({
@@ -117,6 +134,9 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   }
 
   const handleEditActivitySave = async (selectedActivities: { id: number }[]) => {
+    if (!validateTeamEdit({ activitties: selectedActivities })) {
+      return
+    }
     const payload: UpdateTeam = {
       nome: team?.nomeEquipe || '',
       tipoAtividadeList: selectedActivities as ActivityType[],
@@ -125,15 +145,13 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     handleActivityTypesOpen(editActivityTypesOpen)
   }
 
-  const handleEditInstitutionsSave = async (selectedInstitutions: { id: number }[]) => {
-    if (selectedInstitutions.length > 1) {
-      enqueueSnackbar('Só é permitido 1 instituição.', { variant: 'warning' });
+  const handleEditInstitutionsSave = async (selectedInstitution: { id: number }[]) => {
+    if (!validateTeamEdit({ institution: selectedInstitution })) {
       return
     }
-
     const payload: UpdateTeam = {
       nome: team?.nomeEquipe || '',
-      instituicoes: selectedInstitutions as Institution[],
+      instituicoes: selectedInstitution as Institution[],
     };
     await handleUpdateTeam(payload, 'Instituição atualizada com sucesso!');
     handleInstitutionsOpen(editInstitutionsOpen);
@@ -367,7 +385,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               }}>
               <PrintIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
-                <span>Imprimir Incrição</span>
+                <span>Imprimir Inscrição</span>
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"

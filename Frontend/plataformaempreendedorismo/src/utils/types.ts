@@ -1,4 +1,5 @@
 import { TeamEvaluation, TeamEvaluationResponse } from "../model/evaluationFormat"
+import { Ods } from "../model/ods"
 
 export enum ImportType {
   student = 'ALUNO',
@@ -39,6 +40,8 @@ export interface Login {
   login: string
   senha: string
 }
+
+
 
 // export interface LoginResponse {
 //   data: {
@@ -85,9 +88,19 @@ export interface AdaptedLoginResponse {
   token: Token
 }
 
+export interface TeamValidation {
+  ods: Ods[]
+  activitties: { id: number }[]
+  institution: { id: number }[]
+}
+
 export const formatDateToInput = (isoDate: string): string => {
   if (!isoDate) return "" // Retorna vazio se a data não for válida
   return new Date(isoDate).toISOString().split("T")[0]
+}
+
+export function maskCPF(cpf: string): string {
+  return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
 }
 
 export interface EvaluationProps {

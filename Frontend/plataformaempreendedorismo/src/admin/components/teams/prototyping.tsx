@@ -16,13 +16,11 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   const [createTeamPrototype, { isLoading: creating, isSuccess: created }] = useCreateTeamPrototypingMutation()
   const { data: teamPrototyping, isLoading } = useGetTeamPrototypingByIdQuery(id)
   const [updateTeamPrototype, { isLoading: updating, isSuccess: updated }] = useUpdateTeamPrototypingMutation()
-  const [institution, setInstitution] = useState<string | null>(null)
   const navigate = useNavigate()
   const [success, setSucess] = useState(created || updated)
   const { enqueueSnackbar } = useSnackbar()
   const [formValues, setFormValues] = useState<Prototype>({
     idEquipe: id,
-    instituicaoImpactoSocial: institution || '',
     problemaPrincipal: "",
     propostaValor: "",
     vantagemCompetitiva: "",
@@ -35,7 +33,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     if (teamPrototyping) {
       setFormValues({
         idEquipe: id,
-        instituicaoImpactoSocial: teamPrototyping.instituicaoImpactoSocial || '',
         problemaPrincipal: teamPrototyping.problemaPrincipal || '',
         propostaValor: teamPrototyping.propostaValor || '',
         vantagemCompetitiva: teamPrototyping.vantagemCompetitiva || '',
@@ -43,7 +40,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         parcerias: teamPrototyping.parcerias || '',
         tipoApoio: teamPrototyping.tipoApoio || '',
       })
-      setInstitution(teamPrototyping.instituicaoImpactoSocial || null) // Para o campo de Instituições
     }
   }, [teamPrototyping, id])
 
@@ -122,7 +118,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
       let cadastroPrototipoRecord = {
         idEquipe: formValues.idEquipe,
-        instituicaoImpactoSocial: formValues.instituicaoImpactoSocial,
         problemaPrincipal: formValues.problemaPrincipal,
         propostaValor: formValues.propostaValor,
         vantagemCompetitiva: formValues.vantagemCompetitiva,
@@ -134,7 +129,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       const cadastroPrototipoRecordWithIdPrototipo = teamPrototyping
         ? { ...cadastroPrototipoRecord, idPrototipo: teamPrototyping?.id }
         : cadastroPrototipoRecord
-
 
 
       // Adiciona o CadastroPrototipoRecord como um JSON Blob ao FormData
@@ -173,8 +167,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     } catch (error: any) {
       enqueueSnackbar(`${error?.data}`, { variant: 'error' })
     }
-
-
+g
   }
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>

@@ -28,7 +28,7 @@ export interface AnexoPrototype {
 
 export interface Prototype {
   idEquipe: number
-  instituicaoImpactoSocial: string
+  // instituicaoImpactoSocial: string
   problemaPrincipal: string
   propostaValor: string
   vantagemCompetitiva: string

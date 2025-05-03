@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom"
 import { useCreateTeamPrototypingMutation, useGetTeamPrototypingByIdQuery, useUpdateTeamPrototypingMutation } from "../../../api/studentApi"
 import { inputClasses } from "../../../globals"
 import { AnexoTypes, Prototype } from "../../../model/prototyping"
-import { Institutions } from "../../../utils/types"
 import { TextAreaComponent } from "../common/textarea"
 import { FileDownload } from "./fileDownload"
 
@@ -21,7 +20,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   const navigate = useNavigate()
   const [success, setSucess] = useState(created || updated)
   const { enqueueSnackbar } = useSnackbar()
-  const [visibleItems, setVisibleItems] = useState(5) // Inicia com 5 itens visíveis
   const [formValues, setFormValues] = useState<Prototype>({
     idEquipe: id,
     instituicaoImpactoSocial: institution || '',
@@ -55,10 +53,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
   const [memorialFile, setMemorialFile] = useState<File | null>(null)
   const [esquemaFiles, setEsquemaFiles] = useState<File[]>([])
 
-  const handleInstitutionChange = (inst: string) => {
-    setInstitution(inst === institution ? null : inst)
-    setFormValues((prev) => ({ ...prev, instituicaoImpactoSocial: inst }))
-  }
 
   // Função genérica para atualizar os valores dos inputs de texto
   const handleValueChange = (newValue: string, field: string) => {
@@ -183,11 +177,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
   }
 
-  const handleShowMoreToggle = () => {
-    // Mostra mais 15 itens a cada clique
-    setVisibleItems((prev) => prev + 15)
-  }
-
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
 
 
@@ -197,41 +186,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       <h1 className="font-bold text-2xl max-w-4xl mx-auto mb-6">
         DLEI - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
       </h1>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          QUAL A INSTITUIÇÃO DE IMPACTO SOCIAL (IIS) NA QUAL FOI IDENTIFICADO O PROBLEMA E PARA A QUAL FOI CONCEBIDO O PROTÓTIPO DA SOLUÇÃO E QUE SERÁ BENEFICIÁRIA DO SEU TIME / EMPRESA?
-        </p>
-
-        {Institutions.slice(0, visibleItems).map((inst, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-start my-2 transition-all duration-300 hover:bg-[#9F8FD9] hover:bg-opacity-20 rounded p-2"
-          >
-            <input
-              type="checkbox"
-              id={`inst-${index}`}
-              checked={institution === inst}
-              onChange={() => handleInstitutionChange(inst)}
-              className="mr-3 h-5 w-5 text-[#4319AF] border-gray-300 focus:ring-[#5741A6]"
-            />
-            <label htmlFor={`inst-${index}`} className="cursor-pointer text-gray-800">
-              {inst}
-            </label>
-          </div>
-        ))}
-
-        {/* Ver mais botão */}
-        {visibleItems < Institutions.length && (
-          <button
-            type="button"
-            onClick={handleShowMoreToggle}
-            className="mt-4 text-[#4319AF] font-semibold transition-all hover:text-[#5741A6] hover:underline"
-          >
-            Ver Mais
-          </button>
-        )}
-      </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
         <p className="text-[#3C14A4] font-semibold text-lg mb-4">

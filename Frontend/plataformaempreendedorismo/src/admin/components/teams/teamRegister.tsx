@@ -152,19 +152,19 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
 
       <div className="border border-gray-700 border-t-0 p-1">
         <div className="border-gray-700 text-sm">
-          <div className="flex justify-between mb-8">
+          <div className="flex justify-between mb-4">
             <p>Para Uso da Tesouraria</p>
             <p className="font-bold">Inscrição Nº __ / DLEI 2025</p>
           </div>
-          <p className="font-semibold text-center mb-8">RECIBO: R$ 800,00</p>
+          <p className="font-semibold text-center mb-4">RECIBO: R$ 800,00</p>
           <div>
             <p> Recebemos do time <strong>{teamRegister?.nomeEquipe}</strong> a quantia supra de <strong>R$ 800,00 (oitocentos reais)</strong> referente à inscrição de  <strong>{teamRegister?.alunos.length} {extenso(Number(teamRegister?.alunos.length!), { locale: 'br' })} Alunos </strong>
               no <span className="font-bold"> 9º Desafio Lourdinas de Empreendedorismo e Inovação - DLEI 2025.</span>
             </p>
           </div>
-          <p className="my-8">Pelo que damos plena e total quitação ao presente Recibo.</p>
+          <p className="my-4">Pelo que damos plena e total quitação ao presente Recibo.</p>
           <p className="mt-4">Campina Grande, ____ de junho de 2025.</p>
-          <div className="w-full flex justify-end mt-8">
+          <div className="w-full flex justify-end mt-4">
             <div className="text-center">
               <p className="mb-2 border-gray-900 border-b-[1px]"></p>
               <p className="font-bold">Tesouraria do Colégio Nossa Senhora de Lourdes</p>

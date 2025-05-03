@@ -7,7 +7,7 @@ import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
 import { useSnackbar } from 'notistack'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
@@ -26,8 +26,6 @@ import { EditOds } from './editOds'
 import { EditTeamName } from './editTeamName'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
-import { createPortal } from 'react-dom'
-import { FichaInscricaoPreviewComponent } from './teamRegister'
 
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
@@ -43,25 +41,25 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { enqueueSnackbar } = useSnackbar()
   const [getEventById] = useLazyGetEventValidateByIdQuery()
   const [pitchValidated, setPitchValidated] = useState(false)
-  const [showPrint, setShowPrint] = useState(false)
-  const printRef = useRef<HTMLDivElement>(null);
+
+
 
   const handlePrintRegister = () => {
-    //temporario substituir por rota
-    setShowPrint(true); 
+    const registerPrintUrl = `/register-print/${id}`
+    const printWindow = window.open(registerPrintUrl, "_blank")
 
-    setTimeout(() => {
-      if (printRef.current) {
-        const originalContent = document.body.innerHTML;
-        const printContent = printRef.current.innerHTML;
-
-        document.body.innerHTML = printContent;
-        window.print();
-        document.body.innerHTML = originalContent;
-        window.location.reload(); 
+    if (printWindow) {
+      const handleMessage = (event: MessageEvent) => {
+        if (event.origin === window.location.origin && event.data === "ready-to-print-register") {
+          printWindow.print()
+          window.removeEventListener("message", handleMessage) // Remove o listener após o uso
+        }
       }
-    }, 300); 
-  };
+
+      // Escuta a mensagem da página de TeamRegisterPrintComponent
+      window.addEventListener("message", handleMessage)
+    }
+  }
 
   const handlePrintBanner = () => {
     const bannerPreviewUrl = `/banner-preview/${id}`
@@ -434,13 +432,6 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </ul>
         </div>
       </div>
-      {showPrint &&
-        createPortal(
-          <div ref={printRef} style={{ position: "absolute", top: "-10000px", left: "-10000px" }}>
-            <FichaInscricaoPreviewComponent id='1' />
-          </div>,
-          document.body
-        )}
       <FooterImage />
     </div>
   )

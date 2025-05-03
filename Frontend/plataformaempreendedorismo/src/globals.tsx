@@ -3,6 +3,7 @@ export const RoutesNames = {
   login: '/login',
   banner: '/teams/banner/:id',
   bannerPreview: '/banner-preview/:id',
+  teamRegisterPrint: '/register-print/:id',
   companyDetails: '/company-details',
   repository: 'repository',
   contact: 'contact',

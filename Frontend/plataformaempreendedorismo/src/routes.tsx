@@ -41,17 +41,14 @@ import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
 import { Roles } from './utils/types'
+import { TeamRegisterPrintPage } from './pages/teamRegisterPrint'
 
 export const router = createBrowserRouter([
   {
     path: RoutesNames.home,
     element: <LoginPage />,
   },
-  // TODO Implementar a página de preview da ficha de inscrição
-  // {
-  //   path: RoutesNames.home,
-  //   element: <FichaInscricaoPreviewComponent id='1' />,
-  // },
+
   {
     path: RoutesNames.login,
     element: <LoginPage />,
@@ -75,6 +72,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.bannerPreview,
     element: <ProtectedRoute children={<BannerPreviewPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />,
+  },
+  {
+    path: RoutesNames.teamRegisterPrint,
+    element: <ProtectedRoute children={<TeamRegisterPrintPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />,
   },
   {
     path: RoutesNames.uploadFiles,

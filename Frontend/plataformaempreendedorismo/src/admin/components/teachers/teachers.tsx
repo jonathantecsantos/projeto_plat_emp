@@ -172,7 +172,7 @@ export const TeachersComponent = () => {
                 <td className="px-4 py-2 text-nowrap">{teacher.email}</td>
                 <td className="px-4 py-2 capitalize">{generateTeamsName(teacher.equipeRecord)}</td>
                 <td className='px-4 py-2'>{teacher.dataNascimento && formatDate(teacher.dataNascimento.toString())}</td>
-                <td className='px-4 py-2'>{teacher.tamanhoCamisa}</td>
+                <td className='px-4 py-2 capitalize'>{teacher.tamanhoCamisa}</td>
                 <td className="">
                   <IconButton
                     className='hover:text-white no-row-click'

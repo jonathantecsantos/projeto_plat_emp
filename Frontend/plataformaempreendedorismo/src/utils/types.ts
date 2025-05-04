@@ -129,6 +129,14 @@ export const formatDate = (dateString: string): string => {
   }).format(date);
 };
 
+ export const formatDateForInput = (date?: Date | string): string => {
+    if (!date) return '';
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const offset = dateObj.getTimezoneOffset() * 60000;
+    const localDate = new Date(dateObj.getTime() - offset);
+    return localDate.toISOString().split('T')[0]; // Retorna 'yyyy-MM-dd'
+  }
+
 export const ClassesSelectTypes = [
   "1ª Série A",
   "1ª Série B",

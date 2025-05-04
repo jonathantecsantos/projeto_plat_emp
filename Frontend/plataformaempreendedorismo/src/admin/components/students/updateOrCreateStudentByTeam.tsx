@@ -8,7 +8,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse, TeamConfig } from '../../../model/student'
-import { formatCPF } from '../../../utils/types'
+import { formatCPF, formatDateForInput } from '../../../utils/types'
 import { ClassesSelect } from '../common/classesSelect'
 import { TeamSelect } from '../common/teamSelect'
 
@@ -73,14 +73,6 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
       ...prev!,
       tamanhoCamisa: value || undefined
     }))
-  }
-
-  const formatDateForInput = (date?: Date | string): string => {
-    if (!date) return '';
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    const offset = dateObj.getTimezoneOffset() * 60000;
-    const localDate = new Date(dateObj.getTime() - offset);
-    return localDate.toISOString().split('T')[0]; // Retorna 'yyyy-MM-dd'
   }
 
   const handleSubmit = async (e: FormEvent) => {

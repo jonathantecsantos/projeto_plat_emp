@@ -12,7 +12,6 @@ export const TeamMultipleSelect = ({ onChange, value, disable, className }: Team
   const { data: teams, isLoading } = useGetAllTeamsQuery()
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
-  //TODO winnicius fix edit teacher component
 
   return (
     <FormControl className='sm:w-1/2 sm:pr-2' variant="outlined">
@@ -25,6 +24,18 @@ export const TeamMultipleSelect = ({ onChange, value, disable, className }: Team
         value={value} // Valor atual selecionado
         onChange={(e) => onChange(e.target.value as number[])} // Converter para array de números
         label="Equipes"
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              '& .MuiMenuItem-root.Mui-selected': {
+                backgroundColor: '#D1E8FF', // Cor de fundo para itens selecionados
+                '&:hover': {
+                  backgroundColor: '#A8D1FF', // Cor ao passar o mouse sobre itens selecionados
+                },
+              },
+            },
+          },
+        }}
         disabled={disable} // Desabilita se necessário
         sx={{
           '& .MuiOutlinedInput-root': {

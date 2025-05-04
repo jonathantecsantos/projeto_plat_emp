@@ -30,7 +30,7 @@ export interface CreateOrUpdateTeacher {
   nome: string
   cpf: string
   email: string
-  idEquipe: number[] | null
+  idEquipe: number[]
   dataNascimento: Date,
   tamanhoCamisa: string,
 }

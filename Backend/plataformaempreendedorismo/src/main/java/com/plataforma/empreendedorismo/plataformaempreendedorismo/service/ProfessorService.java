@@ -76,6 +76,7 @@ public class ProfessorService {
             professor.setTamanhoCamisa(professorEditarRecord.tamanhoCamisa());
         }
         if(professorEditarRecord.idEquipe() != null){
+            professor.getEquipes().clear();
             for(Long id : professorEditarRecord.idEquipe()){
                 equipeRepository.findById(id).ifPresent(professor.getEquipes()::add);
             }

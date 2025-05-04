@@ -11,12 +11,39 @@ import { useCreateTeacherMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { formatCPF } from '../../../utils/types'
 import { TeamMultipleSelect } from './teamMultipleSelect'
+import { TeamConfig } from '../../../model/student'
 
 const createTeacherSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
   cpf: z.string().min(11, "CPF deve ter pelo menos 11 caracteres"),
   email: z.string().email("Email inválido"),
-  idEquipe: z.array(z.number()).optional().nullable(), // Permitir múltiplas equipes regra professor
+  idEquipe: z.array(z.number().min(1, "ID de equipe inválido"))
+    .min(1, "Selecione pelo menos uma equipe"), // Permitir múltiplas equipes regra professor
+  dataNascimento: z.preprocess(
+    (val) => {
+      if (!val) return undefined;
+      // Remove a parte do tempo se existir
+      if (val instanceof Date) {
+        return new Date(val.toISOString().split('T')[0]);
+      }
+      if (typeof val === 'string') {
+        return new Date(val.split('T')[0]);
+      }
+      return undefined;
+    },
+    z.date({
+      required_error: 'Data de nascimento é obrigatória',
+      invalid_type_error: 'Data inválida',
+    })
+      .refine(date => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date <= today;
+      }, { message: "Data não pode ser no futuro" })
+  ),
+  tamanhoCamisa: z.nativeEnum(TeamConfig.ShirtSize, {
+    errorMap: () => ({ message: "Tamanho inválido" })
+  }),
 })
 
 type CreateTeacherForm = z.infer<typeof createTeacherSchema>
@@ -37,7 +64,9 @@ export const CreateTeacher = () => {
       email: searchParams.get('email') || '',
       idEquipe: searchParams.get('idEquipe')
         ? searchParams.get('idEquipe')!.split(',').map(Number)
-        : [], 
+        : [],
+      dataNascimento: searchParams.get('dataNascimento') ? new Date(searchParams.get('dataNascimento')!) : undefined,
+      tamanhoCamisa: searchParams.get('tamanhoCamisa') as TeamConfig.ShirtSize,
     },
   })
 
@@ -118,12 +147,59 @@ export const CreateTeacher = () => {
                   value={field.value ?? []}
                   onChange={(teamIds) => {
                     field.onChange(teamIds)
-                    handleInputChange('idEquipe', teamIds) 
+                    handleInputChange('idEquipe', teamIds)
                   }}
                 />
               )}
             />
             {errors.idEquipe && <p className="text-red-500 text-sm mt-1">{errors.idEquipe.message}</p>}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label htmlFor="dataNascimento" className="block text-sm font-medium text-gray-700">
+              Data de Nascimento
+            </label>
+            <Controller
+              name="dataNascimento"
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="date"
+                  value={field.value ? field.value.toISOString().split('T')[0] : ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const dateValue = value ? new Date(value) : null;
+                    field.onChange(dateValue);
+                    handleInputChange('dataNascimento', value);
+                  }}
+                  max={new Date().toISOString().split('T')[0]}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                />
+              )}
+            />
+            {errors.dataNascimento && (
+              <p className="text-red-500 text-sm mt-1">{errors.dataNascimento.message}</p>
+            )}
+          </div>
+          <div>
+            <label htmlFor="tamanhoCamisa" className="block text-sm font-medium text-gray-700">
+              Tamanho da Camisa
+            </label>
+            <select
+              {...register('tamanhoCamisa')}
+              onChange={(e) => handleInputChange('tamanhoCamisa', e.target.value)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            >
+              {Object.values(TeamConfig.ShirtSize).map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+            {errors.tamanhoCamisa && (
+              <p className="text-red-500 text-sm mt-1">{errors.tamanhoCamisa.message}</p>
+            )}
           </div>
         </div>
         <div className={`flex items-center justify-between`}>

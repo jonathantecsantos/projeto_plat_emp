@@ -1,15 +1,16 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
-import { FormEvent, useEffect, useState } from "react"
+import { LoadingButton } from '@mui/lab'
+import { CircularProgress } from "@mui/material"
+import { useSnackbar } from "notistack"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useCreateTeacherMutation, useGetTeacherQuery, useUpdateTeacherMutation } from "../../../api/studentApi"
 import { CreateOrUpdateTeacher, TeacherIdResponse } from "../../../model/teacher"
-import { useSnackbar } from "notistack"
-import { useNavigate } from "react-router-dom"
-import { formatCPF } from "../../../utils/types"
-import { CircularProgress } from "@mui/material"
-import { LoadingButton } from '@mui/lab'
-import { TeamSelect } from '../common/teamSelect'
+import { formatCPF, formatDateForInput } from "../../../utils/types"
+import { TeamsSelect } from '../common/teamsSelect'
+import { TeamConfig } from '../../../model/student'
 
 interface UpdateOrCreateTeacherProps {
   id: number
@@ -19,7 +20,8 @@ interface UpdateOrCreateTeacherProps {
 export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeacherProps) => {
   const { data, isLoading } = useGetTeacherQuery(id, { skip: !!teamData })
 
-  const [teacher, setTeacher] = useState<TeacherIdResponse | null>(null)
+  const [teacher, setTeacher] = useState<Partial<TeacherIdResponse> | null>(null)
+  const [selectedTeamIds, setSelectedTeamIds] = useState<number[]>(teamData?.id ? [teamData.id] : [])
   const [updateTeacher, { isSuccess, isLoading: updating }] = useUpdateTeacherMutation()
   const [createTecher, { isLoading: creating }] = useCreateTeacherMutation()
   const [success, setSucess] = useState(isSuccess)
@@ -29,6 +31,7 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
   useEffect(() => {
     if (data) {
       setTeacher(data)
+      setSelectedTeamIds(data.equipe.map(team => team.id))
     }
   }, [data])
 
@@ -39,13 +42,40 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
     }))
   }
 
+  const handleTeamChange = (newTeamIds: number[]) => {
+    if (teamData?.id && !id) {
+      const updatedIds = Array.from(new Set([teamData.id, ...newTeamIds]))
+      setSelectedTeamIds(updatedIds)
+    }
+    else {
+      setSelectedTeamIds(newTeamIds)
+    }
+  }
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setTeacher(prev => ({
+      ...prev!,
+      dataNascimento: new Date(value)
+    }))
+  }
+
+  const handleShirtSizeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as TeamConfig.ShirtSize;
+    setTeacher(prev => ({
+      ...prev!,
+      tamanhoCamisa: value || undefined
+    }))
+  }
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    const updatedTeacher: CreateOrUpdateTeacher = {
+    const updatedTeacher: Partial<CreateOrUpdateTeacher> = {
       nome: teacher?.nome || '',
-      cpf: formatCPF(teacher!.cpf) || '',
+      cpf: formatCPF(teacher?.cpf!) || '',
       email: teacher?.email || '',
-      idEquipe: teacher?.equipe?.id || teamData?.id || 0,
+      idEquipe: selectedTeamIds,
+      dataNascimento: teacher?.dataNascimento,
+      tamanhoCamisa: teacher?.tamanhoCamisa
     }
 
     if (teamData?.id) {
@@ -68,8 +98,6 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
     }
 
   }
-
-
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
 
@@ -108,44 +136,48 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
-          {/* <div>
-            <label htmlFor="idEquipe" className="block text-sm font-medium text-gray-700">ID Equipe</label>
-            <input
-              id="idEquipe"
-              type="number"
-              value={teacher?.equipe?.id || teamData?.id}
-              disabled={!!teamData?.id}
-              onChange={(e) => {
-                const equipeId = parseInt(e.target.value)
-                setTeacher((prevData) => ({
-                  ...prevData!,
-                  equipe: {
-                    ...prevData!.equipe,
-                    id: equipeId
-                  }
-                }))
-              }}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div> */}
           <div className='mt-4'>
-            <TeamSelect
-              className='py-1 mt-2 rounded-md w-56'
-              onChange={(e) => {
-                const equipeId = parseInt(e.target.value)
-                setTeacher((prevData) => ({
-                  ...prevData!,
-                  equipe: {
-                    ...prevData!.equipe,
-                    id: equipeId
-                  }
-                }))
-              }}
-              value={!!teamData?.id ? teamData.id : teacher?.equipe?.id || null}
+            <TeamsSelect
+              value={selectedTeamIds}
+              onChange={handleTeamChange}
               disable={!!teamData?.id}
+              className='py-1 mt-2 rounded-md w-56'
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label htmlFor="dataNascimento" className="block text-sm font-medium text-gray-700">
+              Data de Nascimento
+            </label>
+            <input
+              id="dataNascimento"
+              type="date"
+              value={formatDateForInput(teacher?.dataNascimento!)}
+              onChange={handleDateChange}
+              max={new Date().toISOString().split('T')[0]}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
 
+          <div>
+            <label htmlFor="tamanhoCamisa" className="block text-sm font-medium text-gray-700">
+              Tamanho da Camisa
+            </label>
+            <select
+              id="tamanhoCamisa"
+              value={teacher?.tamanhoCamisa || ''}
+              onChange={handleShirtSizeChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            >
+              <option value="">Camisa</option>
+              {Object.values(TeamConfig.ShirtSize).map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className={`flex items-center justify-between`}>
           <div className='flex gap-4'>

@@ -75,8 +75,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     setEsquemaFiles(Array.from(e.target.files || []))
   }
 
-
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
@@ -167,7 +165,7 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     } catch (error: any) {
       enqueueSnackbar(`${error?.data}`, { variant: 'error' })
     }
-g
+
   }
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>

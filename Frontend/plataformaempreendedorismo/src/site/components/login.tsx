@@ -1,14 +1,14 @@
 import { LoadingButton } from "@mui/lab"
+import { LinearProgress } from "@mui/material"
 import { jwtDecode } from "jwt-decode"
 import { useSnackbar } from "notistack"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useGetEventValidateByIdQuery } from "../../api/studentApi"
 import { RoutesNames } from "../../globals"
 import { EventsTypes } from "../../model/config"
 import { UserApiService } from "../../services/login"
 import { Login, LoginTokenJWT, Roles } from "../../utils/types"
-import { CircularProgress } from "@mui/material"
 
 
 export const LoginComponent = () => {
@@ -40,7 +40,7 @@ export const LoginComponent = () => {
     }
   }
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const username = e.target.value
     setUser({
       ...user,
@@ -48,7 +48,7 @@ export const LoginComponent = () => {
     } as Login)
   }
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const password = e.target.value
     setUser({
       ...user,
@@ -89,7 +89,7 @@ export const LoginComponent = () => {
               <span>Entrar</span>
             </LoadingButton>
           </div>
-          {registerLoading ? <div className='text-center'><CircularProgress /></div> :
+          {registerLoading ? <div className='text-center my-2'><LinearProgress /></div> :
             isValid && isValid ? <div className="flex flex-col gap-2 mt-8 text-center">
               <div className="text-sm text-[#888]">Inscrições abertas!</div>
               <div className="text-sm text-[#888]">Acesse o formulário e faça sua inscrição!</div>

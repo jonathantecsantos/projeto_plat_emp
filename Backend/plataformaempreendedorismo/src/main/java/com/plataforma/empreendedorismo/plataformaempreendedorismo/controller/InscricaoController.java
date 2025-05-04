@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import util.exceptions.CpfDuplicadoException;
-import util.exceptions.EmailDuplicadoException;
-import util.exceptions.LimiteProfessorEquipeException;
+import util.exceptions.*;
 
 @RestController
 @RequestMapping("inscricoes")
@@ -49,7 +47,8 @@ public class InscricaoController {
             inscricaoService.processarInscricao(inscricaoRecord);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Inscrição realizada com sucesso!");
-        }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException e){
+        }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException |
+                CpfUtilizadoException | EmailUtilizadoException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e){
             return ResponseEntity.badRequest().build();

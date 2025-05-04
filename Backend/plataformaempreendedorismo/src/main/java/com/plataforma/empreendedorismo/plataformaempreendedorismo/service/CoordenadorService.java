@@ -72,15 +72,5 @@ public class CoordenadorService {
         }
 
     }
-    @Transactional
-    public void apagarCoordenadorAndUsuario(Long id) throws UsuarioNaoEncontradoException {
-        Coordenador coordenador = coordenadorRepository.getReferenceById(id);
-        Usuario usuario = usuarioService.buscarUsuarioPorLogin(coordenador.getEmail());
-        if(usuario != null){
-            usuarioService.apagarUsuario(usuario);
-            coordenadorRepository.deleteById(id);
-        }else {
-            throw new UsuarioNaoEncontradoException ("Usuário não encotrado");
-        }
-    }
+
 }

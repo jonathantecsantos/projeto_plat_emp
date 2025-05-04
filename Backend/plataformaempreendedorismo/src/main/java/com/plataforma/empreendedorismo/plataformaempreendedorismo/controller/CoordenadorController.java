@@ -85,7 +85,7 @@ public class CoordenadorController {
     @DeleteMapping("/apagar/{id}")
     public ResponseEntity<String> apagar (@PathVariable Long id){
         try{
-            coordenadorService.apagarCoordenadorAndUsuario(id);
+            coordenadorRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Coordenador apagado com sucesso!");
         }catch (Exception e){

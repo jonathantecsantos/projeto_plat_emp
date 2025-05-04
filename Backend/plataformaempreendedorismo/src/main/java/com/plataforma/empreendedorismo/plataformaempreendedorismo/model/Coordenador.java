@@ -26,7 +26,7 @@ public class Coordenador {
 
     private String email;
 
-    @OneToOne(mappedBy = "coordenador")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "coordenador")
     private Usuario usuario;
 
     public Coordenador(CoordenadorCadastroRecord coordenadorCadastroRecord) {

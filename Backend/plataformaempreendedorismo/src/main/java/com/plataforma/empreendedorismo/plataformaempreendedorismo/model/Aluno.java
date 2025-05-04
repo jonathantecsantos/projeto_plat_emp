@@ -41,7 +41,7 @@ public class Aluno implements Serializable {
     private String tamanhoCamisa;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "aluno")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "aluno")
     private Usuario usuario;
 
     @JsonIgnore

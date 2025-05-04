@@ -29,7 +29,7 @@ public class Avaliador {
 
     private String email;
 
-    @OneToOne(mappedBy = "avaliador")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "avaliador")
     private Usuario usuario;
 
     @ManyToMany

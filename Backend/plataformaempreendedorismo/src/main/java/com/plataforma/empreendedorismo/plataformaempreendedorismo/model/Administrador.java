@@ -23,6 +23,6 @@ public class Administrador {
 
     private String email;
 
-    @OneToOne(mappedBy = "administrador")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "administrador")
     private Usuario usuario;
 }

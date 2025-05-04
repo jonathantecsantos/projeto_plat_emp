@@ -41,13 +41,12 @@ public class Professor {
     private List<Equipe> equipes = new ArrayList<>();
 
     @JsonIgnore
-    @OneToOne(mappedBy = "professor")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "professor")
     private Usuario usuario;
 
     private Date dataNascimento;
 
     private String tamanhoCamisa;
-
 
     public Professor(ProfessorCadastroRecord professorCadastroRecord, List<Equipe> equipes) {
         this.nome = professorCadastroRecord.nome().toUpperCase();

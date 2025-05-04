@@ -2,7 +2,7 @@ import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/
 import { useGetAllTeamsQuery } from "../../../api/studentApi";
 
 interface TeamSelectProps {
-  value: number | null
+  value?: number
   onChange: (event: any) => void
   disable?: boolean
   className?: string

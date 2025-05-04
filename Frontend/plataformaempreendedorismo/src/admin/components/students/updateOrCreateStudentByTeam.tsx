@@ -4,10 +4,10 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import { LoadingButton } from "@mui/lab"
 import { CircularProgress } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { FormEvent, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
-import { CreateOrUpdateStudent, StudentIdResponse } from '../../../model/student'
+import { CreateOrUpdateStudent, StudentIdResponse, TeamConfig } from '../../../model/student'
 import { formatCPF } from '../../../utils/types'
 import { ClassesSelect } from '../common/classesSelect'
 import { TeamSelect } from '../common/teamSelect'
@@ -59,10 +59,33 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
     }))
   }
 
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setStudent(prev => ({
+      ...prev!,
+      dataNascimento: new Date(value)
+    }))
+  }
+
+  const handleShirtSizeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as TeamConfig.ShirtSize;
+    setStudent(prev => ({
+      ...prev!,
+      tamanhoCamisa: value || undefined
+    }))
+  }
+
+  const formatDateForInput = (date?: Date | string): string => {
+    if (!date) return '';
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const offset = dateObj.getTimezoneOffset() * 60000;
+    const localDate = new Date(dateObj.getTime() - offset);
+    return localDate.toISOString().split('T')[0]; // Retorna 'yyyy-MM-dd'
+  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    const updatedStudent: CreateOrUpdateStudent = {
+    const updatedStudent: Partial<CreateOrUpdateStudent> = {
       nome: student?.nome || '',
       cpf: formatCPF(student?.cpf || '') || '',
       email: student?.email || '',
@@ -70,7 +93,9 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
       idEquipe: student?.equipe?.id || teamData?.id || 0,
       isLider: student?.isLider || false,
       isViceLider: student?.isViceLider || false,
-      dataNascimento: student?.dataNascimento || new Date(),
+      dataNascimento: student?.dataNascimento
+        ? new Date(student.dataNascimento).toISOString().split('T')[0]
+        : undefined,
       tamanhoCamisa: student?.tamanhoCamisa!,
     }
 
@@ -140,9 +165,43 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
           />
 
         </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label htmlFor="dataNascimento" className="block text-sm font-medium text-gray-700">
+              Data de Nascimento
+            </label>
+            <input
+              id="dataNascimento"
+              type="date"
+              value={formatDateForInput(student?.dataNascimento!)}
+              onChange={handleDateChange}
+              max={new Date().toISOString().split('T')[0]}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="tamanhoCamisa" className="block text-sm font-medium text-gray-700">
+              Tamanho da Camisa
+            </label>
+            <select
+              id="tamanhoCamisa"
+              value={student?.tamanhoCamisa || ''}
+              onChange={handleShirtSizeChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            >
+              <option value="">Camisa</option>
+              {Object.values(TeamConfig.ShirtSize).map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         <TeamSelect
           onChange={handleSelectChange}
-          value={!!teamData?.id ? teamData.id : student?.equipe?.id || null}
+          value={!!teamData?.id ? teamData.id : student?.equipe?.id || undefined}
           disable={!!teamData?.id}
         />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -166,10 +225,6 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
             />
             <label htmlFor="isViceLider" className="ml-2 block text-sm font-medium text-gray-700">Vice-Líder</label>
           </div>
-        </div>
-        <div className='my-4 flex justify-between text-sm'>
-          {/* <span>Equipe: {student?.equipe?.nome || teamData?.nomeEquipe}</span> */}
-          {/* {student?.equipe?.odsList && <span>{student?.equipe.odsList?.codigo}: {student?.equipe.odsList?.descricao}</span>} */}
         </div>
 
         <div className={`flex items-center justify-between`}>

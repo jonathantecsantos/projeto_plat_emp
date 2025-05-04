@@ -11,6 +11,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { RoutesNames } from '../../../globals'
 import { formatCPF } from '../../../utils/types'
 import { TeamSelect } from '../common/teamSelect'
+import { TeamConfig } from '../../../model/student'
 
 const createStudentSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -19,8 +20,32 @@ const createStudentSchema = z.object({
   turma: z.string().min(1, "Turma é obrigatória"),
   isLider: z.boolean(),
   isViceLider: z.boolean(),
-  // idOds: z.preprocess((val) => Number(val), z.number().int().nullable()),
-  idEquipe: z.preprocess((val) => Number(val), z.number().int().nullable()),
+  idEquipe: z.number({ required_error: "Selecione uma equipe" }),
+  dataNascimento: z.preprocess(
+    (val) => {
+      if (!val) return undefined;
+      // Remove a parte do tempo se existir
+      if (val instanceof Date) {
+        return new Date(val.toISOString().split('T')[0]);
+      }
+      if (typeof val === 'string') {
+        return new Date(val.split('T')[0]);
+      }
+      return undefined;
+    },
+    z.date({
+      required_error: 'Data de nascimento é obrigatória',
+      invalid_type_error: 'Data inválida',
+    })
+      .refine(date => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date <= today;
+      }, { message: "Data não pode ser no futuro" })
+  ),
+  tamanhoCamisa: z.nativeEnum(TeamConfig.ShirtSize, {
+    errorMap: () => ({ message: "Tamanho inválido" })
+  }),
 })
 
 type CreateStudentForm = z.infer<typeof createStudentSchema>
@@ -43,8 +68,9 @@ export const CreateStudent = () => {
       turma: searchParams.get('turma') || '',
       isLider: searchParams.get('isLider') === 'true',
       isViceLider: searchParams.get('isViceLider') === 'true',
-      // idOds: searchParams.get('idOds') ? Number(searchParams.get('idOds')) : null,
-      idEquipe: searchParams.get('idEquipe') ? Number(searchParams.get('idEquipe')) : null,
+      idEquipe: searchParams.get('idEquipe') ? Number(searchParams.get('idEquipe')) : undefined,
+      dataNascimento: searchParams.get('dataNascimento') ? new Date(searchParams.get('dataNascimento')!) : undefined,
+      tamanhoCamisa: searchParams.get('tamanhoCamisa') as TeamConfig.ShirtSize,
     },
   })
 
@@ -56,7 +82,7 @@ export const CreateStudent = () => {
       setSucess(true)
     } catch (error: any) {
       console.log(error)
-      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+      enqueueSnackbar(`${error?.data?.error}`, { variant: 'error' })
     }
   }
 
@@ -139,24 +165,71 @@ export const CreateStudent = () => {
             />
             {errors.turma && <p className="text-red-500 text-sm mt-1">{errors.turma.message}</p>}
           </div>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
+            <label htmlFor="dataNascimento" className="block text-sm font-medium text-gray-700">
+              Data de Nascimento
+            </label>
             <Controller
-              name="idEquipe"
+              name="dataNascimento"
               control={control}
               render={({ field }) => (
-                <TeamSelect
-                  className='sm:w-60 py-1 mt-2 rounded-md'
-                  value={field.value}  // Valor atual
-                  onChange={(teamId) => {
-                    field.onChange(teamId)
-                    handleInputChange('idEquipe', teamId.toString())
-                    // Sincronizando com o searchParams
+                <input
+                  type="date"
+                  value={field.value ? field.value.toISOString().split('T')[0] : ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const dateValue = value ? new Date(value) : null;
+                    field.onChange(dateValue);
+                    handleInputChange('dataNascimento', value);
                   }}
+                  max={new Date().toISOString().split('T')[0]}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 />
               )}
             />
-            {errors.idEquipe && <p className="text-red-500 text-sm mt-1">{errors.idEquipe.message}</p>}
+            {errors.dataNascimento && (
+              <p className="text-red-500 text-sm mt-1">{errors.dataNascimento.message}</p>
+            )}
           </div>
+          <div>
+            <label htmlFor="tamanhoCamisa" className="block text-sm font-medium text-gray-700">
+              Tamanho da Camisa
+            </label>
+            <select
+              {...register('tamanhoCamisa')}
+              onChange={(e) => handleInputChange('tamanhoCamisa', e.target.value)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            >
+              {Object.values(TeamConfig.ShirtSize).map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+            {errors.tamanhoCamisa && (
+              <p className="text-red-500 text-sm mt-1">{errors.tamanhoCamisa.message}</p>
+            )}
+          </div>
+        </div>
+        <div>
+          <Controller
+            name="idEquipe"
+            control={control}
+            render={({ field }) => (
+              <TeamSelect
+                className='py-1 mt-2 rounded-md'
+                value={field.value}  // Valor atual
+                onChange={(teamId) => {
+                  field.onChange(teamId)
+                  handleInputChange('idEquipe', teamId.toString())
+                  // Sincronizando com o searchParams
+                }}
+              />
+            )}
+          />
+          {errors.idEquipe && <p className="text-red-500 text-sm mt-1">{errors.idEquipe.message}</p>}
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex items-center">

@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { useDeleteTeacherMutation, useGetTeachersQuery, usePasswordResetMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { TeachersResponse } from "../../../model/teacher"
-import { Roles } from '../../../utils/types'
+import { formatDate, Roles } from '../../../utils/types'
 import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from '../table'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
@@ -158,6 +158,8 @@ export const TeachersComponent = () => {
               'Nome',
               'Email',
               'Equipe',
+              'Nascimento',
+              'Tam. Camisa',
               'Ação'
             ]}
 
@@ -169,6 +171,8 @@ export const TeachersComponent = () => {
                 <td className="px-4 py-2 capitalize text-nowrap">{teacher.nome}</td>
                 <td className="px-4 py-2 text-nowrap">{teacher.email}</td>
                 <td className="px-4 py-2 capitalize">{generateTeamsName(teacher.equipeRecord)}</td>
+                <td className='px-4 py-2'>{teacher.dataNascimento && formatDate(teacher.dataNascimento.toString())}</td>
+                <td className='px-4 py-2'>{teacher.tamanhoCamisa}</td>
                 <td className="">
                   <IconButton
                     className='hover:text-white no-row-click'

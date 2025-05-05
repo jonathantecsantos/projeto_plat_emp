@@ -69,7 +69,7 @@ export const Top5Classification = () => {
           )
         })}
       </div>
-      {!isRunning && <p className="text-center text-sm  text-gray-500">
+      {!isRunning && <p className="text-center text-sm mt-20 text-gray-500">
         Pressione <kbd className="px-1 border rounded">Enter</kbd> para iniciar/parar, E
         <kbd className="mx-1 px-1 border rounded">←</kbd>
         <kbd className="px-1 border rounded">→</kbd> para navegar

@@ -15,9 +15,9 @@ interface TrophyCardProps {
 
 const trophyColors = [
   "text-yellow-600", // 1st
-  "text-blue-600",     // 2nd
-  "text-cyan-600",     // 3rd
-  "text-gray-600",     // 4th
+  "text-gray-600",     // 2nd
+  "text-amber-600",     // 3rd
+  "text-cyan-600",     // 4th
   "text-green-600",   // 5th
 ]
 
@@ -60,17 +60,17 @@ export const TrophyCard = ({ rank, teamName, score, visible, }: TrophyCardProps)
 
   return (
     <div
-      className={`${visible ? "block" : "hidden"
+      className={`${visible ? "block" : "hidden "
         } ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"} w-full`}
     >
       <div
         className={`rounded-lg flex flex-col items-center justify-center w-80 h-full
          ${trophyColor} relative`}
       >
-        <img src={rankTrophyCard} alt="Trophy" className="w-80" />
+        <img src={rankTrophyCard} alt="Trophy" className="w-70" />
         <div className={`h-${spacing} bg-[#e4e9ec] w-full border-4 ${trophyTBorderColor}`}></div>
         {/* <div className="text-center font-bold text-8xl absolute inset-10">{rankLabelTropy}</div> Itens no centro do tropeu*/}
-        <div className={`bg-[#e4e9ec] w-full h-44 border-4 ${trophyBBorderColor}`}>
+        <div className={`bg-[#e4e9ec] w-full h-44 border-4 ${trophyBBorderColor} `}>
           <div className="text-center font-bold text-4xl">{rankLabel}</div>
           <div className="text-center text-4xl font-bold">{teamName}</div>
           <div className="text-center text-4xl font-bold">{score}</div>

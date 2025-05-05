@@ -199,22 +199,35 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
 
   const actions = [
     {
-      icon: <SchoolIcon />, name: 'Adicionar Aluno', onClick: () => navigate(RoutesNames.student,
-        {
-          state: {
-            id: id,
-            nomeEquipe: team?.nomeEquipe,
-          }
-        })
+      icon: <SchoolIcon />, name: 'Adicionar Aluno', onClick: () => {
+        if (team?.alunos && team.alunos.length >= 8) {
+          enqueueSnackbar('Maximo 8 alunos', { variant: 'warning' })
+          return
+        }
+        navigate(RoutesNames.student,
+          {
+            state: {
+              id: id,
+              nomeEquipe: team?.nomeEquipe,
+            }
+          })
+      }
     },
     {
-      icon: <LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => navigate(RoutesNames.teacher,
-        {
-          state: {
-            id: id,
-            nomeEquipe: team?.nomeEquipe,
-          }
-        })
+      icon: <LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => {
+        if (team?.professores && team.professores.length > 0) {
+          enqueueSnackbar('Apenas 1 professor por time', { variant: 'warning' })
+          return
+        }
+        navigate(RoutesNames.teacher,
+          {
+            state: {
+              id: id,
+              nomeEquipe: team?.nomeEquipe,
+            }
+          })
+      }
+
     },
   ]
 

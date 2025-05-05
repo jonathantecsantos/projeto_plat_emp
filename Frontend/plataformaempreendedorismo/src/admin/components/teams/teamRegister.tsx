@@ -42,7 +42,7 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
   return (
     <div ref={printRef} className="w-full max-w-6xl mx-auto bg-white p-8 print:p-4 print:text-[12px]">
       <h1 className="text-center text-lg font-bold mb-8">DLEI 2025 - 9º Desafio Lourdinas de Empreendedorismo e Inovação</h1>
-      <h2 className="text-center text-md font-semibold mb-4">FICHA DE INSCRIÇÃO / RECIBO</h2>
+      <h2 className="text-center text-lg font-semibold mb-4">FICHA DE INSCRIÇÃO / RECIBO</h2>
 
 
       <table className="w-full text-sm bg-[#fc56f4] border border-b-0 border-gray-700">

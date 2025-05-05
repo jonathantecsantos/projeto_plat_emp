@@ -13,6 +13,13 @@ export default {
     extend: {
       colors: {
         'ring-custom': '#6654c0',
+         trophy: {
+          1: '#ffa828', // ouro
+          2: '#89e1ff', // prata
+          3: '#c5c8d0', // bronze
+          4: '#89eeeb', // outros
+          5: '#dafd89'  // outros
+        }
       }
     },
     container: {

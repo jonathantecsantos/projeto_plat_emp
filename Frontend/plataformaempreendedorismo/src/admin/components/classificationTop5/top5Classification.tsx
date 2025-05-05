@@ -44,25 +44,20 @@ export const Top5Classification = () => {
   if (classification?.length < 5) return <p className="text-center mt-10">Menos de 5 classificações disponíveis.</p>
 
   const top5Classification = classification.slice(0, 5)
-
   const podiumOrder = [4, 2, 0, 1, 3]
-
   const heights = [140, 220, 400, 220, 140]
-
   const displayOrder = [4, 3, 2, 1, 0]
 
   return (
-    <div>
-      <div className="flex justify-center items-end gap-4">
+    <div className="">
+      <div className="flex items-end justify-center">
         {podiumOrder.map((orderedIndex, i) => {
           const item = top5Classification[orderedIndex]
           return (
             <div
               key={i}
-              className={`w-40 flex flex-col items-center justify-center p-4`}
-              style={{
-                height: `${heights[i]}px`,
-              }}>
+              className={`flex flex-col  justify-center p-2 h-full`}
+            >
               <TrophyCard
                 rank={orderedIndex}
                 teamName={item.equipe}

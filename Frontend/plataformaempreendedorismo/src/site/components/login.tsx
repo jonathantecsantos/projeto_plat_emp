@@ -9,6 +9,7 @@ import { RoutesNames } from "../../globals"
 import { EventsTypes } from "../../model/config"
 import { UserApiService } from "../../services/login"
 import { Login, LoginTokenJWT, Roles } from "../../utils/types"
+import { Footer } from "../../components/common/footer"
 
 
 export const LoginComponent = () => {
@@ -100,6 +101,7 @@ export const LoginComponent = () => {
               </LoadingButton>
             </div> : null}
         </div>
+        <Footer username=""/>
       </form>
     </div>
   )

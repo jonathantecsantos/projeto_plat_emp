@@ -50,13 +50,13 @@ export const Top5Classification = () => {
 
   return (
     <div className="">
-      <div className="flex items-end justify-center">
+      <div className="flex items-end justify-center w-dvw">
         {podiumOrder.map((orderedIndex, i) => {
           const item = top5Classification[orderedIndex]
           return (
             <div
               key={i}
-              className={`flex flex-col  justify-center p-2 h-full`}
+              className={`flex flex-col justify-center p-2 h-full`}
             >
               <TrophyCard
                 rank={orderedIndex}

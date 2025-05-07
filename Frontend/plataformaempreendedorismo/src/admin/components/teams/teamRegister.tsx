@@ -124,7 +124,7 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
               Provável(eis) Objetivo(s) de Desenvolvimento Sustentável(eis)
             </td>
             <td className="border border-t-0 border-gray-700 p-1">
-              {teamRegister?.odsList?.map((ods) => ods.descricao).join(", ")}
+              {teamRegister?.odsList?.map((ods) => ods.descricao).join(". ")}
             </td>
           </tr>
 
@@ -133,7 +133,7 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
               Provável(eis) Atividade(s) Empreendedora(s)
             </td>
             <td className="border border-gray-700 p-1">
-              {teamRegister?.tipoAtividades?.map((atv) => atv.descricao).join(", ")}
+              {teamRegister?.tipoAtividades?.map((atv) => atv.descricao).join(". ")}
             </td>
           </tr>
 
@@ -142,7 +142,7 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
               Instituição de Impacto Social parceira do Time
             </td>
             <td className="border border-gray-700 p-1">
-              {teamRegister?.instituicoes?.map((inst) => inst.descricao).join(", ")}
+              {teamRegister?.instituicoes?.map((inst) => inst.descricao).join(". ")}
             </td>
           </tr>
         </tbody>
@@ -163,7 +163,7 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
             </p>
           </div>
           <p className="my-4">Pelo que damos plena e total quitação ao presente Recibo.</p>
-          <p className="mt-4">Campina Grande, ____ de junho de 2025.</p>
+          <p className="mt-4">Campina Grande, ____ de _______ de _____.</p>
           <div className="w-full flex justify-end mt-4">
             <div className="text-center">
               <p className="mb-2 border-gray-900 border-b-[1px]"></p>

@@ -95,15 +95,15 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
 
   const validateTeamEdit = ({ ods, activitties, institution }: Partial<TeamValidation>) => {
     if (ods && ods.length > 3) {
-      enqueueSnackbar('Só é permitido até 3 ODS.', { variant: 'warning' })
+      enqueueSnackbar('Permitido até três ODS.', { variant: 'warning' })
       return false
     }
     if (activitties && activitties.length > 3) {
-      enqueueSnackbar('Só é permitido até 3 atividades.', { variant: 'warning' })
+      enqueueSnackbar('Permitido até três Atividades.', { variant: 'warning' })
       return false
     }
     if (institution && institution.length > 1) {
-      enqueueSnackbar('Só é permitido 1 instituição.', { variant: 'warning' })
+      enqueueSnackbar('Permitido apenas uma Instituição.', { variant: 'warning' })
       return false
     }
     return true
@@ -114,7 +114,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
       await updateTeam({ id: id, data: payload }).unwrap()
       enqueueSnackbar(successMessage, { variant: 'success' })
     } catch (error: any) {
-      const errorMessage = `${error?.data?.error}` || 'Erro ao atualizar a equipe.'
+      const errorMessage = `${error?.data?.error}` || 'Erro ao atualizar a Equipe.'
       enqueueSnackbar(errorMessage, { variant: 'error' })
     }
   }
@@ -129,7 +129,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         id: ods.id
       }))
     }
-    await handleUpdateTeam(payload, 'ODS editada com sucesso!')
+    await handleUpdateTeam(payload, 'ODS atualizada com sucesso!')
     handleEditOdsOpen(editOdsOpen)
   }
 
@@ -162,7 +162,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
       nome: newTeamName,  // Novo nome da equipe
       listIdOds: team?.odsList.map((ods) => ({ id: ods.id })) || [], // Manter ODS existentes
     }
-    await handleUpdateTeam(payload, 'Nome da equipe atualizado com sucesso!')
+    await handleUpdateTeam(payload, 'Nome da Equipe atualizada com sucesso!')
     setEditTeamNameOpen(false)
   }
 
@@ -201,7 +201,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     {
       icon: <SchoolIcon />, name: 'Adicionar Aluno', onClick: () => {
         if (team?.alunos && team.alunos.length >= 8) {
-          enqueueSnackbar('Maximo 8 alunos', { variant: 'warning' })
+          enqueueSnackbar('Permitido até 8 Alunos por Time', { variant: 'warning' })
           return
         }
         navigate(RoutesNames.student,
@@ -216,7 +216,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     {
       icon: <LocalLibraryIcon />, name: 'Adicionar Professor', onClick: () => {
         if (team?.professores && team.professores.length > 0) {
-          enqueueSnackbar('Apenas 1 professor por time', { variant: 'warning' })
+          enqueueSnackbar('Permitido apenas um Professor por Time', { variant: 'warning' })
           return
         }
         navigate(RoutesNames.teacher,

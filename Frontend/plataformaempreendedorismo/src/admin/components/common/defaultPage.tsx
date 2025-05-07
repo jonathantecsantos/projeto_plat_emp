@@ -1,7 +1,8 @@
-import { Avatar, Divider } from "@mui/material"
+import { Divider } from "@mui/material"
 import { ReactNode } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import lampLogo from '../../../assets/lamplogo.png'
 import { RoutesNames } from "../../../globals"
 import { RootState } from "../../../redux/store"
 import { Roles } from "../../../utils/types"
@@ -21,9 +22,7 @@ const LeftMenu = () => {
     <div className=" text-[#3C14A4] h-full z-30">
       <div className="w-full p-6 flex justify-center"
         onClick={() => navigate(RoutesNames.adminHome)}>
-        <Avatar alt="admin avatar"
-          className=" bg-[#3C14A4] shadow-md cursor-pointer transform hover:scale-105 transition-transform duration-300 w-16 h-16"
-        />
+        <img src={lampLogo} alt="Trophy" className="cursor-pointer transform hover:scale-125 transition-transform duration-300 w-16 h-16 hover:rotate-12" />
       </div>
       <Divider variant="middle" color="white" />
       <LeftMenuComponent />

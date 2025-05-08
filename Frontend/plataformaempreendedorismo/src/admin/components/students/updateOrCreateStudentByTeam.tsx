@@ -11,6 +11,7 @@ import { CreateOrUpdateStudent, StudentIdResponse, TeamConfig } from '../../../m
 import { ClassesSelectTypes, formatCPF, formatDateForInput } from '../../../utils/types'
 import { ClassesSelect } from '../common/classesSelect'
 import { TeamSelect } from '../common/teamSelect'
+import { createStudentSchema } from './createStudent'
 
 interface UpdateOrCreateStudentProps {
   id: number;
@@ -89,6 +90,19 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
         ? new Date(student.dataNascimento).toISOString().split('T')[0]
         : undefined,
       tamanhoCamisa: student?.tamanhoCamisa!,
+    }
+
+    const result = createStudentSchema.safeParse(updatedStudent);
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+
+      Object.entries(fieldErrors).forEach(([_field, messages]) => {
+        if (messages && messages.length > 0) {
+          enqueueSnackbar(`${messages[0]}`, { variant: 'error' });
+        }
+      })
+
+      return
     }
 
     if (teamData?.id) {

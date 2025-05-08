@@ -14,7 +14,7 @@ import { TeamSelect } from '../common/teamSelect'
 import { TeamConfig } from '../../../model/student'
 import { ValidateUtils } from 'essencials'
 
-const createStudentSchema = z.object({
+export const createStudentSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
   cpf: z.string().refine((cpf) => ValidateUtils.isValidCPF(cpf), { message: "CPF inválido", }),
   email: z.string().email("Email inválido").refine((email) => email.endsWith('@evl.com.br'), {

@@ -45,7 +45,6 @@ export const Top5Classification = () => {
 
   const top5Classification = classification.slice(0, 5)
   const podiumOrder = [4, 2, 0, 1, 3]
-  const heights = [140, 220, 400, 220, 140]
   const displayOrder = [4, 3, 2, 1, 0]
 
   return (
@@ -62,14 +61,13 @@ export const Top5Classification = () => {
                 rank={orderedIndex}
                 teamName={item.equipe}
                 score={item.totalNota}
-                height={heights[i]}
                 visible={currentIndex >= displayOrder.indexOf(orderedIndex)}
               />
             </div>
           )
         })}
       </div>
-      {!isRunning && <p className="text-center text-sm mt-20 text-gray-500">
+      {!isRunning && <p className="text-center text-base mt-20 text-gray-500">
         Pressione <kbd className="px-1 border rounded">Enter</kbd> para iniciar/parar, E
         <kbd className="mx-1 px-1 border rounded">←</kbd>
         <kbd className="px-1 border rounded">→</kbd> para navegar

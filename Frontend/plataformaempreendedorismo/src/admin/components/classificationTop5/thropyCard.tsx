@@ -10,7 +10,6 @@ interface TrophyCardProps {
   teamName: string
   score: number
   visible: boolean
-  height: number
 }
 
 const trophyColors = [
@@ -20,9 +19,7 @@ const trophyColors = [
   "text-cyan-600",     // 4th
   "text-green-600",   // 5th
 ]
-
-// const rankLabelsTropy = ["1", "2", "3", "4", "5"]
-const rankLabels = ["1º", "2º", "3º", "4º", "5º"]
+//                1st, 2nd, 3rd, 4th, 5th
 const rankHeight = [52, 40, 28, 20, 16]
 
 const rankImages = [
@@ -53,28 +50,21 @@ export const TrophyCard = ({ rank, teamName, score, visible, }: TrophyCardProps)
   const trophyColor = trophyColors[rank]
   const trophyTBorderColor = trophyTBorderClasses[rank]
   const trophyBBorderColor = trophyBBorderClasses[rank]
-  // const rankLabelTropy = rankLabelsTropy[rank]
   const rankTrophyCard = rankImages[rank]
-  const rankLabel = rankLabels[rank]
   const spacing = rankHeight[rank]
 
   return (
-    <div
-      className={`${visible ? "block" : "hidden "
-        } ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"} w-full`}
-    >
-      <div
-        className={`rounded-lg flex flex-col items-center justify-center w-72 h-full
-         ${trophyColor} relative`}
-      >
+    <div className={`${visible ? "block opacity-100 scale-100" : "hidden opacity-0 scale-95"} w-full`}>
+      <div className={`flex flex-col items-center justify-start w-72 text-center`}>
         <img src={rankTrophyCard} alt="Trophy" className="w-44" />
-        <div className={`h-${spacing} bg-[#e4e9ec] w-full border-4 ${trophyTBorderColor}`}></div>
-        <p className='absolute mt-20'><div className="text-center text-3xl font-bold">{teamName}</div></p>
-        {/* <div className="text-center font-bold text-8xl absolute inset-10">{rankLabelTropy}</div> Itens no centro do tropeu*/}
-        <div className={`bg-[#e4e9ec] w-full h-32 border-4 ${trophyBBorderColor} `}>
-          {/* <div className="text-center font-bold text-3xl">{rankLabel}</div> */}
-          {/* <div className="text-center text-3xl font-bold">{teamName}</div> */}
-          <div className="text-center text-3xl font-bold">{score}</div>
+        <div className={`bg-[#e4e9ec] w-full border-4 ${trophyTBorderColor}`} style={{ height: `${spacing * 2.4}px` }} />
+
+        <div className="flex items-center justify-center bg-[#e4e9ec] w-full h-20">
+          <div className={`text-3xl font-bold ${trophyColor}`}>{teamName}</div>
+        </div>
+
+        <div className={`bg-[#e4e9ec] w-full h-32 border-4 ${trophyBBorderColor} flex items-center justify-center`}>
+          <div className={`${trophyColor} text-3xl font-bold`}>{score}</div>
         </div>
       </div>
     </div>

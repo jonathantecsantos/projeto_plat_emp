@@ -6,7 +6,7 @@ import { ChangeEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useGetEventValidateByIdQuery } from "../../api/studentApi"
 import lampLogo from '../../assets/lamplogo.png'
-import { Footer, Footer2 } from "../../components/common/footer"
+import { Footer } from "../../components/common/footer"
 import { RoutesNames } from "../../globals"
 import { EventsTypes } from "../../model/config"
 import { UserApiService } from "../../services/login"

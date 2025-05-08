@@ -9,14 +9,17 @@ import { z } from 'zod'
 import { useCreateStudentMutation } from '../../../api/studentApi'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { RoutesNames } from '../../../globals'
-import { formatCPF } from '../../../utils/types'
+import { ClassesSelectTypes, formatCPF } from '../../../utils/types'
 import { TeamSelect } from '../common/teamSelect'
 import { TeamConfig } from '../../../model/student'
+import { ValidateUtils } from 'essencials'
 
 const createStudentSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
-  cpf: z.string().min(11, "CPF deve ter pelo menos 11 caracteres"),
-  email: z.string().email("Email inválido"),
+  cpf: z.string().refine((cpf) => ValidateUtils.isValidCPF(cpf), { message: "CPF inválido", }),
+  email: z.string().email("Email inválido").refine((email) => email.endsWith('@evl.com.br'), {
+    message: "Email deve ser institucional (@evl.com.br)",
+  }),
   turma: z.string().min(1, "Turma é obrigatória"),
   isLider: z.boolean(),
   isViceLider: z.boolean(),
@@ -155,14 +158,18 @@ export const CreateStudent = () => {
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
           </div>
           <div>
-            <label htmlFor="turma" className="block text-sm font-medium text-gray-700">Turma</label>
-            <input
-              id="turma"
-              type="text"
+            <label htmlFor="turma" className="block text-sm font-medium text-gray-700">Turma/Série</label>
+            <select
               {...register('turma')}
+
               onChange={(e) => handleInputChange('turma', e.target.value)}
+
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
+            >
+              {ClassesSelectTypes.map((turma) => (
+                <option key={turma} value={turma}>{turma}</option>
+              ))}
+            </select>
             {errors.turma && <p className="text-red-500 text-sm mt-1">{errors.turma.message}</p>}
           </div>
         </div>

@@ -8,7 +8,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse, TeamConfig } from '../../../model/student'
-import { formatCPF, formatDateForInput } from '../../../utils/types'
+import { ClassesSelectTypes, formatCPF, formatDateForInput } from '../../../utils/types'
 import { ClassesSelect } from '../common/classesSelect'
 import { TeamSelect } from '../common/teamSelect'
 
@@ -114,6 +114,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
 
+  const turmaNormalizada = ClassesSelectTypes.find((t) => t.toLowerCase() === (student?.turma || '').toLowerCase().trim())
 
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md border-t-2">
@@ -150,9 +151,8 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
-
           <ClassesSelect
-            value={student?.turma || ''}
+            value={turmaNormalizada || ''}
             onChange={(e) => handleInputChange('turma', e.target.value)}
           />
 

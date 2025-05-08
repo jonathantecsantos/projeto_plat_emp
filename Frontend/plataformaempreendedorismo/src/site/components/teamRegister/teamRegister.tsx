@@ -398,8 +398,8 @@ export const TeamRegister = () => {
                       onChange={(e) => handleStudentChange(index, 'turma', e.target.value)}
                       className="border rounded-md p-2 sm:w-28 w-full"
                     >
-                      {Object.values(ClassesSelectTypes).map((size) => (
-                        <option key={size} value={size}>{size}</option>
+                      {ClassesSelectTypes.map((turma) => (
+                        <option key={turma} value={turma}>{turma}</option>
                       ))}
                     </select>
                     {errors.alunos?.[index]?.turma && <p className="text-red-500 text-sm">{errors.alunos[index]?.turma?.message}</p>}

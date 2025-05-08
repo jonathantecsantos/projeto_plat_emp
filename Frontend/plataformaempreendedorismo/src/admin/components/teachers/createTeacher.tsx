@@ -12,11 +12,14 @@ import { RoutesNames } from '../../../globals'
 import { formatCPF } from '../../../utils/types'
 import { TeamMultipleSelect } from './teamMultipleSelect'
 import { TeamConfig } from '../../../model/student'
+import { ValidateUtils } from 'essencials'
 
-const createTeacherSchema = z.object({
+export const createTeacherSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
-  cpf: z.string().min(11, "CPF deve ter pelo menos 11 caracteres"),
-  email: z.string().email("Email inválido"),
+  cpf: z.string().refine((cpf) => ValidateUtils.isValidCPF(cpf), { message: "CPF inválido", }),
+  email: z.string().email("Email inválido").refine((email) => email.endsWith('@evl.com.br'), {
+    message: "Email deve ser institucional (@evl.com.br)",
+  }),
   idEquipe: z.array(z.number().min(1, "ID de equipe inválido"))
     .min(1, "Selecione pelo menos uma equipe"), // Permitir múltiplas equipes regra professor
   dataNascimento: z.preprocess(

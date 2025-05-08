@@ -8,7 +8,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse, TeamConfig } from '../../../model/student'
-import { ClassesSelectTypes, formatCPF, formatDateForInput } from '../../../utils/types'
+import { ClassesSelectTypes, formatCPF, formatDateForInput, validateSchema } from '../../../utils/types'
 import { ClassesSelect } from '../common/classesSelect'
 import { TeamSelect } from '../common/teamSelect'
 import { createStudentSchema } from './createStudent'
@@ -92,18 +92,8 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
       tamanhoCamisa: student?.tamanhoCamisa!,
     }
 
-    const result = createStudentSchema.safeParse(updatedStudent);
-    if (!result.success) {
-      const fieldErrors = result.error.flatten().fieldErrors;
-
-      Object.entries(fieldErrors).forEach(([_field, messages]) => {
-        if (messages && messages.length > 0) {
-          enqueueSnackbar(`${messages[0]}`, { variant: 'error' });
-        }
-      })
-
-      return
-    }
+    const validation = validateSchema(createStudentSchema, updatedStudent, (msg) => enqueueSnackbar(msg, { variant: 'error' }))
+    if (!validation.success) return
 
     if (teamData?.id) {
       try {

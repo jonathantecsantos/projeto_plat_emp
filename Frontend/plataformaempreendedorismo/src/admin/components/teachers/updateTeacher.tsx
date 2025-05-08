@@ -8,9 +8,10 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCreateTeacherMutation, useGetTeacherQuery, useUpdateTeacherMutation } from "../../../api/studentApi"
 import { CreateOrUpdateTeacher, TeacherIdResponse } from "../../../model/teacher"
-import { formatCPF, formatDateForInput } from "../../../utils/types"
+import { formatCPF, formatDateForInput, validateSchema } from "../../../utils/types"
 import { TeamsSelect } from '../common/teamsSelect'
 import { TeamConfig } from '../../../model/student'
+import { createTeacherSchema } from './createTeacher'
 
 interface UpdateOrCreateTeacherProps {
   id: number
@@ -77,6 +78,9 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
       dataNascimento: teacher?.dataNascimento,
       tamanhoCamisa: teacher?.tamanhoCamisa
     }
+
+    const validation = validateSchema(createTeacherSchema, updatedTeacher, (msg) => enqueueSnackbar(msg, { variant: 'error' }))
+    if (!validation.success) return
 
     if (teamData?.id) {
       try {

@@ -1,5 +1,6 @@
 import { TeamEvaluation, TeamEvaluationResponse } from "../model/evaluationFormat"
 import { Ods } from "../model/ods"
+import { ZodSchema } from "zod"
 
 export enum ImportType {
   student = 'ALUNO',
@@ -7,6 +8,28 @@ export enum ImportType {
   teacher = 'PROFESSOR',
   coordinator = 'COORDENADOR'
 }
+
+export const validateSchema = <T>(
+  schema: ZodSchema<T>,
+  data: unknown,
+  notify: (msg: string) => void
+): { success: true; data: T } | { success: false } => {
+  const result = schema.safeParse(data)
+
+  if (!result.success) {
+    const fieldErrors = result.error.flatten().fieldErrors as Record<string, string[] | undefined>;
+
+    Object.entries(fieldErrors).forEach(([_field, messages]) => {
+      if (Array.isArray(messages) && messages.length > 0) {
+        notify(`${messages[0]}`)
+      }
+    })
+
+    return { success: false }
+  }
+
+  return { success: true, data: result.data }
+};
 
 
 export enum Roles {
@@ -129,13 +152,13 @@ export const formatDate = (dateString: string): string => {
   }).format(date);
 };
 
- export const formatDateForInput = (date?: Date | string): string => {
-    if (!date) return '';
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    const offset = dateObj.getTimezoneOffset() * 60000;
-    const localDate = new Date(dateObj.getTime() - offset);
-    return localDate.toISOString().split('T')[0]; // Retorna 'yyyy-MM-dd'
-  }
+export const formatDateForInput = (date?: Date | string): string => {
+  if (!date) return '';
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const offset = dateObj.getTimezoneOffset() * 60000;
+  const localDate = new Date(dateObj.getTime() - offset);
+  return localDate.toISOString().split('T')[0]; // Retorna 'yyyy-MM-dd'
+}
 
 export const ClassesSelectTypes = [
   "1ª Série A",

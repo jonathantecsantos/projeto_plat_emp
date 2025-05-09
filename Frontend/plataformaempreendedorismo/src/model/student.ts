@@ -47,3 +47,7 @@ export interface CreateOrUpdateStudent {
   tamanhoCamisa: TeamConfig.ShirtSize
 }
 
+export interface StudentRecordResponse {
+  login: string
+  senha: string
+}

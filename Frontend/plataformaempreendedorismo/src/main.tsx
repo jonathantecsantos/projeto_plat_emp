@@ -15,7 +15,7 @@ import { router } from './routes.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <SnackbarProvider maxSnack={3} preventDuplicate={true} autoHideDuration={2400}
+    <SnackbarProvider maxSnack={3} preventDuplicate={true} autoHideDuration={2800}
       anchorOrigin={{
         horizontal: 'right',
         vertical: 'top'

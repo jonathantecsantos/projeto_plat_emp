@@ -9,7 +9,7 @@ import { Institution } from '../model/institution'
 import { Ods } from '../model/ods'
 import { TeamPrototypeById } from '../model/prototyping'
 import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
-import { CreateOrUpdateStudent, StudentIdResponse, StudentsResponse, } from '../model/student'
+import { CreateOrUpdateStudent, StudentIdResponse, StudentRecordResponse, StudentsResponse, } from '../model/student'
 import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
 import { TeamIdResponse, TeamRegisterPayload, TeamsResponse, UpdateTeam } from '../model/team'
 import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
@@ -127,7 +127,7 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Student', id: 'LIST' }],
     }),
 
-    createStudent: build.mutation<CreateOrUpdateStudent, Partial<CreateOrUpdateStudent>>({
+    createStudent: build.mutation<StudentRecordResponse, Partial<CreateOrUpdateStudent>>({
       query: (data) => ({
         url: `/alunos/cadastrar`,
         method: 'POST',

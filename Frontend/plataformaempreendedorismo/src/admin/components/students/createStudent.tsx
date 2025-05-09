@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import CloseIcon from '@mui/icons-material/Close'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
@@ -59,7 +60,7 @@ export const CreateStudent = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [success, setSucess] = useState(isSuccess)
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
   const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateStudentForm>({
@@ -80,12 +81,25 @@ export const CreateStudent = () => {
   const onSubmit = async (data: CreateStudentForm) => {
     data.cpf = formatCPF(data.cpf)
     try {
-      await createStudent(data).unwrap()
+      const response = await createStudent(data).unwrap()
       enqueueSnackbar('Aluno criado com sucesso!', { variant: 'success' })
+      enqueueSnackbar(
+        <div>
+          <p><strong>Login:</strong> {response?.login}</p>
+          <p><strong>Senha:</strong> {response?.senha}</p>
+        </div>,
+        {
+          variant: 'info',
+          persist: true,
+          action: (key) => (
+            <CloseIcon className='hover:cursor-pointer hover:text-red-500' onClick={() => closeSnackbar(key)} color="primary" />
+          ),
+        }
+      )
       setSucess(true)
     } catch (error: any) {
       console.log(error)
-      enqueueSnackbar(`${error?.data?.error}`, { variant: 'error' })
+      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
     }
   }
 

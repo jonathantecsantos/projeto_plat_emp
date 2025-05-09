@@ -62,10 +62,10 @@ public class AlunoController {
     })
     @SecurityRequirement(name = "bearerToken")
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<String> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
+    public ResponseEntity<Object> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
         try {
             UsuarioRecord usuarioRecord = alunoService.criarAluno(alunoCadastroRecord);
-            return ResponseEntity.ok(usuarioRecord.toString());
+            return ResponseEntity.ok(usuarioRecord);
         }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException |
                 CpfUtilizadoException | EmailUtilizadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

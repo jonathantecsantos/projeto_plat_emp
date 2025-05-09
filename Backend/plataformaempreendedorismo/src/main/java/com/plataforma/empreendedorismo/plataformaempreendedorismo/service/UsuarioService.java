@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import util.exceptions.EmailUtilizadoException;
 import util.exceptions.RoleIncorretaException;
 import util.exceptions.SenhaIncorretaException;
 
@@ -170,6 +171,13 @@ public class UsuarioService {
             return new UsuarioRecord(usuarioReference.getLogin(), senhaPadraoAvaliador);
         }
         return null;
+    }
+
+    public void validarUsuarioCadastrado(String email) throws EmailUtilizadoException {
+        Usuario usuario = buscarUsuarioPorLogin(email);
+        if (usuario != null) {
+            throw new EmailUtilizadoException("Erro. E-mail " + email + " já se encontra cadastrado na base de dados!");
+        }
     }
 
 }

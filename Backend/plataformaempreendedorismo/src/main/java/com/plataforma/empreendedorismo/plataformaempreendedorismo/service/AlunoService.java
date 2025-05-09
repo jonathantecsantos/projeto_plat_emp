@@ -3,6 +3,7 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.service;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.EnumRole;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Equipe;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Usuario;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoCadastroRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoEditarRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.AlunoRecord;
@@ -13,6 +14,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.enuns.TipoOperacaoEnum;
+import util.exceptions.CpfUtilizadoException;
+import util.exceptions.EmailUtilizadoException;
 import util.exceptions.ValidaAlunoException;
 
 import java.util.Objects;
@@ -38,7 +41,9 @@ public class AlunoService {
     }
 
     @Transactional
-    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe) {
+    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe) throws CpfUtilizadoException, EmailUtilizadoException {
+        validaCpfCadastrado(alunoCadastroRecord);
+        validaEmailCadastrado(alunoCadastroRecord);
         Aluno aluno = alunoRepository.save(new Aluno(alunoCadastroRecord, equipe));
         return usuarioService.criarUsuario(aluno, aluno.getEmail(), EnumRole.ROLE_ALUNO);
     }
@@ -165,5 +170,15 @@ public class AlunoService {
     public boolean validarCpfDuplicado(String cpf){
         Aluno aluno = alunoRepository.findByCpf(cpf);
         return aluno != null;
+    }
+
+    private void validaCpfCadastrado(AlunoCadastroRecord alunoCadastroRecord) throws CpfUtilizadoException {
+        if (validarCpfDuplicado(alunoCadastroRecord.cpf())) {
+            throw new CpfUtilizadoException("Erro. O CPF: " + alunoCadastroRecord.cpf() + " já se encontra cadastrado na base de dados!");
+        }
+    }
+
+    private void validaEmailCadastrado(AlunoCadastroRecord alunoCadastroRecord) throws EmailUtilizadoException, CpfUtilizadoException {
+        usuarioService.validarUsuarioCadastrado(alunoCadastroRecord.email());
     }
 }

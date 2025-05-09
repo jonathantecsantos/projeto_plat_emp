@@ -12,6 +12,8 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.Pro
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import util.exceptions.CpfUtilizadoException;
+import util.exceptions.EmailUtilizadoException;
 import util.exceptions.LimiteProfessorEquipeException;
 
 import java.util.ArrayList;
@@ -33,13 +35,39 @@ public class ProfessorService {
     @Transactional
     public void criaProfessor(ProfessorCadastroRecord professorCadastroRecord) throws Exception {
 
+        validarCpfCadastrado(professorCadastroRecord);
+        validaEmailCadastrado(professorCadastroRecord);
+        validaQuantidadeDeEquipes(professorCadastroRecord);
+
         List<Equipe> equipeList = new ArrayList<>();
 
         for(Long idEquipe : professorCadastroRecord.idEquipe()){
             Equipe equipe = equipeService.buscarEquipePorId(idEquipe);
             equipeList.add(equipe);
         }
+
         professorRepository.save(new Professor(professorCadastroRecord,equipeList));
+    }
+
+    private void validaQuantidadeDeEquipes(ProfessorCadastroRecord professorCadastroRecord) {
+        if (professorCadastroRecord.idEquipe().size() > 3) {
+            throw new LimiteProfessorEquipeException("O limite de Equipes por Professor é três!");
+        }
+    }
+
+    private void validaEmailCadastrado(ProfessorCadastroRecord professorCadastroRecord) throws EmailUtilizadoException {
+        usuarioService.validarUsuarioCadastrado(professorCadastroRecord.email());
+    }
+
+    private void validarCpfCadastrado(ProfessorCadastroRecord professorCadastroRecord) throws CpfUtilizadoException {
+        if (validarCpfDuplicado(professorCadastroRecord.cpf())) {
+            throw new CpfUtilizadoException("Erro. O CPF: " + professorCadastroRecord.cpf() + " já se encontra cadastrado na base de dados!");
+        }
+    }
+
+    private boolean validarCpfDuplicado(String cpf) {
+        Professor professor = professorRepository.findByCpf(cpf);
+        return professor != null;
     }
 
     public ProfessorRecord buscaProfessorPorId(Long id) {

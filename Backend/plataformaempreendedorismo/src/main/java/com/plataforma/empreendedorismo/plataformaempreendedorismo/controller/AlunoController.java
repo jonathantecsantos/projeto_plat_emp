@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import util.exceptions.*;
 
 import java.util.List;
 
@@ -61,11 +62,13 @@ public class AlunoController {
     })
     @SecurityRequirement(name = "bearerToken")
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<UsuarioRecord> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
-
+    public ResponseEntity<String> cadastrarAluno(@RequestBody AlunoCadastroRecord alunoCadastroRecord) throws Exception {
         try {
             UsuarioRecord usuarioRecord = alunoService.criarAluno(alunoCadastroRecord);
-            return ResponseEntity.ok(usuarioRecord);
+            return ResponseEntity.ok(usuarioRecord.toString());
+        }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException |
+                CpfUtilizadoException | EmailUtilizadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }

@@ -30,8 +30,6 @@ public class InscricaoService {
     @Autowired
     private TipoAtividadeRepository tipoAtividadeRepository;
     @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
     private ProfessorService professorService;
 
     @Transactional
@@ -39,7 +37,6 @@ public class InscricaoService {
 
         validaEmailDuplicadoNaEntrada(inscricaoRecord.alunos());
         validaCpfDuplicadoNaEntrada(inscricaoRecord.alunos());
-        validaCpfOuEmailCadastrado(inscricaoRecord.alunos());
         professorService.validaLimiteDeProfessorEmEquipes(inscricaoRecord.idProfessor());
 
         Equipe equipe = equipeRepository.findByNome(inscricaoRecord.nomeTime().toUpperCase());
@@ -52,7 +49,6 @@ public class InscricaoService {
             processaInstituicoes(inscricaoRecord, equipe);
 
             equipeRepository.saveAndFlush(equipe);
-
             processaProfessor(inscricaoRecord, equipe);
         }
 
@@ -120,15 +116,4 @@ public class InscricaoService {
         }
     }
 
-    private void validaCpfOuEmailCadastrado(List<AlunoCadastroRecord> listAlunos) throws EmailUtilizadoException, CpfUtilizadoException {
-        for(AlunoCadastroRecord alunoDto : listAlunos) {
-            if (alunoService.validarCpfDuplicado(alunoDto.cpf())) {
-                throw new CpfUtilizadoException("Erro. O CPF: " + alunoDto.cpf() + " já se encontra cadastrado na base de dados!");
-            }
-            Usuario usuario = usuarioService.buscarUsuarioPorLogin(alunoDto.email());
-            if (usuario != null) {
-                throw new EmailUtilizadoException("Erro. E-mail " + alunoDto.email() + " já se encontra cadastrado na base de dados!");
-            }
-        }
-    }
 }

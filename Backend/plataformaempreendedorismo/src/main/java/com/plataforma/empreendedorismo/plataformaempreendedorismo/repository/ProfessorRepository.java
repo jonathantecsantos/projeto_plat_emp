@@ -13,4 +13,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
             "JOIN professor_equipe ep ON ep.id_professor = p.id " +
             "WHERE ep.id_equipe = :equipeId", nativeQuery = true)
     List<Professor> findProfessoresByEquipeId(@Param("equipeId") Long equipeId);
+
+    Professor findByCpf(String cpf);
 }

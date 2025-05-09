@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import util.exceptions.*;
 
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class ProfessorController {
             professorService.criaProfessor(professorCadastroRecord);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body("Professor cadastrado com sucesso!");
+        }catch (LimiteProfessorEquipeException | CpfUtilizadoException | EmailUtilizadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao criar Professor: " + e.getMessage());

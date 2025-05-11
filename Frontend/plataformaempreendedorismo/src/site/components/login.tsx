@@ -11,7 +11,7 @@ import { RoutesNames } from "../../globals"
 import { EventsTypes } from "../../model/config"
 import { UserApiService } from "../../services/login"
 import { Login, LoginTokenJWT, Roles } from "../../utils/types"
-
+import { CookiePolicy } from "./cookiePolicyConsent"
 
 
 export const LoginComponent = () => {
@@ -108,6 +108,7 @@ export const LoginComponent = () => {
         </form>
       </div>
       <Footer />
+      <CookiePolicy />
     </div>
 
   )

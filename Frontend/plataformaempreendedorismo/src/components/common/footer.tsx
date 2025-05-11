@@ -1,5 +1,6 @@
 // import { FaLinkedin, FaGithub } from "react-icons/fa"
 import { CookieUtils } from "essencials"
+import { RoutesNames } from "../../globals"
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -59,8 +60,8 @@ export const Footer = () => {
         </p>
       </div>
       <div className="flex justify-end space-x-4 mt-2 md:mt-0 text-gray-400 ">
-        <a href="/politica-de-privacidade" className="text-sm hover:text-gray-300 transition-colors">Privacidade</a>
-        <a href="/termos-de-uso" className="text-sm hover:text-gray-300 transition-colors">Termos</a>
+        <a target="_blank" href={`${RoutesNames.privacyPolicy}`} className="text-sm hover:text-gray-300 transition-colors">Privacidade</a>
+        <a href={`${RoutesNames.termsOfUse}`} target="_blank" className="text-sm hover:text-gray-300 transition-colors">Termos</a>
       </div>
     </footer>
   )

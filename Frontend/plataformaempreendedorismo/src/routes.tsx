@@ -11,7 +11,6 @@ import { ExpoDleiClassificationPage } from './pages/classificationExpoDlei'
 import { PitchClassificationPage } from './pages/classificationPitch'
 import { SharkTankClassificationPage } from './pages/classificationSharkTank'
 import { Top5ClassificationPage } from './pages/classificationTop5'
-import { CompanyDetailsPage } from './pages/companyDetails'
 import { ContactPage } from './pages/contact'
 import { CoordinatorPage } from './pages/coordinator'
 import { CoordinatorsPage } from './pages/coordinators'
@@ -37,25 +36,23 @@ import { TeamPage } from './pages/team'
 import { TeamNotesPage } from './pages/teamNotes'
 import { TeamPrototypingPage } from './pages/teamPrototyping'
 import { TeamRegisterPage } from './pages/teamRegister'
+import { TeamRegisterPrintPage } from './pages/teamRegisterPrint'
 import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
+import { PrivacyPolicy } from './site/components/privacyPolicy'
 import { Roles } from './utils/types'
-import { TeamRegisterPrintPage } from './pages/teamRegisterPrint'
+import { CookiePolicyComponent } from './site/components/cookiePolicy'
+import { TermsOfUse } from './site/components/termsOfUse'
 
 export const router = createBrowserRouter([
   {
     path: RoutesNames.home,
     element: <LoginPage />,
   },
-
   {
     path: RoutesNames.login,
     element: <LoginPage />,
-  },
-  {
-    path: RoutesNames.companyDetails,
-    element: <CompanyDetailsPage />,
   },
   {
     path: RoutesNames.repository,
@@ -208,5 +205,17 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.generalReport,
     element: <ProtectedRoute children={<GeneralReportPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+  },
+  {
+    path: RoutesNames.privacyPolicy,
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: RoutesNames.termsOfUse,
+    element: <TermsOfUse />,
+  },
+  {
+    path: RoutesNames.cookiePolicy,
+    element: <CookiePolicyComponent />,
   },
 ])

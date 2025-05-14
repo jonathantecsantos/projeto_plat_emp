@@ -1,4 +1,4 @@
-import adminBanner from '../../../assets/adminBanner.svg'
+import adminBanner from '@assets/adminBanner.png'
 
 export const BannerImage = () => {
 

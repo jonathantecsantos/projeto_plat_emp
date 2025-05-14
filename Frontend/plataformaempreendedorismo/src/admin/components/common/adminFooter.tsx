@@ -1,4 +1,4 @@
-import footer from '../../../assets/footer.svg'
+import footer from '@assets/footer.png'
 
 export const FooterImage = () => {
 //TODO-WINNICIUS: fix footer view on mobile

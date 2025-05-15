@@ -9,6 +9,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.Adm
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.FormatoAvaliacaoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.OdsRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -258,6 +259,8 @@ public class ProcessadorArquivoService {
 
         equipeRepository.save(equipe);
     }
+
+    @Transactional
     public void processarImportacaoAluno(Row row) throws Exception {
 
         log.info("Iniciando processamento de Alunos");

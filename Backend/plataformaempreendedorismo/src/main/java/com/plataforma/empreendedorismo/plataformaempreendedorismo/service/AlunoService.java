@@ -40,7 +40,6 @@ public class AlunoService {
         return persistirAlunoAndCriarAcesso(alunoCadastroRecord, equipe);
     }
 
-    @Transactional
     public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe) throws CpfUtilizadoException, EmailUtilizadoException {
         validaCpfCadastrado(alunoCadastroRecord);
         validaEmailCadastrado(alunoCadastroRecord);

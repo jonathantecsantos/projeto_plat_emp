@@ -32,8 +32,8 @@ public class InscricaoService {
     @Autowired
     private ProfessorService professorService;
 
-    @Transactional
-    public void processarInscricao(InscricaoRecord inscricaoRecord) throws CpfDuplicadoException, EmailDuplicadoException, LimiteProfessorEquipeException, EmailUtilizadoException, CpfUtilizadoException {
+    @Transactional(rollbackOn = Exception.class)
+    public void processarInscricao(InscricaoRecord inscricaoRecord) throws CpfDuplicadoException, EmailDuplicadoException, LimiteProfessorEquipeException, EmailUtilizadoException, CpfUtilizadoException, EquipeDuplicadoException {
 
         validaEmailDuplicadoNaEntrada(inscricaoRecord.alunos());
         validaCpfDuplicadoNaEntrada(inscricaoRecord.alunos());
@@ -50,6 +50,8 @@ public class InscricaoService {
 
             equipeRepository.saveAndFlush(equipe);
             processaProfessor(inscricaoRecord, equipe);
+        }else{
+            throw new EquipeDuplicadoException("O nome da Equipe já se encontra cadastrado: " + inscricaoRecord.nomeTime());
         }
 
         for (AlunoCadastroRecord alunoCadastroRecordRecord : inscricaoRecord.alunos()) {

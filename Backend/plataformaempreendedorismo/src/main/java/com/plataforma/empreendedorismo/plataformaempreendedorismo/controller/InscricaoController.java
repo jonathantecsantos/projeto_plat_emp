@@ -48,7 +48,7 @@ public class InscricaoController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Inscrição realizada com sucesso!");
         }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException |
-                CpfUtilizadoException | EmailUtilizadoException e){
+                CpfUtilizadoException | EmailUtilizadoException | EquipeDuplicadoException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e){
             return ResponseEntity.badRequest().build();

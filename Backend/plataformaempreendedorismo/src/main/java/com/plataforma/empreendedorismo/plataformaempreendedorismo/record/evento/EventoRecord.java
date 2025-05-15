@@ -1,6 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.evento;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public record EventoRecord(Date dataInicio, Date dataFim, Long idEvento) {
+public record EventoRecord(LocalDate dataInicio, LocalDate dataFim, Long idEvento) {
 }

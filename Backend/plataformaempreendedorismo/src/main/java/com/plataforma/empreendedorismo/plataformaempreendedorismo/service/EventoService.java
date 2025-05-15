@@ -10,10 +10,8 @@ import org.springframework.stereotype.Service;
 import util.exceptions.EventoEncontradoException;
 import util.exceptions.EventoNaoEncontradoException;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 @Service
 public class EventoService {
@@ -35,8 +33,10 @@ public class EventoService {
     public Evento criarEvento(EventoRecord eventoRecord) throws Exception {
         if(eventoRepository.findByTipoEventoId(eventoRecord.idEvento()).isEmpty()){
             Evento evento = new Evento();
-            evento.setDataInicio(eventoRecord.dataInicio());
-            evento.setDataFim(eventoRecord.dataFim());
+            Date dataInicio = toDate(eventoRecord.dataInicio());
+            Date dataFim = toDate(eventoRecord.dataFim());
+            evento.setDataInicio(dataInicio);
+            evento.setDataFim(dataFim);
             Optional<TipoEvento> eventoOptional = tipoEventoRepository.findById(eventoRecord.idEvento());
             if (eventoOptional.isPresent()) {
                 evento.setTipoEvento(eventoOptional.get());
@@ -54,12 +54,22 @@ public class EventoService {
 
         if (eventoExistente.isPresent()) {
             Evento evento = eventoExistente.get();
-            evento.setDataInicio(eventoAtualizado.dataInicio());
-            evento.setDataFim(eventoAtualizado.dataFim());
+
+            Date dataInicio = toDate(eventoAtualizado.dataInicio());
+            Date dataFim = toDate(eventoAtualizado.dataFim());
+
+            evento.setDataInicio(dataInicio);
+            evento.setDataFim(dataFim);
             return eventoRepository.save(evento);
         }
 
         throw new RuntimeException("Evento não encontrado com ID: " + id);
+    }
+
+    private Date toDate(LocalDate localDate) {
+        return Date.from(localDate
+                .atStartOfDay(ZoneId.of("America/Sao_Paulo"))
+                .toInstant());
     }
 
     public void deletarEvento(Long id) {

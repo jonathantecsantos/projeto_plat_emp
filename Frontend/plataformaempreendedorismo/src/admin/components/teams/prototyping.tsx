@@ -11,8 +11,8 @@ import { AnexoTypes, Prototype } from "../../../model/prototyping"
 import { TextAreaComponent } from "../common/textarea"
 import { FileDownload } from "./fileDownload"
 
-
-export const TeamPrototyping = ({ id }: { id: number }) => {
+//TODO-Winnícius: Adicionar nome do time como parametro
+export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string }) => {
   const [createTeamPrototype, { isLoading: creating, isSuccess: created }] = useCreateTeamPrototypingMutation()
   const { data: teamPrototyping, isLoading } = useGetTeamPrototypingByIdQuery(id)
   const [updateTeamPrototype, { isLoading: updating, isSuccess: updated }] = useUpdateTeamPrototypingMutation()
@@ -45,7 +45,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
   // Estados para gerenciar os arquivos
   const [cronogramaFile, setCronogramaFile] = useState<File | null>(null)
-  const [anexosFile, setAnexoFile] = useState<File[]>([])
   const [memorialFile, setMemorialFile] = useState<File | null>(null)
   const [esquemaFiles, setEsquemaFiles] = useState<File[]>([])
 
@@ -63,10 +62,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
     setCronogramaFile(e.target.files?.[0] || null)
   }
 
-  const handleAnexoChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAnexoFile(Array.from(e.target.files || []))
-  }
-
   const handleMemorialChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMemorialFile(e.target.files?.[0] || null)
   }
@@ -77,11 +72,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-
-    if (anexosFile.length > 3) {
-      enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Anexos!', { variant: 'error' })
-      return
-    }
 
     if (esquemaFiles.length > 3) {
       enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Esquemas!', { variant: 'error' })
@@ -94,11 +84,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
       const filesToSend: Array<{ file: File, tipoAnexoId: number }> = []
       if (cronogramaFile) {
         filesToSend.push({ file: cronogramaFile, tipoAnexoId: AnexoTypes.CRONOGRAMA_CONSTRUCAO.id })
-      }
-      if (anexosFile) {
-        anexosFile.forEach((file) => {
-          filesToSend.push({ file, tipoAnexoId: AnexoTypes.ANEXO.id })
-        })
       }
       if (memorialFile) {
         filesToSend.push({ file: memorialFile, tipoAnexoId: AnexoTypes.MEMORIAL_DESCRITIVO.id })
@@ -173,7 +158,17 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
 
   return (
     <form onSubmit={handleSubmit}
-      className="text-center p-8 bg-gradient-to-b from-[#3B1E86] to-[#4319AF] text-white rounded-lg">
+      className="text-center p-8 max-w-4xl mx-auto text-pretty text-[#3C14A4] bg-gray-50  shadow-md rounded-lg">
+      <div className="text-center flex justify-between max-w-2xl mb-4">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="px-2 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-600 text-sm">
+          <ArrowBackIcon />
+        </button>
+        <h2 className="text-2xl font-bold text-center">Prototipação - Time: {teamName}</h2>
+
+      </div>
       <h1 className="font-bold text-2xl max-w-4xl mx-auto mb-6">
         DLEI - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
       </h1>
@@ -262,24 +257,6 @@ export const TeamPrototyping = ({ id }: { id: number }) => {
         {teamPrototyping?.anexos && (
           <FileDownload anexos={teamPrototyping.anexos}
             type={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao} />
-        )}
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          ANEXOS (NÃO OBRIGATÓRIOS, MAS QUE PODEM AJUDAR MUITO NO DESENVOLVIMENTO DO SEU PROTÓTIPO DA SOLUÇÃO)
-        </p>
-        <input
-          type="file"
-          multiple
-          onChange={handleAnexoChange}
-          id={AnexoTypes.ANEXO.descricao}
-          className={inputClasses}
-        />
-
-        {teamPrototyping?.anexos && (
-          <FileDownload anexos={teamPrototyping.anexos}
-            type={AnexoTypes.ANEXO.descricao} />
         )}
       </div>
 

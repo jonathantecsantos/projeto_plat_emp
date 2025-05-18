@@ -414,7 +414,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   snackBarEventsTypes(EventsTypes.PROTOTIPO)
                   return
                 }
-                navigate(RoutesNames.prototyping?.replace(':id', id?.toString()))
+                navigate(RoutesNames.prototyping?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
               }}
             >
               <DescriptionIcon fontSize='large' />

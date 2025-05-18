@@ -370,7 +370,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                 ))}
               </SpeedDial>}
 
-            {pitchValidated && <div ref={pitchRef} className='bg-gray-100 p-2 border rounded-lg shadow-md lg:w-2/4 w-full animate-pop-in'>
+            {pitchValidated && <div ref={pitchRef} className='bg-gray-100 p-2 border rounded-lg shadow-md w-full max-w-96 animate-pop-in'>
               <h3 className="text-lg font-bold">Pitch:</h3>
               <input type="text" placeholder=' Inserir link pitch'
                 className='w-full rounded-lg py-2 mb-2'

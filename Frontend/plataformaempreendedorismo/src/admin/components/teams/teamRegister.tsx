@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useGetTeamByIdQuery } from "../../../api/studentApi";
 import { formatDate, maskCPF } from "../../../utils/types";
-import extenso from "extenso";
+import extenso from "extenso"
+import lampLogo from '../../../assets/lamplogo.png'
+
 
 interface TeamRegisterPrintComponentProps {
   id: number
@@ -41,10 +43,13 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
 
   return (
     <div ref={printRef} className="w-full max-w-6xl mx-auto bg-white p-8 print:p-4 print:text-[12px]">
-      <h1 className="text-center text-lg font-bold mb-8">DLEI 2025 - 9º Desafio Lourdinas de Empreendedorismo e Inovação</h1>
+      <img src={lampLogo} alt="Trophy" className="w-16 h-16 absolute inset-16" />
+      <div className="print:max-w-md print:mx-auto print:mt-12">
+        <h1 className="text-start text-xl font-bold text-[#2f5597]">DLEI 2025</h1>
+        <div className="w-full"></div>
+        <h2 className="text-start text-nowrap text-lg font-bold mb-8 text-[#2f5597]">9º Desafio Lourdinas de Empreendedorismo e Inovação</h2>
+      </div>
       <h2 className="text-center text-lg font-semibold mb-4">FICHA DE INSCRIÇÃO / RECIBO</h2>
-
-
       <table className="w-full text-sm bg-[#fc56f4] border border-b-0 border-gray-700">
         <tbody>
           <tr>
@@ -158,7 +163,7 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
           </div>
           <p className="font-semibold text-center mb-4">RECIBO: R$ 800,00</p>
           <div>
-            <p> Recebemos do time <strong>{teamRegister?.nomeEquipe}</strong> a quantia supra de <strong>R$ 800,00 (oitocentos reais)</strong> referente à inscrição de  <strong>{teamRegister?.alunos.length} {extenso(Number(teamRegister?.alunos.length!), { locale: 'br' })} Alunos </strong>
+            <p> Recebemos do time <strong>{teamRegister?.nomeEquipe}</strong> a quantia supra de <strong>R$ 800,00 (oitocentos reais)</strong> referente à inscrição de <strong>{teamRegister?.alunos.length} ({extenso(Number(teamRegister?.alunos.length!), { locale: 'br' })}) Alunos </strong>
               no <span className="font-bold"> 9º Desafio Lourdinas de Empreendedorismo e Inovação - DLEI 2025.</span>
             </p>
           </div>

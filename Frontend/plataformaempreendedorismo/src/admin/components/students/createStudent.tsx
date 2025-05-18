@@ -81,7 +81,11 @@ export const CreateStudent = () => {
   const onSubmit = async (data: CreateStudentForm) => {
     data.cpf = formatCPF(data.cpf)
     try {
-      const response = await createStudent(data).unwrap()
+      const response = await createStudent({
+        ...data,
+        dataNascimento: data.dataNascimento?.toISOString()?.split('T')[0],
+      }).unwrap()
+
       enqueueSnackbar('Aluno criado com sucesso!', { variant: 'success' })
       enqueueSnackbar(
         <div>

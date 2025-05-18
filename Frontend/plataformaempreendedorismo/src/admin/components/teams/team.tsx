@@ -7,7 +7,7 @@ import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
 import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
@@ -41,7 +41,13 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { enqueueSnackbar } = useSnackbar()
   const [getEventById] = useLazyGetEventValidateByIdQuery()
   const [pitchValidated, setPitchValidated] = useState(false)
+  const pitchRef = useRef<HTMLDivElement>(null)
 
+  useEffect(() => {
+    if (pitchValidated && pitchRef.current) {
+      pitchRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [pitchValidated])
 
   const handlePrintRegister = () => {
     const registerPrintUrl = `/register-print/${id}`
@@ -364,7 +370,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                 ))}
               </SpeedDial>}
 
-            {pitchValidated && <div className='bg-gray-100 p-2 border rounded-lg shadow-md lg:w-2/4 w-full'>
+            {pitchValidated && <div ref={pitchRef} className='bg-gray-100 p-2 border rounded-lg shadow-md lg:w-2/4 w-full animate-pop-in'>
               <h3 className="text-lg font-bold">Pitch:</h3>
               <input type="text" placeholder=' Inserir link pitch'
                 className='w-full rounded-lg py-2 mb-2'
@@ -408,7 +414,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   snackBarEventsTypes(EventsTypes.PROTOTIPO)
                   return
                 }
-                navigate(RoutesNames.prototyping.replace(':id', id.toString()))
+                navigate(RoutesNames.prototyping?.replace(':id', id?.toString()))
               }}
             >
               <DescriptionIcon fontSize='large' />
@@ -423,7 +429,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   snackBarEventsTypes(EventsTypes.CANVAS)
                   return
                 }
-                navigate(RoutesNames.banner.replace(':id', id.toString()), { state: team?.nomeEquipe })
+                navigate(RoutesNames.banner?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
               }}>
               <WebIcon fontSize='large' />
               <div className="flex-1 flex justify-center">

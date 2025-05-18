@@ -118,8 +118,8 @@ export interface TeamValidation {
 }
 
 export const formatDateToInput = (isoDate: string): string => {
-  if (!isoDate) return "" // Retorna vazio se a data não for válida
-  return new Date(isoDate).toISOString().split("T")[0]
+  if (!isoDate) return "" 
+  return new Date(isoDate)?.toISOString()?.split("T")[0]
 }
 
 export function maskCPF(cpf: string): string {
@@ -130,11 +130,11 @@ export interface EvaluationProps {
   teamData: { id: number, nomeEquipe?: string, teams: TeamEvaluationResponse[], teamEvaluation: TeamEvaluation }
 }
 
-export const normalizePath = (path: string): string => path.replace(/\\/g, '\\\\')
+export const normalizePath = (path: string): string => path?.replace(/\\/g, '\\\\')
 
 export const replacePath = (path: string, folder: string, apiUrl: string): string => {
-  const normalizedFolder = folder.endsWith('\\\\') ? folder : `${folder}\\\\`
-  return path.replace(new RegExp(`^${normalizedFolder}`), `${apiUrl}/uploads/`)
+  const normalizedFolder = folder?.endsWith('\\\\') ? folder : `${folder}\\\\`
+  return path?.replace(new RegExp(`^${normalizedFolder}`), `${apiUrl}/uploads/`)
 }
 
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
@@ -154,10 +154,15 @@ export const formatDate = (dateString: string): string => {
 
 export const formatDateForInput = (date?: Date | string): string => {
   if (!date) return '';
+
   const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  if (isNaN(dateObj.getTime())) return '';
+
   const offset = dateObj.getTimezoneOffset() * 60000;
   const localDate = new Date(dateObj.getTime() - offset);
-  return localDate.toISOString().split('T')[0]; // Retorna 'yyyy-MM-dd'
+
+  return localDate.toISOString().split('T')[0]; // 'yyyy-MM-dd'
 }
 
 export const ClassesSelectTypes = [

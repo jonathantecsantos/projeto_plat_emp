@@ -8,7 +8,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { useCreateStudentMutation, useGetStudentQuery, useUpdateStudentMutation } from '../../../api/studentApi'
 import { CreateOrUpdateStudent, StudentIdResponse, TeamConfig } from '../../../model/student'
-import { ClassesSelectTypes, formatCPF, formatDateForInput, validateSchema } from '../../../utils/types'
+import { ClassesSelectTypes, formatCPF, validateSchema } from '../../../utils/types'
 import { ClassesSelect } from '../common/classesSelect'
 import { TeamSelect } from '../common/teamSelect'
 import { createStudentSchema } from './createStudent'
@@ -64,7 +64,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
     const value = e.target.value;
     setStudent(prev => ({
       ...prev!,
-      dataNascimento: new Date(value)
+      dataNascimento: new Date(value)?.toISOString()
     }))
   }
 
@@ -169,9 +169,8 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
             <input
               id="dataNascimento"
               type="date"
-              value={formatDateForInput(student?.dataNascimento!)}
+              value={student?.dataNascimento?.split('T')[0]}
               onChange={handleDateChange}
-              max={new Date().toISOString().split('T')[0]}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>

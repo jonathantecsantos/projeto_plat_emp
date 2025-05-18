@@ -15,7 +15,8 @@ export const InstitutionsSelect = ({ onChange, value, className, disable }: Inst
 
   return (
     <FormControl className="w-full" variant="outlined">
-      <InputLabel id="institutionsSelect-types-select-label" sx={{ textAlign: 'center', }}>Instituição</InputLabel>
+      <InputLabel id="institutionsSelect-types-select-label" sx={{ textAlign: 'center', }}>
+        Instituição de Impacto Social</InputLabel>
       <Select
         className={`${className ? className : 'py-1 mt-2 rounded-md'}`}
         labelId="institutionsSelect-types-select-label"

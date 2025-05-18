@@ -6,7 +6,7 @@ export interface Teacher {
   nome: string
   cpf: string
   email: string
-  dataNascimento: Date
+  dataNascimento: string
   tamanhoCamisa: TeamConfig.ShirtSize
 }
 
@@ -14,7 +14,7 @@ export interface TeacherIdResponse {
   id: number
   nome: string
   cpf: string
-  dataNascimento: Date,
+  dataNascimento: string,
   tamanhoCamisa: string,
   email: string
   equipe: Team[]
@@ -31,6 +31,6 @@ export interface CreateOrUpdateTeacher {
   cpf: string
   email: string
   idEquipe: number[]
-  dataNascimento: Date,
+  dataNascimento: string,
   tamanhoCamisa: string,
 }

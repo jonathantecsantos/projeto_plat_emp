@@ -7,10 +7,10 @@ import { useSnackbar } from "notistack"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCreateTeacherMutation, useGetTeacherQuery, useUpdateTeacherMutation } from "../../../api/studentApi"
-import { CreateOrUpdateTeacher, TeacherIdResponse } from "../../../model/teacher"
-import { formatCPF, formatDateForInput, validateSchema } from "../../../utils/types"
-import { TeamsSelect } from '../common/teamsSelect'
 import { TeamConfig } from '../../../model/student'
+import { CreateOrUpdateTeacher, TeacherIdResponse } from "../../../model/teacher"
+import { formatCPF, validateSchema } from "../../../utils/types"
+import { TeamsSelect } from '../common/teamsSelect'
 import { createTeacherSchema } from './createTeacher'
 
 interface UpdateOrCreateTeacherProps {
@@ -55,8 +55,8 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTeacher(prev => ({
-      ...prev!,
-      dataNascimento: new Date(value)
+      ...prev,
+      dataNascimento: value
     }))
   }
 
@@ -157,9 +157,8 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
             <input
               id="dataNascimento"
               type="date"
-              value={formatDateForInput(teacher?.dataNascimento!)}
+              value={teacher?.dataNascimento?.split('T')[0]}
               onChange={handleDateChange}
-              max={new Date().toISOString().split('T')[0]}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>

@@ -76,7 +76,10 @@ export const CreateTeacher = () => {
   const onSubmit = async (data: CreateTeacherForm) => {
     data.cpf = formatCPF(data.cpf)
     try {
-      await createTeacher(data).unwrap()
+      await createTeacher({
+        ...data,
+        dataNascimento: data.dataNascimento?.toISOString()?.split('T')[0],
+      }).unwrap()
       enqueueSnackbar('Professor criado com sucesso!', { variant: 'success' })
       setSucess(true)
     } catch (error: any) {

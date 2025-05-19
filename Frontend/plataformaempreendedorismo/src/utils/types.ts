@@ -137,6 +137,18 @@ export const replacePath = (path: string, folder: string, apiUrl: string): strin
   return path?.replace(new RegExp(`^${normalizedFolder}`), `${apiUrl}/uploads/`)
 }
 
+export const getImageUrl = (path: string, folder: string, apiUrl: string): string => {
+  if (path?.startsWith('http://') || path?.startsWith('https://')) {
+    return path;
+  }
+
+  if (import.meta.env.DEV) {
+    return replacePath(normalizePath(path), folder, apiUrl)
+  }
+
+  return `${apiUrl}${path?.startsWith('/') ? path : `/${path}`}`;
+}
+
 export const formatCPF = (cpf: string) => cpf.replace(/[^\d]/g, '')
 
 export const capitalizeTeamName = (name: string) => {

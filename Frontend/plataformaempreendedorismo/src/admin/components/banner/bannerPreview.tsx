@@ -2,7 +2,9 @@ import { Avatar } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
 import { Banner } from "../../../model/banner";
-import { normalizePath, replacePath } from "../../../utils/types";
+import { getImageUrl } from "../../../utils/types";
+import header from '@assets/header.svg'
+import footer from '@assets/footer.svg'
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -38,10 +40,9 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
 
   const imageUrls = banner?.anexos
     ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO")
-    ?.map((anexo) => replacePath(normalizePath(anexo.caminhoAnexo), UPLOAD_FOLDER, API_URL));
+    ?.map((anexo) => getImageUrl(anexo.caminhoAnexo, UPLOAD_FOLDER, API_URL));
 
-  const avatar = replacePath(
-    normalizePath(banner?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo || ''),
+  const avatar = getImageUrl(banner?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo || '',
     UPLOAD_FOLDER,
     API_URL
   );
@@ -97,7 +98,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
     <div className="w-full h-full bg-[hsl(0,0%,83%)] mx-auto relative 
     print:w-[950px] print:text-[12px] blur print:blur-none" ref={bannerRef}>
       <div className="relative h-[340px] print:h-[160px]">
-        <img src="/src/assets/header.svg" alt="Header" className="w-[1980px] h-96 object-cover absolute
+        <img src={header} alt="Header" className="w-[1980px] h-96 object-cover absolute
         print:h-[186px]" />
       </div>
       {/* ----> Primeiro componente inicial parte azul */}
@@ -351,7 +352,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
         </div>
       </div>
       <div className="relative h-28 bottom-0 print:h-20">
-        <img src="/src/assets/footer.svg" alt="Header" className="object-cover absolute" />
+        <img src={footer} alt="Header" className="object-cover absolute" />
       </div>
     </div>
   )

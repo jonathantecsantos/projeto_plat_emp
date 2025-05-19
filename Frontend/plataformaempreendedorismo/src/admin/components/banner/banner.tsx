@@ -1,13 +1,13 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Avatar, CircularProgress } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { z } from "zod"
 import { useCreateBannerMutation, useGetBannerByIdQuery, useUpdateBannerMutation } from "../../../api/studentApi"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { normalizePath, replacePath } from "../../../utils/types"
+import { getImageUrl } from "../../../utils/types"
 
 const fieldLabels: Record<string, string> = {
   atividadeChaveQ1: "Atividade Chave",
@@ -80,7 +80,7 @@ interface BannerComponentProps {
 export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
   const { data, isLoading: bannerInfoLoading } = useGetBannerByIdQuery(id)
   const [createBanner, { isLoading }] = useCreateBannerMutation()
-  const [updateBanner, { isLoading: updatingBanner}] = useUpdateBannerMutation()
+  const [updateBanner, { isLoading: updatingBanner }] = useUpdateBannerMutation()
   const [formData, setFormData] = useState<BannerFormData>({
     atividadeChaveQ1: "",
     contextoProblemaQ3: "",
@@ -115,10 +115,9 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
 
   const imageUrls = data?.anexos
     ?.filter((anexo) => anexo.tipoAnexo !== "LOGOTIPO")
-    ?.map((anexo) => replacePath(normalizePath(anexo.caminhoAnexo), UPLOAD_FOLDER, API_URL));
+    ?.map((anexo) => getImageUrl(anexo.caminhoAnexo, UPLOAD_FOLDER, API_URL));
 
-  const avatar = replacePath(
-    normalizePath(data?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo || ''),
+  const avatar = getImageUrl(data?.anexos?.find((anexo) => anexo.tipoAnexo === "LOGOTIPO")?.caminhoAnexo || '',
     UPLOAD_FOLDER,
     API_URL
   );

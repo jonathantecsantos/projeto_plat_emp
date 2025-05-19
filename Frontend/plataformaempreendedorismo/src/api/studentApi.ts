@@ -557,7 +557,7 @@ export const studentsApiSlice = createApi({
     getOds: build.query<Ods[], void>({
       query: () => '/ods',
       transformResponse: (response: Ods[]) => {
-        return response.sort((a, b) => a.codigo.localeCompare(b.codigo))
+        return response.sort((a, b) => a.id - b.id)
       },
       providesTags: (result) =>
         result
@@ -571,9 +571,6 @@ export const studentsApiSlice = createApi({
     //INSTITUTIONS
     getInstitutions: build.query<Institution[], void>({
       query: () => `/instituicoes`,
-      transformResponse: (response: Institution[]) => {
-        return response.sort((a, b) => a.descricao.localeCompare(b.descricao))
-      },
       providesTags: (result) =>
         result
           ? [
@@ -587,7 +584,7 @@ export const studentsApiSlice = createApi({
     getActivityTypes: build.query<ActivityType[], void>({
       query: () => `/atividades`,
       transformResponse: (response: ActivityType[]) => {
-        return response.sort((a, b) => a.descricao.localeCompare(b.descricao))
+        return response.sort((a, b) => a.id - b.id)
       },
       providesTags: (result) =>
         result

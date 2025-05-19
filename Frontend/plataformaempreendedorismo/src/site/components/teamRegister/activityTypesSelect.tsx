@@ -1,6 +1,5 @@
 import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/material"
 import { useGetActivityTypesQuery } from "../../../api/studentApi"
-import { useMemo } from "react"
 
 interface ActivityTypesSelectProps {
   value: number[]
@@ -11,11 +10,6 @@ interface ActivityTypesSelectProps {
 
 export const ActivityTypesSelect = ({ onChange, value, className, disable }: ActivityTypesSelectProps) => {
   const { data: activityTypes, isLoading } = useGetActivityTypesQuery()
-
-  const sortedActivityTypes = useMemo(() => {
-    if (!activityTypes) return []
-    return [...activityTypes].sort((a, b) => a.id - b.id)
-  }, [activityTypes])
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 
@@ -33,7 +27,7 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
         renderValue={(selected) => (
           (selected as number[])
             .map(id => {
-              const act = sortedActivityTypes.find(item => item.id === id)
+              const act = activityTypes?.find(item => item.id === id)
               return act ? act.descricao : ''
             })
             .join(', ')
@@ -64,13 +58,11 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
           }
         }}
       >
-        {
-          sortedActivityTypes.map(item => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.descricao}
-            </MenuItem>
-          ))
-        }
+        {activityTypes?.map(item => (
+          <MenuItem key={item.id} value={item.id}>
+            {item.descricao}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   )

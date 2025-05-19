@@ -34,10 +34,10 @@ public class SecurityConfigurations {
                                 "/v2/api-docs",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/api-docs/swagger-config"
+                                "/api-docs/swagger-config",
+                                "/uploads/**"
 
                         ).permitAll()
-                        .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/resetar-senha").hasRole("ADMIN")

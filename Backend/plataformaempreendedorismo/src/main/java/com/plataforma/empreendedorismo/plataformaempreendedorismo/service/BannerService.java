@@ -88,7 +88,6 @@ public class BannerService {
 
     private String saveFile(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        //String uploadDir = "uploads/";
 
         Path uploadPath = Paths.get(caminhoBase);
         if (!Files.exists(uploadPath)) {
@@ -226,7 +225,7 @@ public class BannerService {
                     AnexoBanner anexo = new AnexoBanner();
                     anexo.setBanner(banner);
                     anexo.setNomeAnexo(fileName);
-                    anexo.setCaminhoAnexo(caminhoBase + fileName);
+                    anexo.setCaminhoAnexo(Paths.get(caminhoBase, fileName).toString());
                     anexo.setTipoAnexo(TipoAnexoEnum.PADRAO);
                     anexos.add(anexo);
                 }
@@ -238,7 +237,7 @@ public class BannerService {
             fileName = saveFile(logotipo);
             anexoLogotipo.setBanner(banner);
             anexoLogotipo.setNomeAnexo(fileName);
-            anexoLogotipo.setCaminhoAnexo(caminhoBase + fileName);
+            anexoLogotipo.setCaminhoAnexo(Paths.get(caminhoBase, fileName).toString());
             anexoLogotipo.setTipoAnexo(TipoAnexoEnum.LOGOTIPO);
             anexos.add(anexoLogotipo);
         }

@@ -98,7 +98,7 @@ public class PrototipoService {
                 anexo.setEquipe(equipe);
                 anexo.setTipoAnexoPrototipo(tipoAnexoPrototipo);
                 anexo.setNomeAnexo(fileName);
-                anexo.setCaminhoAnexo(caminhoBase + fileName);
+                anexo.setCaminhoAnexo(Paths.get(caminhoBase, fileName).toString());
                 anexos.add(anexo);
             }
         }

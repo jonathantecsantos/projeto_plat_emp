@@ -5,7 +5,7 @@ export const userApiSlice = createApi({
   reducerPath: 'userApi',
   tagTypes: ['Users'],
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BASE_URL,
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   endpoints: (build) => ({
     userLogin: build.mutation<LoginResponse, Login>({

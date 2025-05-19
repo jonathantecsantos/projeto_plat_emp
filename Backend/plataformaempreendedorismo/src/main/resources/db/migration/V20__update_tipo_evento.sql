@@ -1,0 +1,1 @@
+update tipo_evento set descricao = 'CANVAS' where id = 3;

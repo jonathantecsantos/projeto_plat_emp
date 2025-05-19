@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/material"
 import { useGetOdsQuery } from "../../../api/studentApi"
+import { useMemo } from "react"
 
 interface OdsSelectProps {
   value: number[]
@@ -10,6 +11,11 @@ interface OdsSelectProps {
 
 export const OdsSelect = ({ onChange, value, className, disable }: OdsSelectProps) => {
   const { data: ods, isLoading } = useGetOdsQuery()
+
+  const sortedById = useMemo(() => {
+    if (!ods) return []
+    return [...ods].sort((a, b) => a.id - b.id)
+  }, [ods])
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 
@@ -24,12 +30,14 @@ export const OdsSelect = ({ onChange, value, className, disable }: OdsSelectProp
         value={value || ''}
         disabled={disable}
         onChange={onChange}
-        renderValue={(selected) => {
-          return selected.map((id: number) => {
-            const odsItem = ods?.find(item => item.id === id)
-            return odsItem ? odsItem.descricao : ''
-          }).join(', ')
-        }}
+        renderValue={(selected) =>
+          (selected as number[])
+            .map(id => {
+              const o = sortedById.find(item => item.id === id)
+              return o ? `${o.codigo} - ${o.descricao}` : ""
+            })
+            .join(", ")
+        }
         label="ODS"
         MenuProps={{
           PaperProps: {
@@ -58,13 +66,13 @@ export const OdsSelect = ({ onChange, value, className, disable }: OdsSelectProp
           },
         }}
       >
-        {ods?.map((item) => (
-          <MenuItem
-            key={item.id}
-            value={item.id}>
-            {item.descricao}
-          </MenuItem>
-        ))}
+       {
+          sortedById.map(item => (
+            <MenuItem key={item.id} value={item.id}>
+              {item.codigo} - {item.descricao}
+            </MenuItem>
+          ))
+        }
       </Select>
     </FormControl>
   )

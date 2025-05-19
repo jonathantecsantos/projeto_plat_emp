@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/material"
 import { useGetActivityTypesQuery } from "../../../api/studentApi"
+import { useMemo } from "react"
 
 interface ActivityTypesSelectProps {
   value: number[]
@@ -10,6 +11,11 @@ interface ActivityTypesSelectProps {
 
 export const ActivityTypesSelect = ({ onChange, value, className, disable }: ActivityTypesSelectProps) => {
   const { data: activityTypes, isLoading } = useGetActivityTypesQuery()
+
+  const sortedActivityTypes = useMemo(() => {
+    if (!activityTypes) return []
+    return [...activityTypes].sort((a, b) => a.id - b.id)
+  }, [activityTypes])
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 
@@ -24,12 +30,14 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
         value={value || []}
         disabled={disable}
         onChange={onChange}
-        // renderValue={(selected) => {
-        //   return selected.map((id: number) => {
-        //     const activity = activityTypes?.find(item => item.id === id)
-        //     return activity ? activity.descricao : ''
-        //   }).join(', ')
-        // }}
+        renderValue={(selected) => (
+          (selected as number[])
+            .map(id => {
+              const act = sortedActivityTypes.find(item => item.id === id)
+              return act ? act.descricao : ''
+            })
+            .join(', ')
+        )}
         label="Tipos de Atividade"
         MenuProps={{
           PaperProps: {
@@ -56,11 +64,13 @@ export const ActivityTypesSelect = ({ onChange, value, className, disable }: Act
           }
         }}
       >
-        {activityTypes?.map((item) => (
-          <MenuItem key={item.id} value={item.id}>
-            {item.descricao}
-          </MenuItem>
-        ))}
+        {
+          sortedActivityTypes.map(item => (
+            <MenuItem key={item.id} value={item.id}>
+              {item.descricao}
+            </MenuItem>
+          ))
+        }
       </Select>
     </FormControl>
   )

@@ -86,7 +86,7 @@ export const Students = () => {
   const handleConfirmAction = async () => {
     if (actionType === 'delete' && selectedStudent) {
       try {
-        await deleteStudent(selectedStudent.id)
+        await deleteStudent(selectedStudent.id).unwrap()
         enqueueSnackbar(`Aluno(a): ${selectedStudent.nome}, excluído com sucesso!`, { variant: 'success' })
         refetch()
       } catch (error) {
@@ -98,12 +98,12 @@ export const Students = () => {
           idObjeto: selectedStudent.id,
           emailUsuario: selectedStudent.email,
           role: Roles.Aluno,
-        })
+        }).unwrap()
         enqueueSnackbar(`Senha do aluno(a): ${selectedStudent.nome} foi resetada com sucesso!`, { variant: 'success' })
         enqueueSnackbar(
           <div>
-            <p><strong>Login:</strong> {response?.data?.login}</p>
-            <p><strong>Nova senha:</strong> {response?.data?.senha}</p>
+            <p><strong>Login:</strong> {response?.login}</p>
+            <p><strong>Nova senha:</strong> {response?.senha}</p>
           </div>,
           {
             variant: 'info',
@@ -113,8 +113,9 @@ export const Students = () => {
             ),
           }
         )
-      } catch (error) {
-        enqueueSnackbar('Erro ao resetar senha, consulte um administrador.', { variant: 'error' })
+      } catch (error: any) {
+        const errorMessage = `${error?.data?.error}` || 'Erro consulte um adminstrador.'
+        enqueueSnackbar(errorMessage, { variant: 'error' })
       }
     }
     handleCloseDialog()

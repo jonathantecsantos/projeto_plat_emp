@@ -82,7 +82,7 @@ export const EvaluatorsComponent = () => {
   const handleConfirmAction = async () => {
     if (actionType === 'delete' && selectedEvaluator) {
       try {
-        await deleteEvaluator(selectedEvaluator.id)
+        await deleteEvaluator(selectedEvaluator.id).unwrap()
         enqueueSnackbar(`Avaliador(a): ${selectedEvaluator.nome}, excluído com sucesso!`, { variant: 'success' })
         refetch()
       } catch (error) {
@@ -94,12 +94,13 @@ export const EvaluatorsComponent = () => {
           idObjeto: selectedEvaluator.id,
           emailUsuario: selectedEvaluator.email,
           role: Roles.Avaliador,
-        })
+        }).unwrap()
+
         enqueueSnackbar(`Senha do avaliador(a): ${selectedEvaluator.nome} foi resetada com sucesso!`, { variant: 'success' })
         enqueueSnackbar(
           <div>
-            <p><strong>Login:</strong> {response?.data?.login}</p>
-            <p><strong>Nova senha:</strong> {response?.data?.senha}</p>
+            <p><strong>Login:</strong> {response?.login}</p>
+            <p><strong>Nova senha:</strong> {response?.senha}</p>
           </div>,
           {
             variant: 'info',
@@ -109,8 +110,9 @@ export const EvaluatorsComponent = () => {
             ),
           }
         )
-      } catch (error) {
-        enqueueSnackbar('Erro ao resetar senha, consulte um administrador.', { variant: 'error' })
+      } catch (error: any) {
+        const errorMessage = `${error?.data?.error}` || 'Erro consulte um adminstrador.'
+        enqueueSnackbar(errorMessage, { variant: 'error' })
       }
     }
     handleCloseDialog()

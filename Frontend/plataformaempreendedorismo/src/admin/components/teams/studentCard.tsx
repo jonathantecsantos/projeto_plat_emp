@@ -74,11 +74,13 @@ export const StudentCard = ({ student }: StudentCard) => {
   const handleDeleteStudent = async () => {
     if (student) {
       try {
-        await deleteStudent(student.id)
+        await deleteStudent(student.id).unwrap()
         enqueueSnackbar(`${student.nome}, excluído com sucesso!`, { variant: 'success' })
         setOpen(false)
-      } catch (error) {
-        enqueueSnackbar('Erro ao excluir, consulte um administrador.', { variant: 'error' })
+      } catch (error: any) {
+        const errorMessage = `${error?.data?.error}` || 'Erro consulte um admin.'
+        enqueueSnackbar(errorMessage, { variant: 'error' })
+        setOpen(false)
       }
     }
   }

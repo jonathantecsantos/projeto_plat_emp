@@ -81,7 +81,7 @@ export const Coordinators = () => {
   const handleConfirmAction = async () => {
     if (actionType === "delete" && selectedCoordinator) {
       try {
-        await deleteCoordinator(selectedCoordinator.id)
+        await deleteCoordinator(selectedCoordinator.id).unwrap()
         enqueueSnackbar(`Coordenador(a): ${selectedCoordinator.nome} excluído com sucesso!`, { variant: "success" })
         refetch()
       } catch (error) {
@@ -94,12 +94,13 @@ export const Coordinators = () => {
           idObjeto: selectedCoordinator.id,
           emailUsuario: selectedCoordinator.email,
           role: Roles.Coordenador,
-        })
+        }).unwrap()
+        
         enqueueSnackbar(`Senha do coordenador(a): ${selectedCoordinator.nome} foi resetada com sucesso!`, { variant: 'success' })
         enqueueSnackbar(
           <div>
-            <p><strong>Login:</strong> {response?.data?.login}</p>
-            <p><strong>Nova senha:</strong> {response?.data?.senha}</p>
+            <p><strong>Login:</strong> {response?.login}</p>
+            <p><strong>Nova senha:</strong> {response?.senha}</p>
           </div>,
           {
             variant: 'info',
@@ -109,8 +110,9 @@ export const Coordinators = () => {
             ),
           }
         )
-      } catch (error) {
-        enqueueSnackbar('Erro ao resetar senha, consulte um administrador.', { variant: 'error' })
+      } catch (error: any) {
+        const errorMessage = `${error?.data?.error}` || 'Erro consulte um administrador.'
+        enqueueSnackbar(errorMessage, { variant: 'error' })
       }
     }
     handleCloseDialog()

@@ -40,7 +40,7 @@ public class SecurityConfigurations {
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/auth/resetar-senha").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/auth/resetar-senha").hasAnyRole("ADMIN", "COORDENADOR")
 
                         //Incrições
                         .requestMatchers(HttpMethod.POST,"/inscricoes").permitAll()

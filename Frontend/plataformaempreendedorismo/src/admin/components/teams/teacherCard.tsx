@@ -7,25 +7,29 @@ import { useDeleteTeacherMutation } from "../../../api/studentApi"
 import { RoutesNames } from "../../../globals"
 import { Teacher } from "../../../model/teacher"
 import { ActionMenu } from "../common/actionMenuIcon"
+import { Roles } from "@/utils/types"
 
 export interface TeacherCard {
   teacher?: Teacher
+  role: Roles
 }
 
-export const TeacherCard = ({ teacher }: TeacherCard) => {
+export const TeacherCard = ({ teacher, role }: TeacherCard) => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const [open, setOpen] = useState(false)  
+  const [open, setOpen] = useState(false)
   const [deleteTeacher] = useDeleteTeacherMutation()
 
   const handleDeleteTeacher = async () => {
     if (teacher) {
       try {
-        await deleteTeacher(teacher.id)
+        await deleteTeacher(teacher.id).unwrap()
         enqueueSnackbar(`${teacher.nome}, excluído com sucesso!`, { variant: 'success' })
         setOpen(false)
-      } catch (error) {
-        enqueueSnackbar('Erro ao excluir, consulte um administrador.', { variant: 'error' })
+      } catch (error: any) {
+        const errorMessage = `${error?.data?.error}` || 'Erro consulte um admin.'
+        enqueueSnackbar(errorMessage, { variant: 'error' })
+        setOpen(false)
       }
     }
   }
@@ -35,10 +39,10 @@ export const TeacherCard = ({ teacher }: TeacherCard) => {
       <p className={`text-lg font-bold capitalize text-white mr-2`}>
         {teacher?.nome.toLowerCase()}
       </p>
-      <ActionMenu
+      {[Roles.Aluno].includes(role) ? null : <ActionMenu
         onEdit={() => navigate(RoutesNames.teacher.replace(':id', teacher!.id.toString()))}
         onRemove={() => setOpen(true)}
-      />
+      />}
     </div>
     <p>Professor/Orientador</p>
     <Dialog open={open} onClose={() => setOpen(false)}>

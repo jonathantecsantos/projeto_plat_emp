@@ -331,7 +331,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           <div className='flex flex-col xl:gap-2 gap-2 w-full relative'>
             <div className="flex gap-2 flex-wrap">
               {team?.professores && team.professores.map((teacher, idx) => (
-                <TeacherCard key={idx} teacher={teacher} />
+                <TeacherCard key={idx} teacher={teacher} role={userGlobalState?.enumRole!} />
               ))}
             </div>
             <Divider />

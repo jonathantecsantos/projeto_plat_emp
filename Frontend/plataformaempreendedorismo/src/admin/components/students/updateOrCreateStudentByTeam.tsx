@@ -64,7 +64,7 @@ export const UpdateOrCreateStudentByTeam = ({ id, teamData }: UpdateOrCreateStud
     const value = e.target.value;
     setStudent(prev => ({
       ...prev!,
-      dataNascimento: new Date(value)?.toISOString()
+      dataNascimento: value
     }))
   }
 

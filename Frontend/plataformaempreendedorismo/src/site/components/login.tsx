@@ -60,15 +60,15 @@ export const LoginComponent = () => {
 
   return (
     <div>
-      <div className="flex justify-center w-full h-dvh">
-        <div className="hidden lg:block w-2/3 h-dvh box-border rounded-md lg:mr-24">
+      <div className="flex justify-center w-full ">
+        <div className="hidden lg:block w-2/3 box-border lg:mr-24">
           <img
             src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            className="w-dvw h-dvh object-cover"
+            className="w-dvw h-[calc(100vh-44px)] object-cover"
           />
         </div>
         <form action="">
-          <div className={`p-6 rounded-md h-fit ${isValid && isValid ? 'xl:mt-12 md:mt-4' : 'mt-20'} sm:w-96 shadow-xl w-full lg:m-28 lg:ml-12 border-t-2 `}>
+          <div className={`p-6 h-fit ${isValid && isValid ? 'xl:mt-2 md:mt-4' : 'mt-10'} sm:w-96  w-full lg:mr-28 lg:ml-12`}>
             <img src={lampLogo} alt="Trophy" className="cursor-pointer mx-auto transform hover:scale-125 transition-transform duration-300 w-20 h-20 hover:rotate-12" />
             <h1 className="font-bold text-xl w-full my-6 cursor-pointer"
               onClick={() => navigate(RoutesNames.home)}>Plataforma Empreendedorismo</h1>
@@ -94,7 +94,7 @@ export const LoginComponent = () => {
               </LoadingButton>
             </div>
             {registerLoading ? <div className='text-center my-2'><LinearProgress /></div> :
-              isValid && isValid ? <div className="flex flex-col gap-2 mt-8 text-center">
+              isValid && isValid ? <div className={`flex flex-col gap-2 mt-1 sm:mt-8 text-center`}>
                 <div className="text-sm text-[#888]">Inscrições abertas!</div>
                 <div className="text-sm text-[#888]">Acesse o formulário e faça sua inscrição!</div>
                 <LoadingButton
@@ -105,8 +105,8 @@ export const LoginComponent = () => {
               </div> : null}
           </div>
         </form>
+        <Footer />
       </div>
-      <Footer />
       <CookiePolicy />
     </div>
 

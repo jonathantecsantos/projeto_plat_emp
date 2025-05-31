@@ -29,13 +29,8 @@ public class  AutenticacaoController {
 
     @Autowired
     private AuthenticationManager manager;
-
     @Autowired
     private TokenService tokenService;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
     @Autowired
     private UsuarioService usuarioService;
 
@@ -54,19 +49,6 @@ public class  AutenticacaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Usuário inexistente ou senha inválida!");
         }
     }
-
-//    @Operation(summary = "Registarar Usuario", method = "POST")
-//    @PostMapping("/register")
-//    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-//        if(this.usuarioRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
-//
-//        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-//        Usuario newUser = new Usuario(data.login(), encryptedPassword, data.enumRole());
-//
-//        this.usuarioRepository.save(newUser);
-//
-//        return ResponseEntity.ok().build();
-//    }
 
     @Operation(summary = "Redefinir Senha", method = "POST")
     @SecurityRequirement(name = "bearerToken")
@@ -91,6 +73,4 @@ public class  AutenticacaoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-
 }

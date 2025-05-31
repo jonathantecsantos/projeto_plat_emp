@@ -3,9 +3,11 @@ import adminBanner from '@assets/adminBanner.png'
 export const BannerImage = () => {
 
   return (
-    <div
-      className="bg-cover bg-center w-full h-28"
-      style={{ backgroundImage: `url(${adminBanner})` }}
+    <img
+      className="object-cover w-full h-28"
+      loading='lazy'
+      alt='Banner'
+      src={adminBanner}
     />
   )
 }

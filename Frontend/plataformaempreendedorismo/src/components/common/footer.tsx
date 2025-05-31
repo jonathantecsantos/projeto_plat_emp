@@ -7,7 +7,7 @@ export const Footer = () => {
   const siteVersion = CookieUtils.getCookie('version')
 
   return (
-    <footer className="bg-black text-white py-8 px-4 mt-auto">
+    <footer className="absolute bottom-0 bg-[#212830] text-white w-full px-4">
       <div className="container mx-auto text-center">
         {/* <div className="flex justify-center space-x-6 mb-4 text-xl">
           <a
@@ -34,15 +34,14 @@ export const Footer = () => {
           </a>
         </div> */}
 
-        <p className="text-gray-400 text-sm mt-6">
+        <p className="text-gray-400 text-xs mt-2">
           Copyright © {currentYear} MIT by{" "}
           <a
             href="https://www.linkedin.com/in/jonathan-santos-7000a11a3/"
 
             className="text-[#006ea9] hover:text-gray-300 transition-colors"
             target="_blank"
-            rel="noopener noreferrer"
-          >
+            rel="noopener noreferrer">
             Jonathan Santos
           </a>{" "}
           | design by{" "}
@@ -50,8 +49,7 @@ export const Footer = () => {
             href="https://www.linkedin.com/in/winnicius-moura/"
             className="text-[#006ea9] hover:text-gray-300 transition-colors"
             target="_blank"
-            rel="noopener noreferrer"
-          >
+            rel="noopener noreferrer">
             Winnícius Moura
           </a>
         </p>
@@ -59,7 +57,7 @@ export const Footer = () => {
           Official {siteVersion}
         </p>
       </div>
-      <div className="flex justify-end space-x-4 mt-2 md:mt-0 text-gray-400 ">
+      <div className="flex justify-start space-x-4 md:mt-0 text-gray-400">
         <a target="_blank" href={`${RoutesNames.privacyPolicy}`} className="text-sm hover:text-gray-300 transition-colors">Privacidade</a>
         <a href={`${RoutesNames.termsOfUse}`} target="_blank" className="text-sm hover:text-gray-300 transition-colors">Termos</a>
       </div>

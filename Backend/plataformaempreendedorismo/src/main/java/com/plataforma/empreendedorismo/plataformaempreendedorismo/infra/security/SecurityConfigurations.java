@@ -1,5 +1,4 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.infra.security;
-
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.infra.config.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

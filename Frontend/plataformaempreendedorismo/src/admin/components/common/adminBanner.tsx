@@ -1,13 +1,15 @@
-import adminBanner from '@assets/adminBanner.png'
+import adminBanner from '@assets/adminBanner.jpg'
 
 export const BannerImage = () => {
 
   return (
-    <img
-      className="object-cover w-full h-28"
-      loading='lazy'
-      alt='Banner'
-      src={adminBanner}
-    />
+    <div className="w-full overflow-hidden">
+      <img
+        className="w-full object-cover md:object-contain h-28"
+        loading='lazy'
+        alt='Banner'
+        src={adminBanner}
+      />
+    </div>
   )
 }

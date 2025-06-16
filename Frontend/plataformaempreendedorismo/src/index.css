@@ -96,7 +96,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #FF771B;
+  background: #5d8b41;
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -117,7 +117,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #FF771B;
+  background: #5d8b41;
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -137,7 +137,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #FF771B;
+  background: #5d8b41;
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -157,7 +157,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #ec4899;
+  background: #d46316;
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -180,7 +180,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   /* marginLeft: 250px; */
   height: calc(100% - 20px); /* Adjust height to leave space at top and bottom */
   background: linear-gradient(to bottom, 
-              #ec4899 50%, 
+              #d46316 
               rgba(0,0,0,0) 0%) repeat-y;
   background-size: 100% 10px;
   position: absolute;
@@ -192,7 +192,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #ec4899;
+  background: #d46316;
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -215,7 +215,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   /* marginLeft: 250px; */
   height: calc(100% - 20px); /* Adjust height to leave space at top and bottom */
   background: linear-gradient(to bottom, 
-              #ec4899 50%, 
+              #d46316 
               rgba(0,0,0,0) 0%) repeat-y;
   background-size: 100% 10px;
   position: absolute;
@@ -228,7 +228,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #ec4899;
+  background: #d46316;
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -250,7 +250,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   /* marginLeft: 250px; */
   height: calc(100% - 20px); /* Adjust height to leave space at top and bottom */
   background: linear-gradient(to bottom, 
-              #ec4899 50%, 
+              #d46316 
               rgba(0,0,0,0) 0%) repeat-y;
   background-size: 100% 10px;
   position: absolute;
@@ -264,7 +264,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #6C4796;
+  background: #823e11;
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -284,7 +284,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #6C4796;
+  background: #823e11;
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -305,7 +305,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #6C4796;
+  background: #823e11;
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -327,7 +327,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 35px;
-  background: #6C4796;
+  background: #823e11;
   position: absolute;
   bottom: -26px;
   left: 0;
@@ -349,7 +349,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #6C4796;
+  background: #823e11;
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -366,7 +366,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     content: '';
     width: 40px;
     height: 20px; /* Ajuste conforme necessário */
-    background: #6C4796;
+    background: #823e11;
     position: absolute;
     bottom: -25px;
     left: -15px;
@@ -402,7 +402,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #f97316;
+  background: #5d8b41;
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -413,7 +413,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     content: '';
     width: 40px;
     height: 20px; /* Ajuste conforme necessário */
-    background: #f97316;
+    background: #5d8b41;
     position: absolute;
     bottom: -25px;
     left: -15px;
@@ -425,7 +425,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
   content: '';
   width: 8px;
   height: 30px;
-  background: #ec4899;
+  background: #d46316;
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -444,7 +444,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     content: '';
     width: 40px;
     height: 20px; /* Ajuste conforme necessário */
-    background: #ec4899;
+    background: #d46316;
     position: absolute;
     bottom: -25px;
     left: -15px;
@@ -457,7 +457,7 @@ div.overflow-x-auto::-webkit-scrollbar-thumb {
     content: '';
     width: 40px;
     height: 20px; /* Ajuste conforme necessário */
-    background: #f97316;
+    background: #5d8b41;
     position: absolute;
     bottom: -8px;
     left: -15px;

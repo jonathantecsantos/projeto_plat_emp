@@ -20,8 +20,7 @@ export const createTeacherSchema = z.object({
   email: z.string().email("Email inválido").refine((email) => email.endsWith('@evl.com.br'), {
     message: "Email deve ser institucional (@evl.com.br)",
   }),
-  idEquipe: z.array(z.number().min(1, "ID de equipe inválido"))
-    .min(1, "Selecione pelo menos uma equipe"), // Permitir múltiplas equipes regra professor
+  idEquipe: z.array(z.number().min(1, "ID de equipe inválido")), // Permitir múltiplas equipes regra professor
   dataNascimento: z.preprocess(
     (val) => {
       if (!val) return undefined;

@@ -42,14 +42,14 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
 
 
   return (
-    <div ref={printRef} className="w-full max-w-6xl mx-auto bg-white p-8 print:p-3 print:text-[12px]">
-      <img src={lampLogo} alt="Trophy" className="w-16 h-16 absolute inset-12" />
-      <div className="print:max-w-md print:mx-auto print:mt-8">
+    <div ref={printRef} className="w-full max-w-6xl mx-auto bg-white p-2 print:p-2 print:text-[12px]">
+      <img src={lampLogo} alt="Trophy" className="w-16 h-16 absolute inset-8" />
+      <div className="print:max-w-md print:mx-auto print:mt-2">
         <h1 className="text-start text-xl font-bold text-[#2f5597]">DLEI 2025</h1>
         <div className="w-full"></div>
-        <h2 className="text-start text-nowrap text-lg font-bold mb-8 text-[#2f5597]">9º Desafio Lourdinas de Empreendedorismo e Inovação</h2>
+        <h2 className="text-start text-nowrap text-lg font-bold mb-2 text-[#2f5597]">9º Desafio Lourdinas de Empreendedorismo e Inovação</h2>
       </div>
-      <h2 className="text-center text-lg font-semibold mb-4">FICHA DE INSCRIÇÃO / RECIBO</h2>
+      <h2 className="text-center text-lg font-semibold mb-2">FICHA DE INSCRIÇÃO / RECIBO</h2>
       <table className="w-full text-sm bg-[#fc56f4] border border-b-0 border-gray-700">
         <tbody>
           <tr>

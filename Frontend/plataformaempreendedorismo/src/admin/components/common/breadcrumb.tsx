@@ -150,15 +150,18 @@ export const BreadcrumbComponent = (props: {
               <DividerIcon style={{ ...breadcrumbAlignItem, margin: '0px 5px 0px 5px', color: '#505050' }} /> : null}
 
             {/* PATH/ROUTES NAMES */}
-            {args.match.params.id == ':id' ? 'Novo' : location.pathname == args.match.pathname ?
-              <div style={colorUnlink}> {args.breadcrumb} {args.match.params.id}</div> :
-              ArrayUtils.checkEqualsFromArrays([args.match.pathname], unLink) ?
-                <div style={colorUnlink}>{args.match.route?.breadcrumb as string}</div> :
-                <Link style={breadcrumbLinkDecoration}
-                  to={isBannerRoute || isPrototypingRoute ? teamRoute : args.match.pathname === RoutesNames.home ? RoutesNames.adminHome :
-                    args.match.pathname}>
-                  {args.breadcrumb}
-                </Link>}
+            {args.match.params.id == ':id' ? 'Novo' :
+              location.pathname == args.match.pathname && (args.match.params.id || /\/\d+$/.test(location.pathname)) ?
+                null :
+                location.pathname == args.match.pathname ?
+                  <div style={colorUnlink}> {args.breadcrumb}</div> :
+                  ArrayUtils.checkEqualsFromArrays([args.match.pathname], unLink) ?
+                    <div style={colorUnlink}>{args.match.route?.breadcrumb as string}</div> :
+                    <Link style={breadcrumbLinkDecoration}
+                      to={isBannerRoute || isPrototypingRoute ? teamRoute : args.match.pathname === RoutesNames.home ? RoutesNames.adminHome :
+                        args.match.pathname}>
+                      {args.breadcrumb}
+                    </Link>}
           </span>
         </React.Fragment>
       })}

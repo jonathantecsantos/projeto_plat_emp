@@ -1,6 +1,6 @@
-import { TeamEvaluation, TeamEvaluationResponse } from "../model/evaluationFormat"
-import { Ods } from "../model/ods"
-import { ZodSchema } from "zod"
+import { ZodSchema } from "zod";
+import { TeamEvaluation, TeamEvaluationResponse } from "../model/evaluationFormat";
+import { Ods } from "../model/ods";
 
 export enum ImportType {
   student = 'ALUNO',
@@ -118,7 +118,7 @@ export interface TeamValidation {
 }
 
 export const formatDateToInput = (isoDate: string): string => {
-  if (!isoDate) return "" 
+  if (!isoDate) return ""
   return new Date(isoDate)?.toISOString()?.split("T")[0]
 }
 
@@ -155,7 +155,12 @@ export const capitalizeTeamName = (name: string) => {
   return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : ''
 }
 export const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
+  // Se a data tem fuso horário (+00:00), extrair apenas a parte da data
+  const dateOnly = dateString.split('T')[0];
+  const [year, month, day] = dateOnly.split('-');
+
+  // Criar data usando os componentes diretamente para evitar problemas de fuso horário
+  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
 
   return new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',

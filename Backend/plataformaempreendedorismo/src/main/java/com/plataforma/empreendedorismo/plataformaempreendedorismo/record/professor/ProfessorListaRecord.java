@@ -1,5 +1,6 @@
 package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.professor;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecordRetorno;
 
@@ -12,6 +13,7 @@ public record ProfessorListaRecord(
         String nome,
         String cpf,
         String email,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         Date dataNascimento,
         String tamanhoCamisa,
         List<EquipeRecordRetorno> equipeRecord

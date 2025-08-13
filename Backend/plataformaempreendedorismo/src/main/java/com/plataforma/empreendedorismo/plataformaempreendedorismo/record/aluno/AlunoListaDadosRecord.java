@@ -2,6 +2,7 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Aluno;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecordRetorno;
 
@@ -13,6 +14,7 @@ public record AlunoListaDadosRecord(
         String turma,
         Boolean isLider,
         Boolean isViceLider,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         Date dataNascimento,
         String tamanhoCamisa,
         EquipeRecordRetorno equipeRecord) {

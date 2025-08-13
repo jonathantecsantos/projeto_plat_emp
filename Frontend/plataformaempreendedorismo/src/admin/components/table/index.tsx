@@ -2,15 +2,14 @@ import { LabelDisplayedRowsArgs, Table, TableBody, TableCell, TableHead, TablePa
 import * as locales from '@mui/material/locale'
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles'
 import { styled } from '@mui/system'
-import { CommonUtils } from 'essencials'
 import { CSSProperties, ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { setCurrentPage, setRowsPerPage } from '../../../redux/reducers/table.slice'
 import { RootState } from '../../../redux/store'
 import TablePaginationActions from './actions'
 import { TableBaseComponentProps } from './base'
 import { StyledTableRow, SupportedLocales, TableComponentClickRowProps } from './common'
-import { useLocation } from 'react-router-dom'
 
 export interface TableComponentProps<T> extends TableBaseComponentProps<T> {
   onClickRow?: (event: TableComponentClickRowProps<T>) => void,
@@ -50,6 +49,55 @@ export const TableComponent = <T,>(props: TableComponentProps<T>) => {
   const page = useSelector((state: RootState) =>
     state.tableState[id]?.[routePath]?.currentPage || 0
   )
+
+  const exportToCSVUTF8 = (data: any[]) => {
+    if (!data.length) return;
+
+    const processValue = (value: any): string => {
+      if (value === null || value === undefined) return '';
+      
+      if (typeof value === 'object') {
+        return JSON.stringify(value);
+      }
+      
+      const stringValue = String(value);
+      
+      // Se contém separador, quebra de linha ou aspas, envolver em aspas
+      if (stringValue.includes(';') || stringValue.includes('\n') || stringValue.includes('"')) {
+        return `"${stringValue.replace(/"/g, '""')}"`;
+      }
+      
+      return stringValue;
+    };
+
+    const headers = Object.keys(data[0]).join(';');
+    const rows = data
+      .map(item => 
+        Object.values(item)
+          .map(value => processValue(value))
+          .join(';')
+      )
+      .join('\n');
+
+    const csvContent = `${headers}\n${rows}`;
+    
+
+    const utf8 = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    const csvBytes = new TextEncoder().encode(csvContent);
+    const blob = new Blob([utf8, csvBytes], { 
+      type: 'text/csv;charset=utf-8' 
+    });
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'export.csv';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
 
   useEffect(() => {
@@ -140,7 +188,7 @@ export const TableComponent = <T,>(props: TableComponentProps<T>) => {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={(subprops) => <TablePaginationActions {...subprops}
-                onExport={() => CommonUtils.exportToCSV(props.bodyList)} />}
+                onExport={() => exportToCSVUTF8(props.bodyList)} />}
 
               labelDisplayedRows={handleLabelDisplayedRows}
               labelRowsPerPage={defaultPageCount > 1 ? undefined : ''}

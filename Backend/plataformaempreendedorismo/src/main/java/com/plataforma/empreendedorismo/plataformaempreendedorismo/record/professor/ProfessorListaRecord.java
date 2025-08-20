@@ -2,6 +2,7 @@ package com.plataforma.empreendedorismo.plataformaempreendedorismo.record.profes
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.model.Professor;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeNomeRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.equipe.EquipeRecordRetorno;
 
 import java.util.Date;
@@ -16,7 +17,7 @@ public record ProfessorListaRecord(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         Date dataNascimento,
         String tamanhoCamisa,
-        List<EquipeRecordRetorno> equipeRecord
+        List<EquipeNomeRecord> equipeNomerRecord
 ) {
     public ProfessorListaRecord(Professor professor) {
         this(
@@ -28,7 +29,7 @@ public record ProfessorListaRecord(
                 professor.getTamanhoCamisa(),
                 professor.getEquipes() != null
                         ? professor.getEquipes().stream()
-                        .map(e -> new EquipeRecordRetorno(e.getId(), e.getNome(), e.getLinkPitch()))
+                        .map(e -> new EquipeNomeRecord(e.getNome()))
                         .collect(Collectors.toList())
                         : List.of()
         );

@@ -179,7 +179,7 @@ export const Students = () => {
                 <td className="px-4 uppercase">{student.turma}</td>
                 <td className="px-4">{student.isLider ? <CheckIcon className='text-green-500 hover:text-white' /> : ''}</td>
                 <td className="px-4">{student.isViceLider ? <CheckIcon className='text-green-500 hover:text-white' /> : null}</td>
-                <td className="px-4 capitalize">{student.equipeRecord.nome.toLowerCase()}</td>
+                <td className="px-4 capitalize">{student.nomeEquipe.toLowerCase()}</td>
                 <td className="px-4">{student.dataNascimento && formatDate(student.dataNascimento.toString())}</td>
                 <td className="px-4 capitalize">{student.tamanhoCamisa}</td>
                 <td className="px-4">

@@ -1,5 +1,5 @@
 import { Ods } from "./ods"
-import { Team, TeamsResponse } from "./team"
+import { Team } from "./team"
 
 
 export namespace TeamConfig {
@@ -32,7 +32,7 @@ export interface StudentIdResponse extends Student {
 }
 
 export interface StudentsResponse extends Student {
-  equipeRecord: TeamsResponse
+  nomeEquipe: string
 }
 
 export interface CreateOrUpdateStudent {

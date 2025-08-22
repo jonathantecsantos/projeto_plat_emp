@@ -1,5 +1,5 @@
 import { TeamConfig } from "./student"
-import { Team, TeamsResponse } from "./team"
+import { Team } from "./team"
 
 export interface Teacher {
   id: number
@@ -22,7 +22,7 @@ export interface TeacherIdResponse {
 
 
 export interface TeachersResponse extends Teacher {
-  equipeRecord: TeamsResponse[]
+  equipeNomeRecord: string[]
 }
 
 export interface CreateOrUpdateTeacher {

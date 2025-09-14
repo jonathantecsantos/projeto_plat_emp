@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './admin/components/common/protectedRoute'
+import { TeamSelection } from './admin/components/teams/teamSelection'
 import { RoutesNames } from './globals'
 import { AdminConfigPage } from './pages/adminConfig'
 import { AdminHomePage } from './pages/adminHome'
@@ -40,10 +41,11 @@ import { TeamRegisterPrintPage } from './pages/teamRegisterPrint'
 import { TeamsPage } from './pages/teams'
 import { TeamsNotesPage } from './pages/teamsNotes'
 import { UploadFilesPage } from './pages/uploadFiles'
-import { PrivacyPolicy } from './site/components/privacyPolicy'
-import { Roles } from './utils/types'
 import { CookiePolicyComponent } from './site/components/cookiePolicy'
+import { PrivacyPolicy } from './site/components/privacyPolicy'
 import { TermsOfUse } from './site/components/termsOfUse'
+import { Roles } from './utils/types'
+import { TeachersTeamListSelection } from './pages/teachersLogin'
 
 export const router = createBrowserRouter([
   {
@@ -129,6 +131,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.team,
     element: <ProtectedRoute children={<TeamPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+  },
+  {
+    path: RoutesNames.teamSelection,
+    element: <ProtectedRoute children={<TeachersTeamListSelection />} allowedRoles={[Roles.Professor]} />
   },
   {
     path: RoutesNames.banner,

@@ -27,6 +27,7 @@ export const RoutesNames = {
 
   teams: '/teams',
   team: '/teams/:id',
+  teamSelection: '/team-selection',
 
   dljTeams: '/dlj',
   dljTeam: '/dlj/:id',

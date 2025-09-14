@@ -78,7 +78,7 @@ public class SecurityConfigurations {
 
                         //Equipe
                         .requestMatchers(HttpMethod.GET, "/equipes/{id}").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR",  "ALUNO")
-                        .requestMatchers(HttpMethod.GET, "/equipes").hasAnyRole("ADMIN", "COORDENADOR")
+                        .requestMatchers(HttpMethod.GET, "/equipes").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR")
                         .requestMatchers(HttpMethod.PUT, "/equipes/editar").hasAnyRole("ADMIN", "COORDENADOR","ALUNO")
 
                         //Professor

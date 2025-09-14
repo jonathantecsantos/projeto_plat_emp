@@ -31,9 +31,19 @@ export const LoginComponent = () => {
       if (response) {
         const { tokenJWT } = response
         const decodedToken: LoginTokenJWT = jwtDecode(tokenJWT)
-        if ([Roles.Aluno, Roles.Professor].includes(decodedToken?.enumRole!)) {
-          navigate(RoutesNames.team.replace(':id', decodedToken?.idEquipe?.toString()!))
+
+        if (decodedToken?.enumRole === Roles.Aluno) {
+          // Aluno sempre vai para sua única equipe
+          navigate(RoutesNames.team.replace(':id', decodedToken?.idEquipe?.[0]?.toString()!))
+        } else if (decodedToken?.enumRole === Roles.Professor) {
+          // Professor: se tem 1 equipe, vai direto; se tem mais de 1, vai para seleção
+          if (decodedToken?.idEquipe?.length === 1) {
+            navigate(RoutesNames.team.replace(':id', decodedToken.idEquipe[0].toString()))
+          } else if (decodedToken?.idEquipe?.length > 1) {
+            navigate(RoutesNames.teamSelection)
+          }
         } else {
+          // Outros roles (Admin, Coordenador, etc.)
           navigate(RoutesNames.adminHome)
         }
       }

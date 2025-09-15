@@ -1,6 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './admin/components/common/protectedRoute'
-import { TeamSelection } from './admin/components/teams/teamSelection'
 import { RoutesNames } from './globals'
 import { AdminConfigPage } from './pages/adminConfig'
 import { AdminHomePage } from './pages/adminHome'

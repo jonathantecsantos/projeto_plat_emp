@@ -61,20 +61,20 @@ const menuItems: MenuItemType[] = [
     subItens: true,
     insideItems: [
       {
-        insideName: 'DLJ',
-        routeName: RoutesNames.dljTeams
-      },
-      {
         insideName: 'Pitch',
         routeName: RoutesNames.pitchTeams,
       },
       {
-        insideName: 'Shark Tank',
-        routeName: RoutesNames.sharkTankTeams,
+        insideName: 'Canvas',
+        routeName: RoutesNames.canvasTeams
       },
       {
         insideName: 'Expo Dlei',
         routeName: RoutesNames.expoDleiTeams
+      },
+      {
+        insideName: 'Shark Tank',
+        routeName: RoutesNames.sharkTankTeams,
       }
     ]
   },
@@ -123,8 +123,8 @@ const menuItems: MenuItemType[] = [
         routeName: RoutesNames.classificationTop5,
       },
       {
-        insideName: 'DLJ',
-        routeName: RoutesNames.classificationDljTeams,
+        insideName: 'Canvas',
+        routeName: RoutesNames.classificationCanvas,
       },
       {
         insideName: 'Pitch',

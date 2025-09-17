@@ -5,13 +5,13 @@ import { ReportClassificationByFormat } from '../../../model/reports'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
 
-export const PitchClassificationComponent = () => {
-  const { data: pitchClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(1)
+export const CanvasClassificationComponent = () => {
+  const { data: canvasClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(2)
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {
-    if (pitchClassification) {
-      if (pitchClassification?.length <= 0) {
+    if (canvasClassification) {
+      if (canvasClassification?.length <= 0) {
         console.log('pitchClassification refetch')
         refetch()
       }
@@ -19,8 +19,8 @@ export const PitchClassificationComponent = () => {
   }, [])
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
-  if (error) return <p className="text-center">Error loading pitchClassification.</p>
-  if (!pitchClassification?.length) return <p className="text-center mt-10">Nenhuma nota disponível até o momento.</p>
+  if (error) return <p className="text-center">Error loading canvasClassification.</p>
+  if (!canvasClassification?.length) return <p className="text-center mt-10">Nenhuma nota disponível até o momento.</p>
 
   return <div>
     <div className="flex flex-col h-full">
@@ -30,16 +30,16 @@ export const PitchClassificationComponent = () => {
             colums={[
               'Classificação',
               'Time',
-              'Pitch'
+              'Canvas'
             ]}
 
             setCurrPageRef={tableComponentSetCurrPageRef}
-            bodyList={pitchClassification || []}
-            bodyRowBuilder={(pitchClassification: ReportClassificationByFormat, idx) => (
+            bodyList={canvasClassification || []}
+            bodyRowBuilder={(canvasClassification: ReportClassificationByFormat, idx) => (
               <>
                 <td className="px-4 py-2 ">{idx + 1}º</td>
-                <td className="px-4 py-2 capitalize">{pitchClassification.equipe.toLowerCase()}</td>
-                <td className="px-4 py-2 capitalize">{pitchClassification.totalNota}</td>
+                <td className="px-4 py-2 capitalize">{canvasClassification.equipe.toLowerCase()}</td>
+                <td className="px-4 py-2 capitalize">{canvasClassification.totalNota}</td>
               </>
             )}
           />

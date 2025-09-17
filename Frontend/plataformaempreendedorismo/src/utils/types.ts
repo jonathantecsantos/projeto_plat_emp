@@ -46,11 +46,12 @@ export interface EvaluationTypes {
 }
 
 
-export enum EvalutionType {
-  DLJ = 1,
-  PITCH = 2,
-  SHARKTANK = 3,
-  EXPODLEI = 4,
+export enum EvaluationType {
+  DLJ = 0,
+  PITCH = 1,
+  CANVAS = 2,
+  EXPODLEI = 3,
+  SHARKTANK = 4,
 }
 
 export interface User {

@@ -35,6 +35,9 @@ export const RoutesNames = {
   pitchTeams: '/pitch',
   pitchTeam: '/pitch/:id',
 
+  canvasTeams: '/canvas',
+  canvasTeam: '/canvas/:id',
+
   sharkTankTeams: '/sharkTank',
   sharkTankTeam: '/sharkTank/:id',
 
@@ -48,6 +51,7 @@ export const RoutesNames = {
   classificationTop5: '/top5-classification',
   classificationDljTeams: '/dlj-classification',
   classificationPitch: '/pitch-classification',
+  classificationCanvas: '/canvas-classification',
   classificationSharkTank: '/sharTank-classification',
   classificationExpoDlei: '/expoDlei-classification',
 
@@ -63,6 +67,7 @@ export const RoutesNames = {
 //utilizado no controle de rotas do menu
 export const evaluatorsRoutes: Record<string, { insideName: string; routeName: string }> = {
   PITCH: { insideName: "Pitch", routeName: RoutesNames.pitchTeams },
+  CANVAS: { insideName: "Canvas", routeName: RoutesNames.canvasTeams },
   DLJ: { insideName: "DLJ", routeName: RoutesNames.dljTeams },
   "SHARK TANK": { insideName: "Shark Tank", routeName: RoutesNames.sharkTankTeams },
   "EXPO DLEI": { insideName: "Expo Dlei", routeName: RoutesNames.expoDleiTeams },

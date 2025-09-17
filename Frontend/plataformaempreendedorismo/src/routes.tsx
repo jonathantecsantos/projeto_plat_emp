@@ -5,7 +5,10 @@ import { AdminConfigPage } from './pages/adminConfig'
 import { AdminHomePage } from './pages/adminHome'
 import { BannerPage } from './pages/banner'
 import { BannerPreviewPage } from './pages/bannerPreview'
+import { CanvasEvaluationPage } from './pages/canvasTeamEvaluation'
+import { CanvasPage } from './pages/canvasTeams'
 import { ClassificationPage } from './pages/classification'
+import { CanvasClassificationPage } from './pages/classificationCanvas'
 import { DljClassificationPage } from './pages/classificationDlj'
 import { ExpoDleiClassificationPage } from './pages/classificationExpoDlei'
 import { PitchClassificationPage } from './pages/classificationPitch'
@@ -14,8 +17,6 @@ import { Top5ClassificationPage } from './pages/classificationTop5'
 import { ContactPage } from './pages/contact'
 import { CoordinatorPage } from './pages/coordinator'
 import { CoordinatorsPage } from './pages/coordinators'
-import { DLJEvaluationPage } from './pages/dljTeamEvaluation'
-import { DLJPage } from './pages/dljTeams'
 import { EvaluatorPage } from './pages/evaluator'
 import { EvaluatorsPage } from './pages/evaluators'
 import { ExpoDleiEvaluationPage } from './pages/expoDleiTeamEvaluation'
@@ -32,6 +33,7 @@ import { StudentsDetailsPage } from './pages/students'
 import { StudentSettingsPage } from './pages/studentSettings'
 import { TeacherPage } from './pages/teacher'
 import { TeachersPage } from './pages/teachers'
+import { TeachersTeamListSelection } from './pages/teachersLogin'
 import { TeamPage } from './pages/team'
 import { TeamNotesPage } from './pages/teamNotes'
 import { TeamPrototypingPage } from './pages/teamPrototyping'
@@ -44,7 +46,6 @@ import { CookiePolicyComponent } from './site/components/cookiePolicy'
 import { PrivacyPolicy } from './site/components/privacyPolicy'
 import { TermsOfUse } from './site/components/termsOfUse'
 import { Roles } from './utils/types'
-import { TeachersTeamListSelection } from './pages/teachersLogin'
 
 export const router = createBrowserRouter([
   {
@@ -140,12 +141,12 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute children={<BannerPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
   },
   {
-    path: RoutesNames.dljTeams,
-    element: <ProtectedRoute children={<DLJPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+    path: RoutesNames.canvasTeams,
+    element: <ProtectedRoute children={<CanvasPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
   },
   {
-    path: RoutesNames.dljTeam,
-    element: <ProtectedRoute children={<DLJEvaluationPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+    path: RoutesNames.canvasTeam,
+    element: <ProtectedRoute children={<CanvasEvaluationPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
   },
   {
     path: RoutesNames.pitchTeams,
@@ -186,6 +187,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.classificationDljTeams,
     element: <ProtectedRoute children={<DljClassificationPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+  },
+  {
+    path: RoutesNames.classificationCanvas,
+    element: <ProtectedRoute children={<CanvasClassificationPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
   },
   {
     path: RoutesNames.classificationPitch,

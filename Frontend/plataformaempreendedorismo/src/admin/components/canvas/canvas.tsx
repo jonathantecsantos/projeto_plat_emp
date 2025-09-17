@@ -4,9 +4,9 @@ import { RootState } from "../../../redux/store"
 import { EvaluationType } from "../../../utils/types"
 import { TeamsTable } from "../common/teamsTableEvaluations"
 
-export const PitchTeams = () => {
+export const CanvasTeams = () => {
   const userGlobalStateID = useSelector((state: RootState) => state.userInfo.id)
 
-  return <TeamsTable routeName={RoutesNames.pitchTeam}
-    teamEvaluation={{ evaluationTypeId: EvaluationType.PITCH, evaluatorId: userGlobalStateID }} />
+  return <TeamsTable routeName={RoutesNames.canvasTeam}
+    teamEvaluation={{ evaluationTypeId: EvaluationType.CANVAS, evaluatorId: userGlobalStateID }} />
 }

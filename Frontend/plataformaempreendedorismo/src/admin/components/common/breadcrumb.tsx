@@ -104,6 +104,10 @@ const routes = [
     breadcrumb: 'Classificação - DLJ',
   },
   {
+    path: RoutesNames.classificationCanvas,
+    breadcrumb: 'Classificação - Canvas',
+  },
+  {
     path: RoutesNames.classificationPitch,
     breadcrumb: 'Classificação - Pitch',
   },

@@ -6,7 +6,7 @@ import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
 
 export const DljClassificationComponent = () => {
-  const { data: dljClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(1)
+  const { data: dljClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(0)
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {

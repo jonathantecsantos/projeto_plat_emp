@@ -7,7 +7,7 @@ import { TableComponentSetCurrPageProps } from "../table/common"
 
 
 export const SharkTankClassificationComponent = () => {
-  const { data: sharkTankClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(3)
+  const { data: sharkTankClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(4)
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
 
 export const ExpoDleiClassificationComponent = () => {
-  const { data: expoDleiClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(4)
+  const { data: expoDleiClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(3)
 
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 

@@ -77,8 +77,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.PUT, "/banner/editar").hasAnyRole("ADMIN", "COORDENADOR", "ALUNO")
 
                         //Equipe
-                        .requestMatchers(HttpMethod.GET, "/equipes/{id}").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR",  "ALUNO")
-                        .requestMatchers(HttpMethod.GET, "/equipes").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/equipes/{id}").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR","ALUNO","AVALIADOR")
+                        .requestMatchers(HttpMethod.GET, "/equipes").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR","AVALIADOR")
                         .requestMatchers(HttpMethod.PUT, "/equipes/editar").hasAnyRole("ADMIN", "COORDENADOR","ALUNO")
 
                         //Professor

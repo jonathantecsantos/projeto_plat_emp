@@ -230,6 +230,12 @@ export const LeftMenuComponent = () => {
 
   let menuEvaluator = [
     {
+      outsideIcon: <GroupsIcon />,
+      outsideName: 'Times',
+      subItens: false,
+      routeName: RoutesNames.teams,
+    },
+    {
       outsideName: "Avaliações",
       outsideIcon: <AssignmentTurnedInIcon />,
       subItens: true,

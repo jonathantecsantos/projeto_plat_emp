@@ -22,7 +22,7 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
       evaluatorId: teamData.teamEvaluation.evaluatorId
     })
 
-  const { data: pitchResponse, isLoading: pitchLoading } = useGetEvaluationDataQuery({
+  const { data: canvasResponse, isLoading: pitchLoading } = useGetEvaluationDataQuery({
     idAvaliador: teamData.teamEvaluation.evaluatorId,
     idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId,
     idEquipe: teamData.id
@@ -42,13 +42,13 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
   const alreadyEvaluated = teams?.some(team => team.id === teamData.id && team.equipeAvaliada === true)
 
   useEffect(() => {
-    if (canvasQuestions && pitchResponse) {
+    if (canvasQuestions && canvasResponse) {
       const initialValues: { [key: number]: number } = {}
       let initialTotalPoints = 0
 
       canvasQuestions.forEach((criterio) => {
         criterio.subcriterioAvaliacaos.forEach((subcriterio) => {
-          const matchingEvaluation = pitchResponse?.find(
+          const matchingEvaluation = canvasResponse?.find(
             (evaluation) => evaluation.idSubcriterioAvaliacao === subcriterio.id
           )
           const initialValue = matchingEvaluation ? matchingEvaluation.nota : 0 // Pega a nota do payload se existir
@@ -65,7 +65,7 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
       setValues({})
       setTotalPoints(0)
     }
-  }, [canvasQuestions, pitchResponse])
+  }, [canvasQuestions, canvasResponse])
 
   const handleSubcriterionChange = (idSubcriterio: number, value: number) => {
     const previousValue = values[idSubcriterio] || 0

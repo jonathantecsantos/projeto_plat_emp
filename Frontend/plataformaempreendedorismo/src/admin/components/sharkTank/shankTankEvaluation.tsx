@@ -6,7 +6,7 @@ import { useGetEvaluationByIdQuery, useGetEvaluationDataQuery, useGetTeamsEvalua
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation } from "../../../model/evaluationFormat"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { EvaluationProps } from "../../../utils/types"
+import { EvaluationProps, EvaluationType } from "../../../utils/types"
 import { EvaluationHeader } from "../common/evaluationHeader"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
 import { SubcriterionSlider } from "../common/subcriterioSlider"
@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom"
 
 export const SharkTankTeamEvaluation = ({ teamData }: EvaluationProps) => {
 
-  const { data: sharkTankQuestions, isLoading } = useGetEvaluationByIdQuery(3) // id sharkTank = 3
+  const { data: sharkTankQuestions, isLoading } = useGetEvaluationByIdQuery(EvaluationType.SHARKTANK) // id sharkTank = 3
   const { data: teams, } = useGetTeamsEvaluationsQuery(
     {
       evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,

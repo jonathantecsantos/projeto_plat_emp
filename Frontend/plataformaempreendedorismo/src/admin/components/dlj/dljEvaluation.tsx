@@ -8,7 +8,7 @@ import { useGetEvaluationByIdQuery, useGetEvaluationDataQuery, useGetTeamsEvalua
 import { RoutesNames } from "../../../globals"
 import { CriterioAvaliacao, Evaluation, EvaluationData, SubcriterioAvaliacao } from "../../../model/evaluationFormat"
 import { toggleLoading } from "../../../redux/reducers/loadingBar.slice"
-import { EvaluationProps } from "../../../utils/types"
+import { EvaluationProps, EvaluationType } from "../../../utils/types"
 import { EvaluationHeader } from "../common/evaluationHeader"
 import { HandleNextTeamComponent } from "../common/handleNextTeam"
 
@@ -78,7 +78,7 @@ export const QuestionItem = ({ subcriterio, isDisabled, onSelectionChange, dljRe
   )
 }
 export const DljTeamEvaluation = ({ teamData }: EvaluationProps) => {
-  const { data: dljQuestions, isLoading } = useGetEvaluationByIdQuery(1) //id dlj = 1
+  const { data: dljQuestions, isLoading } = useGetEvaluationByIdQuery(EvaluationType.DLJ) //id dlj = 1
   const { data: teams, } = useGetTeamsEvaluationsQuery(
     {
       evaluationTypeId: teamData.teamEvaluation.evaluationTypeId,

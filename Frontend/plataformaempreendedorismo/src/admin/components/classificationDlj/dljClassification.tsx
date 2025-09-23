@@ -4,9 +4,10 @@ import { useGetTeamReportClassificationByFormatQuery } from "../../../api/studen
 import { ReportClassificationByFormat } from '../../../model/reports'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
+import { EvaluationType } from '@/utils/types'
 
 export const DljClassificationComponent = () => {
-  const { data: dljClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(0)
+  const { data: dljClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(EvaluationType.DLJ)
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {

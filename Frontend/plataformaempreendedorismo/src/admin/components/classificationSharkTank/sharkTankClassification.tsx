@@ -4,10 +4,11 @@ import { useGetTeamReportClassificationByFormatQuery } from "../../../api/studen
 import { ReportClassificationByFormat } from '../../../model/reports'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
+import { EvaluationType } from '@/utils/types'
 
 
 export const SharkTankClassificationComponent = () => {
-  const { data: sharkTankClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(4) 
+  const { data: sharkTankClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(EvaluationType.SHARKTANK) 
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {

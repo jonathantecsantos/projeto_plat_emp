@@ -5,9 +5,10 @@ import { useGetTeamReportClassificationByFormatQuery } from "../../../api/studen
 import { ReportClassificationByFormat } from '../../../model/reports'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
+import { EvaluationType } from '@/utils/types'
 
 export const ExpoDleiClassificationComponent = () => {
-  const { data: expoDleiClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(3) 
+  const { data: expoDleiClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(EvaluationType.EXPODLEI) 
 
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 

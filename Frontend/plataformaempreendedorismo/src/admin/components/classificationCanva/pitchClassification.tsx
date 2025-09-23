@@ -4,9 +4,10 @@ import { useGetTeamReportClassificationByFormatQuery } from "../../../api/studen
 import { ReportClassificationByFormat } from '../../../model/reports'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
+import { EvaluationType } from '@/utils/types'
 
 export const CanvasClassificationComponent = () => {
-  const { data: canvasClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(2)
+  const { data: canvasClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(EvaluationType.CANVAS)
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {

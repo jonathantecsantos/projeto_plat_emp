@@ -107,7 +107,11 @@ const menuItems: MenuItemType[] = [
     subItens: true,
     insideItems: [
       {
-        insideName: 'Notas Gerais',
+        insideName: 'Classificação',
+        routeName: RoutesNames.classification,
+      },
+      {
+        insideName: 'Notas Subcritério',
         routeName: RoutesNames.generalReport,
       },
       {
@@ -115,28 +119,24 @@ const menuItems: MenuItemType[] = [
         routeName: RoutesNames.teamsNotes,
       },
       {
-        insideName: 'Classificação',
-        routeName: RoutesNames.classification,
-      },
-      {
         insideName: 'TOP 5',
         routeName: RoutesNames.classificationTop5,
-      },
-      {
-        insideName: 'Canvas',
-        routeName: RoutesNames.classificationCanvas,
       },
       {
         insideName: 'Pitch',
         routeName: RoutesNames.classificationPitch,
       },
       {
-        insideName: 'Shark Tank',
-        routeName: RoutesNames.classificationSharkTank,
+        insideName: 'Canvas',
+        routeName: RoutesNames.classificationCanvas,
       },
       {
         insideName: 'Expo Dlei',
         routeName: RoutesNames.classificationExpoDlei,
+      },
+      {
+        insideName: 'Shark Tank',
+        routeName: RoutesNames.classificationSharkTank,
       },
     ],
   },

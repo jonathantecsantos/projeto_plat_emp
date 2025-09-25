@@ -21,14 +21,14 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             @Param("idAvaliador") Long idAvaliador,
             @Param("idEquipe") Long idEquipe);
 
-    @Query(value = "SELECT e.nome AS equipe, SUM(av.nota) AS totalNota " +
+    @Query(value = "SELECT e.nome AS equipe, TRUNCATE(SUM(av.nota) / 3, 2) AS totalNota " +
             "FROM avaliacao av " +
             "JOIN equipe e ON av.id_equipe = e.id " +
             "GROUP BY e.nome " +
             "ORDER BY totalNota DESC", nativeQuery = true)
     List<Object[]> findEquipeNotaOrderByTotalNotaDesc();
 
-    @Query(value = "SELECT e.nome as equipe, fa.descricao, SUM(av.nota) AS totalNota " +
+    @Query(value = "SELECT e.nome as equipe, fa.descricao, TRUNCATE(SUM(av.nota) / 3, 2) AS totalNota " +
             "FROM avaliacao av " +
             "JOIN equipe e ON e.id = av.id_equipe " +
             "JOIN criterio_avaliacao ca ON ca.id = av.id_criterio_avaliacao " +
@@ -41,7 +41,7 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             @Param("idFormatoAvaliacao") Long idFormatoAvaliacao
     );
 
-    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sa.id as id_subcriterio, sum(av.nota) as total_nota from avaliacao av " +
+    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sa.id as id_subcriterio, TRUNCATE(SUM(av.nota) / 3, 2) as total_nota from avaliacao av " +
             "join equipe e on e.id = av.id_equipe " +
             "join criterio_avaliacao ca on ca.id = av.id_criterio_avaliacao " +
             "join subcriterio_avaliacao sa on sa.id = av.id_subcriterio_avaliacao " +
@@ -52,7 +52,7 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             nativeQuery = true)
     List<Object[]> findNotasPorTime(@Param("idEquipe") Long idEquipe);
 
-    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sa.id as id_subcriterio, sum(av.nota) as total_nota from avaliacao av " +
+    @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sa.id as id_subcriterio, TRUNCATE(SUM(av.nota) / 3, 2) as total_nota from avaliacao av " +
             "join equipe e on e.id = av.id_equipe " +
             "join criterio_avaliacao ca on ca.id = av.id_criterio_avaliacao " +
             "join subcriterio_avaliacao sa on sa.id = av.id_subcriterio_avaliacao " +

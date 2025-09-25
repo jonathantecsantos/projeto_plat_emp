@@ -22,7 +22,7 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
       evaluatorId: teamData.teamEvaluation.evaluatorId
     })
 
-  const { data: canvasResponse, isLoading: pitchLoading } = useGetEvaluationDataQuery({
+  const { data: canvasResponse, isLoading: canvasLoading } = useGetEvaluationDataQuery({
     idAvaliador: teamData.teamEvaluation.evaluatorId,
     idFormatoAvaliacao: teamData.teamEvaluation.evaluationTypeId,
     idEquipe: teamData.id
@@ -130,7 +130,7 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
   }
 
   const handleBackToList = () => {
-    navigate(RoutesNames.pitchTeams)
+    navigate(RoutesNames.canvasTeams)
   }
 
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
@@ -150,7 +150,7 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
               teamEvaluation: teamData.teamEvaluation
             }
           }}
-          evaluationType={RoutesNames.pitchTeam}
+          evaluationType={RoutesNames.canvasTeam}
           onComplete={() => setShowSuccess(false)}
         />
       ) : (
@@ -161,7 +161,7 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
               <h3 className="text-xl font-semibold bg-[#5741A6] p-2 rounded-t-lg text-white">Critério: {criterio.descricao}</h3>
               {criterio.subcriterioAvaliacaos.map((subcriterio) => (
                 <SubcriterionSlider
-                  isLoading={pitchLoading}
+                  isLoading={canvasLoading}
                   key={subcriterio.id}
                   subcriterio={subcriterio}
                   value={values[subcriterio.id] || 0}
@@ -191,7 +191,7 @@ export const CanvasTeamEvaluation = ({ teamData }: EvaluationProps) => {
           <Dialog open={open} onClose={() => setOpen(false)}>
             <DialogContent>
               <span>
-                Deseja {alreadyEvaluated ? 'editar' : 'finalizar'} a avaliação Pitch do time {teamData?.nomeEquipe}?
+                Deseja {alreadyEvaluated ? 'editar' : 'finalizar'} a avaliação Canvas do time {teamData?.nomeEquipe}?
               </span>
             </DialogContent>
             <DialogActions>

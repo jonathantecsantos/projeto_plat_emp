@@ -1,10 +1,10 @@
+import footer from '@assets/footer.png';
+import header from '@assets/header.jpg';
 import { Avatar } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/studentApi";
 import { Banner } from "../../../model/banner";
 import { getImageUrl } from "../../../utils/types";
-import header from '@assets/header.jpg'
-import footer from '@assets/footer.png'
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -25,6 +25,38 @@ const formatTextWithDashes = (text?: string) => {
       ))}
     </div>
   );
+};
+
+// Função para formatar nome: retorna primeiro e último nome
+const formatName = (fullName?: string) => {
+  if (!fullName) return '';
+
+  const nameParts = fullName.trim().split(' ').filter(part => part.length > 0);
+
+  if (nameParts.length <= 1) {
+    return fullName; // Se só tem um nome, retorna como está
+  }
+
+  const firstName = nameParts[0];
+  const lastName = nameParts[nameParts.length - 1];
+
+  return `${firstName} ${lastName}`;
+};
+
+// Função para formatar lista com pontuação correta
+const formatNameList = (items: any[], getName: (item: any) => string) => {
+  if (!items || items.length === 0) return null;
+
+  return items.map((item, index) => {
+    const isLast = index === items.length - 1;
+    const punctuation = isLast ? '.' : ',';
+
+    return (
+      <span key={index} className="print:ml-1">
+        {formatName(getName(item))}{punctuation}
+      </span>
+    );
+  });
 };
 
 
@@ -114,9 +146,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="w-full h-36 print:h-[70px] pt-2 border-r-2 print:border-r-0 border-[#075e95] flex items-start">
               <p className="text-[#075e95] pl-4 print:pl-2">Alunos:</p>
               <div className="flex flex-wrap gap-2 print:gap-1">
-                {team?.alunos?.map((student, index) => (
-                  <p key={index} className="ml-2">{student?.nome},</p>
-                ))}
+                {formatNameList(team?.alunos || [], (student) => student?.nome || '')}
               </div>
             </div>
 
@@ -124,9 +154,7 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
             <div className="w-full pt-2 border-l-2 border-[#075e95] flex items-start">
               <p className="text-[#075e95] pl-4 print:pl-2">Orientadores:</p>
               <div className="flex flex-wrap gap-2 print:gap-1">
-                {team?.professores?.map((professor, index) => (
-                  <p key={index} className="ml-2">{professor?.nome},</p>
-                ))}
+                {formatNameList(team?.professores || [], (professor) => professor?.nome || '')}
               </div>
             </div>
           </div>

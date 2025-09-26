@@ -370,25 +370,38 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                 ))}
               </SpeedDial>}
 
-            {pitchValidated && <div ref={pitchRef} className='bg-gray-100 p-2 border rounded-lg shadow-md w-full max-w-96 animate-pop-in'>
-              <h3 className="text-lg font-bold">Pitch:</h3>
-              <input type="text" placeholder=' Inserir link pitch'
-                className='w-full rounded-lg py-2 mb-2'
-                onBlur={(e) => {
-                  if (e.target.value.length > 1) {
-                    handlePitchSave(e.target.value)
-                  }
-                }}
-              />
-              <a
-                href={team?.linkPitch?.startsWith("http") ? team.linkPitch : `https://${team?.linkPitch}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {team?.linkPitch}
-              </a>
+            {/* Exibe o campo de pitch se foi validado OU se já existe link do pitch */}
+            {(pitchValidated || team?.linkPitch) && (
+              <div ref={pitchRef} className='bg-gray-100 p-2 border rounded-lg shadow-md w-full max-w-96 animate-pop-in'>
+                <h3 className="text-lg font-bold">Pitch:</h3>
 
-            </div>}
+                {/* Input só aparece se: não for avaliador */}
+                {![Roles.Avaliador].includes(userGlobalState.enumRole!) && (
+                  <input
+                    type="text"
+                    placeholder=' Inserir link pitch'
+                    className='w-full rounded-lg py-2 mb-2'
+                    onBlur={(e) => {
+                      if (e.target.value.length > 1) {
+                        handlePitchSave(e.target.value)
+                      }
+                    }}
+                  />
+                )}
+
+                {/* Link sempre aparece quando existe */}
+                {team?.linkPitch && (
+                  <a
+                    href={team?.linkPitch?.startsWith("http") ? team.linkPitch : `https://${team?.linkPitch}`}
+                    className='text-blue-500 underline break-all'
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {team?.linkPitch}
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div className={`w-full lg:w-72 rounded-md p-4 lg:h-fit text-nowrap ${!sortedStudents.length ? 'hidden' : ''}`}>

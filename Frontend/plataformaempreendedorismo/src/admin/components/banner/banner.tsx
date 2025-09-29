@@ -150,20 +150,28 @@ export const BannerComponent = ({ id, teamName }: BannerComponentProps) => {
 
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [fieldName]: fieldValue,
     })
 
+    // Validar apenas o campo específico
     try {
-      bannerValidationSchema.parse({
-        ...formData,
-        [e.target.name]: e.target.value,
-      })
-      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }))
+      // Pegar a definição do campo específico do schema
+      const fieldSchema = bannerValidationSchema.shape[fieldName as keyof typeof bannerValidationSchema.shape];
+
+      if (fieldSchema) {
+        fieldSchema.parse(fieldValue);
+        // Se passou na validação, remove o erro deste campo
+        setErrors((prev) => ({ ...prev, [fieldName]: undefined }))
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
-        setErrors((prev) => ({ ...prev, [e.target.name]: error.errors[0].message }))
+        // Adiciona o erro apenas para este campo específico
+        setErrors((prev) => ({ ...prev, [fieldName]: error.errors[0].message }))
       }
     }
   }

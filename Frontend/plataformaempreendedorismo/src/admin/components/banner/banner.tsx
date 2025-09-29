@@ -42,30 +42,30 @@ const bannerValidationSchema = z.object({
     .nullable(),
   // .refine((file) => file !== null, "O arquivo de logotipo é obrigatório."),
   // file: z.instanceof(File).nullable(),
-  textoDescricaoQ0: z.string().max(900, "Máximo de 900 caracteres permitidos"),
+  textoDescricaoQ0: z.string(), // Removido limite de 900 caracteres
 
   //Capacidade organizazional
-  equipeQ1: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  parceiroQ1: z.string().max(300, "Máximo de 300 caracteres permitidos"),
-  atividadeChaveQ1: z.string().max(300, "Máximo de 300 caracteres permitidos"),
-  recursosQ1: z.string().max(300, "Máximo de 300 caracteres permitidos"),
-  custosQ1: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  equipeQ1: z.string(), // Removido limite de 300 caracteres
+  parceiroQ1: z.string(), // Removido limite de 300 caracteres
+  atividadeChaveQ1: z.string(), // Removido limite de 300 caracteres
+  recursosQ1: z.string(), // Removido limite de 300 caracteres
+  custosQ1: z.string(), // Removido limite de 300 caracteres
 
   //Fluxo de negocio
-  oportunidadeNegQ2: z.string().max(300, "Máximo de 300 caracteres permitidos"),
-  custoQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  propostaValorQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  fonteReceitaQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  resultadoFinanceiroQ2: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  oportunidadeNegQ2: z.string(), // Removido limite de 300 caracteres
+  custoQ2: z.string(), // Removido limite de 300 caracteres
+  propostaValorQ2: z.string(), // Removido limite de 300 caracteres
+  fonteReceitaQ2: z.string(), // Removido limite de 300 caracteres
+  resultadoFinanceiroQ2: z.string(), // Removido limite de 300 caracteres
 
   //Teoria de mudança
-  contextoProblemaQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  publicoFocoImpactoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  intervencoesQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  saidasQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  resultadosCurtoPrazoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  resultadosMedioPrazoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
-  visaoImpactoQ3: z.string().max(300, "Máximo de 300  caracteres permitidos"),
+  contextoProblemaQ3: z.string(), // Removido limite de 300 caracteres
+  publicoFocoImpactoQ3: z.string(), // Removido limite de 300 caracteres
+  intervencoesQ3: z.string(), // Removido limite de 300 caracteres
+  saidasQ3: z.string(), // Removido limite de 300 caracteres
+  resultadosCurtoPrazoQ3: z.string(), // Removido limite de 300 caracteres
+  resultadosMedioPrazoQ3: z.string(), // Removido limite de 300 caracteres
+  visaoImpactoQ3: z.string(), // Removido limite de 300 caracteres
 })
 
 export interface BannerFormData {

@@ -162,11 +162,11 @@ export const BannerPreviewComponent = ({ id }: Pick<Banner, 'id'>) => {
         <div className="border-[20px] print:border-[10px] border-[#075e95] mt-6 h-96 print:h-56 print:mt-3 bg-white">
           <div className="flex text-start h-full">
             <div className="p-4 border-r-2 print:border-r-0 border-[#075e95] flex w-full">
-              <p className="text-[#075e95]">Texto</p>
+              {/* <p className="text-[#075e95]">Texto</p> */}
               <p className="break-words break-all  px-2 print:px-1">{banner?.textoDescricaoQ0}</p>
             </div>
             <div className="p-4 border-l-2 border-[#075e95] flex w-full">
-              <p className="text-[#075e95] absolute">Imagem</p>
+              {/* <p className="text-[#075e95] absolute">Imagem</p> */}
               <div className="flex-col justify-center items-center my-auto mr-2">
                 {avatar && avatar.length > 0 &&
                   <Avatar

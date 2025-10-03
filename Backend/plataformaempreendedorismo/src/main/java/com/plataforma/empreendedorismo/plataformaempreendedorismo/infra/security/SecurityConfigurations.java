@@ -73,7 +73,7 @@ public class SecurityConfigurations {
 
                         //Banner
                         .requestMatchers(HttpMethod.POST, "/banner/cadastrar").hasAnyRole("ADMIN","COORDENADOR", "ALUNO")
-                        .requestMatchers(HttpMethod.GET, "/banner/{idEquipe}").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR",  "ALUNO")
+                        .requestMatchers(HttpMethod.GET, "/banner/{idEquipe}").hasAnyRole("ADMIN", "COORDENADOR", "PROFESSOR", "ALUNO", "AVALIADOR")
                         .requestMatchers(HttpMethod.PUT, "/banner/editar").hasAnyRole("ADMIN", "COORDENADOR", "ALUNO")
 
                         //Equipe

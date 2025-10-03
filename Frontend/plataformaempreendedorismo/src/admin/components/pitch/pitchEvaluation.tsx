@@ -12,6 +12,7 @@ import { HandleNextTeamComponent } from "../common/handleNextTeam"
 import { SubcriterionSlider } from "../common/subcriterioSlider"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigate } from "react-router-dom"
+import { LoadingButton } from "@mui/lab"
 
 
 export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
@@ -28,8 +29,8 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
     idEquipe: teamData.id
   })
 
-  const [postEvaluation] = usePostEvaluationMutation()
-  const [putEvaluation] = usePutEvaluationMutation()
+  const [postEvaluation, { isLoading: isPosting }] = usePostEvaluationMutation()
+  const [putEvaluation, { isLoading: isUpdating }] = usePutEvaluationMutation()
   const [values, setValues] = useState<{ [key: number]: number }>({})
   const [totalPoints, setTotalPoints] = useState(0)
   const [open, setOpen] = useState(false)
@@ -198,12 +199,13 @@ export const PitchTeamEvaluation = ({ teamData }: EvaluationProps) => {
               <Button onClick={() => setOpen(false)} style={{ textTransform: 'none', color: 'gray' }}>
                 Cancelar
               </Button>
-              <Button
+              <LoadingButton
                 onClick={handlePostEvaluation}
                 style={{ textTransform: 'none', color: 'white', backgroundColor: '#5741A6' }}
+                loading={isPosting || isUpdating}
               >
                 {alreadyEvaluated ? 'Editar' : 'Finalizar'}
-              </Button>
+                </LoadingButton>
             </DialogActions>
           </Dialog>
         </>

@@ -158,7 +158,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
 
       // Cria um link para download
       const link = document.createElement('a')
-      const fileName = `canvas-${team?.nomeEquipe?.replace(/\s+/g, '-')}-080x120cm.png`
+      const fileName = `canvas-${team?.nomeEquipe?.replace(/\s+/g, '-')}.png`
       link.download = fileName
       link.href = dataUrl
       link.click()

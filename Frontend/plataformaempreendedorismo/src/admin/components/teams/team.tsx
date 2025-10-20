@@ -163,7 +163,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
       link.href = dataUrl
       link.click()
 
-      enqueueSnackbar('Download concluído com sucesso!', { variant: 'success' })
+      enqueueSnackbar('Download iniciado com sucesso!', { variant: 'success' })
 
       // Esconde o banner novamente
       setShowHiddenBanner(false)

@@ -1,16 +1,18 @@
 import DescriptionIcon from '@mui/icons-material/Description'
+import DownloadIcon from '@mui/icons-material/Download'
 import LinkIcon from '@mui/icons-material/Link'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import PrintIcon from '@mui/icons-material/Print'
 import SchoolIcon from '@mui/icons-material/School'
 import WebIcon from '@mui/icons-material/Web'
-import { CircularProgress, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
+import { CircularProgress, Dialog, DialogContent, DialogContentText, Divider, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material"
+import { toPng } from 'html-to-image'
 import { useSnackbar } from 'notistack'
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
+import { useGetBannerByIdQuery, useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { ActivityType } from '../../../model/activityTypes'
 import { EventsTypes } from '../../../model/config'
@@ -19,6 +21,7 @@ import { Ods } from '../../../model/ods'
 import { TeamsResponse, UpdateTeam } from "../../../model/team"
 import { RootState } from '../../../redux/store'
 import { Roles, TeamValidation } from '../../../utils/types'
+import { BannerPreviewComponent } from '../banner/bannerPreview'
 import { FooterImage } from "../common/adminFooter"
 import { EditActivityTypes } from './editActivityTypes'
 import { EditInstitution } from './editInstitutions'
@@ -30,6 +33,7 @@ import { TeacherCard } from './teacherCard'
 
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
+  const { data: banner } = useGetBannerByIdQuery(id)
   const [updateTeam, status] = useUpdateTeamMutation()
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
@@ -42,6 +46,9 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const [getEventById] = useLazyGetEventValidateByIdQuery()
   const [pitchValidated, setPitchValidated] = useState(false)
   const pitchRef = useRef<HTMLDivElement>(null)
+  const hiddenBannerRef = useRef<HTMLDivElement>(null)
+  const [showHiddenBanner, setShowHiddenBanner] = useState(false)
+  const [isDownloadingBanner, setIsDownloadingBanner] = useState(false)
 
   useEffect(() => {
     if (pitchValidated && pitchRef.current) {
@@ -66,20 +73,106 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     }
   }
 
-  const handlePrintBanner = () => {
-    const bannerPreviewUrl = `/banner-preview/${id}`
-    const printWindow = window.open(bannerPreviewUrl, "_blank")
+  // const handlePrintBanner = () => {
+  //   const bannerPreviewUrl = `/banner-preview/${id}`
+  //   const printWindow = window.open(bannerPreviewUrl, "_blank")
 
-    if (printWindow) {
-      const handleMessage = (event: MessageEvent) => {
-        if (event.origin === window.location.origin && event.data === "ready-to-print") {
-          printWindow.print()
-          window.removeEventListener("message", handleMessage) // Remove o listener após o uso
-        }
+  //   if (printWindow) {
+  //     const handleMessage = (event: MessageEvent) => {
+  //       if (event.origin === window.location.origin && event.data === "ready-to-print") {
+  //         printWindow.print()
+  //         window.removeEventListener("message", handleMessage) // Remove o listener após o uso
+  //       }
+  //     }
+
+  //     // Escuta a mensagem da página de banner-preview
+  //     window.addEventListener("message", handleMessage)
+  //   }
+  // }
+
+  const handleDownloadBannerSVG = async () => {
+    try {
+      if (isDownloadingBanner) {
+        return
       }
 
-      // Escuta a mensagem da página de banner-preview
-      window.addEventListener("message", handleMessage)
+      if (!banner) {
+        enqueueSnackbar('Banner não encontrado. Preencha o canvas primeiro.', { variant: 'warning' })
+        return
+      }
+
+      setIsDownloadingBanner(true)
+
+      // Mostra o banner oculto para renderizar
+      setShowHiddenBanner(true)
+
+      // Aguarda o banner renderizar e as imagens carregarem
+      await new Promise(resolve => setTimeout(resolve, 5000)) // Aumentado para 5s com 600 DPI
+
+      if (!hiddenBannerRef.current) {
+        enqueueSnackbar('Erro ao preparar o banner.', { variant: 'error' })
+        setShowHiddenBanner(false)
+        setIsDownloadingBanner(false)
+        return
+      }
+
+      // Captura o elemento do banner
+      const bannerElement = hiddenBannerRef.current.querySelector('div[class*="bg-[#fefefe]"]') as HTMLElement
+
+      if (!bannerElement) {
+        throw new Error('Elemento do banner não encontrado')
+      }
+
+      // IMPORTANTE: Dimensões para impressão gráfica (0.80m x 1.20m)
+      // Usando 600 DPI (dots per inch) para qualidade de gráfica ULTRA PREMIUM
+      // 1 polegada = 2.54 cm
+      // 0.80m = 80cm = 31.496 polegadas × 600 DPI = 18,898 pixels
+      // 1.20m = 120cm = 47.244 polegadas × 600 DPI = 28,346 pixels
+
+      // Dimensões finais para o arquivo de impressão
+      const targetWidth = 18898   // 0.80m em 600 DPI
+      const targetHeight = 28346  // 1.20m em 600 DPI
+
+      // Vamos usar o elemento renderizado e escalar proporcionalmente
+      const width = targetWidth
+      const height = targetHeight
+
+      // Gera a imagem PNG de altíssima qualidade com todas as fontes e imagens embutidas
+      const dataUrl = await toPng(bannerElement, {
+        quality: 1.0,
+        pixelRatio: 1, // Não multiplica pois já estamos usando dimensões finais grandes
+        width: width,
+        height: height,
+        cacheBust: true,
+        canvasWidth: width,
+        canvasHeight: height,
+        skipFonts: false, // Garante que as fontes sejam capturadas
+        includeQueryParams: true,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left',
+          width: `${width}px`,
+          height: `${height}px`,
+        }
+      })
+
+      // Cria um link para download
+      const link = document.createElement('a')
+      const fileName = `canvas-${team?.nomeEquipe?.replace(/\s+/g, '-')}-080x120cm.png`
+      link.download = fileName
+      link.href = dataUrl
+      link.click()
+
+      enqueueSnackbar('Download concluído com sucesso!', { variant: 'success' })
+
+      // Esconde o banner novamente
+      setShowHiddenBanner(false)
+      setIsDownloadingBanner(false)
+    } catch (error) {
+      console.error('Erro ao gerar banner:', error)
+      enqueueSnackbar('Erro ao gerar o banner. Tente novamente.', { variant: 'error' })
+      setShowHiddenBanner(false)
+      setIsDownloadingBanner(false)
     }
   }
 
@@ -449,7 +542,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                 <span>Preencher Canvas</span>
               </div>
             </li>
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
+            {/* <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
               onClick={async () => {
                 const response = await getEventById(EventsTypes.CANVAS)
                 if (response.data == false || !response.data) {
@@ -461,6 +554,20 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               <PrintIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
                 <span>Imprimir Canvas</span>
+              </div>
+            </li> */}
+            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
+              onClick={async () => {
+                const response = await getEventById(EventsTypes.CANVAS)
+                if (response.data == false || !response.data) {
+                  snackBarEventsTypes(EventsTypes.CANVAS)
+                  return
+                }
+                handleDownloadBannerSVG()
+              }}>
+              <DownloadIcon fontSize='large' />
+              <div className="flex-1 flex justify-center">
+                <span>Download Banner</span>
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
@@ -482,6 +589,78 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
           </ul>
         </div>
       </div>
+
+      {/* Banner oculto para download em alta resolução */}
+      {showHiddenBanner && (
+        <div
+          ref={hiddenBannerRef}
+          style={{
+            position: 'fixed',
+            top: '-30000px',
+            left: '-30000px',
+            width: '18898px',  // 0.80m em 600 DPI
+            height: '28346px', // 1.20m em 600 DPI
+            zIndex: -9999,
+            overflow: 'hidden'
+          }}
+        >
+          {/* Fator de escala: 18898 / 994 ≈ 19.0 */}
+          <BannerPreviewComponent id={id} disableAutoPrint={true} forExport={true} scale={19.0} />
+        </div>
+      )}
+
+      {/* Dialog de loading durante o download */}
+      <Dialog
+        open={isDownloadingBanner}
+        PaperProps={{
+          style: {
+            backgroundColor: '#5741A6',
+            borderRadius: '12px',
+            padding: '16px',
+            minWidth: '320px'
+          }
+        }}
+        sx={{
+          '& .MuiDialog-container': {
+            alignItems: 'center',
+            justifyContent: 'center'
+          }
+        }}
+      >
+        <DialogContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '32px !important'
+          }}
+        >
+          <div className="flex flex-col items-center justify-center gap-4 w-full">
+            <CircularProgress
+              size={56}
+              thickness={4}
+              sx={{
+                color: '#ffffff',
+                display: 'block',
+                margin: '0 auto'
+              }}
+            />
+            <DialogContentText
+              sx={{
+                color: '#ffffff',
+                fontSize: '1rem',
+                fontWeight: 500,
+                textAlign: 'center',
+                width: '100%'
+              }}
+            >
+              Configurando arquivo para download, por favor aguarde...
+            </DialogContentText>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <FooterImage />
     </div>
   )

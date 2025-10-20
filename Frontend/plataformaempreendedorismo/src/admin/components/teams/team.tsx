@@ -567,7 +567,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               }}>
               <DownloadIcon fontSize='large' />
               <div className="flex-1 flex justify-center">
-                <span>Download Banner</span>
+                <span>Download Canvas</span>
               </div>
             </li>
             <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"

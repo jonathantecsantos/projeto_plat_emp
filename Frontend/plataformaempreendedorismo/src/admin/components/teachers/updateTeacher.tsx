@@ -76,7 +76,8 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
       email: teacher?.email || '',
       idEquipe: selectedTeamIds,
       dataNascimento: teacher?.dataNascimento,
-      tamanhoCamisa: teacher?.tamanhoCamisa
+      tamanhoCamisa: teacher?.tamanhoCamisa,
+      habilitado: teacher?.habilitado !== false
     }
 
     const validation = validateSchema(createTeacherSchema, updatedTeacher, (msg) => enqueueSnackbar(msg, { variant: 'error' }))
@@ -181,6 +182,18 @@ export const UpdateOrCreateTeacherByTeam = ({ id, teamData }: UpdateOrCreateTeac
               ))}
             </select>
           </div>
+        </div>
+        <div className="flex items-center space-x-2 mt-2">
+          <input
+            id="habilitado"
+            type="checkbox"
+            checked={teacher?.habilitado !== false}
+            onChange={(e) => handleInputChange('habilitado', e.target.checked)}
+            className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+          />
+          <label htmlFor="habilitado" className="block text-sm font-medium text-gray-700">
+            Habilitado para novas inscrições
+          </label>
         </div>
         <div className={`flex items-center justify-between`}>
           <div className='flex gap-4'>

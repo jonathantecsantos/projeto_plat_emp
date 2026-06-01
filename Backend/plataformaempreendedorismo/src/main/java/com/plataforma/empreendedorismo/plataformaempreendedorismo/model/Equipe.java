@@ -23,6 +23,9 @@ public class Equipe {
 
     private String nome;
 
+    private Integer ano;
+
+
     private String linkPitch;
 
     @OneToOne

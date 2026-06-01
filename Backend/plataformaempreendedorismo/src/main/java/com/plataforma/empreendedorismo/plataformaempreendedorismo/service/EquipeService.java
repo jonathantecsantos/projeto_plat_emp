@@ -11,8 +11,10 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.tipoAti
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,8 +65,25 @@ public class EquipeService {
         return equipe;
     }
 
-    public List<ListaEquipesRecord> buscarEquipes() {
+    public boolean isUsuarioAdmin() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) return false;
+        return auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    public List<ListaEquipesRecord> buscarEquipes(Integer ano) {
+        if (!isUsuarioAdmin()) {
+            ano = LocalDate.now().getYear();
+        }
+        if (ano != null) {
+            return equipeRepository.findByAno(ano).stream().map(ListaEquipesRecord::new).toList();
+        }
         return equipeRepository.findAll().stream().map(ListaEquipesRecord::new).toList();
+    }
+
+    public List<Integer> buscarAnos() {
+        return equipeRepository.findDistinctAnos();
     }
 
     @Transactional
@@ -111,7 +130,13 @@ public class EquipeService {
         equipeRepository.save(equipe);
     }
 
-    public List<ListaEquipesAvaliadasRecord> buscarEquipesTipoAvaliacao() {
+    public List<ListaEquipesAvaliadasRecord> buscarEquipesTipoAvaliacao(Integer ano) {
+        if (!isUsuarioAdmin()) {
+            ano = LocalDate.now().getYear();
+        }
+        if (ano != null) {
+            return equipeRepository.findByAno(ano).stream().map(ListaEquipesAvaliadasRecord::new).toList();
+        }
         return equipeRepository.findAll().stream().map(ListaEquipesAvaliadasRecord::new).toList();
     }
 }

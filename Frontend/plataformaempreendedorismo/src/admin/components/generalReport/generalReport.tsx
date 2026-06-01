@@ -2,12 +2,15 @@ import { CircularProgress } from "@mui/material"
 import { useMemo } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useGetTeamsReportItemsQuery, useGetTeamsReportsQuery } from "../../../api/studentApi"
+import { useSelector } from "react-redux"
+import { RootState } from "../../../redux/store"
 import { AdminHeader } from "../common/adminHeader"
 import { GeneralTableComponent } from "./generalTable"
 
 
 export const GeneralReportComponent = () => {
-  const { data: generalReport, isLoading: generalLoading } = useGetTeamsReportsQuery()
+  const { selectedYear } = useSelector((state: RootState) => state.year)
+  const { data: generalReport, isLoading: generalLoading } = useGetTeamsReportsQuery(selectedYear)
   const { data: generalReportItems, isLoading: generalItensLoading } = useGetTeamsReportItemsQuery()
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''

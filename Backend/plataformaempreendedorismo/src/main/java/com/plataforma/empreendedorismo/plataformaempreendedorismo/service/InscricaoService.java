@@ -43,6 +43,7 @@ public class InscricaoService {
         if (equipe == null) {
             equipe = new Equipe();
             equipe.setNome(inscricaoRecord.nomeTime().toUpperCase());
+            equipe.setAno(java.time.LocalDate.now().getYear());
 
             processaOds(inscricaoRecord, equipe);
             processaAtividades(inscricaoRecord, equipe);

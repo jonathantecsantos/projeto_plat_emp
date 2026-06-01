@@ -160,6 +160,7 @@ export const TeachersComponent = () => {
               'Equipe',
               'Nascimento',
               'Tam. Camisa',
+              'Status',
               'Ação'
             ]}
 
@@ -173,6 +174,13 @@ export const TeachersComponent = () => {
                 <td className="px-4 py-2 capitalize">{generateTeamsName(teacher.equipeNomeRecord)}</td>
                 <td className='px-4 py-2'>{teacher.dataNascimento && formatDate(teacher.dataNascimento.toString())}</td>
                 <td className='px-4 py-2 capitalize'>{teacher.tamanhoCamisa}</td>
+                <td className='px-4 py-2'>
+                  {teacher.habilitado !== false ? (
+                    <span className="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Ativo</span>
+                  ) : (
+                    <span className="px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">Inativo</span>
+                  )}
+                </td>
                 <td className="">
                   <IconButton
                     className='hover:text-white no-row-click'

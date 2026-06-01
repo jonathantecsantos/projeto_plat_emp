@@ -56,8 +56,18 @@ public class EquipeController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ListaEquipesRecord> getEquipes(){
-        return equipeService.buscarEquipes();
+    public List<ListaEquipesRecord> getEquipes(@RequestParam(required = false) Integer ano){
+        return equipeService.buscarEquipes(ano);
+    }
+
+    @Operation(summary = "Busca todos os anos das Equipes", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar anos")
+    })
+    @GetMapping(value = "/anos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Integer> getAnos(){
+        return equipeService.buscarAnos();
     }
 
     @Operation(summary = "Editar Equipe", method = "PUT")

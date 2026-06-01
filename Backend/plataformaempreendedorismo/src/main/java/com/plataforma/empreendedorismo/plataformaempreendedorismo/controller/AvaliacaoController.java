@@ -91,8 +91,8 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
     })
     @GetMapping(value = "/equipes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ListaEquipesAvaliadasRecord>> getEquipes(@RequestParam Long idTipoAvaliacao, @RequestParam Long idAvaliador){
-        return ResponseEntity.ok(avaliacaoService.buscarEquipes(idTipoAvaliacao, idAvaliador));
+    public ResponseEntity<List<ListaEquipesAvaliadasRecord>> getEquipes(@RequestParam Long idTipoAvaliacao, @RequestParam Long idAvaliador, @RequestParam(required = false) Integer ano){
+        return ResponseEntity.ok(avaliacaoService.buscarEquipes(idTipoAvaliacao, idAvaliador, ano));
     }
 
     @Operation(summary = "Buscar Avaliação por Tipo e Avaliador", method = "GET")

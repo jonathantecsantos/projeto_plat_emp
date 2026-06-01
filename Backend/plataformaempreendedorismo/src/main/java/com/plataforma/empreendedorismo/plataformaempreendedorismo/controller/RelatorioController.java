@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,8 +34,8 @@ public class RelatorioController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
     })
     @GetMapping(value = "/classificacao",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ClassificacaoGeralTimesRecord> getClassificao(){
-        return avaliacaoService.buscarClassificacao();
+    public List<ClassificacaoGeralTimesRecord> getClassificao(@RequestParam(required = false) Integer ano){
+        return avaliacaoService.buscarClassificacao(ano);
     }
 
     @Operation(summary = "Buscar classificação dos Times por Formato", method = "GET")
@@ -43,8 +44,8 @@ public class RelatorioController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
     })
     @GetMapping(value = "/classificacao-por-formato/{idFormatoAvaliacao}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<DatalhamentoClassificacaoFormatoRecord> getClassificaoPorFormato(@PathVariable Long idFormatoAvaliacao){
-        return avaliacaoService.buscarClassificacaoPorFormato(idFormatoAvaliacao);
+    public List<DatalhamentoClassificacaoFormatoRecord> getClassificaoPorFormato(@PathVariable Long idFormatoAvaliacao, @RequestParam(required = false) Integer ano){
+        return avaliacaoService.buscarClassificacaoPorFormato(idFormatoAvaliacao, ano);
     }
 
     @Operation(summary = "Buscar notas por Equipe", method = "GET")
@@ -73,8 +74,8 @@ public class RelatorioController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados")
     })
     @GetMapping(value = "/relatorio-geral",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<DetalhamentoNotasTimeRecord> getRelatorioGeral(){
-        return avaliacaoService.buscarRelatorioGeral();
+    public List<DetalhamentoNotasTimeRecord> getRelatorioGeral(@RequestParam(required = false) Integer ano){
+        return avaliacaoService.buscarRelatorioGeral(ano);
     }
 
 }

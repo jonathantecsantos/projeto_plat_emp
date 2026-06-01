@@ -7,6 +7,7 @@ import { persistedAuthReducer } from './persistors/auth.slice'
 import { persistedMenuReducer } from "./persistors/menu.slice"
 import { persistedTableReducer } from "./persistors/table.slice"
 import { persistedUserLoginReducer } from "./persistors/userInfo.slice"
+import { persistedYearReducer } from "./persistors/year.slice"
 import loadingBarReducer from './reducers/loadingBar.slice'
 
 
@@ -17,6 +18,7 @@ export const store = configureStore({
     userInfo: persistedUserLoginReducer,
     menuState: persistedMenuReducer,
     tableState: persistedTableReducer,
+    year: persistedYearReducer,
     [studentsApiSlice.reducerPath]: studentsApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
   },

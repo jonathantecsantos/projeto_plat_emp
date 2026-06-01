@@ -7,9 +7,12 @@ import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from "../table"
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from "../table/common"
 import { useGetAllTeamsQuery } from '../../../api/studentApi'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
 
 export const Teams = () => {
-  const { data: teams, refetch, isLoading, error } = useGetAllTeamsQuery()
+  const { selectedYear } = useSelector((state: RootState) => state.year)
+  const { data: teams, refetch, isLoading, error } = useGetAllTeamsQuery(selectedYear)
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
 

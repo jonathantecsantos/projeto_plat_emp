@@ -109,6 +109,9 @@ public class ProfessorService {
                 equipeRepository.findById(id).ifPresent(professor.getEquipes()::add);
             }
         }
+        if(professorEditarRecord.habilitado() != null){
+            professor.setHabilitado(professorEditarRecord.habilitado());
+        }
     }
 
     public UsuarioRecord persistirProfessorAndCriarAcesso(ProfessorCadastroRecord professorCadastroRecord) throws Exception {

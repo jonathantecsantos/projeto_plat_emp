@@ -59,7 +59,10 @@ public class ProfessorController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar os dados dos Professores")
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProfessorListaRecord> listaDadosProfessores(){
+    public List<ProfessorListaRecord> listaDadosProfessores(@RequestParam(required = false) Boolean somenteHabilitados){
+        if (somenteHabilitados != null && somenteHabilitados) {
+            return professorRepository.findByHabilitadoTrue().stream().map(ProfessorListaRecord::new).toList();
+        }
         return professorRepository.findAll().stream().map(ProfessorListaRecord::new).toList();
     }
 

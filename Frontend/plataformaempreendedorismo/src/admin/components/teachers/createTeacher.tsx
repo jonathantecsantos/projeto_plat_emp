@@ -46,6 +46,7 @@ export const createTeacherSchema = z.object({
   tamanhoCamisa: z.nativeEnum(TeamConfig.ShirtSize, {
     errorMap: () => ({ message: "Tamanho inválido" })
   }),
+  habilitado: z.boolean().optional(),
 })
 
 type CreateTeacherForm = z.infer<typeof createTeacherSchema>
@@ -69,6 +70,7 @@ export const CreateTeacher = () => {
         : [],
       dataNascimento: searchParams.get('dataNascimento') ? new Date(searchParams.get('dataNascimento')!) : undefined,
       tamanhoCamisa: searchParams.get('tamanhoCamisa') as TeamConfig.ShirtSize,
+      habilitado: true,
     },
   })
 
@@ -206,6 +208,17 @@ export const CreateTeacher = () => {
               <p className="text-red-500 text-sm mt-1">{errors.tamanhoCamisa.message}</p>
             )}
           </div>
+        </div>
+        <div className="flex items-center space-x-2 mt-2">
+          <input
+            id="habilitado"
+            type="checkbox"
+            {...register('habilitado')}
+            className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+          />
+          <label htmlFor="habilitado" className="block text-sm font-medium text-gray-700">
+            Habilitado para novas inscrições
+          </label>
         </div>
         <div className={`flex items-center justify-between`}>
           <div className='flex gap-4'>

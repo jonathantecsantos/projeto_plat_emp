@@ -201,7 +201,7 @@ public class ProcessadorArquivoService {
             }
         }
 
-        ProfessorCadastroRecord professorCadastroRecord = new ProfessorCadastroRecord(nome,cpf,email,equipeList,dataNascimento,tamanhoCamisa);
+        ProfessorCadastroRecord professorCadastroRecord = new ProfessorCadastroRecord(nome,cpf,email,equipeList,dataNascimento,tamanhoCamisa, true);
         professorService.persistirProfessorAndCriarAcesso(professorCadastroRecord);
 
     }

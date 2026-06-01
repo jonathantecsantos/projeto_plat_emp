@@ -15,7 +15,8 @@ public record ProfessorListaRecord(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         Date dataNascimento,
         String tamanhoCamisa,
-        List<String> equipeNomeRecord
+        List<String> equipeNomeRecord,
+        Boolean habilitado
 ) {
     public ProfessorListaRecord(Professor professor) {
         this(
@@ -29,7 +30,8 @@ public record ProfessorListaRecord(
                         ? professor.getEquipes().stream()
                         .map(e -> e.getNome())
                         .collect(Collectors.toList())
-                        : List.of()
+                        : List.of(),
+                professor.getHabilitado()
         );
     }
 }

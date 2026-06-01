@@ -117,9 +117,16 @@ public class AvaliacaoService {
                 .orElseThrow(() -> new EntityNotFoundException("Formato Avaliador não encontrado " + idTipoAvaliacao));
     }
 
-    public List<ListaEquipesAvaliadasRecord> buscarEquipes(Long idTipoAvaliacao, Long idAvaliador) {
+    private Integer obterAnoSeguro(Integer ano) {
+        if (!equipeService.isUsuarioAdmin()) {
+            return java.time.LocalDate.now().getYear();
+        }
+        return ano;
+    }
 
-        List<ListaEquipesAvaliadasRecord> listEquipesBanco = equipeService.buscarEquipesTipoAvaliacao();
+    public List<ListaEquipesAvaliadasRecord> buscarEquipes(Long idTipoAvaliacao, Long idAvaliador, Integer ano) {
+
+        List<ListaEquipesAvaliadasRecord> listEquipesBanco = equipeService.buscarEquipesTipoAvaliacao(ano);
 
         List<RegistroAvaliacao> registroAvaliacaoList = registroAvaliacaoRepository
                 .findByFormatoAvaliacaoIdAndAvaliadorId(idTipoAvaliacao, idAvaliador);
@@ -150,8 +157,8 @@ public class AvaliacaoService {
 
     }
 
-    public List<ClassificacaoGeralTimesRecord> buscarClassificacao() {
-        List<Object[]> results = avaliacaoRepository.findEquipeNotaOrderByTotalNotaDesc();
+    public List<ClassificacaoGeralTimesRecord> buscarClassificacao(Integer ano) {
+        List<Object[]> results = avaliacaoRepository.findEquipeNotaOrderByTotalNotaDesc(obterAnoSeguro(ano));
 
         return results.stream()
                 .map(result -> new ClassificacaoGeralTimesRecord(
@@ -161,8 +168,8 @@ public class AvaliacaoService {
                 .collect(Collectors.toList());
     }
 
-    public List<DatalhamentoClassificacaoFormatoRecord> buscarClassificacaoPorFormato(Long idFormatoAvaliacao) {
-        List<Object[]> results = avaliacaoRepository.findClassificacaoPorEquipeEFormato(idFormatoAvaliacao);
+    public List<DatalhamentoClassificacaoFormatoRecord> buscarClassificacaoPorFormato(Long idFormatoAvaliacao, Integer ano) {
+        List<Object[]> results = avaliacaoRepository.findClassificacaoPorEquipeEFormato(idFormatoAvaliacao, obterAnoSeguro(ano));
 
         return results.stream()
                 .map(result -> new DatalhamentoClassificacaoFormatoRecord(
@@ -189,8 +196,8 @@ public class AvaliacaoService {
 
     }
 
-    public List<DetalhamentoNotasTimeRecord> buscarRelatorioGeral() {
-        List<Object[]> results = avaliacaoRepository.getRelatorioClassificatorio();
+    public List<DetalhamentoNotasTimeRecord> buscarRelatorioGeral(Integer ano) {
+        List<Object[]> results = avaliacaoRepository.getRelatorioClassificatorio(obterAnoSeguro(ano));
 
         return results.stream()
                 .map(result -> new DetalhamentoNotasTimeRecord(
@@ -202,7 +209,6 @@ public class AvaliacaoService {
                         (Double) result[5]
                 ))
                 .collect(Collectors.toList());
-
     }
 
     public List<ItensRelatorioRecord> buscarItensDoRelatorio() {

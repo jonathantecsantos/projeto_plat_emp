@@ -10,7 +10,8 @@ import { TableComponent } from "../table"
 import { TableComponentClickRowProps } from "../table/common"
 
 export const TeamSelection = () => {
-  const { data: teams, isLoading, error } = useGetAllTeamsQuery()
+  const { selectedYear } = useSelector((state: RootState) => state.year)
+  const { data: teams, isLoading, error } = useGetAllTeamsQuery(selectedYear)
   const navigate = useNavigate()
   const userInfo = useSelector((state: RootState) => state.userInfo)
 

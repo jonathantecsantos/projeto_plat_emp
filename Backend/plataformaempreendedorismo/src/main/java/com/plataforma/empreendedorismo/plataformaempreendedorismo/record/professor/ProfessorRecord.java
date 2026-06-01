@@ -13,9 +13,10 @@ public record ProfessorRecord(
         String email,
         Date dataNascimento,
         String tamanhoCamisa,
-        List<Equipe> equipe
+        List<Equipe> equipe,
+        Boolean habilitado
 ) {
     public ProfessorRecord(Professor professor) {
-        this(professor.getId(), professor.getNome(), professor.getCpf(), professor.getEmail(), professor.getDataNascimento(), professor.getTamanhoCamisa(), professor.getEquipes());
+        this(professor.getId(), professor.getNome(), professor.getCpf(), professor.getEmail(), professor.getDataNascimento(), professor.getTamanhoCamisa(), professor.getEquipes(), professor.getHabilitado());
     }
 }

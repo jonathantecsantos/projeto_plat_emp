@@ -1,13 +1,16 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useRef } from "react"
 import { useGetTeamReportClassificationByFormatQuery } from "../../../api/studentApi"
+import { useSelector } from "react-redux"
+import { RootState } from "../../../redux/store"
 import { ReportClassificationByFormat } from '../../../model/reports'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
 import { EvaluationType } from '@/utils/types'
 
 export const CanvasClassificationComponent = () => {
-  const { data: canvasClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery(EvaluationType.CANVAS)
+  const { selectedYear } = useSelector((state: RootState) => state.year)
+  const { data: canvasClassification, refetch, isLoading, error } = useGetTeamReportClassificationByFormatQuery({ idFormatoAvaliacao: EvaluationType.CANVAS, ano: selectedYear })
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 
   useEffect(() => {

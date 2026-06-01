@@ -227,8 +227,8 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: result?.nomeEquipe }],
     }),
 
-    getAllTeams: build.query<TeamsResponse[], void>({
-      query: () => '/equipes',
+    getAllTeams: build.query<TeamsResponse[], number | undefined>({
+      query: (ano) => ano ? `/equipes?ano=${ano}` : '/equipes',
       transformResponse: (response: TeamsResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
       },
@@ -279,8 +279,11 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Teacher', id }],
     }),
 
-    getTeachers: build.query<TeachersResponse[], void>({
-      query: () => `/professores`,
+    getTeachers: build.query<TeachersResponse[], { somenteHabilitados?: boolean } | void>({
+      query: (params) => {
+        const queryParams = params?.somenteHabilitados ? '?somenteHabilitados=true' : '';
+        return `/professores${queryParams}`;
+      },
       transformResponse: (response: TeachersResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
       },
@@ -458,8 +461,8 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    getTeamsEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation>({
-      query: ({ evaluationTypeId, evaluatorId }) => `/avaliacoes/equipes?idTipoAvaliacao=${evaluationTypeId}&idAvaliador=${evaluatorId}`,
+    getTeamsEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation & { ano?: number }>({
+      query: ({ evaluationTypeId, evaluatorId, ano }) => `/avaliacoes/equipes?idTipoAvaliacao=${evaluationTypeId}&idAvaliador=${evaluatorId}${ano ? `&ano=${ano}` : ''}`,
       transformResponse: (response: TeamEvaluationResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
       },
@@ -498,8 +501,8 @@ export const studentsApiSlice = createApi({
     }),
 
     //REPORTS
-    getTeamsReports: build.query<RelatorioGeral[], void>({
-      query: () => `/relatorios/relatorio-geral`,
+    getTeamsReports: build.query<RelatorioGeral[], number | undefined>({
+      query: (ano) => `/relatorios/relatorio-geral${ano ? `?ano=${ano}` : ''}`,
       providesTags: (result) =>
         result
           ? [
@@ -531,8 +534,8 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Report', id: `LIST` }],
     }),
 
-    getTeamClassification: build.query<ReportClassification[], void>({
-      query: () => `/relatorios/classificacao`,
+    getTeamClassification: build.query<ReportClassification[], number | undefined>({
+      query: (ano) => `/relatorios/classificacao${ano ? `?ano=${ano}` : ''}`,
       providesTags: (result) =>
         result
           ? [
@@ -542,8 +545,8 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Report', id: `LIST` }],
     }),
 
-    getTeamReportClassificationByFormat: build.query<ReportClassificationByFormat[], number>({
-      query: (idFormatoAvaliacao) => `/relatorios/classificacao-por-formato/${idFormatoAvaliacao}`,
+    getTeamReportClassificationByFormat: build.query<ReportClassificationByFormat[], { idFormatoAvaliacao: number; ano?: number }>({
+      query: ({ idFormatoAvaliacao, ano }) => `/relatorios/classificacao-por-formato/${idFormatoAvaliacao}${ano ? `?ano=${ano}` : ''}`,
       providesTags: (result) =>
         result
           ? [
@@ -551,6 +554,11 @@ export const studentsApiSlice = createApi({
             { type: 'Report', id: `LIST` },
           ]
           : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getDistinctYears: build.query<number[], void>({
+      query: () => '/equipes/anos',
+      providesTags: () => [{ type: 'Team', id: 'YEARS_LIST' }],
     }),
 
     //ODS
@@ -633,6 +641,7 @@ export const {
   useGetAllTeamsQuery,
   useUpdateTeamMutation,
   useCreateTeamMutation,
+  useGetDistinctYearsQuery,
 
   //Teachers
   useGetTeacherQuery,

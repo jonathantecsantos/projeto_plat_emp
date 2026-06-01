@@ -1,10 +1,13 @@
 import { CircularProgress } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useGetTeamClassificationQuery } from "../../../api/studentApi"
+import { useSelector } from "react-redux"
+import { RootState } from "../../../redux/store"
 import { TrophyCard } from "./thropyCard"
 
 export const Top5Classification = () => {
-  const { data: classification, refetch, isLoading, error } = useGetTeamClassificationQuery()
+  const { selectedYear } = useSelector((state: RootState) => state.year)
+  const { data: classification, refetch, isLoading, error } = useGetTeamClassificationQuery(selectedYear)
   const [currentIndex, setCurrentIndex] = useState(-1)
   const [isRunning, setIsRunning] = useState(false)
 

@@ -13,6 +13,7 @@ public record ProfessorEditarRecord(
         String email,
         Date dataNascimento,
         String tamanhoCamisa,
-        List<Long> idEquipe
+        List<Long> idEquipe,
+        Boolean habilitado
         ) {
 }

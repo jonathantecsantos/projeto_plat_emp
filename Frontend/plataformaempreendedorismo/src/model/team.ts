@@ -24,6 +24,8 @@ export interface UpdateTeam {
   linkPitch?: string
   tipoAtividadeList?: ActivityType[],
   instituicoes?: Institution[]
+  nomeParceiro1?: string
+  nomeParceiro2?: string
 }
 
 
@@ -40,6 +42,11 @@ export interface TeamIdResponse {
   odsList: Ods[]
   tipoAtividades: ActivityType[],
   instituicoes: Institution[]
+  logomarcaTime: string | null
+  nomeParceiro1: string | null
+  logomarcaParceiro1: string | null
+  nomeParceiro2: string | null
+  logomarcaParceiro2: string | null
 }
 
 export interface TeamRegisterPayload {
@@ -59,4 +66,6 @@ export interface TeamRegisterPayload {
   listIdOds: Array<{ id: number }>
   tipoAtividades: Array<{ id: number }>
   instituicoes: Array<{ id: number }>
+  nomeParceiro1?: string
+  nomeParceiro2?: string
 }

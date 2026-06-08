@@ -11,16 +11,29 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.tipoAti
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EquipeService {
+
+    @Value("${upload.caminhoBase}")
+    private String caminhoBase;
 
     @Autowired
     private EquipeRepository equipeRepository;
@@ -45,7 +58,20 @@ public class EquipeService {
         List<Aluno> alunos = alunoRepository.findByEquipeId(equipeId);
         List<Professor> professores = professorRepository.findProfessoresByEquipeId(equipeId);
 
-        return new ListaDadosEquipeRecord(equipe.getNome(), alunos, professores, equipe.getOdsList(), equipe.getLinkPitch(), equipe.getTipoAtividades(), equipe.getInstituicoes());
+        return new ListaDadosEquipeRecord(
+                equipe.getNome(),
+                alunos,
+                professores,
+                equipe.getOdsList(),
+                equipe.getLinkPitch(),
+                equipe.getTipoAtividades(),
+                equipe.getInstituicoes(),
+                equipe.getLogomarcaTime(),
+                equipe.getNomeParceiro1(),
+                equipe.getLogomarcaParceiro1(),
+                equipe.getNomeParceiro2(),
+                equipe.getLogomarcaParceiro2()
+        );
     }
 
     public Equipe buscarEquipePorId(Long id) throws Exception {
@@ -87,8 +113,22 @@ public class EquipeService {
     }
 
     @Transactional
-    public void editarEquipe(EquipeRecord equipeRecord) {
+    public void editarEquipe(EquipeRecord equipeRecord, MultipartFile logomarcaTime, MultipartFile logomarcaParceiro1, MultipartFile logomarcaParceiro2) throws IOException {
         Equipe equipe = equipeRepository.getReferenceById(equipeRecord.id());
+
+        if (logomarcaTime != null && !logomarcaTime.isEmpty()) {
+            String fileNameTime = saveFile(logomarcaTime, "logo_time");
+            equipe.setLogomarcaTime(fileNameTime);
+        }
+        if (logomarcaParceiro1 != null && !logomarcaParceiro1.isEmpty()) {
+            String fileNameParceiro1 = saveFile(logomarcaParceiro1, "logo_parceiro1");
+            equipe.setLogomarcaParceiro1(fileNameParceiro1);
+        }
+        if (logomarcaParceiro2 != null && !logomarcaParceiro2.isEmpty()) {
+            String fileNameParceiro2 = saveFile(logomarcaParceiro2, "logo_parceiro2");
+            equipe.setLogomarcaParceiro2(fileNameParceiro2);
+        }
+
         atualizarEquipe(equipe, equipeRecord);
     }
 
@@ -98,6 +138,12 @@ public class EquipeService {
         }
         if (equipeRecord.linkPitch() != null) {
             equipe.setLinkPitch(equipeRecord.linkPitch());
+        }
+        if (equipeRecord.nomeParceiro1() != null) {
+            equipe.setNomeParceiro1(equipeRecord.nomeParceiro1());
+        }
+        if (equipeRecord.nomeParceiro2() != null) {
+            equipe.setNomeParceiro2(equipeRecord.nomeParceiro2());
         }
 
         if (equipeRecord.listIdOds() != null && !equipeRecord.listIdOds().isEmpty()) {
@@ -128,6 +174,32 @@ public class EquipeService {
         }
 
         equipeRepository.save(equipe);
+    }
+
+    private String saveFile(MultipartFile file, String prefix) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        String randomUUID = UUID.randomUUID().toString();
+        String originalFilename = file.getOriginalFilename();
+        String extensao = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extensao = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+        String fileName = prefix + "_" + randomUUID + extensao;
+
+        Path uploadPath = Paths.get(caminhoBase);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        return fileName;
     }
 
     public List<ListaEquipesAvaliadasRecord> buscarEquipesTipoAvaliacao(Integer ano) {

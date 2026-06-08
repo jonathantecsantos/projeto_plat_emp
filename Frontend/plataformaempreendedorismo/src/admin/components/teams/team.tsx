@@ -27,6 +27,7 @@ import { EditActivityTypes } from './editActivityTypes'
 import { EditInstitution } from './editInstitutions'
 import { EditOds } from './editOds'
 import { EditTeamName } from './editTeamName'
+import { EditLogomarcasAndParceiros } from './editLogomarcasAndParceiros'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
 
@@ -42,6 +43,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const [editTeamNameOpen, setEditTeamNameOpen] = useState(false)
   const [editActivityTypesOpen, setEditActivityTypesOpen] = useState(false)
   const [editInstitutionsOpen, setEditInstitutionsOpen] = useState(false)
+  const [editLogomarcasOpen, setEditLogomarcasOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const [getEventById] = useLazyGetEventValidateByIdQuery()
   const [pitchValidated, setPitchValidated] = useState(false)
@@ -265,6 +267,35 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
     setEditTeamNameOpen(false)
   }
 
+  const handleEditLogomarcasSave = async (data: {
+    nomeParceiro1: string
+    nomeParceiro2: string
+    logomarcaTime?: File
+    logomarcaParceiro1?: File
+    logomarcaParceiro2?: File
+  }) => {
+    const payload: UpdateTeam = {
+      nome: team?.nomeEquipe || '',
+      nomeParceiro1: data.nomeParceiro1,
+      nomeParceiro2: data.nomeParceiro2,
+      listIdOds: team?.odsList.map((ods) => ({ id: ods.id })) || [], // Manter ODS existentes
+    }
+    try {
+      await updateTeam({
+        id: id,
+        data: payload,
+        logomarcaTime: data.logomarcaTime,
+        logomarcaParceiro1: data.logomarcaParceiro1,
+        logomarcaParceiro2: data.logomarcaParceiro2
+      }).unwrap()
+      enqueueSnackbar('Logomarcas e Parceiros atualizados com sucesso!', { variant: 'success' })
+      setEditLogomarcasOpen(false)
+    } catch (error: any) {
+      const errorMessage = `${error?.data?.error}` || 'Erro ao atualizar a Equipe.'
+      enqueueSnackbar(errorMessage, { variant: 'error' })
+    }
+  }
+
   const handlePitchSave = async (linkPitch: string) => {
     const payload: UpdateTeam = {
       nome: team?.nomeEquipe,
@@ -344,8 +375,77 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
 
   return (
     <div>
-      <div className="flex flex-col lg:flex-row relative border-t-2 min-h-screen">
-        <div className="p-4 text-[#3C14A4] flex-1">
+      <div className="flex flex-col relative border-t-2 min-h-screen">
+        <div className="p-4 text-[#3C14A4] w-full">
+          {/* Seção de Ações no Topo */}
+          {sortedStudents.length > 0 && (
+            <div className="mb-6 border-b pb-4">
+              <ul className="flex flex-row gap-3 flex-wrap items-center">
+                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.INSCRICAO)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.INSCRICAO)
+                      return
+                    }
+                    handlePrintRegister()
+                  }}>
+                  <PrintIcon fontSize='medium' />
+                  <span>Imprimir Inscrição</span>
+                </li>
+                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.PROTOTIPO)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.PROTOTIPO)
+                      return
+                    }
+                    navigate(RoutesNames.prototyping?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
+                  }}
+                >
+                  <DescriptionIcon fontSize='medium' />
+                  <span>Prototipação</span>
+                </li>
+                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.CANVAS)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.CANVAS)
+                      return
+                    }
+                    navigate(RoutesNames.banner?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
+                  }}>
+                  <WebIcon fontSize='medium' />
+                  <span>Preencher Canvas</span>
+                </li>
+                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.CANVAS)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.CANVAS)
+                      return
+                    }
+                    handleDownloadBannerSVG()
+                  }}>
+                  <DownloadIcon fontSize='medium' />
+                  <span>Download Canvas</span>
+                </li>
+                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.PITCH)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.PITCH)
+                      return
+                    }
+                    setPitchValidated(true)
+                  }}>
+                  <LinkIcon fontSize='medium' />
+                  <span>Link Pitch</span>
+                </li>
+              </ul>
+            </div>
+          )}
+
           <div className='flex gap-2'>
             {editTeamNameOpen ? (
               <EditTeamName
@@ -363,63 +463,196 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             <ModeEditIcon className='cursor-pointer size-5'
               onClick={() => handleEditTeamNameOpen(editTeamNameOpen)} />
           </div> : null}
-          <div className="mt-4 mb-6 capitalize">
-            {editOdsOpen ? <EditOds
-              loading={status.isLoading}
-              initialOds={team?.odsList || []}
-              onSave={handleEditOdsSave}
-              onCancel={handleCancelEditOds}
-            /> :
-              <div className='flex-col'>
-                {team?.odsList?.map((ods, index) => (
-                  <p key={index} className="font-semibold">
-                    {ods.descricao}
-                  </p>
-                ))}
-              </div>}
-            {!editOdsOpen ? <div className='flex gap-2 text-center'>
-              <p>ODS</p>
-              <ModeEditIcon onClick={() => handleEditOdsOpen(editOdsOpen)} className='cursor-pointer size-5' />
-            </div> : null}
+
+          {/* Seção de Logomarcas e Parceiros */}
+          <div className="mt-2 mb-3">
+            {editLogomarcasOpen ? (
+              <EditLogomarcasAndParceiros
+                loading={status.isLoading}
+                initialNomeParceiro1={team?.nomeParceiro1 || ''}
+                initialNomeParceiro2={team?.nomeParceiro2 || ''}
+                onSave={handleEditLogomarcasSave}
+                onCancel={() => setEditLogomarcasOpen(false)}
+              />
+            ) : (
+              <div className="border p-3 rounded-lg bg-gray-50/50 w-full">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-base font-semibold text-[#383691]">Logomarcas e Parceiros</h3>
+                  <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => setEditLogomarcasOpen(true)} />
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {/* Logomarca do time */}
+                  <div className="flex items-center justify-between gap-2 bg-white p-2 rounded shadow-sm border border-gray-100 flex-1 min-w-[180px]">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-10 h-10 border rounded bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        {team?.logomarcaTime ? (
+                          <img src={`${import.meta.env.VITE_API_URL}/uploads/${team.logomarcaTime}`} alt="Logomarca do Time" className="w-full h-full object-contain" />
+                        ) : (
+                          <span className="text-[9px] text-gray-400">Sem logo</span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-[#383691] text-xs">Logomarca do Time</p>
+                      </div>
+                    </div>
+                    {team?.logomarcaTime && (
+                      <a href={`${import.meta.env.VITE_API_URL}/uploads/${team.logomarcaTime}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 flex-shrink-0 p-1 hover:bg-blue-50 rounded" title="Baixar Logomarca do Time">
+                        <DownloadIcon fontSize="small" />
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Parceiro 1 */}
+                  <div className="flex items-center justify-between gap-2 bg-white p-2 rounded shadow-sm border border-gray-100 flex-1 min-w-[180px]">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-10 h-10 border rounded bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        {team?.logomarcaParceiro1 ? (
+                          <img src={`${import.meta.env.VITE_API_URL}/uploads/${team.logomarcaParceiro1}`} alt="Logomarca Parceiro 1" className="w-full h-full object-contain" />
+                        ) : (
+                          <span className="text-[9px] text-gray-400">Sem logo</span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-[#383691] text-xs">Parceiro 1</p>
+                        <p className="text-xs text-gray-700 truncate max-w-[120px]">{team?.nomeParceiro1 || 'Não informado'}</p>
+                      </div>
+                    </div>
+                    {team?.logomarcaParceiro1 && (
+                      <a href={`${import.meta.env.VITE_API_URL}/uploads/${team.logomarcaParceiro1}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 flex-shrink-0 p-1 hover:bg-blue-50 rounded" title="Baixar Logomarca do Parceiro 1">
+                        <DownloadIcon fontSize="small" />
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Parceiro 2 */}
+                  <div className="flex items-center justify-between gap-2 bg-white p-2 rounded shadow-sm border border-gray-100 flex-1 min-w-[180px]">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-10 h-10 border rounded bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        {team?.logomarcaParceiro2 ? (
+                          <img src={`${import.meta.env.VITE_API_URL}/uploads/${team.logomarcaParceiro2}`} alt="Logomarca Parceiro 2" className="w-full h-full object-contain" />
+                        ) : (
+                          <span className="text-[9px] text-gray-400">Sem logo</span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-[#383691] text-xs">Parceiro 2</p>
+                        <p className="text-xs text-gray-700 truncate max-w-[120px]">{team?.nomeParceiro2 || 'Não informado'}</p>
+                      </div>
+                    </div>
+                    {team?.logomarcaParceiro2 && (
+                      <a href={`${import.meta.env.VITE_API_URL}/uploads/${team.logomarcaParceiro2}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 flex-shrink-0 p-1 hover:bg-blue-50 rounded" title="Baixar Logomarca do Parceiro 2">
+                        <DownloadIcon fontSize="small" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="mt-4 mb-6 capitalize">
-            {editActivityTypesOpen ? <EditActivityTypes
-              loading={status.isLoading}
-              value={team?.tipoAtividades || []}
-              onSave={handleEditActivitySave}
-              onCancel={handleCancelEditActivityTypes}
-            /> :
-              <div className='flex-col'>
-                {team?.tipoAtividades?.map((activity, index) => (
-                  <p key={index} className="font-semibold">
-                    {activity.descricao}
-                  </p>
-                ))}
-              </div>}
-            {!editActivityTypesOpen ? <div className='flex gap-2 text-center'>
-              <p>ATIVIDADES</p>
-              <ModeEditIcon onClick={() => handleActivityTypesOpen(editActivityTypesOpen)} className='cursor-pointer size-5' />
-            </div> : null}
+          {/* Seção de ODS e Atividades (Lado a Lado) */}
+          <div className="flex flex-col md:flex-row gap-3 w-full mt-2 mb-3">
+            {/* ODS */}
+            <div className="flex-1 min-w-0 capitalize">
+              {editOdsOpen ? (
+                <EditOds
+                  loading={status.isLoading}
+                  initialOds={team?.odsList || []}
+                  onSave={handleEditOdsSave}
+                  onCancel={handleCancelEditOds}
+                />
+              ) : (
+                <div className="border p-3 rounded-lg bg-gray-50/50 w-full h-full flex flex-col">
+                  <div className="flex justify-between items-center mb-2 flex-shrink-0">
+                    <h3 className="text-base font-semibold text-[#383691]">ODS</h3>
+                    <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => handleEditOdsOpen(editOdsOpen)} />
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 flex-grow items-start">
+                    {team?.odsList && team.odsList.length > 0 ? (
+                      team.odsList.map((ods, index) => (
+                        <div key={index} className="flex items-center gap-2 bg-white p-2 rounded shadow-sm border border-gray-100 flex-grow sm:flex-initial">
+                          <div className="min-w-0 flex items-center gap-1.5 text-xs">
+                            <span className="font-semibold text-[#383691] whitespace-nowrap">ODS {index + 1}:</span>
+                            <span className="text-gray-700 truncate max-w-[120px]" title={ods.descricao}>{ods.descricao}</span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400">Nenhuma ODS informada</span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Atividades */}
+            <div className="flex-1 min-w-0 capitalize">
+              {editActivityTypesOpen ? (
+                <EditActivityTypes
+                  loading={status.isLoading}
+                  value={team?.tipoAtividades || []}
+                  onSave={handleEditActivitySave}
+                  onCancel={handleCancelEditActivityTypes}
+                />
+              ) : (
+                <div className="border p-3 rounded-lg bg-gray-50/50 w-full h-full flex flex-col">
+                  <div className="flex justify-between items-center mb-2 flex-shrink-0">
+                    <h3 className="text-base font-semibold text-[#383691]">Atividades</h3>
+                    <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => handleActivityTypesOpen(editActivityTypesOpen)} />
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 flex-grow items-start">
+                    {team?.tipoAtividades && team.tipoAtividades.length > 0 ? (
+                      team.tipoAtividades.map((activity, index) => (
+                        <div key={index} className="flex items-center gap-2 bg-white p-2 rounded shadow-sm border border-gray-100 flex-grow sm:flex-initial">
+                          <div className="min-w-0 flex items-center text-xs">
+                            <span className="text-gray-700 truncate max-w-[140px]" title={activity.descricao}>{activity.descricao}</span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400">Nenhuma atividade informada</span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="mt-4 mb-6 capitalize">
-            {editInstitutionsOpen ? <EditInstitution
-              loading={status.isLoading}
-              value={team?.instituicoes || []}
-              onSave={handleEditInstitutionsSave}
-              onCancel={handleCancelEditInstitutions}
-            /> :
-              <div className='flex-col'>
-                {team?.instituicoes?.map((institution, index) => (
-                  <p key={index} className="font-semibold">
-                    {institution.descricao}
-                  </p>
-                ))}
-              </div>}
-            {!editInstitutionsOpen ? <div className='flex gap-2 text-center'>
-              <p>INSTITUIÇÃO</p>
-              <ModeEditIcon onClick={() => handleInstitutionsOpen(editInstitutionsOpen)} className='cursor-pointer size-5' />
-            </div> : null}
+
+          {/* Seção de Instituição */}
+          <div className="mt-2 mb-3 capitalize">
+            {editInstitutionsOpen ? (
+              <EditInstitution
+                loading={status.isLoading}
+                value={team?.instituicoes || []}
+                onSave={handleEditInstitutionsSave}
+                onCancel={handleCancelEditInstitutions}
+              />
+            ) : (
+              <div className="border p-3 rounded-lg bg-gray-50/50 w-full">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-base font-semibold text-[#383691]">Instituição</h3>
+                  <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => handleInstitutionsOpen(editInstitutionsOpen)} />
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {team?.instituicoes && team.instituicoes.length > 0 ? (
+                    team.instituicoes.map((institution, index) => (
+                      <div key={index} className="flex items-center gap-2 bg-white p-2 rounded shadow-sm border border-gray-100 flex-grow sm:flex-initial">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-[#383691] text-xs">Instituição</p>
+                          <p className="text-xs text-gray-700" title={institution.descricao}>{institution.descricao}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <span className="text-xs text-gray-400">Nenhuma instituição informada</span>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <div className='flex flex-col xl:gap-2 gap-2 w-full relative'>
             <div className="flex gap-2 flex-wrap">
@@ -443,7 +676,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
             {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? null
               : <SpeedDial
                 ariaLabel="SpeedDial"
-                className={`absolute right-0 -bottom-40 xl:-right-20 xl:-bottom-30 ${!sortedStudents.length ? 'left-96' : ''}`}
+                className="fixed right-6 bottom-6 z-50"
                 sx={{
                   '& .MuiFab-primary': {
                     backgroundColor: '#5741A6',
@@ -496,97 +729,6 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
               </div>
             )}
           </div>
-        </div>
-        <div className={`w-full lg:w-72 rounded-md p-4 lg:h-fit text-nowrap ${!sortedStudents.length ? 'hidden' : ''}`}>
-          <ul className="space-y-4 mt-36">
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={async () => {
-                const response = await getEventById(EventsTypes.INSCRICAO)
-                if (response.data == false || !response.data) {
-                  snackBarEventsTypes(EventsTypes.INSCRICAO)
-                  return
-                }
-                handlePrintRegister()
-              }}>
-              <PrintIcon fontSize='large' />
-              <div className="flex-1 flex justify-center">
-                <span>Imprimir Inscrição</span>
-              </div>
-            </li>
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={async () => {
-                const response = await getEventById(EventsTypes.PROTOTIPO)
-                if (response.data == false || !response.data) {
-                  snackBarEventsTypes(EventsTypes.PROTOTIPO)
-                  return
-                }
-                navigate(RoutesNames.prototyping?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
-              }}
-            >
-              <DescriptionIcon fontSize='large' />
-              <div className="flex-1 flex justify-center">
-                <span>Prototipação</span>
-              </div>
-            </li>
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={async () => {
-                const response = await getEventById(EventsTypes.CANVAS)
-                if (response.data == false || !response.data) {
-                  snackBarEventsTypes(EventsTypes.CANVAS)
-                  return
-                }
-                navigate(RoutesNames.banner?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
-              }}>
-              <WebIcon fontSize='large' />
-              <div className="flex-1 flex justify-center">
-                <span>Preencher Canvas</span>
-              </div>
-            </li>
-            {/* <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={async () => {
-                const response = await getEventById(EventsTypes.CANVAS)
-                if (response.data == false || !response.data) {
-                  snackBarEventsTypes(EventsTypes.CANVAS)
-                  return
-                }
-                handlePrintBanner()
-              }}>
-              <PrintIcon fontSize='large' />
-              <div className="flex-1 flex justify-center">
-                <span>Imprimir Canvas</span>
-              </div>
-            </li> */}
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={async () => {
-                const response = await getEventById(EventsTypes.CANVAS)
-                if (response.data == false || !response.data) {
-                  snackBarEventsTypes(EventsTypes.CANVAS)
-                  return
-                }
-                handleDownloadBannerSVG()
-              }}>
-              <DownloadIcon fontSize='large' />
-              <div className="flex-1 flex justify-center">
-                <span>Download Canvas</span>
-              </div>
-            </li>
-            <li className="bg-[#5741A6] text-white font-semibold p-4 rounded-md cursor-pointer flex items-center"
-              onClick={async () => {
-                const response = await getEventById(EventsTypes.PITCH)
-                if (response.data == false || !response.data) {
-                  snackBarEventsTypes(EventsTypes.PITCH)
-                  return
-                }
-
-                setPitchValidated(true)
-              }}>
-              <LinkIcon fontSize='large' />
-              <div className="flex-1 flex justify-center">
-                <span>Link Pitch</span>
-              </div>
-            </li>
-
-          </ul>
         </div>
       </div>
 

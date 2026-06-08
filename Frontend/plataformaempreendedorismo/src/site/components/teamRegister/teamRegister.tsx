@@ -86,6 +86,8 @@ const createTeamSchema = z.object({
       descricao: z.string().optional(),
     })
   ).min(1, "Instituição é obrigatória"),
+  nomeParceiro1: z.string().optional(),
+  nomeParceiro2: z.string().optional(),
 })
 
 type CreateTeamForm = z.infer<typeof createTeamSchema>
@@ -98,6 +100,10 @@ export const TeamRegister = () => {
   const navigate = useNavigate()
   const [success, setSuccess] = useState(isSuccess)
   const { executeRecaptcha } = useGoogleReCaptcha()
+
+  const [logomarcaTimeFile, setLogomarcaTimeFile] = useState<File | null>(null)
+  const [logomarcaParceiro1File, setLogomarcaParceiro1File] = useState<File | null>(null)
+  const [logomarcaParceiro2File, setLogomarcaParceiro2File] = useState<File | null>(null)
 
   const id = EventsTypes.INSCRICAO
   const { data: isValid, isLoading: registerLoading, } = useGetEventValidateByIdQuery(id)
@@ -114,6 +120,8 @@ export const TeamRegister = () => {
       listIdOds: searchParams.get('listIdOds') ? JSON.parse(searchParams.get('listIdOds') as string) : [],
       tipoAtividades: searchParams.get('tipoAtividades') ? JSON.parse(searchParams.get('tipoAtividades') as string) : [],
       instituicoes: searchParams.get('instituicoes') ? JSON.parse(searchParams.get('instituicoes') as string) : [],
+      nomeParceiro1: '',
+      nomeParceiro2: '',
     },
   })
 
@@ -205,6 +213,8 @@ export const TeamRegister = () => {
       listIdOds: [],
       tipoAtividades: [],
       instituicoes: [],
+      nomeParceiro1: '',
+      nomeParceiro2: '',
     })
 
     setSearchParams({
@@ -216,6 +226,15 @@ export const TeamRegister = () => {
       instituicoes: '[]',
     })
     setSuccess(false)
+    setLogomarcaTimeFile(null)
+    setLogomarcaParceiro1File(null)
+    setLogomarcaParceiro2File(null)
+    const fileInputTime = document.getElementById('logomarcaTime') as HTMLInputElement
+    if (fileInputTime) fileInputTime.value = ''
+    const fileInputP1 = document.getElementById('logomarcaParceiro1') as HTMLInputElement
+    if (fileInputP1) fileInputP1.value = ''
+    const fileInputP2 = document.getElementById('logomarcaParceiro2') as HTMLInputElement
+    if (fileInputP2) fileInputP2.value = ''
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -245,9 +264,17 @@ export const TeamRegister = () => {
         listIdOds: data.listIdOds,
         instituicoes: data.instituicoes,
         tipoAtividades: data.tipoAtividades,
+        nomeParceiro1: data.nomeParceiro1,
+        nomeParceiro2: data.nomeParceiro2,
       }
 
-      await createTeam({ ...payload, token }).unwrap()
+      await createTeam({
+        payload,
+        token,
+        logomarcaTime: logomarcaTimeFile || undefined,
+        logomarcaParceiro1: logomarcaParceiro1File || undefined,
+        logomarcaParceiro2: logomarcaParceiro2File || undefined
+      }).unwrap()
       enqueueSnackbar(`Time: ${data.nomeTime} criado com sucesso!`, { variant: 'success' })
       setSuccess(true)
     } catch (error: any) {
@@ -292,6 +319,80 @@ export const TeamRegister = () => {
             className="border rounded p-2 w-full"
           />
           {errors.nomeTime && <p className="text-red-500 text-sm">{errors.nomeTime.message}</p>}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border p-4 rounded-md bg-gray-50/50">
+          <div className="sm:col-span-2">
+            <h3 className="font-semibold text-lg text-[#383691] border-b pb-1 mb-2">Informações Visuais e Parceiros</h3>
+          </div>
+          
+          <div className="sm:col-span-2">
+            <label htmlFor="logomarcaTime" className="block text-sm font-medium text-[#383691] mb-1">Logomarca do Time</label>
+            <input
+              type="file"
+              id="logomarcaTime"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0] || null
+                setLogomarcaTimeFile(file)
+              }}
+              className="block w-full p-2 border border-gray-300 rounded-md bg-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-[#383691] hover:file:bg-indigo-100"
+            />
+          </div>
+
+          <div className="border p-3 rounded-md bg-white shadow-sm flex flex-col gap-2">
+            <h4 className="font-medium text-[#383691]">Parceiro 01</h4>
+            <div>
+              <label htmlFor="nomeParceiro1" className="block text-xs font-medium text-gray-500 mb-1">Nome do Parceiro 1</label>
+              <input
+                id="nomeParceiro1"
+                {...register("nomeParceiro1")}
+                onKeyDown={handleKeyDown}
+                className="border rounded p-2 w-full text-sm"
+                placeholder="Nome do Parceiro 1"
+              />
+            </div>
+            <div>
+              <label htmlFor="logomarcaParceiro1" className="block text-xs font-medium text-gray-500 mb-1">Logomarca do Parceiro 1</label>
+              <input
+                type="file"
+                id="logomarcaParceiro1"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null
+                  setLogomarcaParceiro1File(file)
+                }}
+                className="block w-full p-1 border border-gray-300 rounded-md text-xs bg-white file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-[#383691]"
+              />
+            </div>
+          </div>
+
+          <div className="border p-3 rounded-md bg-white shadow-sm flex flex-col gap-2">
+            <h4 className="font-medium text-[#383691]">Parceiro 02</h4>
+            <div>
+              <label htmlFor="nomeParceiro2" className="block text-xs font-medium text-gray-500 mb-1">Nome do Parceiro 2</label>
+              <input
+                id="nomeParceiro2"
+                {...register("nomeParceiro2")}
+                onKeyDown={handleKeyDown}
+                className="border rounded p-2 w-full text-sm"
+                placeholder="Nome do Parceiro 2"
+              />
+            </div>
+            <div>
+              <label htmlFor="logomarcaParceiro2" className="block text-xs font-medium text-gray-500 mb-1">Logomarca do Parceiro 2</label>
+              <input
+                type="file"
+                id="logomarcaParceiro2"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null
+                  setLogomarcaParceiro2File(file)
+                }}
+                className="block w-full p-1 border border-gray-300 rounded-md text-xs bg-white file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-[#383691]"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">

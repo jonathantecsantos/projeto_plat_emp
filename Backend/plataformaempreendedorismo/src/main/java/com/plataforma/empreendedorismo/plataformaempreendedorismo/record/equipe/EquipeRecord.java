@@ -12,5 +12,7 @@ public record EquipeRecord(
         String linkPitch,
         List<OdsRecord> listIdOds,
         List<TipoAtividadeRecord> tipoAtividadeList,
-        List<InstituicaoRecord> instituicoes){
+        List<InstituicaoRecord> instituicoes,
+        String nomeParceiro1,
+        String nomeParceiro2){
 }

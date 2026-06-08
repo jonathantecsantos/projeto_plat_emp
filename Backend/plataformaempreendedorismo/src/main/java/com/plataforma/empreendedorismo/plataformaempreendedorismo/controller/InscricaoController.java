@@ -10,12 +10,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import util.exceptions.*;
 
 @RestController
@@ -35,16 +38,20 @@ public class InscricaoController {
             @ApiResponse(responseCode = "409", description = "CPF ou E-mail já cadastrado na base de dados")
     })
     @SecurityRequirement(name = "bearerToken")
-    @PostMapping
-    public ResponseEntity<String> realizarInscricao(@RequestBody InscricaoRecord inscricaoRecord,
-     @RequestHeader("X-Captcha-Token") String recaptchaToken) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> realizarInscricao(
+            @RequestPart("inscricaoRecord") InscricaoRecord inscricaoRecord,
+            @RequestPart(value = "logomarcaTime", required = false) MultipartFile logomarcaTime,
+            @RequestPart(value = "logomarcaParceiro1", required = false) MultipartFile logomarcaParceiro1,
+            @RequestPart(value = "logomarcaParceiro2", required = false) MultipartFile logomarcaParceiro2,
+            @RequestHeader("X-Captcha-Token") String recaptchaToken) {
         try {
             boolean isCaptchaValid = captchaValidatorService.validateCaptcha(recaptchaToken);
             if (!isCaptchaValid) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Captcha inválido!");
             }
             
-            inscricaoService.processarInscricao(inscricaoRecord);
+            inscricaoService.processarInscricao(inscricaoRecord, logomarcaTime, logomarcaParceiro1, logomarcaParceiro2);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Inscrição realizada com sucesso!");
         }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException |

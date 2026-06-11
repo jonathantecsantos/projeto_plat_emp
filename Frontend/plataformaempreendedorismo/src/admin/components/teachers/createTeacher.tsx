@@ -217,7 +217,7 @@ export const CreateTeacher = () => {
             className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
           />
           <label htmlFor="habilitado" className="block text-sm font-medium text-gray-700">
-            Habilitado para novas inscrições
+            Habilitar
           </label>
         </div>
         <div className={`flex items-center justify-between`}>

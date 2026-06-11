@@ -50,6 +50,14 @@ public class Professor {
 
     private Boolean habilitado = true;
 
+    public Boolean getHabilitado() {
+        return this.habilitado == null ? Boolean.TRUE : this.habilitado;
+    }
+
+    public void setHabilitado(Boolean habilitado) {
+        this.habilitado = habilitado == null ? Boolean.TRUE : habilitado;
+    }
+
     public Professor(ProfessorCadastroRecord professorCadastroRecord, List<Equipe> equipes) {
         this.nome = professorCadastroRecord.nome().toUpperCase();
         this.cpf = professorCadastroRecord.cpf();

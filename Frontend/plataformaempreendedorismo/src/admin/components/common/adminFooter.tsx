@@ -1,4 +1,4 @@
-import footer from '@assets/footer.png'
+import footer from '@assets/footer.jpg'
 
 export const FooterImage = () => {
   return (

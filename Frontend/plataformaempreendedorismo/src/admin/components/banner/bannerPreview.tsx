@@ -1,4 +1,4 @@
-import footer from '@assets/footer.png';
+import footer from '@assets/footer2025.png';
 import header from '@assets/header.jpg';
 import { Avatar } from "@mui/material";
 import { useEffect, useRef, useState } from "react";

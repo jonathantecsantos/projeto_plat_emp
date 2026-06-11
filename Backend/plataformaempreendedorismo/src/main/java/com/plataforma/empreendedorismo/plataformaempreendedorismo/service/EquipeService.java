@@ -60,6 +60,7 @@ public class EquipeService {
 
         return new ListaDadosEquipeRecord(
                 equipe.getNome(),
+                equipe.getAno(),
                 alunos,
                 professores,
                 equipe.getOdsList(),

@@ -364,6 +364,18 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   if (isLoading) return <div className='text-center'><CircularProgress /></div>
   if (error) return <p>Error loading team</p>
 
+  const isStudent = userGlobalState?.enumRole === Roles.Aluno;
+  const isNotCurrentYear = team && team.ano !== 2026;
+
+  if (isStudent && isNotCurrentYear) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-[#3C14A4] p-4 text-center">
+        <h2 className="text-2xl font-bold mb-2">Equipe Indisponível</h2>
+        <p className="text-gray-600">Esta equipe pertence a outro ano letivo e não está disponível para visualização.</p>
+      </div>
+    );
+  }
+
   const sortedStudents = []
   const leader = team?.alunos?.find(aluno => aluno?.isLider)
   const viceLeader = team?.alunos?.find(aluno => aluno?.isViceLider)

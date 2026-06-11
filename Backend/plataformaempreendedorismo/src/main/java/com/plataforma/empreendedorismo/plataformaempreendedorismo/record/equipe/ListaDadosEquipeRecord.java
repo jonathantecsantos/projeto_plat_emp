@@ -7,6 +7,7 @@ import java.util.List;
 
 public record ListaDadosEquipeRecord(
         String nomeEquipe,
+        Integer ano,
         List<Aluno> alunos,
         List<Professor> professores,
         List<Ods> odsList,

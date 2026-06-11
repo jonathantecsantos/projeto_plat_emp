@@ -36,6 +36,7 @@ export interface Team extends TeamsResponse {
 
 export interface TeamIdResponse {
   nomeEquipe: string
+  ano: number
   linkPitch: string | null
   alunos: Student[]
   professores: Teacher[]

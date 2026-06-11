@@ -10,8 +10,7 @@ import { TableComponent } from "../table"
 import { TableComponentClickRowProps } from "../table/common"
 
 export const TeamSelection = () => {
-  const { selectedYear } = useSelector((state: RootState) => state.year)
-  const { data: teams, isLoading, error } = useGetAllTeamsQuery(selectedYear)
+  const { data: teams, isLoading, error } = useGetAllTeamsQuery(2026)
   const navigate = useNavigate()
   const userInfo = useSelector((state: RootState) => state.userInfo)
 
@@ -24,9 +23,15 @@ export const TeamSelection = () => {
   }, [teams, userInfo.idEquipe])
 
   useEffect(() => {
-    if (userInfo.idEquipe && userInfo.idEquipe.length === 1) {
-      navigate(RoutesNames.team.replace(':id', userInfo.idEquipe[0].toString()))
-    } else if (!userInfo.idEquipe || userInfo.idEquipe.length === 0) {
+    if (!isLoading && teams) {
+      if (professorTeams.length === 1) {
+        navigate(RoutesNames.team.replace(':id', professorTeams[0].id.toString()))
+      }
+    }
+  }, [professorTeams, isLoading, teams, navigate])
+
+  useEffect(() => {
+    if (!userInfo.idEquipe || userInfo.idEquipe.length === 0) {
       navigate(RoutesNames.login)
     }
   }, [userInfo.idEquipe, navigate])

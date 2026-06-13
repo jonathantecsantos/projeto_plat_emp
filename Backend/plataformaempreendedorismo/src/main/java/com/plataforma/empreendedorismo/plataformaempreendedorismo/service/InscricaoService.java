@@ -47,7 +47,7 @@ public class InscricaoService {
     public void processarInscricao(InscricaoRecord inscricaoRecord,
                                    MultipartFile logomarcaTime,
                                    MultipartFile logomarcaParceiro1,
-                                   MultipartFile logomarcaParceiro2) throws CpfDuplicadoException, EmailDuplicadoException, LimiteProfessorEquipeException, EmailUtilizadoException, CpfUtilizadoException, EquipeDuplicadoException, IOException {
+                                   MultipartFile logomarcaParceiro2) throws CpfDuplicadoException, EmailDuplicadoException, LimiteProfessorEquipeException, EmailUtilizadoException, CpfUtilizadoException, EquipeDuplicadoException, IOException, AlunoJaInscritoNoAnoAtualException {
 
         validaEmailDuplicadoNaEntrada(inscricaoRecord.alunos());
         validaCpfDuplicadoNaEntrada(inscricaoRecord.alunos());

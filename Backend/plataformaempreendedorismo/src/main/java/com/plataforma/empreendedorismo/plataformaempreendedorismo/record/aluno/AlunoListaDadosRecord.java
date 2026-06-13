@@ -16,10 +16,12 @@ public record AlunoListaDadosRecord(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         Date dataNascimento,
         String tamanhoCamisa,
-        String nomeEquipe) {
+        String nomeEquipe,
+        Integer anoLetivo) {
 
     public AlunoListaDadosRecord(Aluno aluno) {
         this(aluno.getId(), aluno.getCpf(), aluno.getNome(), aluno.getEmail(), aluno.getTurma(),
-                aluno.getIsLider(), aluno.getIsViceLider(), aluno.getDataNascimento(), aluno.getTamanhoCamisa(), aluno.getEquipe().getNome());
+                aluno.getIsLider(), aluno.getIsViceLider(), aluno.getDataNascimento(), aluno.getTamanhoCamisa(), 
+                aluno.getEquipe() != null ? aluno.getEquipe().getNome() : null, aluno.getAnoLetivo());
     }
 }

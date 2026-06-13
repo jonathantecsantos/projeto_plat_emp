@@ -40,6 +40,9 @@ public class Aluno implements Serializable {
 
     private String tamanhoCamisa;
 
+    @Column(name = "ano_letivo")
+    private Integer anoLetivo;
+
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "aluno")
     private Usuario usuario;
@@ -59,6 +62,7 @@ public class Aluno implements Serializable {
         this.dataNascimento = alunoCadastroRecord.dataNascimento();
         this.tamanhoCamisa = alunoCadastroRecord.tamanhoCamisa();
         this.equipe = equipe;
+        this.anoLetivo = equipe != null ? equipe.getAno() : null;
     }
 
 

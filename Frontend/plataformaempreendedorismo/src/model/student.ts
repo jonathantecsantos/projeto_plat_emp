@@ -24,6 +24,7 @@ export interface Student {
   isViceLider: boolean
   dataNascimento: string
   tamanhoCamisa: TeamConfig.ShirtSize
+  anoLetivo?: number
 }
 
 export interface StudentIdResponse extends Student {

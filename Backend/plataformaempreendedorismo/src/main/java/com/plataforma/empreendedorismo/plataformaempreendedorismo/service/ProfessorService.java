@@ -127,8 +127,12 @@ public class ProfessorService {
 
     public void validaLimiteDeProfessorEmEquipes(Long idProfessor){
         professorRepository.findById(idProfessor).ifPresent(professor -> {
-            if (professor.getEquipes().size() >= 3) {
-                throw new LimiteProfessorEquipeException("O professor já está associado a 3 ou mais equipes. Selecione outro Professor!");
+            int currentYear = java.time.LocalDate.now().getYear();
+            long countCurrentYearTeams = professor.getEquipes().stream()
+                    .filter(equipe -> equipe.getAno() != null && equipe.getAno().equals(currentYear))
+                    .count();
+            if (countCurrentYearTeams >= 3) {
+                throw new LimiteProfessorEquipeException("O professor já está associado a 3 ou mais equipes no ano letivo atual. Selecione outro Professor!");
             }
         });
     }

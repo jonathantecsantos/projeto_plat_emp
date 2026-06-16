@@ -2,12 +2,13 @@ import extenso from "extenso";
 import { useEffect, useRef } from "react";
 import { useGetTeamByIdQuery } from "../../../api/studentApi";
 import lampLogo from '../../../assets/lamplogo.png';
-import { formatDate, maskCPF } from "../../../utils/types";
+import { calculateRegistrationCost, formatDate, maskCPF } from "../../../utils/types";
 
 
 interface TeamRegisterPrintComponentProps {
   id: number
 }
+
 
 export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentProps) => {
   const { data: teamRegister, isFetching } = useGetTeamByIdQuery(id)
@@ -45,9 +46,9 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
     <div ref={printRef} className="w-full max-w-7xl mx-auto bg-white p-2 print:p-2 print:text-[12px]">
       <img src={lampLogo} alt="Trophy" className="w-16 h-16 absolute inset-6" />
       <div className="print:max-w-md print:mx-auto">
-        <h1 className="text-start text-base font-bold text-[#2f5597]">DLEI 2025</h1>
+        <h1 className="text-start text-base font-bold text-[#2f5597]">DLEI 2026</h1>
         <div className="w-full"></div>
-        <h2 className="text-start text-nowrap text-base font-bold mb-2 text-[#2f5597]">9º Desafio Lourdinas de Empreendedorismo e Inovação</h2>
+        <h2 className="text-start text-nowrap text-base font-bold mb-2 text-[#2f5597]">10º Desafio Lourdinas de Empreendedorismo e Inovação</h2>
       </div>
       <h2 className="text-center text-base font-semibold mb-2">FICHA DE INSCRIÇÃO / RECIBO</h2>
       <table className="w-full text-sm bg-[#fc56f4] border border-b-0 border-gray-700">
@@ -159,12 +160,13 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
         <div className="border-gray-700 text-sm">
           <div className="flex justify-between mb-4">
             <p>Para Uso da Tesouraria</p>
-            <p className="font-bold">Inscrição Nº __ / DLEI 2025</p>
+            <p className="font-bold">Inscrição Nº __ / DLEI 2026</p>
           </div>
           {(() => {
             const qtdStudents = teamRegister?.alunos?.length || 0;
-            const studentRegistrationCost = qtdStudents * 100
+            const studentRegistrationCost = calculateRegistrationCost(qtdStudents)
             const formatValue = (valor: number) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
             const valorExtenso = studentRegistrationCost > 0 ? extenso(studentRegistrationCost, { locale: 'br' }) : '';
             
             return (
@@ -172,7 +174,7 @@ export const TeamRegisterPrintComponent = ({ id }: TeamRegisterPrintComponentPro
                 <p className="font-semibold text-center mb-4">RECIBO: {formatValue(studentRegistrationCost)}</p>
                 <div>
                   <p> Recebemos do time <strong>{teamRegister?.nomeEquipe}</strong> a quantia supra de <strong>{formatValue(studentRegistrationCost)}{valorExtenso && ` (${valorExtenso})`}</strong> referente à inscrição de <strong>{qtdStudents} ({extenso(Number(qtdStudents), { locale: 'br' })}) Alunos </strong>
-                    no <span className="font-bold"> 9º Desafio Lourdinas de Empreendedorismo e Inovação - DLEI 2025.</span>
+                    no <span className="font-bold"> 10º Desafio Lourdinas de Empreendedorismo e Inovação - DLEI 2026.</span>
                   </p>
                 </div>
               </>

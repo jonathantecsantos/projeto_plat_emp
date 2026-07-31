@@ -27,6 +27,7 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
+                                "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/api-docs",
                                 "/v3/api-docs/**",
@@ -106,6 +107,9 @@ public class SecurityConfigurations {
 
                         //Downloads
                         .requestMatchers("/download/**").permitAll()
+
+                        //Anexo Template
+                        .requestMatchers(HttpMethod.GET, "/anexo_template/**").permitAll()
 
                         .anyRequest().authenticated()
                 )

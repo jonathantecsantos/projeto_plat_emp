@@ -47,7 +47,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
   const [cronogramaFile, setCronogramaFile] = useState<File | null>(null)
   const [memorialFile, setMemorialFile] = useState<File | null>(null)
   const [esquemaFiles, setEsquemaFiles] = useState<File[]>([])
-
+  const [memorialCompletoPdf, setMemorialCompletoPdf] = useState<File | null>(null)
 
   // Função genérica para atualizar os valores dos inputs de texto
   const handleValueChange = (newValue: string, field: string) => {
@@ -57,24 +57,63 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
     }))
   }
 
-  // Funções de onChange para os inputs de arquivos
+  // Funções de onChange para os inputs de arquivos com validações
   const handleCronogramaChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCronogramaFile(e.target.files?.[0] || null)
+    const file = e.target.files?.[0] || null
+    if (file && !file.type.startsWith('image/')) {
+      enqueueSnackbar('O arquivo do Cronograma deve ser uma imagem!', { variant: 'warning' })
+      e.target.value = ''
+      setCronogramaFile(null)
+      return
+    }
+    setCronogramaFile(file)
   }
 
   const handleMemorialChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMemorialFile(e.target.files?.[0] || null)
+    const file = e.target.files?.[0] || null
+    if (file && !file.type.startsWith('image/')) {
+      enqueueSnackbar('O Memorial Descritivo Simplificado deve ser uma imagem!', { variant: 'warning' })
+      e.target.value = ''
+      setMemorialFile(null)
+      return
+    }
+    setMemorialFile(file)
   }
 
   const handleEsquemaChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEsquemaFiles(Array.from(e.target.files || []))
+    const files = Array.from(e.target.files || [])
+    if (files.length > 4) {
+      enqueueSnackbar('Você pode selecionar no máximo 4 imagens nos Anexos Adicionais!', { variant: 'warning' })
+      e.target.value = ''
+      setEsquemaFiles([])
+      return
+    }
+    const nonImages = files.filter((f) => !f.type.startsWith('image/'))
+    if (nonImages.length > 0) {
+      enqueueSnackbar('Todos os Anexos Adicionais devem ser imagens!', { variant: 'warning' })
+      e.target.value = ''
+      setEsquemaFiles([])
+      return
+    }
+    setEsquemaFiles(files)
+  }
+
+  const handleMemorialCompletoChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    if (file && file.type !== 'application/pdf') {
+      enqueueSnackbar('O Memorial Descritivo Completo deve ser obrigatoriamente um arquivo PDF!', { variant: 'error' })
+      e.target.value = ''
+      setMemorialCompletoPdf(null)
+      return
+    }
+    setMemorialCompletoPdf(file)
   }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
-    if (esquemaFiles.length > 3) {
-      enqueueSnackbar('Você pode enviar no máximo 3 arquivos no campo Esquemas!', { variant: 'error' })
+    if (esquemaFiles.length > 4) {
+      enqueueSnackbar('Você pode enviar no máximo 4 imagens nos Anexos Adicionais!', { variant: 'error' })
       return
     }
 
@@ -90,8 +129,11 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
       }
       if (esquemaFiles.length > 0) {
         esquemaFiles.forEach((file) => {
-          filesToSend.push({ file, tipoAnexoId: AnexoTypes.ESQUEMA.id })
+          filesToSend.push({ file, tipoAnexoId: AnexoTypes.ANEXO.id })
         })
+      }
+      if (memorialCompletoPdf) {
+        filesToSend.push({ file: memorialCompletoPdf, tipoAnexoId: AnexoTypes.ESQUEMA.id })
       }
 
       filesToSend.forEach(({ file, tipoAnexoId }) => {
@@ -133,7 +175,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
           enqueueSnackbar('Prototipo atualizado com sucesso!', { variant: 'success' })
           setSucess(true)
         } catch (error: any) {
-          enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+          enqueueSnackbar(`${error?.data || 'Erro ao editar protótipo.'}`, { variant: 'error' })
           console.error(error)
         }
       } else {
@@ -142,13 +184,13 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
           enqueueSnackbar('Prototipo cadastrado com sucesso!', { variant: 'success' })
           setSucess(true)
         } catch (error: any) {
-          enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+          enqueueSnackbar(`${error?.data || 'Erro ao cadastrar protótipo.'}`, { variant: 'error' })
           console.error(error)
         }
       }
 
     } catch (error: any) {
-      enqueueSnackbar(`${error?.data}`, { variant: 'error' })
+      enqueueSnackbar(`${error?.data || 'Ocorreu um erro no processamento.'}`, { variant: 'error' })
     }
 
   }
@@ -158,8 +200,8 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
 
   return (
     <form onSubmit={handleSubmit}
-      className="text-center p-8 max-w-4xl mx-auto text-pretty text-[#3C14A4] bg-gray-50  shadow-md rounded-lg">
-      <div className="text-center flex justify-between max-w-2xl mb-4">
+      className="text-center p-8 max-w-7xl mx-auto text-pretty text-[#3C14A4] bg-gray-50 shadow-md rounded-lg">
+      <div className="text-center flex justify-between max-w-2xl mx-auto mb-4">
         <button
           type="button"
           onClick={() => navigate(-1)}
@@ -173,127 +215,159 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
         DLEI - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
       </h1>
 
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          DEPOIS DA VISITA ÀS INSTITUIÇÕES DE IMPACTO SOCIAL (IIS) E DO QUE VIVENCIAMOS NO HACKATHON DAY, QUAL O PROBLEMA PRINCIPAL E DEFINITIVO DA IIS QUE VOCÊS ESCOLHERAM, QUE ESTÁ ASSOCIADO AOS ODS's, PARA O QUAL FOI CONCEBIDA UM PROTÓTIPO / SOLUÇÃO INICIAL?
-        </p>
-        <TextAreaComponent
-          placeholder="Digite sua resposta para o problema principal"
-          value={formValues.problemaPrincipal}
-          onChange={(e) => handleValueChange(e.target.value, "problemaPrincipal")}
-          label="Problema Principal"
-        />
+      {/* Sessão 1: Informações Gerais da Solução (Fundo #628e48) */}
+      <div className="bg-[#628e48] opacity-80 text-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto mb-8 text-left space-y-6">
+        <h3 className="text-xl font-bold border-b border-white/30 pb-2 text-white text-center uppercase tracking-wide">
+          Detalhamento da Solução e Parcerias
+        </h3>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3">
+            DEPOIS DA VISITA ÀS INSTITUIÇÕES DE IMPACTO SOCIAL (IIS) E DO QUE VIVENCIAMOS NO HACKATHON DAY, QUAL O PROBLEMA PRINCIPAL E DEFINITIVO DA IIS QUE VOCÊS ESCOLHERAM, QUE ESTÁ ASSOCIADO AOS ODS's, PARA O QUAL FOI CONCEBIDA UM PROTÓTIPO / SOLUÇÃO INICIAL?
+          </p>
+          <TextAreaComponent
+            placeholder="Digite sua resposta para o problema principal"
+            value={formValues.problemaPrincipal}
+            onChange={(e) => handleValueChange(e.target.value, "problemaPrincipal")}
+            label="Problema Principal"
+          />
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            QUAL A PROPOSTA DE VALOR DO PROTÓTIPO DA SOLUÇÃO, ISTO É, COMO O PRODUTO OU SERVIÇO IDEALIZADO RESOLVE O PROBLEMA DA IIS ESCOLHIDA PELO SEU TIME?
+          </p>
+          <TextAreaComponent
+            placeholder="Digite sua resposta para a proposta de valor"
+            value={formValues.propostaValor}
+            onChange={(e) => handleValueChange(e.target.value, "propostaValor")}
+            showLabel
+            label="Proposta de Valor"
+          />
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            QUANDO COMPARADA COM OUTRAS SOLUÇÕES JÁ EXISTENTES NO MERCADO, QUAIS AS VANTAGENS COMPETITIVAS DO PROTÓTIPO DA SOLUÇÃO IDEALIZADA PELO TIME P/ RESOLVER O PROBLEMA DA IIS?
+          </p>
+          <TextAreaComponent
+            placeholder="Digite sua resposta para as vantagens competitivas"
+            value={formValues.vantagemCompetitiva}
+            onChange={(e) => handleValueChange(e.target.value, "vantagemCompetitiva")}
+          />
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            QUAIS AS PRINCIPAIS NECESSIDADES DO SEU TIME P/ DESENVOLVIMENTO COMPLETO DO PROTÓTIPO DA SOLUÇÃO?
+          </p>
+          <TextAreaComponent
+            placeholder="Digite sua resposta para as principais necessidades"
+            value={formValues.principaisNecessidades}
+            onChange={(e) => handleValueChange(e.target.value, "principaisNecessidades")}
+          />
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            QUAIS PARCERIAS SERIAM BEM-VINDAS PARA O APRIMORAMENTO DO PROTÓTIPO DA SOLUÇÃO, TAIS COMO: EMPRESAS ESTABELECIDAS, LABORATÓRIOS DE UNIVERSIDADES, ENTIDADES DO SISTEMA S, PARQUE TECNOLÓGICO, INCUBADORA DE EMPRESA?
+          </p>
+          <TextAreaComponent
+            placeholder="Digite sua resposta para as parcerias"
+            value={formValues.parcerias}
+            onChange={(e) => handleValueChange(e.target.value, "parcerias")}
+          />
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            QUE TIPO DE APOIO SERIA NECESSÁRIO DESSAS ENTIDADES / EMPRESAS / ICTs PARCEIRAS?
+          </p>
+          <TextAreaComponent
+            placeholder="Digite sua resposta para o tipo de apoio"
+            value={formValues?.tipoApoio}
+            onChange={(e) => handleValueChange(e.target.value, "tipoApoio")}
+          />
+        </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          QUAL A PROPOSTA DE VALOR DO PROTÓTIPO DA SOLUÇÃO, ISTO É, COMO O PRODUTO OU SERVIÇO IDEALIZADO RESOLVE O PROBLEMA DA IIS ESCOLHIDA PELO SEU TIME?
-        </p>
-        <TextAreaComponent
-          placeholder="Digite sua resposta para a proposta de valor"
-          value={formValues.propostaValor}
-          onChange={(e) => handleValueChange(e.target.value, "propostaValor")}
-          showLabel
-          label="Proposta de Valor"
-        />
+      {/* Sessão 2: Cronograma e Memorial Descritivo (Fundo #628e48) */}
+      <div className="bg-[#d56928]  text-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto mb-8 text-left space-y-6">
+        <h3 className="text-xl font-bold border-b border-white/30 pb-2 text-white text-center uppercase tracking-wide">
+          Cronograma, Memoriais e Anexos
+        </h3>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            QUAL O CRONOGRAMA DE CONSTRUÇÃO DO PROTÓTIPO DA SOLUÇÃO DEFINITIVA ATÉ SUA VERSÃO FINAL (NOS PRÓXIMOS DOIS MESES - 12/08 A 12/10)?
+          </p>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleCronogramaChange}
+            id={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao}
+            className={inputClasses}
+          />
+          {teamPrototyping?.anexos && (
+            <FileDownload anexos={teamPrototyping.anexos}
+              type={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao} />
+          )}
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            MEMORIAL DESCRITIVO SIMPLIFICADO (DESCRIÇÃO RESUMIDA DAS PRINCIPAIS FUNCIONALIDADES DO PROTÓTIPO DA SOLUÇÃO)
+          </p>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleMemorialChange}
+            id={AnexoTypes.MEMORIAL_DESCRITIVO.descricao}
+            className={inputClasses}
+          />
+          {teamPrototyping?.anexos && (
+            <FileDownload anexos={teamPrototyping.anexos}
+              type={AnexoTypes.MEMORIAL_DESCRITIVO.descricao} />
+          )}
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            ANEXE ADICIONALMENTE ESQUEMAS, IMAGENS, FIGURAS, FOTOS, VÍDEOS, SE ACHAR NECESSÁRIO
+          </p>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleEsquemaChange}
+            id={AnexoTypes.ANEXO.descricao}
+            className={inputClasses}
+          />
+          {teamPrototyping?.anexos && (
+            <FileDownload anexos={teamPrototyping.anexos}
+              type={AnexoTypes.ANEXO.descricao} />
+          )}
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+          <p className="font-semibold text-base mb-3 text-white">
+            MEMORIAL DESCRITIVO COMPLETO (DESCRIÇÃO DETALHADA DAS FUNCIONALIDADES DO PROTÓTIPO DA SOLUÇÃO)
+          </p>
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={handleMemorialCompletoChange}
+            id={AnexoTypes.ESQUEMA.descricao}
+            className={inputClasses}
+          />
+          {teamPrototyping?.anexos && (
+            <FileDownload anexos={teamPrototyping.anexos}
+              type={AnexoTypes.ESQUEMA.descricao} />
+          )}
+        </div>
       </div>
 
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          QUANDO COMPARADA COM OUTRAS SOLUÇÕES JÁ EXISTENTES NO MERCADO,  QUAIS AS VANTAGENS COMPETITIVAS DO PROTÓTIPO DA SOLUÇÃO IDEALIZADA PELO TIME P/ RESOLVER O PROBLEMA DA IIS?
-        </p>
-        <TextAreaComponent
-          placeholder="Digite sua resposta para as vantagens competitivas"
-          value={formValues.vantagemCompetitiva}
-          onChange={(e) => handleValueChange(e.target.value, "vantagemCompetitiva")}
-
-        />
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          QUAIS AS PRINCIPAIS NECESSIDADES DO SEU TIME P/ DESENVOLVIMENTO COMPLETO DO PROTÓTIPO DA SOLUÇÃO?
-        </p>
-        <TextAreaComponent
-          placeholder="Digite sua resposta para as principais necessidades"
-          value={formValues.principaisNecessidades}
-          onChange={(e) => handleValueChange(e.target.value, "principaisNecessidades")}
-        />
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          QUAIS PARCERIAS SERIAM BEM-VINDAS PARA O APRIMORAMENTO DO PROTÓTIPO DA SOLUÇÃO, TAIS COMO: EMPRESAS ESTABELECIDAS, LABORATÓRIOS DE UNIVERSIDADES, ENTIDADES DO SISTEMA S, PARQUE TECNOLÓGICO, INCUBADORA DE EMPRESA?
-        </p>
-        <TextAreaComponent
-          placeholder="Digite sua resposta para as parcerias"
-          value={formValues.parcerias}
-          onChange={(e) => handleValueChange(e.target.value, "parcerias")}
-        />
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          QUE TIPO DE APOIO SERIA NECESSÁRIO DESSAS ENTIDADES / EMPRESAS / ICTs PARCEIRAS?
-        </p>
-        <TextAreaComponent
-          placeholder="Digite sua resposta para o tipo de apoio"
-          value={formValues.tipoApoio}
-          onChange={(e) => handleValueChange(e.target.value, "tipoApoio")}
-        />
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          QUAL O CRONOGRAMA DE CONSTRUÇÃO DO PROTÓTIPO DA SOLUÇÃO DEFINITIVA ATÉ SUA VERSÃO FINAL (NOS PRÓXIMOS DOIS MESES - 12/08 A 12/10)?
-        </p>
-        <input
-          type="file"
-          onChange={handleCronogramaChange}
-          id={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao}
-          className={inputClasses}
-        />
-        {teamPrototyping?.anexos && (
-          <FileDownload anexos={teamPrototyping.anexos}
-            type={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao} />
-        )}
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          MEMORIAL DESCRITIVO (DESCRIÇÃO DAS PRINCIPAIS FUNCIONALIDADES DO PROTÓTIPO DA SOLUÇÃO):
-        </p>
-        <input
-          type="file"
-          onChange={handleMemorialChange}
-          id={AnexoTypes.MEMORIAL_DESCRITIVO.descricao}
-          className={inputClasses}
-        />
-        {teamPrototyping?.anexos && (
-          <FileDownload anexos={teamPrototyping.anexos}
-            type={AnexoTypes.MEMORIAL_DESCRITIVO.descricao} />
-        )}
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto mb-8">
-        <p className="text-[#3C14A4] font-semibold text-lg mb-4">
-          ANEXE ADICIONALMENTE ESQUEMAS, IMAGENS, FIGURAS, FOTOS, VÍDEOS, SE ACHAR NECESSÁRIO:
-        </p>
-        <input
-          type="file"
-          multiple
-          onChange={handleEsquemaChange}
-          id={AnexoTypes.ESQUEMA.descricao}
-          className={inputClasses}
-        />
-        {teamPrototyping?.anexos && (
-          <FileDownload anexos={teamPrototyping.anexos}
-            type={AnexoTypes.ESQUEMA.descricao} />
-        )}
-      </div>
-
-      <div className='text-center flex justify-between max-w-2xl mx-auto'>
+      <div className='text-center flex justify-between max-w-7xl mx-auto'>
         <button
           type="button"
           onClick={() => navigate(-1)}

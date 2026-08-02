@@ -330,8 +330,8 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const actions = [
     {
       icon: <SchoolIcon />, name: 'Adicionar Aluno', onClick: () => {
-        if (team?.alunos && team.alunos.length >= 8) {
-          enqueueSnackbar('Permitido até 8 Alunos por Time', { variant: 'warning' })
+        if (team?.alunos && team.alunos.length >= 10) {
+          enqueueSnackbar('Permitido até 10 Alunos por Time', { variant: 'warning' })
           return
         }
         navigate(RoutesNames.student,

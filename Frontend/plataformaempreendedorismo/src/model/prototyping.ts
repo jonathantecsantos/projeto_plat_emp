@@ -34,7 +34,7 @@ export interface Prototype {
   vantagemCompetitiva: string
   principaisNecessidades: string
   parcerias: string
-  tipoApoio: string
+  tipoApoio?: string
 }
 
 

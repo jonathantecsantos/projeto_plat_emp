@@ -45,6 +45,7 @@ export const RoutesNames = {
   expoDleiTeam: '/expoDlei/:id',
 
   prototyping: '/teams/prototyping/:id',
+  prototypePreview: '/teams/prototype-preview/:id',
 
   classification: '/classification',
   generalReport: '/general-report',

@@ -5,6 +5,8 @@ import { AdminConfigPage } from './pages/adminConfig'
 import { AdminHomePage } from './pages/adminHome'
 import { BannerPage } from './pages/banner'
 import { BannerPreviewPage } from './pages/bannerPreview'
+import { PrototypePreviewPage } from './pages/prototypePreview'
+import { TeamPrototypingPage } from './pages/teamPrototyping'
 import { CanvasEvaluationPage } from './pages/canvasTeamEvaluation'
 import { CanvasPage } from './pages/canvasTeams'
 import { ClassificationPage } from './pages/classification'
@@ -36,7 +38,6 @@ import { TeachersPage } from './pages/teachers'
 import { TeachersTeamListSelection } from './pages/teachersLogin'
 import { TeamPage } from './pages/team'
 import { TeamNotesPage } from './pages/teamNotes'
-import { TeamPrototypingPage } from './pages/teamPrototyping'
 import { TeamRegisterPage } from './pages/teamRegister'
 import { TeamRegisterPrintPage } from './pages/teamRegisterPrint'
 import { TeamsPage } from './pages/teams'
@@ -175,6 +176,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesNames.prototyping,
     element: <ProtectedRoute children={<TeamPrototypingPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
+  },
+  {
+    path: RoutesNames.prototypePreview,
+    element: <ProtectedRoute children={<PrototypePreviewPage />} allowedRoles={[Roles.Admin, Roles.Professor, Roles.Aluno, Roles.Avaliador, Roles.Coordenador]} />
   },
   {
     path: RoutesNames.classification,

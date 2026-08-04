@@ -15,4 +15,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     List<Professor> findProfessoresByEquipeId(@Param("equipeId") Long equipeId);
 
     Professor findByCpf(String cpf);
+
+    List<Professor> findByHabilitadoTrue();
 }

@@ -13,6 +13,8 @@ public record InscricaoRecord(
         Long idProfessor,
         List<OdsRecord> listIdOds,
         List<TipoAtividadeRecord> tipoAtividades,
-        List<InstituicaoRecord> instituicoes
+        List<InstituicaoRecord> instituicoes,
+        String nomeParceiro1,
+        String nomeParceiro2
 ) {
 }

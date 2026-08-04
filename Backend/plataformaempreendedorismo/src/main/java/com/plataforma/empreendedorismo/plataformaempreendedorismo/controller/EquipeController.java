@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequestMapping("equipes")
 @Tag(name="Equipe")
@@ -56,8 +58,18 @@ public class EquipeController {
             @ApiResponse(responseCode = "500", description = "Erro ao buscar Equipes"),
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ListaEquipesRecord> getEquipes(){
-        return equipeService.buscarEquipes();
+    public List<ListaEquipesRecord> getEquipes(@RequestParam(required = false) Integer ano){
+        return equipeService.buscarEquipes(ano);
+    }
+
+    @Operation(summary = "Busca todos os anos das Equipes", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados encontrados com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao buscar anos")
+    })
+    @GetMapping(value = "/anos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Integer> getAnos(){
+        return equipeService.buscarAnos();
     }
 
     @Operation(summary = "Editar Equipe", method = "PUT")
@@ -65,10 +77,14 @@ public class EquipeController {
             @ApiResponse(responseCode = "200", description = "Aluno editado com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao editar aluno")
     })
-    @PutMapping("/editar")
-    public ResponseEntity<String> editar(@RequestBody @Valid EquipeRecord equipeRecord){
+    @PutMapping(value = "/editar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> editar(
+            @RequestPart("equipeRecord") @Valid EquipeRecord equipeRecord,
+            @RequestPart(value = "logomarcaTime", required = false) MultipartFile logomarcaTime,
+            @RequestPart(value = "logomarcaParceiro1", required = false) MultipartFile logomarcaParceiro1,
+            @RequestPart(value = "logomarcaParceiro2", required = false) MultipartFile logomarcaParceiro2){
         try {
-            equipeService.editarEquipe(equipeRecord);
+            equipeService.editarEquipe(equipeRecord, logomarcaTime, logomarcaParceiro1, logomarcaParceiro2);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Equipe atualizada com sucesso!");
         }catch (Exception e){

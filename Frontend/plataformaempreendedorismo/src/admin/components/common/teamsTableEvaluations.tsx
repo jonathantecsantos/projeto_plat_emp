@@ -3,6 +3,8 @@ import { CircularProgress } from '@mui/material'
 import { useEffect, useMemo, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useGetTeamsEvaluationsQuery } from '../../../api/studentApi'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
 import { TeamEvaluation, TeamEvaluationResponse } from '../../../model/evaluationFormat'
 import { AdminHeader } from "../common/adminHeader"
 import { TableComponent } from "../table"
@@ -15,10 +17,12 @@ interface TeamsTableProps {
 }
 
 export const TeamsTable = ({ routeName, teamEvaluation }: TeamsTableProps) => {
+  const { selectedYear } = useSelector((state: RootState) => state.year)
   const { data: teams, refetch, isLoading, error } = useGetTeamsEvaluationsQuery(
     {
       evaluationTypeId: teamEvaluation.evaluationTypeId,
-      evaluatorId: teamEvaluation.evaluatorId
+      evaluatorId: teamEvaluation.evaluatorId,
+      ano: selectedYear
     })
 
   const [searchParams, setSearchParams] = useSearchParams()

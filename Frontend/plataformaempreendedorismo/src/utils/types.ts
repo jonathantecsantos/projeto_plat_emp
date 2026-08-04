@@ -238,3 +238,12 @@ export const Institutions = [
   'Santuário da Divina Misericórdia',
   'São Vicente de Paulo',
 ]
+
+export const STUDENT_REGISTRATION_FEE_PER_STUDENT = 150
+
+export function calculateRegistrationCost(studentCount: number): number {
+  if (studentCount < 0) {
+    return 0
+  }
+  return studentCount * STUDENT_REGISTRATION_FEE_PER_STUDENT
+}

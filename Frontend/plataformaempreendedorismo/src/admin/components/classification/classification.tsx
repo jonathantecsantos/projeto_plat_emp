@@ -1,12 +1,15 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useRef } from "react"
 import { useGetTeamClassificationQuery } from "../../../api/studentApi"
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
 import { ReportClassification } from '../../../model/reports'
 import { TableComponent } from "../table"
 import { TableComponentSetCurrPageProps } from "../table/common"
 
 export const ClassificationComponent = () => {
-  const { data: classification, refetch, isLoading, error } = useGetTeamClassificationQuery()
+  const { selectedYear } = useSelector((state: RootState) => state.year)
+  const { data: classification, refetch, isLoading, error } = useGetTeamClassificationQuery(selectedYear)
 
   const tableComponentSetCurrPageRef = useRef<TableComponentSetCurrPageProps>(() => { })
 

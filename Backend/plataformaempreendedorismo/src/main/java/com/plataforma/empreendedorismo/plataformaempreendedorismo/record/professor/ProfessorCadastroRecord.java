@@ -9,7 +9,8 @@ public record ProfessorCadastroRecord(
         String email,
         List<Long> idEquipe,
         Date dataNascimento,
-        String tamanhoCamisa
+        String tamanhoCamisa,
+        Boolean habilitado
 ) {
 }
 

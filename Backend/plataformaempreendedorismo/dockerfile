@@ -1,0 +1,16 @@
+FROM maven:3.9-eclipse-temurin-17-alpine AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY . .
+RUN mvn clean package -DskipTests   
+
+FROM eclipse-temurin:17-jre-alpine
+RUN apk add --no-cache bash
+WORKDIR /app
+COPY --from=builder /app/target/plataformaempreendedorismo-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY wait-for-it.sh /app/wait-for-it.sh
+EXPOSE 8080
+ENTRYPOINT ["./wait-for-it.sh", "db_empreendedorismo:3306", "-t", "60", "--", "java", "-jar", "app.jar","--spring.profiles.active=prod"]
+
+

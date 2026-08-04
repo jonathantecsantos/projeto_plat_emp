@@ -1,0 +1,1 @@
+UPDATE equipe set ano = 2025;

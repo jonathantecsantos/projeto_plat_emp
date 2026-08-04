@@ -11,6 +11,7 @@ import { BreadcrumbComponent } from "./breadcrumb"
 import { LeftMenuComponent } from "./leftMenu"
 import { Logout } from "./logout"
 import { ToggleMenuButton } from "./toggleMenuButton"
+import { YearSelector } from "./YearSelector"
 
 interface AdminPage {
   mainContent: ReactNode
@@ -46,9 +47,12 @@ export const AdminDefaultPage = ({ mainContent }: AdminPage) => {
           {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? null : <ToggleMenuButton />}
           <BannerImage />
           <div className="px-2 py-4 h-[calc(100%-9rem)]">
-            <div className="flex">
+            <div className="flex justify-between items-center pr-4">
               {[Roles.Aluno, Roles.Professor].includes(userGlobalState.enumRole!) ? <div className="w-full mt-10"></div> : <BreadcrumbComponent />}
-              <Logout />
+              <div className="flex items-center gap-4">
+                <YearSelector />
+                <Logout />
+              </div>
             </div>
             {mainContent}
           </div>

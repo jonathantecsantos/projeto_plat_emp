@@ -23,7 +23,25 @@ public class Equipe {
 
     private String nome;
 
+    private Integer ano;
+
+
     private String linkPitch;
+
+    @Column(name = "logomarca_time")
+    private String logomarcaTime;
+
+    @Column(name = "nome_parceiro1")
+    private String nomeParceiro1;
+
+    @Column(name = "logomarca_parceiro1")
+    private String logomarcaParceiro1;
+
+    @Column(name = "nome_parceiro2")
+    private String nomeParceiro2;
+
+    @Column(name = "logomarca_parceiro2")
+    private String logomarcaParceiro2;
 
     @OneToOne
     @JoinColumn(name = "BANNER_ID", referencedColumnName = "id")

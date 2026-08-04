@@ -8,7 +8,7 @@ interface TeacherSelectProps {
 }
 
 export const TeacherSelect = ({ onChange, value, className }: TeacherSelectProps) => {
-  const { data: teachers, isLoading } = useGetTeachersQuery()
+  const { data: teachers, isLoading } = useGetTeachersQuery({ somenteHabilitados: true })
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 

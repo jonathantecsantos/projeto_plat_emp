@@ -8,6 +8,7 @@ export interface Teacher {
   email: string
   dataNascimento: string
   tamanhoCamisa: TeamConfig.ShirtSize
+  habilitado?: boolean
 }
 
 export interface TeacherIdResponse {
@@ -18,6 +19,7 @@ export interface TeacherIdResponse {
   tamanhoCamisa: string,
   email: string
   equipe: Team[]
+  habilitado?: boolean
 }
 
 
@@ -33,4 +35,5 @@ export interface CreateOrUpdateTeacher {
   idEquipe: number[]
   dataNascimento: string,
   tamanhoCamisa: string,
+  habilitado?: boolean
 }

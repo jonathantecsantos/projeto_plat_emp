@@ -10,6 +10,7 @@ import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.aluno.A
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.record.usuario.UsuarioRecord;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.AlunoRepository;
 import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.EquipeRepository;
+import com.plataforma.empreendedorismo.plataformaempreendedorismo.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,11 @@ import util.enuns.TipoOperacaoEnum;
 import util.exceptions.CpfUtilizadoException;
 import util.exceptions.EmailUtilizadoException;
 import util.exceptions.ValidaAlunoException;
+import util.exceptions.AlunoJaInscritoNoAnoAtualException;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class AlunoService {
@@ -32,6 +35,8 @@ public class AlunoService {
     private EquipeService equipeService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Transactional
     public UsuarioRecord criarAluno(AlunoCadastroRecord alunoCadastroRecord) throws Exception {
@@ -40,11 +45,38 @@ public class AlunoService {
         return persistirAlunoAndCriarAcesso(alunoCadastroRecord, equipe);
     }
 
-    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe) throws CpfUtilizadoException, EmailUtilizadoException {
-        validaCpfCadastrado(alunoCadastroRecord);
-        validaEmailCadastrado(alunoCadastroRecord);
+    public UsuarioRecord persistirAlunoAndCriarAcesso(AlunoCadastroRecord alunoCadastroRecord, Equipe equipe)
+            throws CpfUtilizadoException, EmailUtilizadoException, AlunoJaInscritoNoAnoAtualException {
+        int anoInscricao = equipe.getAno();
+
+        // 1. Validar se o aluno já está inscrito em um time do ano letivo atual
+        Aluno alunoExistenteCpf = alunoRepository.findByCpfAndAnoLetivo(alunoCadastroRecord.cpf(), anoInscricao);
+        if (alunoExistenteCpf != null) {
+            throw new AlunoJaInscritoNoAnoAtualException("Erro. O aluno com CPF: " + alunoCadastroRecord.cpf()
+                    + " já está inscrito em um time do ano letivo atual!");
+        }
+
+        Aluno alunoExistenteEmail = alunoRepository.findByEmailAndAnoLetivo(alunoCadastroRecord.email(), anoInscricao);
+        if (alunoExistenteEmail != null) {
+            throw new AlunoJaInscritoNoAnoAtualException("Erro. O aluno com E-mail: " + alunoCadastroRecord.email()
+                    + " já está inscrito em um time do ano letivo atual!");
+        }
+
+        // 2. Salva o novo registro do Aluno
         Aluno aluno = alunoRepository.save(new Aluno(alunoCadastroRecord, equipe));
-        return usuarioService.criarUsuario(aluno, aluno.getEmail(), EnumRole.ROLE_ALUNO);
+
+        // 3. Cria ou atualiza o vínculo do Usuario
+        Usuario usuarioExistente = usuarioService.buscarUsuarioPorLogin(alunoCadastroRecord.email());
+        if (usuarioExistente != null) {
+            usuarioExistente.setAluno(aluno);
+            if (usuarioExistente.getEnumRole() != EnumRole.ROLE_ALUNO) {
+                usuarioExistente.setEnumRole(EnumRole.ROLE_ALUNO);
+            }
+            usuarioRepository.save(usuarioExistente);
+            return new UsuarioRecord(usuarioExistente.getLogin(), null);
+        } else {
+            return usuarioService.criarUsuario(aluno, aluno.getEmail(), EnumRole.ROLE_ALUNO);
+        }
     }
 
     @Transactional
@@ -58,10 +90,10 @@ public class AlunoService {
     }
 
     private void validaLiderAndViceLider(TipoOperacaoEnum tipo,
-                                         Aluno aluno,
-                                         AlunoCadastroRecord alunoCadastroRecord,
-                                         AlunoEditarRecord alunoEditarRecord,
-                                         Equipe equipe) throws ValidaAlunoException {
+            Aluno aluno,
+            AlunoCadastroRecord alunoCadastroRecord,
+            AlunoEditarRecord alunoEditarRecord,
+            Equipe equipe) throws ValidaAlunoException {
         if (tipo.equals(TipoOperacaoEnum.CADASTRAR)) {
             validarLiderAndViceLiderCadastro(equipe, alunoCadastroRecord);
         } else {
@@ -69,8 +101,10 @@ public class AlunoService {
         }
     }
 
-    private void validarLiderAndViceLiderCadastro(Equipe equipe, AlunoCadastroRecord alunoCadastroRecord) throws ValidaAlunoException {
-        if (Boolean.TRUE.equals(alunoCadastroRecord.isLider()) || Boolean.TRUE.equals(alunoCadastroRecord.isViceLider())) {
+    private void validarLiderAndViceLiderCadastro(Equipe equipe, AlunoCadastroRecord alunoCadastroRecord)
+            throws ValidaAlunoException {
+        if (Boolean.TRUE.equals(alunoCadastroRecord.isLider())
+                || Boolean.TRUE.equals(alunoCadastroRecord.isViceLider())) {
             for (Aluno alunoList : equipe.getAlunos()) {
                 if (alunoCadastroRecord.isLider() && alunoList.getIsLider()) {
                     throw new ValidaAlunoException("Já existe um Líder no time!");
@@ -82,7 +116,8 @@ public class AlunoService {
         }
     }
 
-    private void validaLiderAndViceLiderEdicao(Aluno aluno, AlunoEditarRecord alunoEditarRecord, Equipe equipe) throws ValidaAlunoException {
+    private void validaLiderAndViceLiderEdicao(Aluno aluno, AlunoEditarRecord alunoEditarRecord, Equipe equipe)
+            throws ValidaAlunoException {
         validarLiderancaDupla(alunoEditarRecord);
         validarSeExisteLider(alunoEditarRecord, equipe);
         validarSeExisteViceLider(alunoEditarRecord, equipe);
@@ -136,11 +171,11 @@ public class AlunoService {
             aluno.setIsViceLider(alunoEditarRecord.isViceLider());
         }
 
-        if(alunoEditarRecord.dataNascimento() != null){
+        if (alunoEditarRecord.dataNascimento() != null) {
             aluno.setDataNascimento(alunoEditarRecord.dataNascimento());
         }
 
-        if(alunoEditarRecord.tamanhoCamisa() != null){
+        if (alunoEditarRecord.tamanhoCamisa() != null) {
             aluno.setTamanhoCamisa(alunoEditarRecord.tamanhoCamisa());
         }
 
@@ -166,18 +201,20 @@ public class AlunoService {
         return null;
     }
 
-    public boolean validarCpfDuplicado(String cpf){
-        Aluno aluno = alunoRepository.findByCpf(cpf);
-        return aluno != null;
+    public boolean validarCpfDuplicado(String cpf) {
+        List<Aluno> aluno = alunoRepository.findByCpf(cpf);
+        return aluno != null && !aluno.isEmpty();
     }
 
     private void validaCpfCadastrado(AlunoCadastroRecord alunoCadastroRecord) throws CpfUtilizadoException {
         if (validarCpfDuplicado(alunoCadastroRecord.cpf())) {
-            throw new CpfUtilizadoException("Erro. O CPF: " + alunoCadastroRecord.cpf() + " já se encontra cadastrado na base de dados!");
+            throw new CpfUtilizadoException(
+                    "Erro. O CPF: " + alunoCadastroRecord.cpf() + " já se encontra cadastrado na base de dados!");
         }
     }
 
-    private void validaEmailCadastrado(AlunoCadastroRecord alunoCadastroRecord) throws EmailUtilizadoException, CpfUtilizadoException {
+    private void validaEmailCadastrado(AlunoCadastroRecord alunoCadastroRecord)
+            throws EmailUtilizadoException, CpfUtilizadoException {
         usuarioService.validarUsuarioCadastrado(alunoCadastroRecord.email());
     }
 }

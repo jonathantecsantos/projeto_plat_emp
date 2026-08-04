@@ -8,5 +8,12 @@ import java.util.List;
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     List<Aluno> findByEquipeId(Long equipeId);
-    Aluno findByCpf(String cpf);
+
+    List<Aluno> findByCpf(String cpf);
+
+    List<Aluno> findByEmail(String email);
+
+    Aluno findByCpfAndAnoLetivo(String cpf, Integer anoLetivo);
+
+    Aluno findByEmailAndAnoLetivo(String email, Integer anoLetivo);
 }

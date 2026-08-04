@@ -1,5 +1,7 @@
 import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@mui/material";
 import { useGetAllTeamsQuery } from "../../../api/studentApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 interface TeamSelectProps {
   value?: number
@@ -10,7 +12,8 @@ interface TeamSelectProps {
 
 
 export const TeamSelect = ({ onChange, value, disable, className}: TeamSelectProps) => {
-  const { data: teams, isLoading } = useGetAllTeamsQuery()
+  const { selectedYear } = useSelector((state: RootState) => state.year)
+  const { data: teams, isLoading } = useGetAllTeamsQuery(selectedYear)
 
   if (isLoading) return <div className='text-center'><LinearProgress color="inherit" /></div>
 

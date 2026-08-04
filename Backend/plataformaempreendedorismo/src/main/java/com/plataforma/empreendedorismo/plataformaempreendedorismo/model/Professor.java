@@ -48,6 +48,16 @@ public class Professor {
 
     private String tamanhoCamisa;
 
+    private Boolean habilitado = true;
+
+    public Boolean getHabilitado() {
+        return this.habilitado == null ? Boolean.TRUE : this.habilitado;
+    }
+
+    public void setHabilitado(Boolean habilitado) {
+        this.habilitado = habilitado == null ? Boolean.TRUE : habilitado;
+    }
+
     public Professor(ProfessorCadastroRecord professorCadastroRecord, List<Equipe> equipes) {
         this.nome = professorCadastroRecord.nome().toUpperCase();
         this.cpf = professorCadastroRecord.cpf();
@@ -55,5 +65,6 @@ public class Professor {
         this.dataNascimento = professorCadastroRecord.dataNascimento();
         this.tamanhoCamisa = professorCadastroRecord.tamanhoCamisa();
         this.equipes = equipes;
+        this.habilitado = professorCadastroRecord.habilitado() != null ? professorCadastroRecord.habilitado() : true;
     }
 }

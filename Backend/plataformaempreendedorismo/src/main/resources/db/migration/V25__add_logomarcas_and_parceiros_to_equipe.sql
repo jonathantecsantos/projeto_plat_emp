@@ -1,0 +1,6 @@
+ALTER TABLE equipe
+ADD COLUMN logomarca_time VARCHAR(255) NULL,
+ADD COLUMN nome_parceiro1 VARCHAR(255) NULL,
+ADD COLUMN logomarca_parceiro1 VARCHAR(255) NULL,
+ADD COLUMN nome_parceiro2 VARCHAR(255) NULL,
+ADD COLUMN logomarca_parceiro2 VARCHAR(255) NULL;

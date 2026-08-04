@@ -1,0 +1,1 @@
+ALTER TABLE professor ADD COLUMN habilitado TINYINT(1) NOT NULL DEFAULT 1;

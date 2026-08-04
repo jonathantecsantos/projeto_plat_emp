@@ -14,11 +14,12 @@ public record AlunoRecord(
         Boolean isViceLider,
         Date dataNascimento,
         String tamanhoCamisa,
-        Equipe equipe) {
+        Equipe equipe,
+        Integer anoLetivo) {
 
     public AlunoRecord(Aluno aluno) {
         this(aluno.getId(), aluno.getCpf(), aluno.getNome(), aluno.getEmail(), aluno.getTurma(),
                 aluno.getIsLider(), aluno.getIsViceLider(),
-                aluno.getDataNascimento(), aluno.getTamanhoCamisa(), aluno.getEquipe());
+                aluno.getDataNascimento(), aluno.getTamanhoCamisa(), aluno.getEquipe(), aluno.getAnoLetivo());
     }
 }

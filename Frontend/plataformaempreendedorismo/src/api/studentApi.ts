@@ -227,8 +227,8 @@ export const studentsApiSlice = createApi({
         { type: 'Team', id: result?.nomeEquipe }],
     }),
 
-    getAllTeams: build.query<TeamsResponse[], void>({
-      query: () => '/equipes',
+    getAllTeams: build.query<TeamsResponse[], number | undefined>({
+      query: (ano) => ano ? `/equipes?ano=${ano}` : '/equipes',
       transformResponse: (response: TeamsResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
       },
@@ -241,32 +241,57 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Team', id: 'LIST' }],
     }),
 
-    updateTeam: build.mutation<UpdateTeam, { id: any; data: Partial<UpdateTeam> }>({
-      query: ({ id, data }) => ({
-        url: `/equipes/editar`,
-        method: 'PUT',
-        body: { id, ...data },
-      }),
-      invalidatesTags: (_result, _error, { id, }: any) => [
+    updateTeam: build.mutation<void, { id: any; data: Partial<UpdateTeam>; logomarcaTime?: File; logomarcaParceiro1?: File; logomarcaParceiro2?: File }>({
+      query: ({ id, data, logomarcaTime, logomarcaParceiro1, logomarcaParceiro2 }) => {
+        const formData = new FormData()
+        formData.append('equipeRecord', new Blob([JSON.stringify({ id, ...data })], { type: 'application/json' }))
+        if (logomarcaTime) {
+          formData.append('logomarcaTime', logomarcaTime)
+        }
+        if (logomarcaParceiro1) {
+          formData.append('logomarcaParceiro1', logomarcaParceiro1)
+        }
+        if (logomarcaParceiro2) {
+          formData.append('logomarcaParceiro2', logomarcaParceiro2)
+        }
+        return {
+          url: `/equipes/editar`,
+          method: 'PUT',
+          body: formData,
+        }
+      },
+      invalidatesTags: (_result, _error, { id }) => [
         { type: 'Team', id },
       ],
     }),
 
-    createTeam: build.mutation<{ message: string }, TeamRegisterPayload & { token: string }>({
-      query: (body) => ({
-        url: '/inscricoes',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Captcha-Token': body.token,
-        },
-        body,
+    createTeam: build.mutation<{ message: string }, { payload: TeamRegisterPayload; token: string; logomarcaTime?: File; logomarcaParceiro1?: File; logomarcaParceiro2?: File }>({
+      query: ({ payload, token, logomarcaTime, logomarcaParceiro1, logomarcaParceiro2 }) => {
+        const formData = new FormData()
+        formData.append('inscricaoRecord', new Blob([JSON.stringify(payload)], { type: 'application/json' }))
+        if (logomarcaTime) {
+          formData.append('logomarcaTime', logomarcaTime)
+        }
+        if (logomarcaParceiro1) {
+          formData.append('logomarcaParceiro1', logomarcaParceiro1)
+        }
+        if (logomarcaParceiro2) {
+          formData.append('logomarcaParceiro2', logomarcaParceiro2)
+        }
+        return {
+          url: '/inscricoes',
+          method: 'POST',
+          headers: {
+            'X-Captcha-Token': token,
+          },
+          body: formData,
+        }
+      },
+      transformResponse: (response: any) => ({
+        message: typeof response === 'string' ? response : `Time: ${response?.nomeTime} criado com sucesso!`
       }),
-      transformResponse: (response: { nomeTime: string }) => ({
-        message: `Time: ${response.nomeTime} criado com sucesso!`
-      }),
-      invalidatesTags: (_result, _error, { idProfessor }) => [
-        { type: 'Teacher', id: idProfessor },
+      invalidatesTags: (_result, _error, { payload }) => [
+        { type: 'Teacher', id: payload.idProfessor },
         { type: 'Teacher', id: 'LIST' },
         { type: 'Student', id: 'LIST' },
         { type: 'Team', id: 'LIST' },
@@ -279,8 +304,11 @@ export const studentsApiSlice = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Teacher', id }],
     }),
 
-    getTeachers: build.query<TeachersResponse[], void>({
-      query: () => `/professores`,
+    getTeachers: build.query<TeachersResponse[], { somenteHabilitados?: boolean } | void>({
+      query: (params) => {
+        const queryParams = params?.somenteHabilitados ? '?somenteHabilitados=true' : '';
+        return `/professores${queryParams}`;
+      },
       transformResponse: (response: TeachersResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
       },
@@ -458,8 +486,8 @@ export const studentsApiSlice = createApi({
       ],
     }),
 
-    getTeamsEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation>({
-      query: ({ evaluationTypeId, evaluatorId }) => `/avaliacoes/equipes?idTipoAvaliacao=${evaluationTypeId}&idAvaliador=${evaluatorId}`,
+    getTeamsEvaluations: build.query<TeamEvaluationResponse[], TeamEvaluation & { ano?: number }>({
+      query: ({ evaluationTypeId, evaluatorId, ano }) => `/avaliacoes/equipes?idTipoAvaliacao=${evaluationTypeId}&idAvaliador=${evaluatorId}${ano ? `&ano=${ano}` : ''}`,
       transformResponse: (response: TeamEvaluationResponse[]) => {
         return response.sort((a, b) => a.nome.localeCompare(b.nome))
       },
@@ -498,8 +526,8 @@ export const studentsApiSlice = createApi({
     }),
 
     //REPORTS
-    getTeamsReports: build.query<RelatorioGeral[], void>({
-      query: () => `/relatorios/relatorio-geral`,
+    getTeamsReports: build.query<RelatorioGeral[], number | undefined>({
+      query: (ano) => `/relatorios/relatorio-geral${ano ? `?ano=${ano}` : ''}`,
       providesTags: (result) =>
         result
           ? [
@@ -531,8 +559,8 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Report', id: `LIST` }],
     }),
 
-    getTeamClassification: build.query<ReportClassification[], void>({
-      query: () => `/relatorios/classificacao`,
+    getTeamClassification: build.query<ReportClassification[], number | undefined>({
+      query: (ano) => `/relatorios/classificacao${ano ? `?ano=${ano}` : ''}`,
       providesTags: (result) =>
         result
           ? [
@@ -542,8 +570,8 @@ export const studentsApiSlice = createApi({
           : [{ type: 'Report', id: `LIST` }],
     }),
 
-    getTeamReportClassificationByFormat: build.query<ReportClassificationByFormat[], number>({
-      query: (idFormatoAvaliacao) => `/relatorios/classificacao-por-formato/${idFormatoAvaliacao}`,
+    getTeamReportClassificationByFormat: build.query<ReportClassificationByFormat[], { idFormatoAvaliacao: number; ano?: number }>({
+      query: ({ idFormatoAvaliacao, ano }) => `/relatorios/classificacao-por-formato/${idFormatoAvaliacao}${ano ? `?ano=${ano}` : ''}`,
       providesTags: (result) =>
         result
           ? [
@@ -551,6 +579,11 @@ export const studentsApiSlice = createApi({
             { type: 'Report', id: `LIST` },
           ]
           : [{ type: 'Report', id: `LIST` }],
+    }),
+
+    getDistinctYears: build.query<number[], void>({
+      query: () => '/equipes/anos',
+      providesTags: () => [{ type: 'Team', id: 'YEARS_LIST' }],
     }),
 
     //ODS
@@ -633,6 +666,7 @@ export const {
   useGetAllTeamsQuery,
   useUpdateTeamMutation,
   useCreateTeamMutation,
+  useGetDistinctYearsQuery,
 
   //Teachers
   useGetTeacherQuery,

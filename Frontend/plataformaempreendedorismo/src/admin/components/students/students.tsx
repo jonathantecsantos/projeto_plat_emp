@@ -13,10 +13,13 @@ import { StudentsResponse } from '../../../model/student'
 import { formatDate, Roles } from '../../../utils/types'
 import { AdminHeader } from '../common/adminHeader'
 import { TableComponent } from '../table'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
 import { TableComponentClickRowProps, TableComponentSetCurrPageProps } from '../table/common'
 
 
 export const Students = () => {
+  const { selectedYear } = useSelector((state: RootState) => state.year)
   const { data: students, isLoading, error, refetch } = useGetAllStudentsQuery()
   const [deleteStudent, { isLoading: studentDelet }] = useDeleteStudentMutation()
   const [passordReset, { isLoading: resetPassword }] = usePasswordResetMutation()
@@ -49,13 +52,16 @@ export const Students = () => {
 
   const filteredStudents = useMemo(() => {
     if (!students) return []
-    return students.filter((student) =>
-      student.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.cpf.toLowerCase().includes(searchTerm.toLowerCase())
+    return students.filter((student) => {
+      const matchSearch = student.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.cpf.toLowerCase().includes(searchTerm.toLowerCase());
 
-    )
-  }, [students, searchTerm])
+      const matchYear = student.anoLetivo === selectedYear;
+
+      return matchSearch && matchYear;
+    })
+  }, [students, searchTerm, selectedYear])
 
   const handleSearch = (query: string) => {
     setSearchParams({ search: query })
@@ -165,6 +171,7 @@ export const Students = () => {
               'Equipe',
               'Nascimento',
               'Tam. Camisa',
+              'Ano Letivo',
               'Ação'
             ]}
 
@@ -182,6 +189,7 @@ export const Students = () => {
                 <td className="px-4 capitalize">{student.nomeEquipe.toLowerCase()}</td>
                 <td className="px-4">{student.dataNascimento && formatDate(student.dataNascimento.toString())}</td>
                 <td className="px-4 capitalize">{student.tamanhoCamisa}</td>
+                <td className="px-4">{student.anoLetivo}</td>
                 <td className="px-4">
                   <IconButton
                     className='hover:text-white no-row-click'

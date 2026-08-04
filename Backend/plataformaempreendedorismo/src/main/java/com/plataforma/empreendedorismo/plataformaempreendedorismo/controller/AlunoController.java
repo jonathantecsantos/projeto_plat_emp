@@ -67,7 +67,7 @@ public class AlunoController {
             UsuarioRecord usuarioRecord = alunoService.criarAluno(alunoCadastroRecord);
             return ResponseEntity.ok(usuarioRecord);
         }catch (CpfDuplicadoException | EmailDuplicadoException | LimiteProfessorEquipeException |
-                CpfUtilizadoException | EmailUtilizadoException e) {
+                CpfUtilizadoException | EmailUtilizadoException | AlunoJaInscritoNoAnoAtualException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }catch (Exception e){
             return ResponseEntity.badRequest().build();

@@ -24,9 +24,10 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
     @Query(value = "SELECT e.nome AS equipe, TRUNCATE(SUM(av.nota) / 3, 2) AS totalNota " +
             "FROM avaliacao av " +
             "JOIN equipe e ON av.id_equipe = e.id " +
+            "WHERE (:ano IS NULL OR e.ano = :ano) " +
             "GROUP BY e.nome " +
             "ORDER BY totalNota DESC", nativeQuery = true)
-    List<Object[]> findEquipeNotaOrderByTotalNotaDesc();
+    List<Object[]> findEquipeNotaOrderByTotalNotaDesc(@Param("ano") Integer ano);
 
     @Query(value = "SELECT e.nome as equipe, fa.descricao, TRUNCATE(SUM(av.nota) / 3, 2) AS totalNota " +
             "FROM avaliacao av " +
@@ -34,11 +35,13 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             "JOIN criterio_avaliacao ca ON ca.id = av.id_criterio_avaliacao " +
             "JOIN formato_avaliacao fa ON fa.id = ca.id_formato_avaliacao " +
             "WHERE fa.id = :idFormatoAvaliacao "  +
+            "AND (:ano IS NULL OR e.ano = :ano) " +
             "GROUP BY e.nome, fa.id, fa.descricao " +
             "ORDER BY totalNota DESC",
             nativeQuery = true)
     List<Object[]> findClassificacaoPorEquipeEFormato(
-            @Param("idFormatoAvaliacao") Long idFormatoAvaliacao
+            @Param("idFormatoAvaliacao") Long idFormatoAvaliacao,
+            @Param("ano") Integer ano
     );
 
     @Query(value = "SELECT e.nome as equipe, fa.descricao as formato, ca.descricao as criterio, sa.descricao as subcriterio, sa.id as id_subcriterio, TRUNCATE(SUM(av.nota) / 3, 2) as total_nota from avaliacao av " +
@@ -57,8 +60,9 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             "join criterio_avaliacao ca on ca.id = av.id_criterio_avaliacao " +
             "join subcriterio_avaliacao sa on sa.id = av.id_subcriterio_avaliacao " +
             "JOIN formato_avaliacao fa ON fa.id = ca.id_formato_avaliacao " +
+            "WHERE (:ano IS NULL OR e.ano = :ano) " +
             "group by av.id_equipe, av.id_criterio_avaliacao, av.id_subcriterio_avaliacao " +
             "ORDER BY e.nome DESC",
             nativeQuery = true)
-    List<Object[]> getRelatorioClassificatorio();
+    List<Object[]> getRelatorioClassificatorio(@Param("ano") Integer ano);
 }

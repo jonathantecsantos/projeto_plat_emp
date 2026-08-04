@@ -76,7 +76,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   }
 
   // const handlePrintBanner = () => {
-  //   const bannerPreviewUrl = `/banner-preview/${id}`
+  //   const bannerPreviewUrl = RoutesNames.bannerPreview ? RoutesNames.bannerPreview.replace(':id', id.toString()) : `/banner-preview/${id}`
   //   const printWindow = window.open(bannerPreviewUrl, "_blank")
 
   //   if (printWindow) {
@@ -91,6 +91,23 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   //     window.addEventListener("message", handleMessage)
   //   }
   // }
+
+  const handlePrintPrototype = () => {
+    const prototypePreviewUrl = RoutesNames.prototypePreview ? RoutesNames.prototypePreview.replace(':id', id.toString()) : `/teams/prototype-preview/${id}`
+    const printWindow = window.open(prototypePreviewUrl, "_blank")
+
+    if (printWindow) {
+      const handleMessage = (event: MessageEvent) => {
+        if (event.origin === window.location.origin && event.data === "ready-to-print-prototype") {
+          printWindow.print()
+          window.removeEventListener("message", handleMessage) // Remove o listener após o uso
+        }
+      }
+
+      // Escuta a mensagem da página de prototype-preview
+      window.addEventListener("message", handleMessage)
+    }
+  }
 
   const handleDownloadBannerSVG = async () => {
     try {
@@ -330,7 +347,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const actions = [
     {
       icon: <SchoolIcon />, name: 'Adicionar Aluno', onClick: () => {
-        if (team?.alunos && team.alunos.length >= 10) {
+        if (team?.alunos && team.alunos.length > 10) {
           enqueueSnackbar('Permitido até 10 Alunos por Time', { variant: 'warning' })
           return
         }
@@ -405,6 +422,30 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   <PrintIcon fontSize='medium' />
                   <span>Imprimir Inscrição</span>
                 </li>
+                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.PROTOTIPO)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.PROTOTIPO)
+                      return
+                    }
+                    handlePrintPrototype()
+                  }}>
+                  <PrintIcon fontSize='medium' />
+                  <span>Imprimir Protótipo</span>
+                </li>
+                {/* <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.CANVAS)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.CANVAS)
+                      return
+                    }
+                    handlePrintBanner()
+                  }}>
+                  <PrintIcon fontSize='medium' />
+                  <span>Imprimir Canvas</span>
+                </li> */}
                 <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
                   onClick={async () => {
                     const response = await getEventById(EventsTypes.PROTOTIPO)

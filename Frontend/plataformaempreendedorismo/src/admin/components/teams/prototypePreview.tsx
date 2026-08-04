@@ -80,16 +80,30 @@ export const PrototypePreviewComponent = ({ id, disableAutoPrint = false, scale 
   }, [cronogramaUrl, memorialUrl, avatar])
 
   useEffect(() => {
-    if (!disableAutoPrint && !isFetchingPrototyping && !isFetchingTeam && prototyping && imagesLoaded) {
-      setTimeout(() => {
-        if (window.opener) {
-          window.opener.postMessage("ready-to-print-banner", "*")
-        } else {
-          window.print()
-        }
-      }, 800)
+    if (disableAutoPrint) return
+
+    const handleAfterPrint = () => {
+      window.close()
+    }
+
+    window.onafterprint = handleAfterPrint
+
+    if (!isFetchingPrototyping && !isFetchingTeam && prototyping && imagesLoaded) {
+      window.print()
+    }
+
+    return () => {
+      window.onafterprint = null
     }
   }, [isFetchingPrototyping, isFetchingTeam, prototyping, team, imagesLoaded, disableAutoPrint])
+
+  useEffect(() => {
+    if (disableAutoPrint) return
+
+    if (!isFetchingPrototyping && !isFetchingTeam && prototyping && imagesLoaded) {
+      window.opener?.postMessage("ready-to-print-prototype", window.location.origin)
+    }
+  }, [isFetchingPrototyping, isFetchingTeam, prototyping, imagesLoaded, disableAutoPrint])
 
   return (
     <>

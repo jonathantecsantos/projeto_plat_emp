@@ -6,7 +6,7 @@ export const PrototypePreviewPage = () => {
 
   return (
     <div className="flex justify-center items-center w-full min-h-screen bg-gray-200 p-4 print:p-0 print:bg-white">
-      <PrototypePreviewComponent id={parseInt(id!)} disableAutoPrint={true} />
+      <PrototypePreviewComponent id={parseInt(id!)} />
     </div>
   )
 }

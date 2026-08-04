@@ -28,7 +28,7 @@ public record ProfessorListaRecord(
                 professor.getTamanhoCamisa(),
                 professor.getEquipes() != null
                         ? professor.getEquipes().stream()
-                        .map(e -> e.getNome())
+                        .map(e -> e.getAno() != null ? "[" + e.getAno() + "] " + e.getNome() : e.getNome())
                         .collect(Collectors.toList())
                         : List.of(),
                 professor.getHabilitado()

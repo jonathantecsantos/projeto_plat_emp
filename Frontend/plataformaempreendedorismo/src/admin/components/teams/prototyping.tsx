@@ -211,83 +211,119 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
         <h2 className="text-2xl font-bold text-center">Prototipação - Time: {teamName}</h2>
 
       </div>
-      <h1 className="font-bold text-2xl max-w-4xl mx-auto mb-6">
+      <h1 className="font-bold text-2xl max-w-4xl mx-auto mb-12">
         DLEI - Formulário p/ Cadastramento da Proposta do Protótipo da Solução do Problema da Instituição de Impacto Social - Protótipo Versão Física ou Digital
       </h1>
 
-      {/* Sessão 1: Informações Gerais da Solução (Fundo #628e48) */}
+      <div className="bg-[#075e95] text-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto mb-8 text-left grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+          <p className="font-semibold text-base mb-3 text-white">
+            TEXTO (BREVE DESCRIÇÃO DO TIME, PROJETO E PRODUTO).
+          </p>
+          <div className="mt-auto">
+            <TextAreaComponent
+              placeholder="Digite sua resposta para o tipo de apoio"
+              value={formValues?.tipoApoio}
+              onChange={(e) => handleValueChange(e.target.value, "tipoApoio")}
+            />
+          </div>
+        </div>
+
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+          <p className="font-semibold text-base mb-3 text-white">
+            ANEXE ADICIONALMENTE ESQUEMAS, IMAGENS, FIGURAS, FOTOS, VÍDEOS, SE ACHAR NECESSÁRIO
+          </p>
+          <div className="mt-auto">
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleEsquemaChange}
+              id={AnexoTypes.ANEXO.descricao}
+              className={inputClasses}
+            />
+            {teamPrototyping?.anexos && (
+              <FileDownload anexos={teamPrototyping.anexos}
+                type={AnexoTypes.ANEXO.descricao} />
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="bg-[#628e48] opacity-80 text-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto mb-8 text-left space-y-6">
         <h3 className="text-xl font-bold border-b border-white/30 pb-2 text-white text-center uppercase tracking-wide">
           Detalhamento da Solução e Parcerias
         </h3>
 
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3">
-            DEPOIS DA VISITA ÀS INSTITUIÇÕES DE IMPACTO SOCIAL (IIS) E DO QUE VIVENCIAMOS NO HACKATHON DAY, QUAL O PROBLEMA PRINCIPAL E DEFINITIVO DA IIS QUE VOCÊS ESCOLHERAM, QUE ESTÁ ASSOCIADO AOS ODS's, PARA O QUAL FOI CONCEBIDA UM PROTÓTIPO / SOLUÇÃO INICIAL?
-          </p>
-          <TextAreaComponent
-            placeholder="Digite sua resposta para o problema principal"
-            value={formValues.problemaPrincipal}
-            onChange={(e) => handleValueChange(e.target.value, "problemaPrincipal")}
-            label="Problema Principal"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+            <p className="font-semibold text-base mb-3">
+              DEPOIS DA VISITA ÀS INSTITUIÇÕES DE IMPACTO SOCIAL (IIS) E DO QUE VIVENCIAMOS NO HACKATHON DAY, QUAL O PROBLEMA PRINCIPAL E DEFINITIVO DA IIS QUE VOCÊS ESCOLHERAM, QUE ESTÁ ASSOCIADO AOS ODS's, PARA O QUAL FOI CONCEBIDA UM PROTÓTIPO / SOLUÇÃO INICIAL?
+            </p>
+            <div className="mt-auto">
+              <TextAreaComponent
+                placeholder="Digite sua resposta para o problema principal"
+                value={formValues.problemaPrincipal}
+                onChange={(e) => handleValueChange(e.target.value, "problemaPrincipal")}
+                label="Problema Principal"
+              />
+            </div>
+          </div>
+
+          <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+            <p className="font-semibold text-base mb-3 text-white">
+              QUAL A PROPOSTA DE VALOR DO PROTÓTIPO DA SOLUÇÃO, ISTO É, COMO O PRODUTO OU SERVIÇO IDEALIZADO RESOLVE O PROBLEMA DA IIS ESCOLHIDA PELO SEU TIME?
+            </p>
+            <div className="mt-auto">
+              <TextAreaComponent
+                placeholder="Digite sua resposta para a proposta de valor"
+                value={formValues.propostaValor}
+                onChange={(e) => handleValueChange(e.target.value, "propostaValor")}
+                label="Proposta de Valor"
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3 text-white">
-            QUAL A PROPOSTA DE VALOR DO PROTÓTIPO DA SOLUÇÃO, ISTO É, COMO O PRODUTO OU SERVIÇO IDEALIZADO RESOLVE O PROBLEMA DA IIS ESCOLHIDA PELO SEU TIME?
-          </p>
-          <TextAreaComponent
-            placeholder="Digite sua resposta para a proposta de valor"
-            value={formValues.propostaValor}
-            onChange={(e) => handleValueChange(e.target.value, "propostaValor")}
-            showLabel
-            label="Proposta de Valor"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+            <p className="font-semibold text-base mb-3 text-white">
+              QUANDO COMPARADA COM OUTRAS SOLUÇÕES JÁ EXISTENTES NO MERCADO, QUAIS AS VANTAGENS COMPETITIVAS DO PROTÓTIPO DA SOLUÇÃO IDEALIZADA PELO TIME P/ RESOLVER O PROBLEMA DA IIS?
+            </p>
+            <div className="mt-auto">
+              <TextAreaComponent
+                placeholder="Digite sua resposta para as vantagens competitivas"
+                value={formValues.vantagemCompetitiva}
+                onChange={(e) => handleValueChange(e.target.value, "vantagemCompetitiva")}
+              />
+            </div>
+          </div>
+
+          <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+            <p className="font-semibold text-base mb-3 text-white">
+              QUAIS AS PRINCIPAIS NECESSIDADES DO SEU TIME P/ DESENVOLVIMENTO COMPLETO DO PROTÓTIPO DA SOLUÇÃO?
+            </p>
+            <div className="mt-auto">
+              <TextAreaComponent
+                placeholder="Digite sua resposta para as principais necessidades"
+                value={formValues.principaisNecessidades}
+                onChange={(e) => handleValueChange(e.target.value, "principaisNecessidades")}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3 text-white">
-            QUANDO COMPARADA COM OUTRAS SOLUÇÕES JÁ EXISTENTES NO MERCADO, QUAIS AS VANTAGENS COMPETITIVAS DO PROTÓTIPO DA SOLUÇÃO IDEALIZADA PELO TIME P/ RESOLVER O PROBLEMA DA IIS?
-          </p>
-          <TextAreaComponent
-            placeholder="Digite sua resposta para as vantagens competitivas"
-            value={formValues.vantagemCompetitiva}
-            onChange={(e) => handleValueChange(e.target.value, "vantagemCompetitiva")}
-          />
-        </div>
-
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3 text-white">
-            QUAIS AS PRINCIPAIS NECESSIDADES DO SEU TIME P/ DESENVOLVIMENTO COMPLETO DO PROTÓTIPO DA SOLUÇÃO?
-          </p>
-          <TextAreaComponent
-            placeholder="Digite sua resposta para as principais necessidades"
-            value={formValues.principaisNecessidades}
-            onChange={(e) => handleValueChange(e.target.value, "principaisNecessidades")}
-          />
-        </div>
-
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
+        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
           <p className="font-semibold text-base mb-3 text-white">
             QUAIS PARCERIAS SERIAM BEM-VINDAS PARA O APRIMORAMENTO DO PROTÓTIPO DA SOLUÇÃO, TAIS COMO: EMPRESAS ESTABELECIDAS, LABORATÓRIOS DE UNIVERSIDADES, ENTIDADES DO SISTEMA S, PARQUE TECNOLÓGICO, INCUBADORA DE EMPRESA?
           </p>
-          <TextAreaComponent
-            placeholder="Digite sua resposta para as parcerias"
-            value={formValues.parcerias}
-            onChange={(e) => handleValueChange(e.target.value, "parcerias")}
-          />
-        </div>
-
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3 text-white">
-            QUE TIPO DE APOIO SERIA NECESSÁRIO DESSAS ENTIDADES / EMPRESAS / ICTs PARCEIRAS?
-          </p>
-          <TextAreaComponent
-            placeholder="Digite sua resposta para o tipo de apoio"
-            value={formValues?.tipoApoio}
-            onChange={(e) => handleValueChange(e.target.value, "tipoApoio")}
-          />
+          <div className="mt-auto">
+            <TextAreaComponent
+              placeholder="Digite sua resposta para as parcerias"
+              value={formValues.parcerias}
+              onChange={(e) => handleValueChange(e.target.value, "parcerias")}
+            />
+          </div>
         </div>
       </div>
 
@@ -297,58 +333,49 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
           Cronograma, Memoriais e Anexos
         </h3>
 
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3 text-white">
-            QUAL O CRONOGRAMA DE CONSTRUÇÃO DO PROTÓTIPO DA SOLUÇÃO DEFINITIVA ATÉ SUA VERSÃO FINAL (NOS PRÓXIMOS DOIS MESES - 12/08 A 12/10)?
-          </p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleCronogramaChange}
-            id={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao}
-            className={inputClasses}
-          />
-          {teamPrototyping?.anexos && (
-            <FileDownload anexos={teamPrototyping.anexos}
-              type={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao} />
-          )}
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+            <p className="font-semibold text-base mb-3 text-white">
+              QUAL O CRONOGRAMA DE CONSTRUÇÃO DO PROTÓTIPO DA SOLUÇÃO DEFINITIVA ATÉ SUA VERSÃO FINAL (NOS PRÓXIMOS DOIS MESES - 12/08 A 12/10)?
+            </p>
+            <div className="mt-auto">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleCronogramaChange}
+                id={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao}
+                className={inputClasses}
+              />
+            </div>
+            {teamPrototyping?.anexos && (
+              <FileDownload anexos={teamPrototyping.anexos}
+                type={AnexoTypes.CRONOGRAMA_CONSTRUCAO.descricao} />
+            )}
+          </div>
 
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3 text-white">
-            MEMORIAL DESCRITIVO SIMPLIFICADO (DESCRIÇÃO RESUMIDA DAS PRINCIPAIS FUNCIONALIDADES DO PROTÓTIPO DA SOLUÇÃO)
-          </p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleMemorialChange}
-            id={AnexoTypes.MEMORIAL_DESCRITIVO.descricao}
-            className={inputClasses}
-          />
-          {teamPrototyping?.anexos && (
-            <FileDownload anexos={teamPrototyping.anexos}
-              type={AnexoTypes.MEMORIAL_DESCRITIVO.descricao} />
-          )}
+          <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs flex flex-col justify-between h-full">
+            <p className="font-semibold text-base mb-3 text-white">
+              MEMORIAL DESCRITIVO SIMPLIFICADO (DESCRIÇÃO RESUMIDA DAS PRINCIPAIS FUNCIONALIDADES DO PROTÓTIPO DA SOLUÇÃO)
+            </p>
+            <div className="mt-auto">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleMemorialChange}
+                id={AnexoTypes.MEMORIAL_DESCRITIVO.descricao}
+                className={inputClasses}
+              />
+            </div>
+            {teamPrototyping?.anexos && (
+              <FileDownload anexos={teamPrototyping.anexos}
+                type={AnexoTypes.MEMORIAL_DESCRITIVO.descricao} />
+            )}
+          </div>
         </div>
+      </div>
 
-        <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
-          <p className="font-semibold text-base mb-3 text-white">
-            ANEXE ADICIONALMENTE ESQUEMAS, IMAGENS, FIGURAS, FOTOS, VÍDEOS, SE ACHAR NECESSÁRIO
-          </p>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleEsquemaChange}
-            id={AnexoTypes.ANEXO.descricao}
-            className={inputClasses}
-          />
-          {teamPrototyping?.anexos && (
-            <FileDownload anexos={teamPrototyping.anexos}
-              type={AnexoTypes.ANEXO.descricao} />
-          )}
-        </div>
 
+      <div className="bg-[#9d9b9b]  text-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto mb-8 text-left space-y-6">
         <div className="bg-white/10 p-4 rounded-lg backdrop-blur-xs">
           <p className="font-semibold text-base mb-3 text-white">
             MEMORIAL DESCRITIVO COMPLETO (DESCRIÇÃO DETALHADA DAS FUNCIONALIDADES DO PROTÓTIPO DA SOLUÇÃO)

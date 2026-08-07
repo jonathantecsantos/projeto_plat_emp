@@ -1,0 +1,39 @@
+import defaultAdminBanner from '@assets/adminBanner.jpg'
+import defaultFooter from '@assets/footer.jpg'
+import defaultFooter2025 from '@assets/footer2025.png'
+import defaultHeader from '@assets/header.jpg'
+import { useSelector } from 'react-redux'
+import { useGetAnexoTemplateByAnoQuery } from '@/api/studentApi'
+import { RootState } from '@/redux/store'
+import { getImageUrl, TipoTemplate } from '@/utils/types'
+
+export const useTemplateImages = (anoletivo?: number) => {
+  const selectedYear = useSelector((state: RootState) => state.year.selectedYear)
+  const year = anoletivo ?? selectedYear ?? new Date().getFullYear()
+
+  const { data: templates, isLoading, isError } = useGetAnexoTemplateByAnoQuery(year)
+
+  const UPLOAD_FOLDER = import.meta.env.VITE_UPLOAD_FOLDER
+  const API_URL = import.meta.env.VITE_API_URL
+
+  const headerRecord = templates?.find((t) => t.tipoTemplate === TipoTemplate.CABECALHO)
+  const footerRecord = templates?.find((t) => t.tipoTemplate === TipoTemplate.RODAPE)
+
+  const headerDynamicUrl = headerRecord?.caminho
+    ? getImageUrl(headerRecord.caminho, UPLOAD_FOLDER, API_URL)
+    : null
+
+  const footerDynamicUrl = footerRecord?.caminho
+    ? getImageUrl(footerRecord.caminho, UPLOAD_FOLDER, API_URL)
+    : null
+
+  return {
+    headerAdminUrl: headerDynamicUrl || defaultAdminBanner,
+    headerBannerUrl: headerDynamicUrl || defaultHeader,
+    headerUrl: headerDynamicUrl || defaultHeader,
+    footerUrl: footerDynamicUrl || defaultFooter,
+    footer2025Url: footerDynamicUrl || defaultFooter2025,
+    isLoading,
+    isError,
+  }
+}

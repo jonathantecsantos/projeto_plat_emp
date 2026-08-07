@@ -1,7 +1,6 @@
-import footer from '@assets/footer2025.png'
-import header from '@assets/header.jpg'
 import { useEffect, useRef, useState } from "react"
 import { useGetTeamByIdQuery, useGetTeamPrototypingByIdQuery } from "../../../api/studentApi"
+import { useTemplateImages } from "../../../hooks/useTemplateImages"
 import { AnexoTypeDescription } from "../../../model/prototyping"
 import { getImageUrl } from "../../../utils/types"
 
@@ -43,6 +42,7 @@ export const PrototypePreviewComponent = ({ id, disableAutoPrint = false, scale 
   const bannerRef = useRef<HTMLDivElement>(null)
   const { data: prototyping, isFetching: isFetchingPrototyping } = useGetTeamPrototypingByIdQuery(id)
   const { data: team, isFetching: isFetchingTeam } = useGetTeamByIdQuery(id)
+  const { headerBannerUrl, footer2025Url } = useTemplateImages(team?.ano)
 
   const [imagesLoaded, setImagesLoaded] = useState(false)
 
@@ -142,7 +142,7 @@ export const PrototypePreviewComponent = ({ id, disableAutoPrint = false, scale 
       >
         {/* Header Banner */}
         <div className="w-full flex justify-center shrink-0">
-          <img src={header} alt="Header DLEI 2025" className="w-full max-h-[85px] object-contain print:max-h-[70px]" />
+          <img src={headerBannerUrl} alt="Header DLEI 2025" className="w-full max-h-[85px] object-contain print:max-h-[70px]" crossOrigin="anonymous" />
         </div>
 
         {/* Sessão 1: Informações do Time (Topo) */}
@@ -295,7 +295,7 @@ export const PrototypePreviewComponent = ({ id, disableAutoPrint = false, scale 
 
         {/* Footer Banner */}
         <div className="w-full flex justify-center shrink-0">
-          <img src={footer} alt="Footer Realização e Parcerias" className="w-full max-h-[50px] object-contain print:max-h-[40px]" />
+          <img src={footer2025Url} alt="Footer Realização e Parcerias" className="w-full max-h-[50px] object-contain print:max-h-[40px]" crossOrigin="anonymous" />
         </div>
       </div>
     </>

@@ -1,10 +1,12 @@
-import footer from '@assets/footer.jpg'
+import { useTemplateImages } from '../../../hooks/useTemplateImages'
 
 export const FooterImage = () => {
+  const { footerUrl } = useTemplateImages()
   return (
     <img
-      src={footer}
+      src={footerUrl}
       className="object-contain  w-full h-40 mt-10"
+      crossOrigin="anonymous"
     />
   )
 }

@@ -1,27 +1,26 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { ActivityType } from '../model/activityTypes'
-import { Banner } from '../model/banner'
-import { EventConfig, Events } from '../model/config'
-import { Coordinator } from '../model/coordinators'
-import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '../model/evaluationFormat'
-import { Evaluator } from '../model/evaluator'
-import { Institution } from '../model/institution'
-import { Ods } from '../model/ods'
-import { TeamPrototypeById } from '../model/prototyping'
-import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '../model/reports'
-import { CreateOrUpdateStudent, StudentIdResponse, StudentRecordResponse, StudentsResponse, } from '../model/student'
-import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '../model/teacher'
-import { TeamIdResponse, TeamRegisterPayload, TeamsResponse, UpdateTeam } from '../model/team'
-import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '../model/user'
-import { authFetchBaseQuery } from '../redux/auth.middleware'
-import { EvaluationTypes } from '../utils/types'
-
+import { ActivityType } from '@/model/activityTypes'
+import { Banner } from '@/model/banner'
+import { EventConfig, Events } from '@/model/config'
+import { Coordinator } from '@/model/coordinators'
+import { Evaluation, EvaluationById, EvaluationData, TeamEvaluation, TeamEvaluationResponse } from '@/model/evaluationFormat'
+import { Evaluator } from '@/model/evaluator'
+import { Institution } from '@/model/institution'
+import { Ods } from '@/model/ods'
+import { TeamPrototypeById } from '@/model/prototyping'
+import { ItensRelatorio, RelatorioGeral, ReportClassification, ReportClassificationByFormat, ReportTeamId } from '@/model/reports'
+import { CreateOrUpdateStudent, StudentIdResponse, StudentRecordResponse, StudentsResponse, } from '@/model/student'
+import { CreateOrUpdateTeacher, TeacherIdResponse, TeachersResponse } from '@/model/teacher'
+import { TeamIdResponse, TeamRegisterPayload, TeamsResponse, UpdateTeam } from '@/model/team'
+import { PasswordResetRequest, PasswordResetResponse, UserSettings } from '@/model/user'
+import { authFetchBaseQuery } from '@/redux/auth.middleware'
+import { AnexoTemplateRecord, EvaluationTypes } from '@/utils/types'
 
 export const studentsApiSlice = createApi({
   reducerPath: 'studentsApi',
   tagTypes: ['Student', 'Team', 'Teacher', 'Banner',
     'Evaluation', 'importApi', 'Ods', 'Prototype', 'Report', 'Evaluator', 'Coordinator', 'Events',
-    'Register', 'ActivityType', 'Institution'
+    'Register', 'ActivityType', 'Institution', 'AnexoTemplate'
   ],
   baseQuery: authFetchBaseQuery(import.meta.env.VITE_API_URL),
   // baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
@@ -61,6 +60,18 @@ export const studentsApiSlice = createApi({
         { type: 'Teacher', id: 'LIST' },
         { type: 'Team', id: 'teamById' },
       ],
+    }),
+
+    //ANEXO TEMPLATE
+    getAnexoTemplateByAno: build.query<AnexoTemplateRecord[], number>({
+      query: (ano) => `/anexo_template/${ano}`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ caminho }: any) => ({ type: 'AnexoTemplate' as const, id: caminho })),
+            { type: 'AnexoTemplate', id: 'LIST' },
+          ]
+          : [{ type: 'AnexoTemplate', id: 'LIST' }],
     }),
 
     //CONFIGS
@@ -713,6 +724,10 @@ export const {
   useGetInstitutionsQuery,
   //Activity Type
   useGetActivityTypesQuery,
+
+  //Anexo Template
+  useGetAnexoTemplateByAnoQuery,
+  useLazyGetAnexoTemplateByAnoQuery,
 
 } = studentsApiSlice
 

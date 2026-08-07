@@ -1,6 +1,7 @@
-import adminBanner from '@assets/adminBanner.jpg'
+import { useTemplateImages } from '../../../hooks/useTemplateImages'
 
 export const BannerImage = () => {
+  const { headerAdminUrl } = useTemplateImages()
 
   return (
     <div className="w-full overflow-hidden">
@@ -8,7 +9,8 @@ export const BannerImage = () => {
         className="w-full object-cover md:object-contain h-28"
         loading='lazy'
         alt='Banner'
-        src={adminBanner}
+        src={headerAdminUrl}
+        crossOrigin="anonymous"
       />
     </div>
   )

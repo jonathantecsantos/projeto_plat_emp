@@ -178,21 +178,25 @@ public class PrototipoService {
 
     private List<AnexoPrototipo> tratarAnexos(List<AnexoPrototipoRecord> files, Prototipo prototipo, Equipe equipe) throws Exception {
         List<AnexoPrototipo> anexosExistentes = prototipo.getAnexos();
-        List<String> novosNomesAnexos = files.stream()
-                .map(record -> record.file().getOriginalFilename())
-                .toList();
 
-        List<AnexoPrototipo> anexosParaRemover = anexosExistentes.stream()
-                .filter(anexo -> !novosNomesAnexos.contains(anexo.getNomeAnexo()))
-                .collect(Collectors.toList());
+        if (files != null && !files.isEmpty()) {
+            Set<Long> tiposEnviados = files.stream()
+                    .map(AnexoPrototipoRecord::tipoAnexoId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
 
-        if (!anexosParaRemover.isEmpty()) {
-            anexosExistentes.removeAll(anexosParaRemover);
-            anexoPrototipoRepository.deleteAll(anexosParaRemover);
+            List<AnexoPrototipo> anexosParaRemover = anexosExistentes.stream()
+                    .filter(anexo -> anexo.getTipoAnexoPrototipo() != null && tiposEnviados.contains(anexo.getTipoAnexoPrototipo().getId()))
+                    .collect(Collectors.toList());
+
+            if (!anexosParaRemover.isEmpty()) {
+                anexosExistentes.removeAll(anexosParaRemover);
+                anexoPrototipoRepository.deleteAll(anexosParaRemover);
+            }
+
+            List<AnexoPrototipo> novosAnexos = salvarAnexos(files, prototipo, equipe);
+            anexosExistentes.addAll(novosAnexos);
         }
-
-        List<AnexoPrototipo> novosAnexos = salvarAnexos(files, prototipo, equipe);
-        anexosExistentes.addAll(novosAnexos);
 
         return anexosExistentes;
     }

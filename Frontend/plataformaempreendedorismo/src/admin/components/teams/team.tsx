@@ -12,7 +12,7 @@ import { useSnackbar } from 'notistack'
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useGetBannerByIdQuery, useGetTeamByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
+import { useGetBannerByIdQuery, useGetTeamByIdQuery, useGetTeamPrototypingByIdQuery, useLazyGetEventValidateByIdQuery, useUpdateTeamMutation } from '../../../api/studentApi'
 import { RoutesNames } from '../../../globals'
 import { ActivityType } from '../../../model/activityTypes'
 import { EventsTypes } from '../../../model/config'
@@ -25,9 +25,10 @@ import { BannerPreviewComponent } from '../banner/bannerPreview'
 import { FooterImage } from "../common/adminFooter"
 import { EditActivityTypes } from './editActivityTypes'
 import { EditInstitution } from './editInstitutions'
+import { EditLogomarcasAndParceiros } from './editLogomarcasAndParceiros'
 import { EditOds } from './editOds'
 import { EditTeamName } from './editTeamName'
-import { EditLogomarcasAndParceiros } from './editLogomarcasAndParceiros'
+import { PrototypePreviewComponent } from './prototypePreview'
 import { StudentCard } from './studentCard'
 import { TeacherCard } from './teacherCard'
 
@@ -35,6 +36,7 @@ import { TeacherCard } from './teacherCard'
 export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const { data: team, error, isLoading } = useGetTeamByIdQuery(id)
   const { data: banner } = useGetBannerByIdQuery(id)
+  const { data: prototyping } = useGetTeamPrototypingByIdQuery(id)
   const [updateTeam, status] = useUpdateTeamMutation()
   const userGlobalState = useSelector((state: RootState) => state.userInfo)
 
@@ -50,7 +52,10 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
   const pitchRef = useRef<HTMLDivElement>(null)
   const hiddenBannerRef = useRef<HTMLDivElement>(null)
   const [showHiddenBanner, setShowHiddenBanner] = useState(false)
+  const hiddenPrototypeRef = useRef<HTMLDivElement>(null)
   const [isDownloadingBanner, setIsDownloadingBanner] = useState(false)
+  const [isDownloadingPrototype, setIsDownloadingPrototype] = useState(false)
+  const [showHiddenPrototype, setShowHiddenPrototype] = useState(false)
 
   useEffect(() => {
     if (pitchValidated && pitchRef.current) {
@@ -192,6 +197,93 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
       enqueueSnackbar('Erro ao gerar o banner. Tente novamente.', { variant: 'error' })
       setShowHiddenBanner(false)
       setIsDownloadingBanner(false)
+    }
+  }
+
+  const handleDownloadProtypeSVG = async () => {
+    try {
+      if (isDownloadingPrototype) {
+        return
+      }
+
+      if (!prototyping) {
+        enqueueSnackbar('Não encontrado. Preencha o protótipo primeiro.', { variant: 'warning' })
+        return
+      }
+
+      setIsDownloadingPrototype(true)
+
+      // Mostra o banner oculto para renderizar
+      setShowHiddenPrototype(true)
+
+      // Aguarda o banner renderizar e as imagens carregarem
+      await new Promise(resolve => setTimeout(resolve, 5000)) // Aumentado para 5s com 600 DPI
+
+      if (!hiddenPrototypeRef.current) {
+        enqueueSnackbar('Erro ao preparar o protótipo.', { variant: 'error' })
+        setShowHiddenPrototype(false)
+        setIsDownloadingPrototype(false)
+        return
+      }
+
+      // Captura o elemento do protótipo
+      const prototypeElement = hiddenPrototypeRef.current.querySelector('div[class*="bg-[#fefefe]"]') as HTMLElement
+
+      if (!prototypeElement) {
+        throw new Error('Elemento do protótipo não encontrado')
+      }
+
+      // IMPORTANTE: Dimensões para impressão gráfica (0.80m x 1.20m)
+      // Usando 600 DPI (dots per inch) para qualidade de gráfica ULTRA PREMIUM
+      // 1 polegada = 2.54 cm
+      // 0.80m = 80cm = 31.496 polegadas × 600 DPI = 18,898 pixels
+      // 1.20m = 120cm = 47.244 polegadas × 600 DPI = 28,346 pixels
+
+      // Dimensões finais para o arquivo de impressão
+      const targetWidth = 18898   // 0.80m em 600 DPI
+      const targetHeight = 28346  // 1.20m em 600 DPI
+
+      // Vamos usar o elemento renderizado e escalar proporcionalmente
+      const width = targetWidth
+      const height = targetHeight
+
+      // Gera a imagem PNG de altíssima qualidade com todas as fontes e imagens embutidas
+      const dataUrl = await toPng(prototypeElement, {
+        quality: 1.0,
+        pixelRatio: 1, // Não multiplica pois já estamos usando dimensões finais grandes
+        width: width,
+        height: height,
+        cacheBust: true,
+        canvasWidth: width,
+        canvasHeight: height,
+        skipFonts: false, // Garante que as fontes sejam capturadas
+        includeQueryParams: true,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left',
+          width: `${width}px`,
+          height: `${height}px`,
+          backgroundColor: '#fefefe',
+        }
+      })
+
+      // Cria um link para download
+      const link = document.createElement('a')
+      const fileName = `prototipo-${team?.nomeEquipe?.replace(/\s+/g, '-')}.png`
+      link.download = fileName
+      link.href = dataUrl
+      link.click()
+
+      enqueueSnackbar('Download iniciado com sucesso!', { variant: 'success' })
+
+      // Esconde o banner novamente
+      setShowHiddenPrototype(false)
+      setIsDownloadingPrototype(false)
+    } catch (error) {
+      console.error('Erro ao gerar prototipo:', error)
+      enqueueSnackbar('Erro ao gerar o prototipo. Tente novamente.', { variant: 'error' })
+      setShowHiddenPrototype(false)
+      setIsDownloadingPrototype(false)
     }
   }
 
@@ -434,6 +526,18 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   <PrintIcon fontSize='medium' />
                   <span>Imprimir Protótipo</span>
                 </li>
+                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                  onClick={async () => {
+                    const response = await getEventById(EventsTypes.PROTOTIPO)
+                    if (response.data == false || !response.data) {
+                      snackBarEventsTypes(EventsTypes.PROTOTIPO)
+                      return
+                    }
+                    handleDownloadProtypeSVG()
+                  }}>
+                  <DownloadIcon fontSize='medium' />
+                  <span>Download Protótipo</span>
+                </li>
                 {/* <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
                   onClick={async () => {
                     const response = await getEventById(EventsTypes.CANVAS)
@@ -533,7 +637,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   <h3 className="text-base font-semibold text-[#383691]">Logomarcas e Parceiros</h3>
                   <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => setEditLogomarcasOpen(true)} />
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row gap-2">
                   {/* Logomarca do time */}
                   <div className="flex items-center justify-between gap-2 bg-white p-2 rounded shadow-sm border border-gray-100 flex-1 min-w-[180px]">
@@ -621,7 +725,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                     <h3 className="text-base font-semibold text-[#383691]">ODS</h3>
                     <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => handleEditOdsOpen(editOdsOpen)} />
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2 flex-grow items-start">
                     {team?.odsList && team.odsList.length > 0 ? (
                       team.odsList.map((ods, index) => (
@@ -655,7 +759,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                     <h3 className="text-base font-semibold text-[#383691]">Atividades</h3>
                     <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => handleActivityTypesOpen(editActivityTypesOpen)} />
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2 flex-grow items-start">
                     {team?.tipoAtividades && team.tipoAtividades.length > 0 ? (
                       team.tipoAtividades.map((activity, index) => (
@@ -689,7 +793,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   <h3 className="text-base font-semibold text-[#383691]">Instituição</h3>
                   <ModeEditIcon className="cursor-pointer size-4 text-[#3C14A4]" onClick={() => handleInstitutionsOpen(editInstitutionsOpen)} />
                 </div>
-                
+
                 <div className="flex flex-wrap gap-2">
                   {team?.instituicoes && team.instituicoes.length > 0 ? (
                     team.instituicoes.map((institution, index) => (
@@ -804,9 +908,28 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
         </div>
       )}
 
+      {/* Banner oculto para download em alta resolução */}
+      {showHiddenPrototype && (
+        <div
+          ref={hiddenPrototypeRef}
+          style={{
+            position: 'fixed',
+            top: '-30000px',
+            left: '-30000px',
+            width: '18898px',  // 0.80m em 600 DPI
+            height: '28346px', // 1.20m em 600 DPI
+            zIndex: -9999,
+            overflow: 'hidden'
+          }}
+        >
+          {/* Fator de escala: 18898 / 994 ≈ 19.0 */}
+          <PrototypePreviewComponent id={id} disableAutoPrint={true} forExport={true} scale={19.0} />
+        </div>
+      )}
+
       {/* Dialog de loading durante o download */}
       <Dialog
-        open={isDownloadingBanner}
+        open={isDownloadingBanner || isDownloadingPrototype}
         PaperProps={{
           style: {
             backgroundColor: '#5741A6',

@@ -514,7 +514,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   <PrintIcon fontSize='medium' />
                   <span>Imprimir Inscrição</span>
                 </li>
-                <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
+                {/* <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
                   onClick={async () => {
                     const response = await getEventById(EventsTypes.PROTOTIPO)
                     if (response.data == false || !response.data) {
@@ -537,7 +537,7 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                   }}>
                   <DownloadIcon fontSize='medium' />
                   <span>Download Protótipo</span>
-                </li>
+                </li> */}
                 {/* <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
                   onClick={async () => {
                     const response = await getEventById(EventsTypes.CANVAS)

@@ -149,16 +149,20 @@ export const BannerPreviewComponent = ({ id, disableAutoPrint = false, forExport
     print:w-[994px] print:text-[12px] blur print:blur-none"
       style={baseStyles}
       ref={bannerRef}>
-      <div className="relative h-[340px] print:h-[160px]" style={scale !== 1 ? { height: `${s(160)}px` } : {}}>
+      <div className="relative h-[340px] print:h-[160px]"
+        style={scale !== 1 ? { height: `${s(124)}px`, position: 'relative', zIndex: 1, overflow: 'visible' } : {}}>
         <img
           src={headerBannerUrl}
           alt="Header"
-          className="w-[1980px] h-96 object-conver absolute print:h-[160px]"
+          className="w-full object-contain"
           crossOrigin="anonymous"
-          style={scale !== 1 ? {
-            height: `${s(160)}px`,
-            width: `${s(994)}px`
-          } : {}}
+          style={{
+            height: '85%',
+            width: '85%',
+            transform: 'scale(1.2)',
+            objectFit: 'fill',
+            marginInline:'auto'
+          }}
         />
       </div>
       {/* ----> Primeiro componente inicial parte azul */}
@@ -452,17 +456,14 @@ export const BannerPreviewComponent = ({ id, disableAutoPrint = false, forExport
           </div>
         </div>
       </div>
-      <div className="relative h-28 bottom-0 print:h-20 mt-4" style={scale !== 1 ? { height: `${s(240)}px`, marginTop: `${s(16)}px` } : {}}>
+      <div className="w-full flex justify-center" style={{ paddingTop: `${s(6)}px` }}>
         <img
           src={footerUrl}
           alt="Footer"
-          className="object-cover absolute"
           crossOrigin="anonymous"
-          style={scale !== 1 ? {
-            height: `${s(240)}px`,
-            width: `${s(994)}px`,
-            objectFit: 'cover'
-          } : {}}
+          style={{
+            objectFit: 'fill', width: '50%', marginInline: 'auto'
+          }}
         />
       </div>
     </div>

@@ -2,5 +2,7 @@ package util.enuns;
 
 public enum TipoTemplate {
     CABECALHO,
-    RODAPE
+    RODAPE,
+    CABECALHO_BANNER,
+    RODAPE_BANNER
 }

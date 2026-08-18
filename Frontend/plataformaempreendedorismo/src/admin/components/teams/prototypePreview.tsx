@@ -28,7 +28,7 @@ export const PrototypePreviewComponent = ({
   const prototypeRef = useRef<HTMLDivElement>(null)
   const { data: prototyping, isFetching: isFetchingPrototyping } = useGetTeamPrototypingByIdQuery(id)
   const { data: team, isFetching: isFetchingTeam } = useGetTeamByIdQuery(id)
-  const { headerBannerUrl, footerUrl } = useTemplateImages(team?.ano)
+  const { headerBannerUrl, footerBannerUrl } = useTemplateImages(team?.ano)
 
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const s = (value: number) => value * scale
@@ -389,7 +389,7 @@ export const PrototypePreviewComponent = ({
 
       <div className="w-full flex justify-center" style={{ paddingTop: `${s(6)}px` }}>
         <img
-          src={footerUrl}
+          src={footerBannerUrl}
           alt="Footer Realização e Parcerias"
           crossOrigin="anonymous"
           style={{

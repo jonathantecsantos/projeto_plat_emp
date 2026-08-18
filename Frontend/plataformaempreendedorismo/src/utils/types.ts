@@ -1,6 +1,6 @@
-import { ZodSchema } from "zod";
 import { TeamEvaluation, TeamEvaluationResponse } from "@/model/evaluationFormat";
 import { Ods } from "@/model/ods";
+import { ZodSchema } from "zod";
 
 export enum ImportType {
   student = 'ALUNO',
@@ -68,7 +68,9 @@ export interface Login {
 
 export enum TipoTemplate {
   CABECALHO = 'CABECALHO',
-  RODAPE = 'RODAPE'
+  RODAPE = 'RODAPE',
+  CABECALHO_BANNER = 'CABECALHO_BANNER',
+  RODAPE_BANNER = 'RODAPE_BANNER'
 }
 
 export interface AnexoTemplateRecord {

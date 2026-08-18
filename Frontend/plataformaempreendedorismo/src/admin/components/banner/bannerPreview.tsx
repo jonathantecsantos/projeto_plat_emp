@@ -63,7 +63,7 @@ export const BannerPreviewComponent = ({ id, disableAutoPrint = false, forExport
   const bannerRef = useRef<HTMLDivElement>(null)
   const { data: banner, isFetching: isFetchingBanner } = useGetBannerByIdQuery(id)
   const { data: team, isFetching: isFetchingTeam } = useGetTeamByIdQuery(id)
-  const { headerBannerUrl, footerUrl } = useTemplateImages(team?.ano)
+  const { headerBannerUrl, footerBannerUrl } = useTemplateImages(team?.ano)
 
   const [imagesLoaded, setImagesLoaded] = useState(false)
 
@@ -161,7 +161,7 @@ export const BannerPreviewComponent = ({ id, disableAutoPrint = false, forExport
             width: '85%',
             transform: 'scale(1.2)',
             objectFit: 'fill',
-            marginInline:'auto'
+            marginInline: 'auto'
           }}
         />
       </div>
@@ -458,7 +458,7 @@ export const BannerPreviewComponent = ({ id, disableAutoPrint = false, forExport
       </div>
       <div className="w-full flex justify-center" style={{ paddingTop: `${s(6)}px` }}>
         <img
-          src={footerUrl}
+          src={footerBannerUrl}
           alt="Footer"
           crossOrigin="anonymous"
           style={{

@@ -185,31 +185,26 @@ public class BannerService {
         }
     }
 
-    private List<AnexoBanner> tratarAnexos(List<MultipartFile> files, MultipartFile logotipo,Banner banner) throws IOException {
+    private List<AnexoBanner> tratarAnexos(List<MultipartFile> files, MultipartFile logotipo, Banner banner) throws IOException {
         List<AnexoBanner> anexosExistentes = banner.getAnexos();
-        List<String> novosNomesAnexos = new ArrayList<>();
 
-        if(files != null && !files.isEmpty()) {
-            novosNomesAnexos = files.stream()
-                    .map(MultipartFile::getOriginalFilename)
+        if (logotipo != null) {
+            List<AnexoBanner> logotiposAntigos = anexosExistentes.stream()
+                    .filter(anexo -> anexo.getTipoAnexo() == TipoAnexoEnum.LOGOTIPO)
                     .collect(Collectors.toList());
+            anexosExistentes.removeAll(logotiposAntigos);
+            anexoBannerRepository.deleteAll(logotiposAntigos);
         }
 
-        if(logotipo != null){
-            novosNomesAnexos.add(logotipo.getOriginalFilename());
-        }
-
-        if(!novosNomesAnexos.isEmpty()){
-            List<String> finalNovosNomesAnexos = novosNomesAnexos;
-            List<AnexoBanner> anexosParaRemover = anexosExistentes.stream()
-                    .filter(anexo -> !finalNovosNomesAnexos.contains(anexo.getNomeAnexo()))
+        if (files != null && !files.isEmpty()) {
+            List<AnexoBanner> padraoAntigos = anexosExistentes.stream()
+                    .filter(anexo -> anexo.getTipoAnexo() == TipoAnexoEnum.PADRAO)
                     .collect(Collectors.toList());
-
-            anexosExistentes.removeAll(anexosParaRemover);
-            anexoBannerRepository.deleteAll(anexosParaRemover);
+            anexosExistentes.removeAll(padraoAntigos);
+            anexoBannerRepository.deleteAll(padraoAntigos);
         }
 
-        List<AnexoBanner> novosAnexos = salvarAnexos(files,logotipo, banner);
+        List<AnexoBanner> novosAnexos = salvarAnexos(files, logotipo, banner);
         anexosExistentes.addAll(novosAnexos);
 
         return anexosExistentes;

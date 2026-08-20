@@ -102,7 +102,7 @@ export const PrototypePreviewComponent = ({
   const baseStyles = scale !== 1 ? {
     width: `${s(994)}px`,
     fontSize: `${s(12)}px`,
-    paddingInline: `${s(64)}px`,
+    paddingInline: `${s(8)}px`,
     filter: 'none'
   } : (forExport ? { width: '994px', fontSize: '18px', filter: 'none' } : {})
 
@@ -125,17 +125,24 @@ export const PrototypePreviewComponent = ({
           className="w-full object-contain"
           crossOrigin="anonymous"
           style={{
-            height: 'auto',
             width: '100%',
-            transform: 'scale(1.2)',
-            transformOrigin: 'top center'
+            height: 'auto',
+            objectFit: 'contain'
           }}
         />
       </div>
 
-      <div className="flex flex-col p-[16px]" style={{ backgroundColor: '#075e95', padding: `${s(16)}px`, marginTop: `${s(16)}px` }}>
-        <div className="overflow-hidden flex flex-col" style={{ backgroundColor: '#fefefe', border: `${s(4)}px solid #075e95`, borderRadius: `${s(12)}px` }}>
-          <div className="flex items-center p-[12px]" style={{ padding: `${s(12)}px` }}>
+      <div className="flex flex-col p-[8px]" style={{
+        backgroundColor: '#075e95',
+        padding: `${s(8)}px`,
+        marginTop: `${s(8)}px`
+      }}>
+        <div className="overflow-hidden flex flex-col" style={{
+          backgroundColor: '#fefefe',
+          border: `${s(4)}px solid #075e95`,
+          borderRadius: `${s(12)}px`
+        }}>
+          <div className="flex items-center p-[8px]" style={{ padding: `${s(8)}px` }}>
             <span style={{ color: '#075e95', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Projeto:
             </span>
@@ -147,7 +154,7 @@ export const PrototypePreviewComponent = ({
           <hr className="divider w-full" style={{ backgroundColor: '#075e95', height: `${s(4)}px`, border: 'none' }} />
 
           <div className="grid grid-cols-2 w-full">
-            <div className="flex flex-col justify-start p-[12px]" style={{ borderRight: `${s(2)}px solid #075e95`, padding: `${s(8)}px`, }}>
+            <div className="flex flex-col justify-start p-[6px]" style={{ borderRight: `${s(2)}px solid #075e95`, padding: `${s(6)}px`, }}>
               <span style={{ color: '#075e95', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
                 Alunos:
               </span>
@@ -177,9 +184,9 @@ export const PrototypePreviewComponent = ({
               </div>
             </div>
 
-            <div className="flex flex-col justify-start" style={{ borderLeft: `${s(2)}px solid #075e95`, padding: `${s(8)}px` }}>
+            <div className="flex flex-col justify-start" style={{ borderLeft: `${s(2)}px solid #075e95`, padding: `${s(6)}px` }}>
               <span
-                className="p-[12px]"
+                className="p-[6px]"
                 style={{ color: '#075e95', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
                 Orientadores:
               </span>
@@ -207,29 +214,39 @@ export const PrototypePreviewComponent = ({
         </div>
       </div>
 
-      <hr className="divider w-full" style={{ backgroundColor: '#ffffff', height: `${s(10)}px`, border: 'none' }} />
+      <hr className="divider w-full" style={{ backgroundColor: '#ffffff', height: `${s(6)}px`, border: 'none' }} />
 
-      <div className="overflow-hidden grid grid-cols-2 min-h-44 p-[16px]" style={{ backgroundColor: '#075e95', padding: `${s(16)}px` }}>
+      <div className="overflow-hidden grid grid-cols-2 min-h-32 p-[10px]" style={{
+        backgroundColor: '#075e95', padding: `${s(10)}px`,
+        minHeight: `${s(325)}px`
+      }}>
         <div className="flex flex-col justify-start overflow-hidden" style={{ backgroundColor: '#fefefe', borderTopLeftRadius: `${s(12)}px`, borderBottomLeftRadius: `${s(12)}px`, borderRight: `${s(2)}px solid #075e95` }}>
-          <span className="p-[12px]" style={{ color: '#075e95', fontWeight: 'bold', fontSize: `${s(12)}px`, padding: `${s(8)}px` }}>
+          <span className="p-[6px]" style={{ color: '#075e95', fontWeight: 'bold', fontSize: `${s(12)}px`, padding: `${s(6)}px` }}>
             Texto:
           </span>
-          <div className="flex-1 overflow-y-auto break-words whitespace-pre-wrap p-[12px]"
-            style={{ color: '#334155', fontSize: `${s(14)}px`, lineHeight: `${s(15)}px`, padding: `${s(8)}px`, }}>
+          <div className="flex-1 overflow-y-auto break-words whitespace-pre-wrap p-[6px]"
+            style={{ color: '#334155', fontSize: `${s(13)}px`, lineHeight: `${s(14)}px`, padding: `${s(6)}px`, }}>
             {prototyping?.tipoApoio}
           </div>
         </div>
 
-        <div className="flex flex-col justify-start overflow-hidden" style={{ backgroundColor: '#fefefe', borderTopRightRadius: `${s(12)}px`, borderBottomRightRadius: `${s(12)}px`, borderLeft: `${s(2)}px solid #075e95`, padding: `${s(8)}px` }}>
-          <span className="p-[12px]" style={{ color: '#075e95', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
+        <div className="flex flex-col justify-start overflow-hidden" style={{ backgroundColor: '#fefefe', borderTopRightRadius: `${s(12)}px`, borderBottomRightRadius: `${s(12)}px`, borderLeft: `${s(2)}px solid #075e95`, padding: `${s(6)}px` }}>
+          <span className="p-[6px]" style={{ color: '#075e95', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
             Imagem:
           </span>
-          <div className="flex-1 flex items-center justify-center overflow-hidden px-8" style={{ paddingInline: `${s(16)}px` }}>
+          <div className="flex-1 flex items-center justify-center overflow-hidden px-6" style={{ paddingInline: `${s(12)}px` }}>
             {anexosUrls.length > 0 ? (
-              <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-2 items-center justify-items-center overflow-hidden" style={{ gap: `${s(2)}` }}>
+              <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-2 items-center justify-items-center overflow-hidden" style={{
+                gap: `${s(2)}`,
+                maxHeight: `${s(234)}px`
+              }}>
                 {anexosUrls.map((url, idx) => (
                   <div key={idx}
-                    className="w-full h-full flex items-center justify-center overflow-hidden rounded-md">
+                    className="w-full h-full flex items-center justify-center overflow-hidden rounded-md"
+                    style={scale !== 1 ? {
+                      borderRadius: `${s(6)}px`,
+                      maxHeight: `${s(125)}px`
+                    } : { maxHeight: `${s(125)}px` }}>
                     <img
                       src={url}
                       alt={`Anexo ${idx + 1}`}
@@ -238,6 +255,7 @@ export const PrototypePreviewComponent = ({
                         objectFit: 'contain',
                         objectPosition: 'center',
                         width: '86%',
+                        maxHeight: `${s(125)}px`,
                         marginInline: 'auto',
                       }}
                       crossOrigin="anonymous"
@@ -254,13 +272,13 @@ export const PrototypePreviewComponent = ({
         </div>
       </div>
 
-      <hr className="divider w-full" style={{ backgroundColor: '#ffffff', height: `${s(10)}px`, border: 'none' }} />
+      <hr className="divider w-full" style={{ backgroundColor: '#ffffff', height: `${s(6)}px`, border: 'none' }} />
 
-      <div className="flex flex-col p-[16px]" style={{ backgroundColor: '#628e48', padding: `${s(16)}px` }}>
+      <div className="flex flex-col p-[10px]" style={{ backgroundColor: '#628e48', padding: `${s(10)}px` }}>
         <div className="grid grid-cols-2 w-full">
-          <div className="flex flex-col justify-start overflow-hidden p-[16px] mb-4" style={{
+          <div className="flex flex-col justify-start overflow-hidden p-[10px] mb-3" style={{
             backgroundColor: '#ffffff',
-            borderRadius: `${s(8)}px 0 0 ${s(8)}px`, borderRight: `${s(2)}px solid #628e48`, padding: `${s(6)}px`, marginBottom: `${s(8)}px`
+            borderRadius: `${s(8)}px 0 0 ${s(8)}px`, borderRight: `${s(2)}px solid #628e48`, padding: `${s(5)}px`, marginBottom: `${s(6)}px`
           }}>
             <span style={{ color: '#628e48', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Instituição de impacto social:
@@ -273,8 +291,8 @@ export const PrototypePreviewComponent = ({
             </div>
           </div>
 
-          <div className="flex flex-col justify-start overflow-hidden p-[16px] mb-4"
-            style={{ backgroundColor: '#ffffff', borderRadius: `0 ${s(8)}px ${s(8)}px 0`, borderLeft: `${s(2)}px solid #628e48`, padding: `${s(6)}px`, marginBottom: `${s(8)}px` }}>
+          <div className="flex flex-col justify-start overflow-hidden p-[10px] mb-3"
+            style={{ backgroundColor: '#ffffff', borderRadius: `0 ${s(8)}px ${s(8)}px 0`, borderLeft: `${s(2)}px solid #628e48`, padding: `${s(5)}px`, marginBottom: `${s(6)}px` }}>
             <span style={{ color: '#628e48', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Problema identificado:
             </span>
@@ -283,8 +301,8 @@ export const PrototypePreviewComponent = ({
             </div>
           </div>
 
-          <div className="flex flex-col justify-start overflow-hidden p-[16px] mb-4"
-            style={{ backgroundColor: '#ffffff', borderRadius: `${s(8)}px 0 0 ${s(8)}px`, borderRight: `${s(2)}px solid #628e48`, borderTop: `${s(2)}px solid #628e48`, padding: `${s(6)}px`, marginBottom: `${s(8)}px` }}>
+          <div className="flex flex-col justify-start overflow-hidden p-[10px] mb-3"
+            style={{ backgroundColor: '#ffffff', borderRadius: `${s(8)}px 0 0 ${s(8)}px`, borderRight: `${s(2)}px solid #628e48`, borderTop: `${s(2)}px solid #628e48`, padding: `${s(5)}px`, marginBottom: `${s(6)}px` }}>
             <span style={{ color: '#628e48', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Proposta de valor da solução:
             </span>
@@ -293,8 +311,8 @@ export const PrototypePreviewComponent = ({
             </div>
           </div>
 
-          <div className="flex flex-col justify-start overflow-hidden p-[16px] mb-4"
-            style={{ backgroundColor: '#ffffff', borderRadius: `0 ${s(8)}px ${s(8)}px 0`, borderLeft: `${s(2)}px solid #628e48`, borderTop: `${s(2)}px solid #628e48`, padding: `${s(6)}px`, marginBottom: `${s(8)}px` }}>
+          <div className="flex flex-col justify-start overflow-hidden p-[10px] mb-3"
+            style={{ backgroundColor: '#ffffff', borderRadius: `0 ${s(8)}px ${s(8)}px 0`, borderLeft: `${s(2)}px solid #628e48`, borderTop: `${s(2)}px solid #628e48`, padding: `${s(5)}px`, marginBottom: `${s(6)}px` }}>
             <span style={{ color: '#628e48', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Vantagens competitivas da solução:
             </span>
@@ -303,8 +321,15 @@ export const PrototypePreviewComponent = ({
             </div>
           </div>
 
-          <div className="flex flex-col justify-start overflow-hidden p-[16px]"
-            style={{ backgroundColor: '#ffffff', borderRadius: `${s(8)}px 0 0 ${s(8)}px`, borderRight: `${s(2)}px solid #628e48`, borderTop: `${s(2)}px solid #628e48`, padding: `${s(6)}px`, }}>
+          <div className="flex flex-col justify-start overflow-hidden p-[10px]"
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: `${s(8)}px 0 0 ${s(8)}px`,
+              borderRight: `${s(2)}px solid #628e48`,
+              borderTop: `${s(2)}px solid #628e48`,
+              padding: `${s(5)}px`,
+            }}
+          >
             <span style={{ color: '#628e48', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Principais necessidades para o desenvolvimento:
             </span>
@@ -315,8 +340,14 @@ export const PrototypePreviewComponent = ({
             </div>
           </div>
 
-          <div className="flex flex-col justify-start overflow-hidden p-[16px]"
-            style={{ backgroundColor: '#ffffff', borderRadius: `0 ${s(8)}px ${s(8)}px 0`, borderLeft: `${s(2)}px solid #628e48`, borderTop: `${s(2)}px solid #628e48`, padding: `${s(6)}px`, }}>
+          <div className="flex flex-col justify-start overflow-hidden p-[10px]"
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: `0 ${s(8)}px ${s(8)}px 0`,
+              borderLeft: `${s(2)}px solid #628e48`,
+              borderTop: `${s(2)}px solid #628e48`,
+              padding: `${s(5)}px`,
+            }}>
             <span style={{ color: '#628e48', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Parcerias estratégicas para o desenvolvimento:
             </span>
@@ -327,12 +358,17 @@ export const PrototypePreviewComponent = ({
         </div>
       </div>
 
-      <hr className="divider w-full" style={{ backgroundColor: '#ffffff', height: `${s(10)}px`, border: 'none' }} />
+      <hr className="divider w-full" style={{ backgroundColor: '#ffffff', height: `${s(6)}px`, border: 'none' }} />
 
       <div className="flex flex-col">
-        <div className="grid grid-cols-2 w-full p-[16px]" style={{ backgroundColor: '#d56928', padding: `${s(6)}px`, }}>
-          <div className="flex flex-col justify-start overflow-hidden p-[16px]"
-            style={{ backgroundColor: '#ffffff', borderRadius: `${s(8)}px 0 0 ${s(8)}px`, borderRight: `${s(2)}px solid #d56928`, padding: `${s(6)}px`, }}>
+        <div className="grid grid-cols-2 w-full p-[8px]" style={{ backgroundColor: '#d56928', padding: `${s(8)}px`, }}>
+          <div className="flex flex-col justify-start overflow-hidden p-[10px]"
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: `${s(8)}px 0 0 ${s(8)}px`,
+              borderRight: `${s(2)}px solid #d56928`,
+              padding: `${s(5)}px`,
+            }}>
             <span style={{ color: '#d56928', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Cronograma de construção do protótipo:
             </span>
@@ -358,8 +394,8 @@ export const PrototypePreviewComponent = ({
             </div>
           </div>
 
-          <div className="flex flex-col justify-start overflow-hidden p-[16px]"
-            style={{ backgroundColor: '#ffffff', borderRadius: `0 ${s(8)}px ${s(8)}px 0`, borderLeft: `${s(2)}px solid #d56928`, padding: `${s(6)}px`, }}>
+          <div className="flex flex-col justify-start overflow-hidden p-[10px]"
+            style={{ backgroundColor: '#ffffff', borderRadius: `0 ${s(8)}px ${s(8)}px 0`, borderLeft: `${s(2)}px solid #d56928`, padding: `${s(5)}px`, }}>
             <span style={{ color: '#d56928', fontWeight: 'bold', fontSize: `${s(12)}px` }}>
               Memorial descritivo:
             </span>
@@ -387,13 +423,14 @@ export const PrototypePreviewComponent = ({
         </div>
       </div>
 
-      <div className="w-full flex justify-center" style={{ paddingTop: `${s(6)}px` }}>
+      <div className="w-full flex justify-center" style={{ paddingTop: `${s(2)}px` }}>
         <img
           src={footerBannerUrl}
           alt="Footer Realização e Parcerias"
           crossOrigin="anonymous"
           style={{
-            objectFit: 'fill', width: '50%', height: '100%', marginInline: 'auto'
+            objectFit: 'contain', width: '100%', height: 'auto', display: 'block',
+            marginInline: 'auto'
           }}
         />
       </div>

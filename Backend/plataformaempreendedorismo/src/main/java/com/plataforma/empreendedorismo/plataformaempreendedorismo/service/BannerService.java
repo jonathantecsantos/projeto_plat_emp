@@ -86,9 +86,7 @@ public class BannerService {
         }
     }
 
-    private String saveFile(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-
+    private String saveFile(MultipartFile file, String fileName) throws IOException {
         Path uploadPath = Paths.get(caminhoBase);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -122,7 +120,7 @@ public class BannerService {
 
         tratarAndSalvarInfosBanner(banner, bannerRecord);
 
-        if (files != null && !files.isEmpty() || logotipo != null) {
+        if ((files != null && !files.isEmpty()) || logotipo != null) {
             List<AnexoBanner> anexosExistentes = tratarAnexos(files, logotipo, banner);
             banner.setAnexos(anexosExistentes);
         }
@@ -188,7 +186,7 @@ public class BannerService {
     private List<AnexoBanner> tratarAnexos(List<MultipartFile> files, MultipartFile logotipo, Banner banner) throws IOException {
         List<AnexoBanner> anexosExistentes = banner.getAnexos();
 
-        if (logotipo != null) {
+        if (logotipo != null && !logotipo.isEmpty()) {
             List<AnexoBanner> logotiposAntigos = anexosExistentes.stream()
                     .filter(anexo -> anexo.getTipoAnexo() == TipoAnexoEnum.LOGOTIPO)
                     .collect(Collectors.toList());
@@ -196,27 +194,36 @@ public class BannerService {
             anexoBannerRepository.deleteAll(logotiposAntigos);
         }
 
-        if (files != null && !files.isEmpty()) {
-            List<AnexoBanner> padraoAntigos = anexosExistentes.stream()
-                    .filter(anexo -> anexo.getTipoAnexo() == TipoAnexoEnum.PADRAO)
-                    .collect(Collectors.toList());
-            anexosExistentes.removeAll(padraoAntigos);
-            anexoBannerRepository.deleteAll(padraoAntigos);
-        }
-
         List<AnexoBanner> novosAnexos = salvarAnexos(files, logotipo, banner);
         anexosExistentes.addAll(novosAnexos);
+
+        List<AnexoBanner> anexosPadrao = anexosExistentes.stream()
+                .filter(anexo -> anexo.getTipoAnexo() == TipoAnexoEnum.PADRAO)
+                .collect(Collectors.toList());
+
+        int MAX_PADRAO = 4;
+        if (anexosPadrao.size() > MAX_PADRAO) {
+            int excesso = anexosPadrao.size() - MAX_PADRAO;
+            List<AnexoBanner> excedentes = anexosPadrao.subList(0, excesso);
+            anexosExistentes.removeAll(excedentes);
+            anexoBannerRepository.deleteAll(excedentes);
+        }
 
         return anexosExistentes;
     }
 
-    private List<AnexoBanner> salvarAnexos(List<MultipartFile> files, MultipartFile logotipo,Banner banner) throws IOException {
+    private List<AnexoBanner> salvarAnexos(List<MultipartFile> files, MultipartFile logotipo, Banner banner) throws IOException {
         List<AnexoBanner> anexos = new ArrayList<>();
-        if(files != null && !files.isEmpty()){
+        if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
-                String fileName = file.getOriginalFilename();
-                if (anexoBannerRepository.findByBannerAndNomeAnexo(banner, fileName) == null) {
-                    fileName = saveFile(file);
+                if (file != null && !file.isEmpty()) {
+                    String randomUUID = java.util.UUID.randomUUID().toString();
+                    String originalName = file.getOriginalFilename();
+                    String extensao = (originalName != null && originalName.contains(".")) ?
+                            originalName.substring(originalName.lastIndexOf(".")) : "";
+                    String fileName = "banner_" + randomUUID + extensao;
+                    fileName = saveFile(file, fileName);
+
                     AnexoBanner anexo = new AnexoBanner();
                     anexo.setBanner(banner);
                     anexo.setNomeAnexo(fileName);
@@ -226,10 +233,15 @@ public class BannerService {
                 }
             }
         }
-        if(logotipo!= null){
+        if (logotipo != null && !logotipo.isEmpty()) {
+            String randomUUID = java.util.UUID.randomUUID().toString();
+            String originalName = logotipo.getOriginalFilename();
+            String extensao = (originalName != null && originalName.contains(".")) ?
+                    originalName.substring(originalName.lastIndexOf(".")) : "";
+            String fileName = "logotipo_" + randomUUID + extensao;
+            fileName = saveFile(logotipo, fileName);
+
             AnexoBanner anexoLogotipo = new AnexoBanner();
-            String fileName = logotipo.getOriginalFilename();
-            fileName = saveFile(logotipo);
             anexoLogotipo.setBanner(banner);
             anexoLogotipo.setNomeAnexo(fileName);
             anexoLogotipo.setCaminhoAnexo(Paths.get(caminhoBase, fileName).toString());

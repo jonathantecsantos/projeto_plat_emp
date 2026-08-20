@@ -185,17 +185,37 @@ public class PrototipoService {
                     .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
 
-            List<AnexoPrototipo> anexosParaRemover = anexosExistentes.stream()
-                    .filter(anexo -> anexo.getTipoAnexoPrototipo() != null && tiposEnviados.contains(anexo.getTipoAnexoPrototipo().getId()))
-                    .collect(Collectors.toList());
+            Long TIPO_ANEXO_MULTIPLO = 2L; // ANEXO (Adicionais)
 
-            if (!anexosParaRemover.isEmpty()) {
-                anexosExistentes.removeAll(anexosParaRemover);
-                anexoPrototipoRepository.deleteAll(anexosParaRemover);
+            Set<Long> tiposSingulares = tiposEnviados.stream()
+                    .filter(id -> !id.equals(TIPO_ANEXO_MULTIPLO))
+                    .collect(Collectors.toSet());
+
+            if (!tiposSingulares.isEmpty()) {
+                List<AnexoPrototipo> singularesAntigos = anexosExistentes.stream()
+                        .filter(anexo -> anexo.getTipoAnexoPrototipo() != null && tiposSingulares.contains(anexo.getTipoAnexoPrototipo().getId()))
+                        .collect(Collectors.toList());
+
+                if (!singularesAntigos.isEmpty()) {
+                    anexosExistentes.removeAll(singularesAntigos);
+                    anexoPrototipoRepository.deleteAll(singularesAntigos);
+                }
             }
 
             List<AnexoPrototipo> novosAnexos = salvarAnexos(files, prototipo, equipe);
             anexosExistentes.addAll(novosAnexos);
+
+            List<AnexoPrototipo> anexosAdicionais = anexosExistentes.stream()
+                    .filter(anexo -> anexo.getTipoAnexoPrototipo() != null && TIPO_ANEXO_MULTIPLO.equals(anexo.getTipoAnexoPrototipo().getId()))
+                    .collect(Collectors.toList());
+
+            int MAX_ANEXOS_ADICIONAIS = 4;
+            if (anexosAdicionais.size() > MAX_ANEXOS_ADICIONAIS) {
+                int excesso = anexosAdicionais.size() - MAX_ANEXOS_ADICIONAIS;
+                List<AnexoPrototipo> excedentes = anexosAdicionais.subList(0, excesso);
+                anexosExistentes.removeAll(excedentes);
+                anexoPrototipoRepository.deleteAll(excedentes);
+            }
         }
 
         return anexosExistentes;

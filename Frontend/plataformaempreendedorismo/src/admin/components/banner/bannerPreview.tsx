@@ -4,6 +4,7 @@ import { useGetBannerByIdQuery, useGetTeamByIdQuery } from "../../../api/student
 import { useTemplateImages } from "../../../hooks/useTemplateImages";
 import { Banner } from "../../../model/banner";
 import { getImageUrl } from "../../../utils/types";
+import { BannerScaledStyles } from "./BannerScaledStyles";
 
 
 const formatTextWithDashes = (text?: string) => {
@@ -142,31 +143,31 @@ export const BannerPreviewComponent = ({ id, disableAutoPrint = false, forExport
     width: `${s(994)}px`,
     fontSize: `${s(12)}px`,
     filter: 'none'
-  } : (forExport ? { width: '994px', fontSize: '18px', filter: 'none' } : {});
+  } : (forExport ? { width: '994px', fontSize: '18px', filter: 'none' } : {})
 
   return (
     <div className="w-full h-full bg-[#fefefe] mx-auto relative 
     print:w-[994px] print:text-[12px] blur print:blur-none"
       style={baseStyles}
       ref={bannerRef}>
+      <BannerScaledStyles scale={scale} forExport={forExport} />
       <div className="relative h-[340px] print:h-[160px]"
-        style={scale !== 1 ? { height: `${s(124)}px`, position: 'relative', zIndex: 1, overflow: 'visible' } : {}}>
+        style={scale !== 1 ? { height: `${s(124)}px`, position: 'static', zIndex: 1, overflow: 'visible' } : {}}>
         <img
           src={headerBannerUrl}
           alt="Header"
           className="w-full object-contain"
           crossOrigin="anonymous"
           style={{
-            height: '85%',
-            width: '85%',
-            transform: 'scale(1.2)',
-            objectFit: 'fill',
+            width: '100%',
+            height: 'auto',
+            objectFit: 'contain',
             marginInline: 'auto'
           }}
         />
       </div>
       {/* ----> Primeiro componente inicial parte azul */}
-      <div className="relative px-8 print:px-4">
+      <div className="relative px-8 print:px-4" style={{}}>
         <div className="border-[20px] print:border-[10px] border-[#075e95]" style={scale !== 1 ? { borderWidth: `${s(10)}px` } : {}}>
           <div className="p-4 border-b-4 print:border-b-[2px]  border-[#075e95]  bg-white flex h-20
            print:px-4 print:pt-3 print:h-11" style={scale !== 1 ? {
@@ -462,7 +463,7 @@ export const BannerPreviewComponent = ({ id, disableAutoPrint = false, forExport
           alt="Footer"
           crossOrigin="anonymous"
           style={{
-            objectFit: 'fill', width: '50%', marginInline: 'auto'
+            objectFit: 'contain', width: '100%', height: 'auto', marginInline: 'auto'
           }}
         />
       </div>

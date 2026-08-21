@@ -533,23 +533,12 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                       snackBarEventsTypes(EventsTypes.PROTOTIPO)
                       return
                     }
-                    handleDownloadProtypeSVG()
-                  }}>
-                  <DownloadIcon fontSize='medium' />
-                  <span>Download Protótipo</span>
+                    navigate(RoutesNames.prototyping?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
+                  }}
+                >
+                  <DescriptionIcon fontSize='medium' />
+                  <span>Preencher Protótipo</span>
                 </li>
-                {/* <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
-                  onClick={async () => {
-                    const response = await getEventById(EventsTypes.CANVAS)
-                    if (response.data == false || !response.data) {
-                      snackBarEventsTypes(EventsTypes.CANVAS)
-                      return
-                    }
-                    handlePrintBanner()
-                  }}>
-                  <PrintIcon fontSize='medium' />
-                  <span>Imprimir Canvas</span>
-                </li> */}
                 <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
                   onClick={async () => {
                     const response = await getEventById(EventsTypes.PROTOTIPO)
@@ -557,11 +546,10 @@ export const TeamComponent = ({ id }: Pick<TeamsResponse, 'id'>) => {
                       snackBarEventsTypes(EventsTypes.PROTOTIPO)
                       return
                     }
-                    navigate(RoutesNames.prototyping?.replace(':id', id?.toString()), { state: team?.nomeEquipe })
-                  }}
-                >
-                  <DescriptionIcon fontSize='medium' />
-                  <span>Prototipação</span>
+                    handleDownloadProtypeSVG()
+                  }}>
+                  <DownloadIcon fontSize='medium' />
+                  <span>Download Protótipo</span>
                 </li>
                 <li className="bg-[#5741A6] text-white font-semibold py-2 px-4 rounded-md cursor-pointer flex items-center gap-2 hover:bg-[#5222A2] transition-all duration-200 shadow-sm text-sm"
                   onClick={async () => {

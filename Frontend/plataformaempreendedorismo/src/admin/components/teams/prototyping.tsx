@@ -225,6 +225,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
               placeholder="Digite sua resposta para o tipo de apoio"
               value={formValues?.tipoApoio}
               onChange={(e) => handleValueChange(e.target.value, "tipoApoio")}
+              maxLength={500}
             />
           </div>
         </div>
@@ -266,6 +267,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
                 value={formValues.problemaPrincipal}
                 onChange={(e) => handleValueChange(e.target.value, "problemaPrincipal")}
                 label="Problema Principal"
+                maxLength={500}
               />
             </div>
           </div>
@@ -280,6 +282,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
                 value={formValues.propostaValor}
                 onChange={(e) => handleValueChange(e.target.value, "propostaValor")}
                 label="Proposta de Valor"
+                maxLength={500}
               />
             </div>
           </div>
@@ -295,6 +298,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
                 placeholder="Digite sua resposta para as vantagens competitivas"
                 value={formValues.vantagemCompetitiva}
                 onChange={(e) => handleValueChange(e.target.value, "vantagemCompetitiva")}
+                maxLength={500}
               />
             </div>
           </div>
@@ -308,6 +312,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
                 placeholder="Digite sua resposta para as principais necessidades"
                 value={formValues.principaisNecessidades}
                 onChange={(e) => handleValueChange(e.target.value, "principaisNecessidades")}
+                maxLength={500}
               />
             </div>
           </div>
@@ -322,6 +327,7 @@ export const TeamPrototyping = ({ id, teamName }: { id: number, teamName: string
               placeholder="Digite sua resposta para as parcerias"
               value={formValues.parcerias}
               onChange={(e) => handleValueChange(e.target.value, "parcerias")}
+              maxLength={500}
             />
           </div>
         </div>

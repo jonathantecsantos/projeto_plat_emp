@@ -9,6 +9,7 @@ type TextAreaProps = {
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   defaultMarginBotton?: boolean;
   value?: string;
+  maxLength?: number;
 };
 
 export const TextAreaComponent = ({
@@ -19,11 +20,13 @@ export const TextAreaComponent = ({
   showLabel,
   defaultMarginBotton,
   value,
+  maxLength,
 }: TextAreaProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const currentLength = value ? value.length : 0;
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       {showLabel && <label className="block text-sm leading-6">{label}</label>}
       <textarea
         className={`${inputClasses} ${className} ${defaultMarginBotton && defaultMB
@@ -33,7 +36,13 @@ export const TextAreaComponent = ({
         onBlur={() => setIsFocused(false)}
         onChange={onChange}
         value={value}
+        maxLength={maxLength}
       />
+      {maxLength && (
+        <div className="text-right text-xs mt-1 select-none opacity-75">
+          {currentLength}/{maxLength} caracteres
+        </div>
+      )}
     </div>
   );
 };
